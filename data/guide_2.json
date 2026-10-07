@@ -1,0 +1,153 @@
+{
+  "no_triss": {
+    "summary": "Triss questline in Novigrad: A Matter of Life and Death (Vegelbud masquerade, includes Gwent tournament and Albert) followed directly by Now or Never (evacuating mages through sewers to a Katakan fight).",
+    "available_when": "A Matter of Life and Death: starts after Count Reuven's Treasure, by visiting Triss at her hideout (tilted building NE of Hierarch Square). Now or Never: begins after completing A Matter of Life and Death.",
+    "how_to": [
+      "Visit Triss at her hideout; follow the blue-shirted servant with keys south over the bridge (bandits attack).",
+      "Buy masks from Elihal's shop; attend the Vegelbud masquerade.",
+      "Talk to the croupier and win the three Gwent matches before advancing the quest further.",
+      "Find Albert among the guests, hedge-maze scene with Triss, then fight the 3 witch hunters on leaving.",
+      "Now or Never: choose whether to rescue the late mages Berthold and Anisse (yields Gwestog steel sword but Olivier then dies at the Kingfisher; his Gwent card is a consideration), clear the sewers, secret library, rat chamber.",
+      "Beat the Katakan (level 14, regenerates; harder than level suggests) at the end."
+    ],
+    "missable": "The 3 masquerade Gwent cards (Milva, Vampire: Bruxa, Dandelion) are lost for good if you don't win them during A Matter of Life and Death. The Triss romance kiss is timed. Not otherwise verified beyond that. Search result (not a fetched page) also says Triss cleanup must be done before the Isle of Mists.",
+    "sources": [
+      "https://gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/a-matter-of-life-and-death",
+      "https://www.gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/now-or-never"
+    ],
+    "verified": "yes",
+    "quest_names": ["A Matter of Life and Death", "Now or Never"]
+  },
+  "no_vegelbud": {
+    "summary": "Three Gwent matches against masked guests at the Vegelbud masquerade during A Matter of Life and Death, winning cards that exist nowhere else.",
+    "available_when": "During the masquerade part of A Matter of Life and Death (after Count Reuven's Treasure and meeting Triss); talk to the croupier at the ball.",
+    "how_to": [
+      "Attend the Vegelbud estate masquerade.",
+      "Talk to the croupier and play the three opponents: Round 1 Nilfgaardian deck (win Milva), Round 2 Scoia'tael deck (win Vampire: Bruxa), Round 3 Monsters deck (win Dandelion).",
+      "Do this before advancing the quest (finding Albert)."
+    ],
+    "missable": "Guide states: this is your only chance to win these cards in the entire game; you must win the tournament before advancing the quest any further, otherwise lost forever.",
+    "sources": [
+      "https://gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/a-matter-of-life-and-death"
+    ],
+    "verified": "yes",
+    "quest_names": ["A Matter of Life and Death"]
+  },
+  "no_gangs": {
+    "summary": "Secondary quest running alongside the main quest Get Junior: raid Junior's casino and arena together with Cleaver's dwarves.",
+    "available_when": "Starts during Get Junior: after meeting Sigi Reuven in his bathhouse, you are attacked by Junior's thugs; afterwards dwarf mobster Cleaver invites you to meet him.",
+    "how_to": [
+      "Visit Cleaver at his headquarters west of Hierarch Square and accept his offer.",
+      "Raid the casino with Cleaver's men (3rd floor: halfling Rico Meiersdorf).",
+      "Raid the arena with Cleaver's men.",
+      "Return to Cleaver for reward (50 XP + 150 crowns for one location, 50 XP + 300 crowns for both)."
+    ],
+    "missable": "Guide: if you never talk to Cleaver or refuse to use his henchdwarves at either location, the quest fails. Using them at both locations gives the full reward. The guide says nothing about Roche or Radovid timing, so that part of the note is NOT verified; it is consistent with doing it during Get Junior.",
+    "sources": [
+      "https://gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/gangs-of-novigrad"
+    ],
+    "verified": "partial",
+    "quest_names": ["Gangs of Novigrad", "Get Junior"]
+  },
+  "no_dandelion": {
+    "summary": "Help Dandelion open his cabaret (loan, theme, Polly, Rautlec's placards); leads straight into Carnal Sins.",
+    "available_when": "After completing the main quest A Poet Under Pressure (rescuing Dandelion); speak to Dandelion at the Rosemary and Thyme in Novigrad.",
+    "how_to": [
+      "Get a prop sword from Irina near Hierarch Square.",
+      "Go to Sophronia's house, wait until 10 PM, take part in the staged rescue (follow script 50 XP, or refuse and beat him 25 XP).",
+      "Next morning choose theatrical or boudoir theme.",
+      "Recruit Polly (key in bucket via Witcher Sense; deal with boyfriend Hubio).",
+      "Get placards from Rautlec: race for him, pay 200 crown debt, or abandon.",
+      "Return to the Rosemary and Thyme; quest transitions to Carnal Sins."
+    ],
+    "missable": "Not really missable by leaving Novigrad per gamerguides (it says leaving Novigrad does not affect availability), but the note's claim that optional chains unlock there was not verified. Failing to help Rautlec means missing the placards (fextralife).",
+    "sources": [
+      "https://gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/cabaret",
+      "https://thewitcher3.wiki.fextralife.com/Cabaret"
+    ],
+    "verified": "partial",
+    "quest_names": ["Cabaret", "A Poet Under Pressure"]
+  },
+  "no_carnal": {
+    "summary": "Investigate the killer of Eternal Fire offenders after Priscilla is attacked; ends with Nathaniel at Crippled Kate's.",
+    "available_when": "Starts automatically at the end of Cabaret when a messenger announces Priscilla was attacked at the Rosemary and Thyme.",
+    "how_to": [
+      "Escort Doctor von Gratz through the sewers to the morgue (Drowners, Water Hag).",
+      "Follow three leads: Eustace the corpse collector (Axii), the alley where Priscilla was attacked (fistfight), the dwarven woodcarver's death scene.",
+      "Return to the coroner for the third autopsy; victims offended the Eternal Fire cult.",
+      "Go to the Vegelbud estate, fight through guards and dogs (too late for Patricia).",
+      "Confront Nathaniel at Crippled Kate's; use dialogue 'Just like that? No formaldehyde?' and 'So who left the letter on Patricia's body?'; then kill, spare with Axii, or leave him (killing gives best rewards per guide)."
+    ],
+    "missable": "Guide only says wrong dialogue choices can fail the quest. No other missable verified.",
+    "sources": [
+      "https://www.gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/carnal-sins"
+    ],
+    "verified": "yes",
+    "quest_names": ["Carnal Sins", "Cabaret"]
+  },
+  "no_dangerous": {
+    "summary": "Zoltan needs three rare Gwent cards for a buyer; you collect them and decide at the end between the cards or 150 crowns.",
+    "available_when": "After A Poet Under Pressure and its follow-up; at the Rosemary and Thyme talk to Zoltan, who is being harassed by men seeking rare Gwent cards (Caesar Bilzen).",
+    "how_to": [
+      "Isengrim Faoiltiarna: take from bandits at Zed's house.",
+      "John Natalis: win from Earl at the Golden Sturgeon (Gwent match or combat).",
+      "Fringilla Vigo: in Caesar Bilzen's secret Nilfgaardian collection (find triangular key, secret door, upstairs).",
+      "In Caesar's collection loot the lockbox with the Jade Figurine (starts The Soldier Statuette) and the Fringilla Vigo card.",
+      "Defeat Duke in the sewers; when Zoltan offers cards or 150 crowns, take the cards.",
+      "Optional: after looting, Cleaver's dwarves appear; choose 'Leave him alone' to defend Caesar or 'We were just leaving'."
+    ],
+    "missable": "Cards are unobtainable elsewhere; taking crowns forfeits them (guide strongly recommends cards). Declining the quest entirely makes full card collection impossible. The Jade Figurine starts The Soldier Statuette; the guide does not say it is time-limited, but loot it during the visit.",
+    "sources": [
+      "https://www.gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/a-dangerous-game"
+    ],
+    "verified": "yes",
+    "quest_names": ["A Dangerous Game", "The Soldier Statuette"]
+  },
+  "no_eye": {
+    "summary": "Help Vernon Roche and Ves fight Nilfgaardians at Mulbrydale; required to later get Roche's help.",
+    "available_when": "Becomes available during the main quest Get Junior, when you meet Roche at the Temerian Partisan Hideout NE of Oxenfurt.",
+    "how_to": [
+      "Talk to Roche at the hideout; go to Hanged Man's Tree (save first).",
+      "Follow Roche into Mulbrydale and fight the Nilfgaardian soldiers; reach Ves quickly.",
+      "Make the final choice about the wounded Nilfgaardian officer (Ves wants him dead, Roche merciful); either completes the quest, 50 XP."
+    ],
+    "missable": "Ves must survive or the quest fails; completing it successfully is needed to recruit Roche later (Full Crew achievement). Failing impacts the Radovid questline (gamerguides). Wording of Roche/Ves recruitment partly from a search summary.",
+    "sources": [
+      "https://www.gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/eye-for-an-eye"
+    ],
+    "verified": "yes",
+    "quest_names": ["An Eye for an Eye", "Get Junior"]
+  },
+  "no_redania": {
+    "summary": "Redania's Most Wanted (capture Philippa for Radovid) and A Deadly Plot (find shoemaker Thaler held by trolls); together with An Eye for an Eye they unlock Reason of State.",
+    "available_when": "A Deadly Plot activates automatically at the end of Now or Never (Dijkstra and Roche discuss a plot against Radovid). Redania's Most Wanted becomes available after A Favor for Radovid, when Radovid demands Philippa Eilhart.",
+    "how_to": [
+      "A Deadly Plot: speak to soldier Gregor at the Border Post; investigate wagon near Hindhol/Hanged Man's Tree; follow footprints to troll Rogg; find Thaler held by Ogg and Pogg in a cave; fight or negotiate (peaceful recommended); escort Thaler back to his wagon. Loot ursine armor diagrams in the cave's left corridor room.",
+      "Redania's Most Wanted: meet witch hunters at the elven ruins NE of Oxenfurt; get key; solve puzzles (Power Cells, Aard); kill Ifrit; take the Megascope Crystal from Philippa's lab; decide its fate on exit (witch hunters, Radovid, or Triss/Yennefer)."
+    ],
+    "missable": "Per a search summary (not a fetched page): Redania's Most Wanted must be completed before starting The Isle of Mists or it fails; A Deadly Plot may auto-fail on travel to the Isle of Mists unless you first talk to Dijkstra at his bathhouse about politics; all three trilogy quests are prerequisites for Reason of State. The fetched Redania page only says you can ignore it until leaving for the Isle of Mists. Crystal choice affects Radovid/world state.",
+    "sources": [
+      "https://www.gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/novigrad/redanias-most-wanted",
+      "https://www.thegamer.com/witcher-3-deadly-plot-walkthrough/"
+    ],
+    "verified": "partial",
+    "quest_names": ["Redania's Most Wanted", "A Deadly Plot", "A Favor for Radovid", "Now or Never", "Reason of State"]
+  },
+  "no_gwent": {
+    "summary": "Novigrad Gwent quests: Gwent: Big City Players (Dijkstra/Sigi Reuven among them), Gwent: Playing Thaler, and Gwent: High Stakes tournament at the Passiflora.",
+    "available_when": "Dijkstra: after Broken Flowers and the Get Junior scene with thugs at his bathhouse, he moves to his office near the bathhouse entrance. Thaler: after A Deadly Plot he is at the Seven Cats Inn. High Stakes: take the notice from any Novigrad notice board, then speak to the Scribe at the Passiflora.",
+    "how_to": [
+      "Dijkstra (Sigismund, bathhouse office): beat him for the Esterad Thyssen card; play him as soon as possible so he does not become unavailable.",
+      "Thaler at the Seven Cats Inn after A Deadly Plot: beat him for the Geralt of Rivia card (25 XP).",
+      "High Stakes: pay 1,000 crown entry to the Scribe, win four matches (Bernard Tulle, Sasha, Finneas, Count Tybalt), fight Finneas after, recover the stolen purse at a warehouse, dinner with Sasha."
+    ],
+    "missable": "Dijkstra: guide warns he may become unavailable with new story developments. Thaler: from a search summary (not fetched), the Thaler card should be won before Reason of State; otherwise it may only be obtainable inside the Seven Cats Inn (unconfirmed). High Stakes: gamerguides says there is NO choice between cards and coins; you get both the four leader cards and 4,500 crowns, so the note about choosing cards over coins is not supported. A search summary warns leaving the Passiflora mid-tournament fails the quest (not fetched).",
+    "sources": [
+      "https://gamerguides.com/the-witcher-3-wild-hunt/guide/gwent/quests/gwent-big-city-players",
+      "http://www.gamebanshee.com/thewitcher3/walkthrough/gwent-oldpals.php",
+      "https://gamerguides.com/the-witcher-3-wild-hunt/guide/gwent/quests/high-stakes-gwent"
+    ],
+    "verified": "partial",
+    "quest_names": ["Gwent: Big City Players", "Gwent: Old Pals", "Gwent: Playing Thaler", "Gwent: High Stakes", "Reason of State"]
+  }
+}

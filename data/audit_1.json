@@ -1,0 +1,1696 @@
+{
+ "region_order": [
+  "Prologue: tutorial, Lilac and Gooseberries (ghouls, loot skull, Gwent with Aldert, buy cards from Elsa)",
+  "Captain -> The Beast of White Orchard; Tomira -> On Death's Bed; do Missing in Action, Precious Cargo, Frying Pan, Twisted Firestarter, Viper diagrams, treasure hunts BEFORE the Vesemir talk",
+  "Report griffin (safe) -> manual save -> Vesemir at inn (point of no return) -> Incident -> Imperial Audience",
+  "The Nilfgaardian Connection (gate for all Velen)",
+  "Hunting a Witch -> Wandering in the Dark (accept and finish Magic Lamp inside the ruins) -> An Invitation from Keira Metz",
+  "Bloody Baron -> King of the Wolves -> Family Matters up to botchling/Tamara; play the Baron at Gwent now",
+  "Lynch Mob (Hangman's Alley) -> A Towerful of Mice -> A Favor for a Friend -> For the Advancement of Learning (send Keira to Kaer Morhen); Forefathers' Eve after Towerful",
+  "Ladies of the Wood (Whispering Hillock after the ealdorman) -> Fleeing the Bog",
+  "Skellige: The Calm Before the Storm before telling the Baron about Anna",
+  "Finish Family Matters -> Return to Crookback Bog -> Out of the Shadows",
+  "Hazardous Goods, then Reardon Manor and Ghosts of the Past (if Letho alive)",
+  "Remaining Velen side quests/contracts/Gwent at their level; everything on the Isle cutoff list before the boat; Devil by the Well before On Thin Ice"
+ ],
+ "quests": [
+  {
+   "title": "Lilac and Gooseberries",
+   "kind": "main",
+   "level": "1-3",
+   "start": "Prologue, after the Kaer Morhen tutorial.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Starts the leave-White-Orchard sequence; innkeeper Elsa becomes unavailable and WO side quests fail."
+    }
+   ],
+   "fails_or_locks_when": "never (ends the prologue)",
+   "journal_files": [
+    "q001yennsearch",
+    "questactprologue"
+   ],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Both journal files have no readable entries; wiki objectives (kill ghouls, follow Vesemir, ask travelers, griffin contract) cannot be matched; name 'yennsearch' fits.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Lilac_and_Gooseberries"
+   ],
+   "unverified": [
+    "Which journal file is the parent quest"
+   ]
+  },
+  {
+   "title": "The Beast of White Orchard",
+   "kind": "main",
+   "level": "3",
+   "start": "Sub-quest of Lilac and Gooseberries: talk to Captain Peter Saar Gwynleve at the garrison (Tomira's door stays locked until then).",
+   "needs_before": [
+    {
+     "quest": "Lilac and Gooseberries",
+     "strength": "hard",
+     "why": "starts inside it"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Reporting the reward to the captain is safe; the cutoff is the later Vesemir conversation."
+    }
+   ],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q002griffin"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries Find the Huntsman, Kill rabid dogs, Search the griffin nest, Get the Buckthorn, Kill the Griffin, Get reward from Nilfgaardians = wiki objectives.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Beast_of_White_Orchard",
+    "https://witcher.fandom.com/wiki/Lilac_and_Gooseberries"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Incident at White Orchard",
+   "kind": "main",
+   "level": "2",
+   "start": "Talk to Vesemir at WO inn after the griffin reward.",
+   "needs_before": [
+    {
+     "quest": "The Beast of White Orchard",
+     "strength": "hard",
+     "why": "must be finished first"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "is itself the point of no return for WO side quests",
+   "journal_files": [
+    "q002bandits"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "'Q002 Bandit attack' = the bandit fight in the inn.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Incident_at_White_Orchard"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Imperial Audience",
+   "kind": "main",
+   "level": "2",
+   "start": "Automatic after The Incident at White Orchard (Yennefer arrives, travel to Vizima).",
+   "needs_before": [
+    {
+     "quest": "The Incident at White Orchard",
+     "strength": "hard",
+     "why": "sequence"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never; several WO quest infoboxes name it as their cutoff but wiki text says the cutoff is finishing Lilac and Gooseberries / Vesemir talk",
+   "journal_files": [
+    "q002vizimapalace"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries Dress up and talk to chamberlain, Follow chamberlain, Talk to Yennefer, Get your equipment back = wiki objectives exactly.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Imperial_Audience",
+    "https://witcher.fandom.com/wiki/Lilac_and_Gooseberries"
+   ],
+   "unverified": [
+    "Exact frame at which WO quests flip to Failed (Vesemir talk vs Imperial Audience start) - wiki infobox and text disagree"
+   ]
+  },
+  {
+   "title": "Missing in Action",
+   "kind": "side",
+   "level": "2",
+   "start": "WO notice board, or Dune Vildenvert at the Ransacked Village; not accessible until the griffin has been seen in Lilac and Gooseberries.",
+   "needs_before": [
+    {
+     "quest": "Lilac and Gooseberries",
+     "strength": "hard",
+     "why": "griffin must have been met first"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Wiki: fails if not completed before finishing Lilac and Gooseberries (infobox: Imperial Audience)"
+    }
+   ],
+   "fails_or_locks_when": "Leaving White Orchard at end of prologue",
+   "journal_files": [
+    "mq0001battlefieldmother"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Journal 'Missing Brother'; entries Look for Temerian Shields with White Orchid, Meet man at battlefield, Dog Led = wiki objectives.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Missing_in_Action"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Precious Cargo",
+   "kind": "side",
+   "level": "2",
+   "start": "Forlorn merchant (John Geermer) NW of WO, south of the bog, during Lilac and Gooseberries.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Prologue quest; no explicit cutoff on wiki, L&G text says WO secondary quests fail"
+    }
+   ],
+   "fails_or_locks_when": "Not explicitly stated; presumed when prologue ends",
+   "journal_files": [
+    "mq0002thefield"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries Find Chest, Find Cart, Scam Succeeded/Failed, Ask merchant about contract = locked box, cart, merchant lies.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Precious_Cargo"
+   ],
+   "unverified": [
+    "Explicit cutoff (infobox cutoff_quest empty)"
+   ]
+  },
+  {
+   "title": "A Frying Pan, Spick and Span",
+   "kind": "side",
+   "level": "2",
+   "start": "Old woman on the Ismena riverbank NW of WO village (on the way to the garrison).",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Presumed prologue quest"
+    }
+   ],
+   "fails_or_locks_when": "Not explicitly stated",
+   "journal_files": [
+    "mq0004lockedshed"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries Break into the shed, Search Shed for Frying Pan, Return Frying Pan to Lady.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Frying_Pan,_Spick_and_Span"
+   ],
+   "unverified": [
+    "Explicit cutoff"
+   ]
+  },
+  {
+   "title": "Twisted Firestarter",
+   "kind": "side",
+   "level": "2",
+   "start": "Willis the dwarven smith at WO forge.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Wiki: fails if not completed before finishing Lilac and Gooseberries"
+    }
+   ],
+   "fails_or_locks_when": "Leaving WO (infobox: Imperial Audience)",
+   "journal_files": [
+    "mq0005dwarfsmith"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries Examine area behind smithy, Follow tracks, Confront suspect, Released/Brought Arsonist.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Twisted_Firestarter"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "On Death's Bed",
+   "kind": "side",
+   "level": "2",
+   "start": "Herbalist Tomira after the garrison captain sends you to her (ask about dying girl Lena). Needs a Swallow potion (celandine).",
+   "needs_before": [
+    {
+     "quest": "The Beast of White Orchard",
+     "strength": "hard",
+     "why": "Tomira's door locked until captain conversation"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Wiki: auto-fails when prologue ends and you leave WO"
+    }
+   ],
+   "fails_or_locks_when": "Leaving WO (infobox: Imperial Audience)",
+   "journal_files": [
+    "q002healingwoman"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries Create Swallow, Bring elixirs to the Herbalist = brew Swallow, take to herbalist.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/On_Death's_Bed"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Devil by the Well",
+   "kind": "contract",
+   "level": "2",
+   "start": "WO notice board / Odolan.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "On Thin Ice (talking to Avallac'h) / Something Ends, Something Begins fishing scene",
+     "why": "Late cutoff; NOT lost when leaving WO in the prologue."
+    }
+   ],
+   "fails_or_locks_when": "On Thin Ice / Something Ends, Something Begins; NOT at prologue end",
+   "journal_files": [
+    "mq0003freshwater"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries 'See if there's a Noonwraith contract on White Orchard's notice board', Banish Noonwraith, Ask farmer about help with well.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Devil_by_the_Well",
+    "https://witcher.fandom.com/wiki/On_Thin_Ice",
+    "https://witcher.fandom.com/wiki/Something_Ends,_Something_Begins_(quest)"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Scavenger Hunt: Viper School Gear (base game swords)",
+   "kind": "treasure",
+   "level": "6",
+   "start": "Pick up either Viper sword diagram in WO (silver: cemetery chapel basement; steel: Amavet Fortress Ruins).",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "No wiki statement that it is lost; WO stays reachable after prologue",
+   "journal_files": [
+    "th1001viper"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "Entries 'Viper Set', 'Steel sword'. Armor/venomous diagrams are Hearts of Stone, not this entry.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Scavenger_Hunt:_Viper_School_Gear",
+    "https://witcher.fandom.com/wiki/Viper_School_Gear"
+   ],
+   "unverified": [
+    "Whether WO camps/ruins remain intact after prologue"
+   ]
+  },
+  {
+   "title": "Gwent (White Orchard): Aldert Geert (scholar) and innkeeper Elsa",
+   "kind": "gwent",
+   "level": "1-3",
+   "start": "WO inn. Aldert plays Nilfgaard deck: Zoltan Chivay card + A Miraculous Guide to Gwent. Elsa sells cards.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Talking to Vesemir at the White Orchard inn after the griffin reward",
+     "why": "Elsa becomes unavailable; her cards can still be bought from Bram"
+    }
+   ],
+   "fails_or_locks_when": "Aldert is later hanged at Hanged Man's Tree in Velen; Zoltan card is on his corpse if not won - not missable",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "No journal file (not a quest; Collect 'Em All = cgmetagatherall).",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Aldert_Geert",
+    "https://witcher.fandom.com/wiki/Gwent_players",
+    "https://witcher.fandom.com/wiki/Lilac_and_Gooseberries"
+   ],
+   "unverified": [
+    "Whether Elsa herself plays Gwent (list shows only Aldert for WO)"
+   ]
+  },
+  {
+   "title": "The Nilfgaardian Connection",
+   "kind": "main",
+   "level": "5",
+   "start": "After Imperial Audience: Velen, Inn at the Crossroads.",
+   "needs_before": [
+    {
+     "quest": "Imperial Audience",
+     "strength": "hard",
+     "why": "previous quest"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q101agent"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "'Find Agent' = find agent Hendrik; only entry.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Nilfgaardian_Connection"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Bloody Baron",
+   "kind": "main",
+   "level": "6",
+   "start": "Crow's Perch, via Hendrik's notes.",
+   "needs_before": [
+    {
+     "quest": "The Nilfgaardian Connection",
+     "strength": "hard",
+     "why": "cave entrance blocked before it; wiki previous quest"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "baron"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries 'Find the shrine erected in the boy's memory', 'Return to the old man ... pay for his information', 'Search the village to find a different way inside', Follow sergeant to Baron = wiki objectives.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Bloody_Baron_(quest)"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Ciri's Story: The King of the Wolves",
+   "kind": "main",
+   "level": "5",
+   "start": "Starts at the end of Bloody Baron.",
+   "needs_before": [
+    {
+     "quest": "Bloody Baron",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q103firstreplacerciri"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Protect Margaret from wolfs, Kill werewolf, Get through riverbed.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ciri's_Story:_The_King_of_the_Wolves"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Family Matters",
+   "kind": "main",
+   "level": "6",
+   "start": "After Ciri's Story: The King of the Wolves.",
+   "needs_before": [
+    {
+     "quest": "Ciri's Story: The King of the Wolves",
+     "strength": "hard",
+     "why": "previous quest"
+    },
+    {
+     "quest": "A Princess in Distress",
+     "strength": "hard",
+     "why": "sub-quest (pellar's goat)"
+    },
+    {
+     "quest": "Ladies of the Wood",
+     "strength": "hard",
+     "why": "final Baron conversation cannot happen until Ladies of the Wood is completed"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Telling the Baron you found Anna / asking for Ciri's last story (Out of the Shadows)",
+     "why": "Last chance to play the Baron at Gwent (card remains in his office since 1.20); starts Return to Crookback Bog; kills A Mysterious Passenger if Skellige's The Calm Before the Storm is not done"
+    },
+    {
+     "event": "Finishing it when Novigrad and Skellige mains are done",
+     "why": "Ugly Baby begins immediately after Uma appears"
+    }
+   ],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "family",
+    "q103goat",
+    "q103secondreplacerciri",
+    "q103thirdreplacerciri"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'family' entries Find daughter, Find wife, Deal with botch, Reporting to Baron. q103goat 'Epic Goat Adventure' = A Princess in Distress; secondreplacerciri 'Beat Baron in horserace' = The Race; thirdreplacerciri 'Kill Basilisk / Save Baron from the tower' = Out of the Shadows (med).",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Family_Matters",
+    "https://witcher.fandom.com/wiki/A_Princess_in_Distress",
+    "https://witcher.fandom.com/wiki/Ciri's_Story:_The_Race",
+    "https://witcher.fandom.com/wiki/A_Mysterious_Passenger"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Hunting a Witch",
+   "kind": "main",
+   "level": "5",
+   "start": "Hendrik's notes lead to Midcopse; may be done before or after Bloody Baron.",
+   "needs_before": [
+    {
+     "quest": "The Nilfgaardian Connection",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q104lookingforwitch"
+   ],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Journal file has no readable entries; matched by title 'looking for witch' only.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Hunting_a_Witch"
+   ],
+   "unverified": [
+    "Which statuses the tracker can read for this file"
+   ]
+  },
+  {
+   "title": "Wandering in the Dark",
+   "kind": "main",
+   "level": "6",
+   "start": "Follows Hunting a Witch (meet Keira at the mage's hideout).",
+   "needs_before": [
+    {
+     "quest": "Hunting a Witch",
+     "strength": "hard",
+     "why": "previous quest"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "mine"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "'Q104 Mysterious Sorcerer' (the elf mage), Keep following Keira. Caveat: 'mine' also holds the brazier entry that the wiki puts in Magic Lamp, so its Done may include Lamp content.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Wandering_in_the_Dark"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Magic Lamp",
+   "kind": "side",
+   "level": "6",
+   "start": "Offered by Keira at the end of Wandering in the Dark, inside the ruins.",
+   "needs_before": [
+    {
+     "quest": "Wandering in the Dark",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Leaving the elven ruins",
+     "why": "Once agreed it must be finished before leaving the ruins or it fails; failing/skipping also blocks the ruins' Place of Power (skill point)"
+    }
+   ],
+   "fails_or_locks_when": "Leaving the ruins unfinished; also The Isle of Mists (infobox)",
+   "journal_files": [
+    "q104postmine"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "'Q104 Favour For Keira' + 'Lit braziers in correct order' = wiki 'Light the braziers in the correct order'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Magic_Lamp_(quest)"
+   ],
+   "unverified": [
+    "Place of Power lock when lamp declined (wiki note only)"
+   ]
+  },
+  {
+   "title": "An Invitation from Keira Metz",
+   "kind": "side",
+   "level": "6",
+   "start": "Visit Keira's hut N of Midcopse; available once you exit the ruins after Wandering in the Dark (or Magic Lamp). Does NOT need Ladies of the Wood.",
+   "needs_before": [
+    {
+     "quest": "Wandering in the Dark",
+     "strength": "hard",
+     "why": "Gamerguides: starts after exiting the elven ruins"
+    },
+    {
+     "quest": "Magic Lamp",
+     "strength": "soft",
+     "why": "not required, but yields the lamp item used in Towerful"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists",
+   "journal_files": [
+    "q106findkeira"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Q106 Keira's bussiness', Keira Metz invitation - begining, Speak with Keira.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/An_Invitation_from_Keira_Metz",
+    "https://www.gamerguides.com/the-witcher-3-wild-hunt/guide/secondary-quests/velen/an-invitation-from-keira-metz"
+   ],
+   "unverified": [
+    "Wiki note says it needs all Hunting-a-Witch-related quests; infobox and Gamerguides say only Wandering in the Dark/Magic Lamp; treated as soft"
+   ]
+  },
+  {
+   "title": "A Towerful of Mice",
+   "kind": "side",
+   "level": "6",
+   "start": "Keira's hut after Invitation (boat to Fyke Isle).",
+   "needs_before": [
+    {
+     "quest": "An Invitation from Keira Metz",
+     "strength": "hard",
+     "why": "previous quest"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Returning to Keira at the end of Towerful",
+     "why": "That conversation is the Lynch Mob cutoff: do Lynch Mob first"
+    },
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists",
+   "journal_files": [
+    "q106tower"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Use oillamp on island to find ghosts, Find mages laboratory, Plague maiden, Take Anabelle to Graham.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Towerful_of_Mice",
+    "https://witcher.fandom.com/wiki/Lynch_Mob"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Forefathers' Eve",
+   "kind": "side",
+   "level": "7",
+   "start": "Pellar contacts you after A Towerful of Mice (Crow's Perch forge if the botchling part of Family Matters is done, else at Keira's hut).",
+   "needs_before": [
+    {
+     "quest": "A Towerful of Mice",
+     "strength": "hard",
+     "why": "dependent"
+    },
+    {
+     "quest": "Family Matters",
+     "strength": "soft",
+     "why": "only changes where the pellar finds you"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "No matching journal file in journal_names_1.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Forefathers'_Eve"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Lynch Mob",
+   "kind": "side",
+   "level": "7",
+   "start": "Peasants at Hangman's Alley.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Start of A Favor for a Friend (end of A Towerful of Mice)",
+     "why": "Automatically too late afterwards"
+    }
+   ],
+   "fails_or_locks_when": "Start of A Favor for a Friend; or if you ignore it",
+   "journal_files": [
+    "mq1015lynch"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Ending - lynch, Ending - fight, Deal with the villagers.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Lynch_Mob"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "A Favor for a Friend",
+   "kind": "side",
+   "level": "6",
+   "start": "End of A Towerful of Mice (Keira asks you to find a missing trader).",
+   "needs_before": [
+    {
+     "quest": "A Towerful of Mice",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Dinner/race with Keira",
+     "why": "Wiki hint: wait before dinner if you still want Keira as vendor; refusing to play Prince Charming fails the quest"
+    },
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists; refusing to play along at dinner",
+   "journal_files": [
+    "sq101keira"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Stuff for Keira, Race with Keira to the meadow, SQ101 Ending Sex/No Sex/No Date.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Favor_for_a_Friend"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "For the Advancement of Learning",
+   "kind": "side",
+   "level": "8",
+   "start": "Immediately after A Favor for a Friend.",
+   "needs_before": [
+    {
+     "quest": "A Favor for a Friend",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Choosing Keira's fate",
+     "why": "Send her to Kaer Morhen (needed for Brothers In Arms: Velen / Full Crew). Letting her go to Radovid unlocks A Final Kindness instead; demanding notes first fights her and she dies"
+    },
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists",
+   "journal_files": [
+    "q109wrapup"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Go to Popiel's Tower to stop Keira, Defeat Keira, Ending Keira Left for Kaer Morhen/Radovid.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/For_the_Advancement_of_Learning",
+    "https://witcher.fandom.com/wiki/A_Final_Kindness",
+    "https://witcher.fandom.com/wiki/Brothers_In_Arms:_Velen"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "A Final Kindness",
+   "kind": "main",
+   "level": "26",
+   "start": "Novigrad during Final Preparations; exists only if Keira was NOT sent to Kaer Morhen (let go to Radovid or line unfinished).",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "Mutually exclusive with sending Keira to Kaer Morhen",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Not in this journal slice.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Final_Kindness"
+   ],
+   "unverified": [
+    "Whether a 100% tracker can ever have both"
+   ]
+  },
+  {
+   "title": "Ladies of the Wood",
+   "kind": "main",
+   "level": "6",
+   "start": "After Wandering in the Dark; marker to the Orphans of Crookback Bog.",
+   "needs_before": [
+    {
+     "quest": "Wandering in the Dark",
+     "strength": "hard",
+     "why": "wiki previous quest"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Telling the Baron about Anna in Family Matters",
+     "why": "Family Matters cannot progress past Tamara until Ladies of the Wood is done"
+    }
+   ],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q105witches"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Find the witches in the swamps, Follow Johnny, Give Janek doll, Ask the children about Ciri.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ladies_of_the_Wood"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Whispering Hillock",
+   "kind": "main",
+   "level": "5",
+   "start": "Sent by the Downwarren ealdorman during Ladies of the Wood (or found earlier as a secondary).",
+   "needs_before": [
+    {
+     "quest": "Ladies of the Wood",
+     "strength": "soft",
+     "why": "it is a sub-quest of Ladies of the Wood, not a follow-up; speak to the ealdorman first"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Freeing/killing the spirit before consulting the ealdorman",
+     "why": "Odd outcome: Downwarren attacked, orphans not saved, Anna not made a hag"
+    }
+   ],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q105evilspirit"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Gather spirits bones, Get ravens feathers, Tame wild black horse with Axii, Destroy trees heart.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Whispering_Hillock",
+    "https://witcher.fandom.com/wiki/Ladies_of_the_Wood",
+    "https://witcher.fandom.com/wiki/Return_to_Crookback_Bog"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Ciri's Story: Fleeing the Bog",
+   "kind": "main",
+   "level": "5",
+   "start": "After Whispering Hillock.",
+   "needs_before": [
+    {
+     "quest": "The Whispering Hillock",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q105ciriescape"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Escape from crookback bog.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ciri's_Story:_Fleeing_the_Bog"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Return to Crookback Bog",
+   "kind": "side",
+   "level": "9",
+   "start": "Begins right after Family Matters ends (Baron asks you to help save Anna).",
+   "needs_before": [
+    {
+     "quest": "Family Matters",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "Ladies of the Wood",
+     "strength": "hard",
+     "why": "needed to end Family Matters"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists",
+   "journal_files": [
+    "q107swamps"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Meet Baron in Burrows, Getting rid of witch hunters, Ask Johnny about Anna, Q107 Ending Baron hanged.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Return_to_Crookback_Bog"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Ciri's Room",
+   "kind": "side",
+   "level": "5",
+   "start": "Crow's Perch after Bloody Baron / King of the Wolves.",
+   "needs_before": [
+    {
+     "quest": "Ciri's Story: The King of the Wolves",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Not in journal_names_1.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ciri's_Room"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "A Mysterious Passenger",
+   "kind": "main",
+   "level": "-",
+   "start": "Skellige (Larvik), after The Calm Before the Storm.",
+   "needs_before": [
+    {
+     "quest": "The Calm Before the Storm",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Asking the Baron for Out of the Shadows",
+     "why": "Cutoff: do Skellige's Calm Before the Storm before telling the Baron about Anna"
+    }
+   ],
+   "fails_or_locks_when": "Baron conversation starting Ciri's Story: Out of the Shadows",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Not in this slice.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Mysterious_Passenger",
+    "https://witcher.fandom.com/wiki/Family_Matters"
+   ],
+   "unverified": [
+    "Whether tracker should enforce a cross-region hold"
+   ]
+  },
+  {
+   "title": "The Fall of the House of Reardon",
+   "kind": "side",
+   "level": "6",
+   "start": "Dolores in Midcopse area / find Reardon Manor. Available regardless of Letho.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists",
+   "journal_files": [
+    "sq102dolores"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Help Dolores, Find the farmstead, Find a trace of Dolores' brother, Rid the farm of monstrous occupants.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Fall_of_the_House_of_Reardon"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Ghosts of the Past",
+   "kind": "side",
+   "level": "6",
+   "start": "Farmstead near Reardon/Lurtch; exists only if Letho is alive in the world state.",
+   "needs_before": [
+    {
+     "quest": "Hazardous Goods",
+     "strength": "soft",
+     "why": "do Hazardous Goods part 1 before starting this"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "The Isle of Mists (boat trip to Undvik + final confirm prompt)",
+     "why": "fails (wiki: only if Letho alive)"
+    }
+   ],
+   "fails_or_locks_when": "The Isle of Mists; straying from Letho ends it early",
+   "journal_files": [
+    "sq102letho"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Follow Letho to Midcots, Kill the assassins in the yard, Follow Letho to camp, Kill the bandits.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ghosts_of_the_Past",
+    "https://witcher.fandom.com/wiki/The_Isle_of_Mists_(quest)",
+    "https://witcher.fandom.com/wiki/Imperial_Audience"
+   ],
+   "unverified": [
+    "Default Letho state with no import and no simulation"
+   ]
+  },
+  {
+   "title": "Hazardous Goods",
+   "kind": "side",
+   "level": "n/a",
+   "start": "Cart with plague victims NW of Lurtch.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Starting Ghosts of the Past",
+     "why": "Unavailable until GotP is finished if part 1 isn't done"
+    }
+   ],
+   "fails_or_locks_when": "Proximity-sensitive (burn option fails if you travel away)",
+   "journal_files": [
+    "mq1003trailofdead"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Help cart owner burn the bodies, Help the trapped man.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Hazardous_Goods"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Gwent: Velen Players",
+   "kind": "gwent",
+   "level": "-",
+   "start": "Notice at Crow's Perch/Midcopse, or challenge the Baron. Opponents: Baron (Dijkstra card), Old Sage at Benek, Haddy at Midcopse, Boatwright at Oreton (Letho card).",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Final Family Matters conversation with the Baron",
+     "why": "Last chance to play him; afterwards the card is in his office (needs the quest started)"
+    }
+   ],
+   "fails_or_locks_when": "Baron card falls back to office since 1.20; other three not missable per wiki",
+   "journal_files": [
+    "cgnomansland"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Win unique card from Baron, Search Baron's office for his unique card, seer, boatbuilder, Hadko (old names).",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Gwent:_Velen_Players",
+    "https://witcher.fandom.com/wiki/Family_Matters",
+    "https://witcher.fandom.com/wiki/Gwent_players"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Gwent: Playing Innkeeps (Crossroads innkeep)",
+   "kind": "gwent",
+   "level": "-",
+   "start": "Inn at the Crossroads innkeep (also Stjepan in Oxenfurt, Olivier in Novigrad).",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "Olivier can die in Now or Never; card then in a Kingfisher lockbox",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Not in this slice.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Gwent:_Playing_Innkeeps"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Fists of Fury: Velen",
+   "kind": "side",
+   "level": "11",
+   "start": "No Man's Land",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never stated",
+   "journal_files": [
+    "fistfightnomansland"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Fight the Blacksmith/Fisherman/Jonas/Sergeant.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Fists_of_Fury:_Velen"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Races: Crow's Perch",
+   "kind": "side",
+   "level": "-",
+   "start": "Crow's Perch",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never stated",
+   "journal_files": [
+    "hr101baron"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "NML Horse Race: Baron's Men.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Races:_Crow's_Perch"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Collect 'Em All",
+   "kind": "gwent",
+   "level": "-",
+   "start": "Automatic",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "cgmetagatherall"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Gather all the cards.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Collect_'Em_All"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Shrieker",
+   "kind": "contract",
+   "level": "8",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh101cockatrice"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Skrzeczun (Polish for Shrieker), Baron noticeboard, rooster attacks",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Shrieker"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Missing Brother",
+   "kind": "contract",
+   "level": "33",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh102arachas"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Bruno, mine near crossroads inn, eggs",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Missing_Brother"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Jenny o' the Woods",
+   "kind": "contract",
+   "level": "10",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh103nightwraith"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Midcotts, lovers' spot, burn blood from knife",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Jenny_o'_the_Woods"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: The Mystery of the Byways Murders",
+   "kind": "contract",
+   "level": "22",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh104ekimma"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Bytomir, Stegna ekimmara",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_The_Mystery_of_the_Byways_Murders"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Phantom of the Trade Route",
+   "kind": "contract",
+   "level": "23",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh105wyvern"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "missing caravan, wyvern nests, royal wyvern",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Phantom_of_the_Trade_Route"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: The Merry Widow",
+   "kind": "contract",
+   "level": "10",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh106gravehag"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "gravedigger, skulls, grave hag",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_The_Merry_Widow"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Mysterious Tracks",
+   "kind": "contract",
+   "level": "20",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh107fiend"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "chort bait, bies dung",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Mysterious_Tracks"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: Swamp Thing",
+   "kind": "contract",
+   "level": "12",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "mh108fogling"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Eye of Nehaleni, peat worker, ancient fogling",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Swamp_Thing"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: The Griffin from the Highlands",
+   "kind": "contract",
+   "level": "24",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "sq108griffon"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Baron quartermaster trophy",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_The_Griffin_from_the_Highlands"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Master Armorers",
+   "kind": "side",
+   "level": "24",
+   "start": "Notice board / NPC in Velen; no story prerequisite found on wiki",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "none stated on wiki",
+   "journal_files": [
+    "sq108masterblacksmith"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "Fergus/Joana/Undvik tools",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Master_Armorers"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Funeral Pyres",
+   "kind": "side",
+   "level": "3",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1019amatteroffaith"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "burn mass graves, return to priest",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Funeral_Pyres"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Defender of the Faith",
+   "kind": "side",
+   "level": "10",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1012ongoodtermswithgods"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "fix shrines",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Defender_of_the_Faith"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Last Rites",
+   "kind": "side",
+   "level": "9",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1010lastrite"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "weeping grave ring; previous Defender of the Faith",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Last_Rites"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Witcher Wannabe",
+   "kind": "side",
+   "level": "10",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1013thepretender"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "charlatan in cemetery; previous Merry Widow",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Witcher_Wannabe"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Bitter Harvest",
+   "kind": "side",
+   "level": "9",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1005battlescavengers"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "protect scavengers",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Bitter_Harvest"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Fake Papers",
+   "kind": "side",
+   "level": "-",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1023fakepapers"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "previous Bitter Harvest (dependent); keep Albin alive",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Fake_Papers"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "A Greedy God",
+   "kind": "side",
+   "level": "7",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1057fugas"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "Allgod/sylvan; previous Wandering in the Dark",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Greedy_God"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Fool's Gold",
+   "kind": "side",
+   "level": "6",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "sq107pigs"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "talk to the pig",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Fool's_Gold"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Wild at Heart",
+   "kind": "side",
+   "level": "7",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "sq104werewolf"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "Niellen/Hanna werewolf",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Wild_at_Heart"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Death By Fire",
+   "kind": "side",
+   "level": "10",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1046_burning_down_the_house"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "bandits, speak to victim",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Death_By_Fire"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Love's Cruel Snares",
+   "kind": "side",
+   "level": "10",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1045bdamselindistress"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "find fiance; proximity-sensitive",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Love's_Cruel_Snares"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "A Dog's Life",
+   "kind": "side",
+   "level": "5",
+   "start": "Velen overworld",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "see wiki",
+   "journal_files": [
+    "mq1001wolvesanddogs"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "follow dog; dog can die",
+   "sources": [
+    "https://witcher.fandom.com/wiki/A_Dog's_Life"
+   ],
+   "unverified": [
+    "Cutoffs only partially checked"
+   ]
+  },
+  {
+   "title": "Ugly Baby",
+   "kind": "main",
+   "level": "19",
+   "start": "Starts only after Velen, Novigrad and Skellige main lines are done (tell Sergeant Ardal you take Uma).",
+   "needs_before": [
+    {
+     "quest": "Family Matters",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Collecting Uma",
+     "why": "fails The Last Wish and Following the Thread"
+    }
+   ],
+   "fails_or_locks_when": "-",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Not in slice.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ugly_Baby",
+    "https://witcher.fandom.com/wiki/In_Ciri's_Footsteps"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Isle of Mists",
+   "kind": "main",
+   "level": "22",
+   "start": "After Uma's curse is lifted in Ugly Baby.",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "-",
+   "journal_files": [
+    "q402ciri"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Outside slice.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Isle_of_Mists_(quest)"
+   ],
+   "unverified": []
+  }
+ ],
+ "events": [
+  {
+   "name": "Talking to Vesemir at WO inn after the griffin (start of The Incident at White Orchard)",
+   "journal_files": [
+    "q002bandits",
+    "q002griffin"
+   ],
+   "fails": [
+    "Missing in Action",
+    "Precious Cargo",
+    "A Frying Pan, Spick and Span",
+    "Twisted Firestarter",
+    "On Death's Bed"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Lilac_and_Gooseberries",
+    "https://witcher.fandom.com/wiki/The_Incident_at_White_Orchard"
+   ]
+  },
+  {
+   "name": "On Thin Ice / Something Ends, Something Begins",
+   "journal_files": [
+    "mq0003freshwater"
+   ],
+   "fails": [
+    "Contract: Devil by the Well"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/On_Thin_Ice",
+    "https://witcher.fandom.com/wiki/Contract:_Devil_by_the_Well"
+   ]
+  },
+  {
+   "name": "Leaving the elven ruins (end of Wandering in the Dark)",
+   "journal_files": [
+    "mine",
+    "q104postmine"
+   ],
+   "fails": [
+    "Magic Lamp"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Magic_Lamp_(quest)"
+   ]
+  },
+  {
+   "name": "Start of A Favor for a Friend (end of A Towerful of Mice)",
+   "journal_files": [
+    "sq101keira"
+   ],
+   "fails": [
+    "Lynch Mob"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Lynch_Mob",
+    "https://witcher.fandom.com/wiki/A_Towerful_of_Mice"
+   ]
+  },
+  {
+   "name": "Starting Ghosts of the Past",
+   "journal_files": [
+    "sq102letho"
+   ],
+   "fails": [
+    "Hazardous Goods (until GotP done, if part 1 not done)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Hazardous_Goods"
+   ]
+  },
+  {
+   "name": "Telling Baron about Anna / asking for Ciri's last story (Out of the Shadows)",
+   "journal_files": [
+    "family",
+    "q103thirdreplacerciri"
+   ],
+   "fails": [
+    "A Mysterious Passenger (if Calm Before the Storm not done)",
+    "Baron Gwent match (card then from office)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Family_Matters",
+    "https://witcher.fandom.com/wiki/A_Mysterious_Passenger",
+    "https://witcher.fandom.com/wiki/Gwent:_Velen_Players"
+   ]
+  },
+  {
+   "name": "Freeing Whispering Hillock spirit before consulting the Downwarren ealdorman",
+   "journal_files": [
+    "q105evilspirit"
+   ],
+   "fails": [
+    "No quest fails; alters Return to Crookback Bog outcome (orphans not saved)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Whispering_Hillock"
+   ]
+  },
+  {
+   "name": "Retrieving Uma in Ugly Baby",
+   "journal_files": [],
+   "fails": [
+    "The Last Wish",
+    "Following the Thread"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ugly_Baby"
+   ]
+  },
+  {
+   "name": "The Isle of Mists: boat to Undvik and confirm (q402ciri is already Active when Uma's curse is lifted)",
+   "journal_files": [
+    "q402ciri"
+   ],
+   "fails": [
+    "A Dangerous Game",
+    "A Deadly Plot",
+    "A Favor for a Friend",
+    "A Matter of Life and Death",
+    "A Towerful of Mice",
+    "An Eye for an Eye",
+    "Berengar's Blade (really Battle of Kaer Morhen)",
+    "Brothers In Arms x4",
+    "Cabaret",
+    "Carnal Sins",
+    "Ciri's Room",
+    "Coronation",
+    "Fencing Lessons",
+    "For the Advancement of Learning",
+    "Ghosts of the Past (Letho alive)",
+    "King's Gambit",
+    "Now or Never",
+    "Possession",
+    "Redania's Most Wanted",
+    "Return to Crookback Bog",
+    "The Fall of the House of Reardon",
+    "The Lord of Undvik",
+    "An Invitation from Keira Metz (infobox)",
+    "Magic Lamp (infobox)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Isle_of_Mists_(quest)"
+   ]
+  }
+ ]
+}

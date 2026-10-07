@@ -1,0 +1,245 @@
+{
+ "_meta": {
+  "note": "Witcher fandom wiki (witcher.fandom.com) returned HTTP 402 and gamerguides/twinfinite/vulkk/gamebanshee-dev returned 403 for many pages, so sources are gamerguides (partly), fextralife, consolepulse, allthings.how, guides4gamers, ggrecon, arrpeegeez. Nothing was checked against the v5.00 Remastered build. Sources sometimes disagree; discrepancies are flagged inside entries."
+ },
+ "wo_skull": {
+  "summary": "Yennefer's crystal bird (raven) skull is a quest item lying near the opening campfire in White Orchard, which you can later give to Yennefer for unique dialogue and XP.",
+  "available_when": "Right after Geralt and Vesemir kill the ghouls that attack at the opening campfire (quest Lilac and Gooseberries). No other trigger.",
+  "how_to": [
+   "Kill the ghouls at the campfire during the opening.",
+   "Turn on Witcher Senses and loot the skull lying in the foliage nearby.",
+   "Keep it and hand it to Yennefer when you find her later in the game."
+  ],
+  "missable": "Allthings.how and ConsolePulse say it must be taken before leaving White Orchard; the real cutoff is the Vesemir conversation at the inn after the griffin reward, which ends the prologue. A web search snippet says you can return it to Yennefer later.",
+  "sources": [
+   "https://allthings.how/?p=232659",
+   "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-missable-collectibles-complete-checklist"
+  ],
+  "verified": "yes",
+  "quest_names": ["Lilac and Gooseberries"]
+ },
+ "wo_side": {
+  "summary": "White Orchard has five prologue side quests that disappear permanently when the prologue ends.",
+  "available_when": "Each is picked up from NPCs/notice boards in White Orchard during the prologue. The exact trigger NPC for each was not verified (fetch of detail pages failed).",
+  "how_to": [
+   "Do A Frying Pan, Spick and Span (the guide also places Thaler's silver monocle in a riverside hut during it).",
+   "Do Missing in Action, On Death's Bed, Precious Cargo and Twisted Firestarter.",
+   "Optional: guides4gamers also lists Contract: Devil by the Well, Collect 'Em All, Deserter Gold, Dirty Funds, Temerian Valuables as White Orchard quests; fextralife lists Devil by the Well and Faithful Friend. I did not verify whether they count toward '5'.",
+   "Report the griffin and talk to Vesemir only after finishing."
+  ],
+  "missable": "All five vanish after the talk with Vesemir at the inn following the griffin reward (allthings.how).",
+  "sources": [
+   "https://allthings.how/?p=232659",
+   "https://guides4gamers.com/witcher-3-wild-hunt/maps/white-orchard/",
+   "https://thewitcher3.wiki.fextralife.com/White+Orchard"
+  ],
+  "verified": "partial",
+  "quest_names": ["A Frying Pan, Spick and Span", "Missing in Action", "On Death's Bed", "Precious Cargo", "Twisted Firestarter"]
+ },
+ "wo_viper": {
+  "summary": "The quest Scavenger Hunt: Viper School Gear gives the Serpentine steel and silver sword diagrams, both found in White Orchard.",
+  "available_when": "Scavenger Hunt: Viper School Gear appears in White Orchard (how it is triggered, e.g. by a note or by finding the gear, was not verified because the detailed guide pages were blocked).",
+  "how_to": [
+   "Silver sword diagram: in Kolgrim's remains in the crypt (Kolgrim's crypt, White Orchard Cemetery).",
+   "Steel sword diagram: in a chest in the castle ruins.",
+   "Loot both before the prologue ends."
+  ],
+  "missable": "Sources list Viper diagrams among prologue items to take before speaking to Vesemir; presumably lost with the region, not verified for the diagrams specifically.",
+  "sources": [
+   "https://guides4gamers.com/witcher-3-wild-hunt/maps/white-orchard/",
+   "https://allthings.how/?p=232659"
+  ],
+  "verified": "partial",
+  "quest_names": ["Scavenger Hunt: Viper School Gear"]
+ },
+ "wo_poi": {
+  "summary": "White Orchard has six Places of Power, each giving a free ability point on the first visit, plus the usual region clean-up.",
+  "available_when": "Available from the start of the prologue once you can explore; they are in the open world, found with Witcher Senses/map.",
+  "how_to": [
+   "Visit all six (signs: Aard, Axii, Igni, Quen x2, Yrden).",
+   "One is right outside the large crypt near the cemetery.",
+   "Finish other region content before the griffin report."
+  ],
+  "missable": "Prologue content ends after the Vesemir talk. I did not find a source saying each Place of Power is lost afterward; the six count is from guides4gamers, while fextralife lists only the graveyard one.",
+  "sources": [
+   "https://guides4gamers.com/witcher-3-wild-hunt/maps/white-orchard/",
+   "https://thewitcher3.wiki.fextralife.com/White+Orchard"
+  ],
+  "verified": "partial",
+  "quest_names": []
+ },
+ "wo_gwent": {
+  "summary": "Buy Gwent cards from innkeeper Elsa at the White Orchard inn and win the Zoltan Chivay card from the scholar in the inn.",
+  "available_when": "Elsa sells cards from the start of the prologue. The scholar sits with two others in the inn; they leave, he talks to Geralt and, when he says he is going, asks for a Gwent game.",
+  "how_to": [
+   "Buy Elsa's cards (Decoy 20 crowns, Foltest Lord Commander of the North 50 crowns, Blue Stripes Commando, Catapult, Crinfrid Reavers Dragon Hunter per sources).",
+   "Talk to the scholar and beat him at Gwent for the Zoltan Chivay card (this also flags the 'Gwent: Playing Innkeeps' quest)."
+  ],
+  "missable": "ConsolePulse: you can buy Elsa's cards later from Bram outside the inn, and the scholar's card has a fallback (his body at Hanged Man's Tree in Velen). Safer to do both now.",
+  "sources": [
+   "https://consolepulse.com/multiplatform/the-witcher/guides/witcher-3-missable-gwent-cards-safe-collection-order",
+   "https://www.gamerguides.com/witcher3/guide/walkthrough/white-orchard",
+   "https://guides4gamers.com/witcher-3-wild-hunt/maps/white-orchard/"
+  ],
+  "verified": "partial",
+  "quest_names": ["Gwent: Playing Innkeeps", "Collect 'Em All"]
+ },
+ "wo_griffin": {
+  "summary": "Finish The Beast of White Orchard by killing the griffin, collect the reward and talk to Vesemir at the inn, which ends the prologue.",
+  "available_when": "The Beast of White Orchard runs in parallel with Lilac and Gooseberries during the prologue; you save a merchant (Bram) from the griffin outside the inn.",
+  "how_to": [
+   "Finish everything in White Orchard first.",
+   "Kill the griffin, claim the reward from the innkeeper (declining the 50 crowns gets roast chicken legs instead, per gamerguides).",
+   "Make a manual save, then talk to Vesemir at the inn."
+  ],
+  "missable": "The conversation with Vesemir sends Geralt to Vizima and permanently closes White Orchard prologue content.",
+  "sources": [
+   "https://allthings.how/?p=232659",
+   "https://www.gamerguides.com/witcher3/guide/walkthrough/white-orchard"
+  ],
+  "verified": "yes",
+  "quest_names": ["The Beast of White Orchard", "Lilac and Gooseberries"]
+ },
+ "ve_baron": {
+  "summary": "Bloody Baron line: Family Matters (find the Baron's wife and daughter) leads to Ladies of the Wood and later Return to Crookback Bog.",
+  "available_when": "Family Matters requires finishing Ciri's Story: The King of the Wolves and starts when Baron Phillip Strenger offers to tell Geralt about Ciri if Geralt finds his wife and daughter.",
+  "how_to": [
+   "Search the castle (bedroom talisman is required, Tamara's room optional).",
+   "Find the Pellar in Blackbough; his goat is found in the side quest A Princess in Distress.",
+   "Return to Crow's Perch (burning stables: optionally save the stable hand and horses), fistfight the Baron, then face the Botchling at the grave.",
+   "Choose to lift the Botchling's curse (becomes a Lubberkin) or kill it."
+  ],
+  "missable": "Botchling choice and stablehand rescue are one-shot. The sources do not say Family Matters is missable; interleaving with Keira is a route preference, not something I verified.",
+  "sources": [
+   "https://gamerguides.com/the-witcher-3-wild-hunt/guide/walkthrough/velen/family-matters",
+   "https://thewitcher3.wiki.fextralife.com/Family+Matters"
+  ],
+  "verified": "yes",
+  "quest_names": ["Family Matters", "A Princess in Distress", "Ciri's Story: The King of the Wolves"]
+ },
+ "ve_keira": {
+  "summary": "Keira Metz chain: Hunting a Witch, Wandering in the Dark, Magic Lamp, An Invitation from Keira Metz, A Towerful of Mice, A Favor for a Friend, For the Advancement of Learning.",
+  "available_when": "Hunting a Witch (Fextralife): starts after Ciri's Story: Out of the Shadows via Hendrik's notes about a witch; find the witch's hut north of Midcopse, touch the glowing skull to open the portal. Wandering in the Dark begins after you speak to Keira. Magic Lamp starts when you accept Keira's request after Nithral dies. The rest start in order, each after the previous one.",
+  "how_to": [
+   "Hunting a Witch: question villagers in Midcopse, go to the hut, use the skull portal, meet Keira.",
+   "Wandering in the Dark: escort Keira through the ruins, protect her at the three portals, kill Nithral; pick 'Fine. I'll help' to start Magic Lamp.",
+   "Magic Lamp: light the statue braziers third, second, fourth, first (left to right), take the lamp, leave. Do not leave the ruins mid-quest or it fails (gamerguides).",
+   "An Invitation: visit Keira's hut and take the Fyke Isle job.",
+   "A Towerful of Mice: use the Magic Lamp on Fyke Isle; either give Annabelle's bones to Graham (300 XP, plague maiden freed) or refuse and bring Graham to the tower (500 XP, both die).",
+   "A Favor for a Friend: find the wagon at Hangman's Alley, accept Keira's role-play dinner; leads to For the Advancement of Learning."
+  ],
+  "missable": "ConsolePulse claims finishing after the Isle of Mists breaks the chain (not independently verified). Towerful of Mice is a cutoff for the Lynch Mob side quest. The Magic Lamp Place of Power in the ruins is skippable if you leave. Hunting a Witch 'next quest' differs by source (Fextralife says A Princess in Distress; ggrecon/Twinfinite say Wandering in the Dark).",
+  "sources": [
+   "https://thewitcher3.wiki.fextralife.com/Hunting+a+Witch",
+   "https://ggrecon.com/guides/the-witcher-3-wandering-in-the-dark",
+   "https://www.arrpeegeez.com/2016/02/the-witcher-3-walkthrough-part-seven.html",
+   "https://arrpeegeez.com/2016/02/the-witcher-3-walkthrough-side-quests_10.html",
+   "https://gamerguides.com/the-witcher-3-wild-hunt/guide/walkthrough/velen/magic-lamp",
+   "https://thewitcher3.wiki.fextralife.com/A+Towerful+of+Mice",
+   "https://thewitcher3.wiki.fextralife.com/A+Favor+for+a+Friend",
+   "https://thewitcher3.wiki.fextralife.com/For+the+Advancement+of+Learning",
+   "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-keira-metz-questline"
+  ],
+  "verified": "yes",
+  "quest_names": ["Hunting a Witch", "Wandering in the Dark", "Magic Lamp", "An Invitation from Keira Metz", "A Towerful of Mice", "A Favor for a Friend", "For the Advancement of Learning"]
+ },
+ "ve_ladies": {
+  "summary": "Main quest in Velen where Geralt follows the Crones' trail to an orphanage in Crookback Bog and then to Downwarren.",
+  "available_when": "Begins during/after Wandering in the Dark: after killing Nithral in Keira's lab you get a book about the Crookback Bog witches (gamerguides). Arrpeegeez: completing Wandering in the Dark unlocks it.",
+  "how_to": [
+   "Follow the trail of treats (Witcher Senses) from the shrine southeast of Lindenvale to the orphanage.",
+   "Talk to Gran and the orphans (hide-and-seek or trade sweets for info about Johnny).",
+   "Find Johnny the Godling in the swamp, fight through, retrieve the sealed bottle to restore his voice.",
+   "Show the Crones' dagger to the ealdorman of Downwarren, who sends you to the Whispering Hillock."
+  ],
+  "missable": "Not shown as missable; its outcome is influenced by the Hillock decision.",
+  "sources": [
+   "https://gamerguides.com/the-witcher-3-wild-hunt/guide/walkthrough/velen/ladies-of-the-wood",
+   "https://www.arrpeegeez.com/2016/02/the-witcher-3-walkthrough-part-seven.html"
+  ],
+  "verified": "yes",
+  "quest_names": ["Ladies of the Wood"]
+ },
+ "ve_hillock": {
+  "summary": "Whispering Hillock: free, trick or fight the spirit trapped under the hillock near Downwarren; the choice changes Downwarren, the orphans and the Baron's ending.",
+  "available_when": "Ealdorman of Downwarren sends you there during Ladies of the Wood, or it can be found by exploring SE of Downwarren near the Ancient Oak signpost.",
+  "how_to": [
+   "Enter the cave and kill the werewolf (level 8) at the entrance.",
+   "Recover the bones from the tombstone NW of Ancient Oak.",
+   "Take a raven's feather from the nest SW of Downwarren.",
+   "Catch a black mare south of Ancient Oak and bring it to the spirit's chamber.",
+   "SAVE before the final chamber, then free, trick or fight the spirit."
+  ],
+  "missable": "The outcome varies depending on whether you spoke to the Ealdorman first. Freeing the spirit leads to the rescue of orphans and a cursed Anna (Return to Crookback Bog); killing it or freeing it before talking to the Ealdorman leads to orphans taken and Anna driven mad.",
+  "sources": [
+   "https://gamerguides.com/the-witcher-3-wild-hunt/guide/walkthrough/velen/the-whispering-hillock",
+   "https://gamerguides.com/the-witcher-3-wild-hunt/guide/walkthrough/velen/return-to-crookback-bog"
+  ],
+  "verified": "yes",
+  "quest_names": ["The Whispering Hillock"]
+ },
+ "ve_keira_km": {
+  "summary": "At the end of the Keira chain you can convince her to hide at Kaer Morhen, which saves her, recruits her for the battle and is needed for the Full Crew achievement.",
+  "available_when": "Quest For the Advancement of Learning, which starts automatically after A Favor for a Friend (Keira casts a spell on Geralt at dinner, then you meet her on Fyke Isle holding Alexander's notes). It requires the earlier chain done.",
+  "how_to": [
+   "On Fyke Isle, with Keira holding the notes, choose 'What's with the notes?' then 'Radovid never forgets', 'It's suicide', then the Kaer Morhen option.",
+   "Do NOT demand Alexander's notes before persuading her; that turns hostile and forces Geralt to kill her (ConsolePulse, 200 XP outcome per Fextralife)."
+  ],
+  "missable": "The Kaer Morhen dialogue option appears only in that conversation. Fextralife notes a 1.03-era bug where she doesn't go through the portal (reload fixes it).",
+  "sources": [
+   "https://thewitcher3.wiki.fextralife.com/For+the+Advancement+of+Learning",
+   "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-keira-metz-questline",
+   "https://thewitcher3.wiki.fextralife.com/A+Favor+for+a+Friend"
+  ],
+  "verified": "yes",
+  "quest_names": ["For the Advancement of Learning", "A Favor for a Friend"]
+ },
+ "ve_letho": {
+  "summary": "If Letho survived The Witcher 2, Reardon Manor in Lindenvale triggers Ghosts of the Past, which ends with him joining at Kaer Morhen.",
+  "available_when": "World state: Letho alive (import a Witcher 2 save or simulate one and tell Morvran Voorhis the Kingslayer was spared). The Fall of the House of Reardon starts via Dolores near Lindenvale or the notice board; Ghosts of the Past starts on approaching the manor (tripwire).",
+  "how_to": [
+   "Go to Reardon Manor in Lindenvale; Letho hides in the barn loft, with traps on the grounds.",
+   "Open Dolores's lockbox, explore the cellar (Humbert's skeleton behind a breakable wall).",
+   "Accompany Letho to confront Louis, then Arnout Vester.",
+   "When bounty hunters shoot Letho, hand over his medallion as proof instead of intervening, then invite him to Kaer Morhen."
+  ],
+  "missable": "If you refuse to accompany Letho after the first fight or stray too far, the pair separate permanently and recruitment is impossible. Both quests must finish before the Isle of Mists. Details differ between sources (Fextralife describes negotiating or fighting the mercenaries; ConsolePulse the medallion route).",
+  "sources": [
+   "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-letho-ghosts-of-the-past-questline",
+   "https://thewitcher3.wiki.fextralife.com/Ghosts+of+the+Past"
+  ],
+  "verified": "partial",
+  "quest_names": ["The Fall of the House of Reardon", "Ghosts of the Past"]
+ },
+ "ve_gwent": {
+  "summary": "Challenge the Bloody Baron to Gwent during the Baron story; he gives the Dijkstra spy card.",
+  "available_when": "During his questline after meeting him at Crow's Perch (the Velen Gwent quests Playing Innkeeps and Velen Players list him as an opponent).",
+  "how_to": [
+   "Talk to the Baron and challenge him to Gwent before ending the Baron story.",
+   "Win to get the Dijkstra spy card."
+  ],
+  "missable": "ConsolePulse: do not finish the Baron's story or Now or Never before challenging the Baron and Olivier; a fallback exists but is less safe. A search snippet (not a fetched page) says Return to Crookback Bog sends the Baron away for the rest of the game, so play before completing it. The fextralife page does not mention Gwent.",
+  "sources": [
+   "https://consolepulse.com/multiplatform/the-witcher/guides/witcher-3-missable-gwent-cards-safe-collection-order"
+  ],
+  "verified": "partial",
+  "quest_names": ["Velen Players", "Gwent: Playing Innkeeps", "Return to Crookback Bog"]
+ },
+ "ve_bog": {
+  "summary": "Return to Crookback Bog: go with the Baron to the Crones' huts, kill the Fiend, and (if the spirit was freed) lift Anna's curse by choosing the right doll.",
+  "available_when": "After Ladies of the Wood, if you agreed in Family Matters to help the Baron get his wife back; approach Downwarren where the Baron talks to the peasant (suggested level 9).",
+  "how_to": [
+   "Meet the Baron at Downwarren.",
+   "Escort through the swamp, defend the orphanage, kill the Fiend.",
+   "If Anna was cursed (spirit freed), find Johnny and choose the doll with the violet hollyhock bloom, otherwise she dies by fire.",
+   "Return to Crow's Perch for the ending."
+  ],
+  "missable": "Outcome set by your Hillock choice. The sources do not say it is mandatory before the Isle of Mists (Fextralife says not stated); the user's note that it must be done before then is plausible but unverified.",
+  "sources": [
+   "https://gamerguides.com/the-witcher-3-wild-hunt/guide/walkthrough/velen/return-to-crookback-bog",
+   "https://thewitcher3.wiki.fextralife.com/Return+to+Crookback+Bog"
+  ],
+  "verified": "partial",
+  "quest_names": ["Return to Crookback Bog"]
+ }
+}

@@ -1,0 +1,1353 @@
+{
+ "region_order": [
+  "Destination: Skellige - unlocks region (Following the Thread can be started earlier in Novigrad at L11 but must pause before the Seven Cats Inn talk)",
+  "The King is Dead - Long Live the King - unlocks Possession, Lord of Undvik, Cave of Dreams, Phantom of Eldberg",
+  "Contract: The Phantom of Eldberg then Stranger in a Strange Land - must begin before King's Gambit",
+  "The Cave of Dreams (+ An Unpaid Debt) - locked once King's Gambit starts",
+  "Echoes of the Past, Missing Persons, Nameless, The Calm Before the Storm - main chain",
+  "The Last Wish - immediately, before Uma",
+  "Flesh for Sale - before the Seven Cats Inn scene of Following the Thread",
+  "Following the Thread (Seven Cats, Faroe/Hammond, Nowhere Inn, Karadin) + Gwent Lambert - before Uma",
+  "Possession and The Lord of Undvik - any order, after Cave/Stranger",
+  "King's Gambit then Coronation - before the Isle",
+  "Gwent: Skellige Style - Lugos before Battle Preparations, Crach before On Thin Ice",
+  "Ugly Baby (collect Uma) then Disturbance, To Bait a Forktail, Final Trial, No Place Like Home, Va Fail Elaine",
+  "Berengar's Blade (talk to Vesemir first), Triss' earring, Lambert gwent - before sailing",
+  "Brothers In Arms Velen/Novigrad/Skellige/Nilfgaard - before the Isle; ask Zoltan only after A Dangerous Game",
+  "Dijkstra gwent before Final Preparations; Thaler before Reason of State",
+  "Named save, then The Isle of Mists",
+  "Battle of Kaer Morhen, Blood on the Battlefield (snowball, Velen), Bald Mountain",
+  "Final Preparations (Ciri meets Lodge alone; Blindingly Obvious bribe), Reason of State",
+  "Battle Preparations (wreck lab, Skjall's Grave); Reason of State and Contract: Devil by the Well done before telling Avallac'h; On Thin Ice"
+ ],
+ "quests": [
+  {
+   "title": "Destination: Skellige",
+   "kind": "main",
+   "level": "16",
+   "start": "Starts automatically at end of Imperial Audience (Novigrad harbour; pay Captain Wolverstone 1000 crowns at the Golden Sturgeon).",
+   "needs_before": [
+    {
+     "quest": "Imperial Audience",
+     "strength": "hard",
+     "why": "previous quest"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q201traveltoskellige"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Pins q201_captain, steingrim, burial, ship battle match captain/Steingrim/Wolverstone voyage.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Destination:_Skellige"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The King is Dead - Long Live the King",
+   "kind": "main",
+   "level": "16",
+   "start": "Follows Destination: Skellige (Kaer Trolde wake).",
+   "needs_before": [
+    {
+     "quest": "Destination: Skellige",
+     "strength": "hard",
+     "why": "previous"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "pirate"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "quest_db.json 'pirate.journal' has Q201 Bran's Reception, Feast at Kaer Trolde, Mousesack lab, race, Kill Earth Elemental = wiki objectives (race with Cerys, Ermion's workshop, earth elemental). File is absent from journal_names_*.json, only in quest_db.json.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_King_is_Dead_%E2%80%93_Long_Live_the_King"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Echoes of the Past",
+   "kind": "main",
+   "level": "17",
+   "start": "After The King is Dead.",
+   "needs_before": [
+    {
+     "quest": "The King is Dead - Long Live the King",
+     "strength": "hard",
+     "why": "previous"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q203cataclysm"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Objectives 'Talk to Yennefer at cataclysm', 'Use mask artifact1-4', 'Help Yennefer with monsters' match wiki (mask of Uroboros, magic storm).",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Echoes_of_the_Past"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Missing Persons / Nameless",
+   "kind": "main",
+   "level": "15 / 14",
+   "start": "Main Skellige chain after Echoes of the Past.",
+   "needs_before": [
+    {
+     "quest": "Echoes of the Past",
+     "strength": "hard",
+     "why": "chain"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q205lofoten",
+    "q205herbarium"
+   ],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Only generic 'Quest Started/Ended' + Lofoten/herbarium entries; not matched objective by objective.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Missing_Persons",
+    "https://witcher.fandom.com/wiki/Nameless"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Calm Before the Storm",
+   "kind": "main",
+   "level": "14",
+   "start": "After Nameless (Skjall in Freya's Garden).",
+   "needs_before": [
+    {
+     "quest": "Nameless",
+     "strength": "hard",
+     "why": "chain"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q205cirireplacer"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Ciri - safe heaven','cool off','have a shot' = sauna scene with Astrid/Freya's Firewater.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Calm_Before_the_Storm"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Last Wish",
+   "kind": "side",
+   "level": "15",
+   "start": "Yennefer asks you to meet her in Larvik at end of The Calm Before the Storm (Skellige).",
+   "needs_before": [
+    {
+     "quest": "The Calm Before the Storm",
+     "strength": "hard",
+     "why": "previous quest"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Ugly Baby: collecting Uma at Crow's Perch",
+     "why": "Fails when Uma is retrieved from Crow's Perch (Yennefer and Lambert move to Kaer Morhen). Not doing it also locks the Yennefer romance."
+    }
+   ],
+   "fails_or_locks_when": "Retrieving Uma at Crow's Perch during Ugly Baby (wiki cutoff_quest = Ugly Baby). Not the moment Ugly Baby merely appears.",
+   "journal_files": [
+    "sq202yen"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Objectives 'Meet Yennfer in Warrior's House in Larvik', 'Get to Larvik's bay', 'Get on boat', 'Sail ... to found Djinn', 'Kill Djinn', 'SQ202 End - In Love / Not So In Love' match wiki walkthrough exactly.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Last_Wish_(quest)",
+    "https://witcher.fandom.com/wiki/The_Witcher_3_decision_checklist"
+   ],
+   "unverified": [
+    "Exact journal-state moment of Uma pickup."
+   ]
+  },
+  {
+   "title": "Following the Thread",
+   "kind": "side",
+   "level": "11",
+   "start": "Notice 'Contract: Monster in the Bits' on Hierarch Square board (Novigrad), then the watermill near Arette; finishing needs Skellige unlocked (Faroe).",
+   "needs_before": [
+    {
+     "quest": "Destination: Skellige",
+     "strength": "hard",
+     "why": "needed to finish (Faroe/Hammond)"
+    },
+    {
+     "quest": "Flesh for Sale",
+     "strength": "soft",
+     "why": "FFS is lost once Lambert talks to you at Seven Cats Inn, so do FFS first"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Ugly Baby: collecting Uma at Crow's Perch",
+     "why": "Fails if not completed before retrieving Uma"
+    }
+   ],
+   "fails_or_locks_when": "Retrieving Uma at Crow's Perch (Ugly Baby). Journal also has 'Quest Fail before/after meeting Lambert'.",
+   "journal_files": [
+    "sq106killbill"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries 'Quest Start - met lambert', 'Go to Faroe', 'Hammond', 'Ask Crach', 'meet Lambert nowhere', 'Selyse'/'Tauler', 'Vienne junkies' match objectives (Ekimmara, Vienne, Hammond, Crach, Nowhere Inn, Karadin). File is in journal_names_1.json.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Following_the_Thread_(The_Witcher_3)",
+    "https://witcher.fandom.com/wiki/Gwent:_Old_Pals"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Flesh for Sale",
+   "kind": "side",
+   "level": "12",
+   "start": "Trottheim, Faroe (needs Skellige unlocked).",
+   "needs_before": [
+    {
+     "quest": "Destination: Skellige",
+     "strength": "hard",
+     "why": "region access"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Following the Thread: first conversation with Lambert at Seven Cats Inn (after watermill)",
+     "why": "Quest becomes unavailable"
+    }
+   ],
+   "fails_or_locks_when": "After the talk with Lambert at the Seven Cats Inn in Following the Thread (NOT the later Faroe trip).",
+   "journal_files": [
+    "mq2020fleshforcash"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Follow the pirate to this boss','Defeat the pirates','Find the key to slave cells','Free the slaves','Lead slaves outside the village' = wiki objectives.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Flesh_for_Sale",
+    "https://witcher.fandom.com/wiki/Following_the_Thread_(The_Witcher_3)"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Contract: The Phantom of Eldberg",
+   "kind": "contract",
+   "level": "17",
+   "start": "Jorund in Arinbjorn tavern / notice board.",
+   "needs_before": [
+    {
+     "quest": "The King is Dead - Long Live the King",
+     "strength": "hard",
+     "why": "must be started between it and King's Gambit to enable Stranger in a Strange Land"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "King's Gambit (start)",
+     "why": "Window for Stranger in a Strange Land closes"
+    }
+   ],
+   "fails_or_locks_when": "Never fails itself; starting it after King's Gambit means Stranger/An Unpaid Debt are unobtainable.",
+   "journal_files": [
+    "mh207wraith"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Quest Started - noticeboard/ talking to Jorund after q201', Mikkjal, Expiationer, lighthouse = wiki.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_The_Phantom_of_Eldberg",
+    "https://witcher.fandom.com/wiki/Stranger_in_a_Strange_Land"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Stranger in a Strange Land",
+   "kind": "side",
+   "level": "14",
+   "start": "Automatically after the Phantom of Eldberg payment at Arinbjorn inn (brawl, jail at Kaer Muire).",
+   "needs_before": [
+    {
+     "quest": "Contract: The Phantom of Eldberg",
+     "strength": "hard",
+     "why": "contract must be started between The King is Dead and King's Gambit"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "King's Gambit (start)",
+     "why": "locked out"
+    }
+   ],
+   "fails_or_locks_when": "Once King's Gambit starts.",
+   "journal_files": [
+    "sq209weregild"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'SQ209 Tavern Brawl','Defeat villagers','Clear your situation with Lugos the Mad','Get out of jail' = wiki.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Stranger_in_a_Strange_Land"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Cave of Dreams",
+   "kind": "side",
+   "level": "14",
+   "start": "Madman Lugos sends you after Stranger in a Strange Land, or walk up to Blueboy Lugos's ship SE of Holmstein's Port.",
+   "needs_before": [
+    {
+     "quest": "The King is Dead - Long Live the King",
+     "strength": "hard",
+     "why": "Blueboy not on ship before"
+    },
+    {
+     "quest": "Stranger in a Strange Land",
+     "strength": "soft",
+     "why": "only for the Madman Lugos route and for An Unpaid Debt; NOT required to start the cave"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "King's Gambit (start/finish)",
+     "why": "Quest page: fails if not completed before finishing King's Gambit; King's Gambit page: locked once started. Treat start as the cutoff."
+    }
+   ],
+   "fails_or_locks_when": "King's Gambit (NOT Battle Preparations as route.py says).",
+   "journal_files": [
+    "sq209weregildb"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Join Lugos the Glaucous expedition to the Cave of Dreams','Explore the cave of dreams to face your fears','Leave the Cave of Dreams','Start Lugos Jr'/'Start from Lugos Mad' = wiki.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Cave_of_Dreams",
+    "https://witcher.fandom.com/wiki/King's_Gambit"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "An Unpaid Debt",
+   "kind": "side",
+   "level": "15",
+   "start": "Simun outside New Port Inn some days after Cave of Dreams (only if you accepted Simun's help in Stranger).",
+   "needs_before": [
+    {
+     "quest": "The Cave of Dreams",
+     "strength": "hard",
+     "why": "dependent"
+    },
+    {
+     "quest": "Stranger in a Strange Land",
+     "strength": "hard",
+     "why": "with Simun's help"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "Not stated by wiki.",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "No matching journal file identified; not in route.py.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/An_Unpaid_Debt"
+   ],
+   "unverified": [
+    "journal file",
+    "cutoff"
+   ]
+  },
+  {
+   "title": "Possession",
+   "kind": "side",
+   "level": "17",
+   "start": "Crach, during/after The King is Dead; Svorlag on Spikeroog (Udalryk).",
+   "needs_before": [
+    {
+     "quest": "The King is Dead - Long Live the King",
+     "strength": "hard",
+     "why": "previous"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "King's Gambit",
+     "why": "needs Possession + Lord of Undvik both done"
+    },
+    {
+     "event": "Battle Preparations (infobox) / Isle of Mists (cutoff list)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Wiki infobox: Battle Preparations. Isle of Mists cutoff list also names it. Safest: before Isle of Mists. Place of Power in the haunted house disappears when quest completes.",
+   "journal_files": [
+    "q203him"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Entries 'Ask Udalryk where is Cerys','Find Eirik','Kill drowners','Find Broksvard','Find Akis bones in sea','Look for Cerys in abandoned house','Talk to Bergthora' = wiki walkthrough. route.py wrongly uses q206berserkers.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Possession_(quest)",
+    "https://witcher.fandom.com/wiki/The_Isle_of_Mists_(quest)"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Lord of Undvik",
+   "kind": "side",
+   "level": "17",
+   "start": "Crach an Craite (New Port / Kaer Trolde) after The King is Dead.",
+   "needs_before": [
+    {
+     "quest": "The King is Dead - Long Live the King",
+     "strength": "hard",
+     "why": "previous"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "King's Gambit",
+     "why": "needs Possession + Lord of Undvik"
+    }
+   ],
+   "fails_or_locks_when": "Wiki infobox: Battle Preparations; Isle of Mists list also names it. Do before the Isle.",
+   "journal_files": [
+    "giant"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "giant.journal entries 'Q202 Ice_Giant - Begining/Ending/Met Hjalmar/Met Folan', Vigi/Folan mappins, 'Q202 Failed' = wiki (Hjalmar, Folan, Vigi, ice giant). Listed in journal_names_2.json.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Lord_of_Undvik"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "King's Gambit",
+   "kind": "side",
+   "level": "18",
+   "start": "Starts automatically after BOTH Possession and The Lord of Undvik are completed (Kaer Trolde feast).",
+   "needs_before": [
+    {
+     "quest": "Possession",
+     "strength": "hard",
+     "why": "prerequisite"
+    },
+    {
+     "quest": "The Lord of Undvik",
+     "strength": "hard",
+     "why": "prerequisite"
+    },
+    {
+     "quest": "The Cave of Dreams",
+     "strength": "hard",
+     "why": "must be finished first or it is locked out"
+    },
+    {
+     "quest": "Stranger in a Strange Land",
+     "strength": "hard",
+     "why": "must be finished first or it is locked out"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "The Isle of Mists",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Fails if not completed before The Isle of Mists. Starting it locks Cave of Dreams and Stranger in a Strange Land. Vildkaarl fistfights must all be done before talking to Crach.",
+   "journal_files": [
+    "q206berserkers"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "q206berserkers entries 'Follow Arnvald to the party','Defeat the Islander','Kill the Berserkers','Q206 Investigation With Cerys / with Hjalmar','Arnvald Died/Lived','Q206 Fail - ...' = King's Gambit walkthrough. route.py maps this file to Possession/Lord of Undvik (wrong).",
+   "sources": [
+    "https://witcher.fandom.com/wiki/King's_Gambit"
+   ],
+   "unverified": [
+    "Whether quest starts at completion of the second prerequisite or when entering Kaer Trolde."
+   ]
+  },
+  {
+   "title": "Coronation",
+   "kind": "side",
+   "level": "18",
+   "start": "Immediately after King's Gambit when you helped Cerys or Hjalmar (not if neither).",
+   "needs_before": [
+    {
+     "quest": "King's Gambit",
+     "strength": "hard",
+     "why": "previous (must help Cerys or Hjalmar)"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Isle of Mists / Battle Preparations",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Infobox: Battle Preparations; Isle list names it. Do before Isle. Never appears if King's Gambit left both to investigate alone.",
+   "journal_files": [
+    "q208heroesmead"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Q208 Cerys the Queen','Q208 Hjamlar the King','To coronation','q208_coronation','Q208 Fail'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Coronation"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Gwent: Skellige Style",
+   "kind": "gwent",
+   "level": "n/a",
+   "start": "Notice at Kaer Trolde Harbour; real start after Echoes of the Past.",
+   "needs_before": [
+    {
+     "quest": "Echoes of the Past",
+     "strength": "hard",
+     "why": "Ermion playable only then"
+    },
+    {
+     "quest": "Practicum in Advanced Alchemy",
+     "strength": "hard",
+     "why": "unlocks Gremist match"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Battle Preparations (ship sails to Skellige)",
+     "why": "Madman Lugos unplayable unless Svanrige is king; card must be looted (red mark)"
+    },
+    {
+     "event": "On Thin Ice battle",
+     "why": "Crach unplayable (card given, no XP)"
+    }
+   ],
+   "fails_or_locks_when": "Lugos: set sail at start of Battle Preparations; Crach: start of the On Thin Ice battle.",
+   "journal_files": [
+    "cgskellige"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Objectives Mousesack(=Ermion), Crach, Dagobert (map pin 'gremista' = Gremist), Sjusta the Tailor, Lugos the Mad + 'Search Lugos Keep'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Gwent:_Skellige_Style"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Gwent: Old Pals",
+   "kind": "gwent",
+   "level": "n/a",
+   "start": "Beat Zoltan first (Broken Flowers), then Roche, Lambert, Thaler.",
+   "needs_before": [
+    {
+     "quest": "Zoltan match",
+     "strength": "hard",
+     "why": "starts quest"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Reason of State",
+     "why": "Thaler/Roche unplayable and may die"
+    },
+    {
+     "event": "Ugly Baby: collecting Uma at Crow's Perch",
+     "why": "Lambert leaves Nowhere Inn; replayable at Kaer Morhen and at the funeral in Blood on the Battlefield"
+    }
+   ],
+   "fails_or_locks_when": "Lambert: always another chance (Kaer Morhen incl. gwent during No Place Like Home, Blood on the Battlefield).",
+   "journal_files": [
+    "cgoldfriends"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Win unique card from Roche','...Lambert','Find Lambert's unique card in Kaer Morhen'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Gwent:_Old_Pals"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Gwent: Playing Thaler",
+   "kind": "gwent",
+   "level": "n/a",
+   "start": "After A Deadly Plot if Roche was played before it.",
+   "needs_before": [
+    {
+     "quest": "A Deadly Plot",
+     "strength": "hard",
+     "why": "start"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Reason of State",
+     "why": "Fails if Thaler dies"
+    }
+   ],
+   "fails_or_locks_when": "Thaler dies / Reason of State.",
+   "journal_files": [
+    "cgtalar"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "journal name 'cgtalar'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Gwent:_Playing_Thaler"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Gwent: Big City Players (Dijkstra match)",
+   "kind": "gwent",
+   "level": "n/a",
+   "start": "Harborside notice board or challenge Vivaldi.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Final Preparations (start)",
+     "why": "Dijkstra unreachable from start; after Blindingly Obvious bribe also until after Reason of State"
+    }
+   ],
+   "fails_or_locks_when": "If you kill Dijkstra in Reason of State, he must be played before Final Preparations.",
+   "journal_files": [
+    "cgnovigrad"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Win unique card from Dijkstra'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Gwent:_Big_City_Players"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Ugly Baby",
+   "kind": "main",
+   "level": "19",
+   "start": "Begins when the last of the Velen/Novigrad/Skellige trails (In Ciri's Footsteps) completes; if that is Family Matters it begins at the Baron's.",
+   "needs_before": [
+    {
+     "quest": "In Ciri's Footsteps (Velen, Novigrad, Skellige main chains)",
+     "strength": "hard",
+     "why": "previous"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never (but collecting Uma fails The Last Wish and Following the Thread)",
+   "journal_files": [
+    "q401_konsylium",
+    "q401_ugliest_man_alive",
+    "searchforugly"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "q401_konsylium: 'Find Lambert','Find Eskel','Hang out with Witchers','Cure UMA','Talk to stablemaster to leave with UMA','Get UMA' = Ugly Baby objectives. q401_ugliest_man_alive: Obtaining Uma/Vizima. searchforugly 'Donar has Uma' is probably the lead; unverified.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ugly_Baby",
+    "https://witcher.fandom.com/wiki/Family_Matters"
+   ],
+   "unverified": [
+    "What journal state corresponds exactly to the Uma pickup; searchforugly semantics."
+   ]
+  },
+  {
+   "title": "Disturbance",
+   "kind": "main",
+   "level": "n/a",
+   "start": "First sub-quest of Ugly Baby (talk to Yennefer).",
+   "needs_before": [
+    {
+     "quest": "Ugly Baby",
+     "strength": "hard",
+     "why": "parent"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q401_megascope"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Find the source of the magical disturbance','Return to Yennefer to attend the coven'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Disturbance"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "To Bait a Forktail...",
+   "kind": "main",
+   "level": "19",
+   "start": "Ugly Baby sub-quest.",
+   "needs_before": [
+    {
+     "quest": "Ugly Baby",
+     "strength": "hard",
+     "why": "parent"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q401_hunt_with_eskel"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Eskel tracks / horse tracks / goat smell entries.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/To_Bait_a_Forktail..."
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Final Trial",
+   "kind": "main",
+   "level": "19",
+   "start": "Ugly Baby sub-quest (Lambert).",
+   "needs_before": [
+    {
+     "quest": "Ugly Baby",
+     "strength": "hard",
+     "why": "parent"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q401_phylactery"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "Phylactery, shrine, torches, Lambert, lake, Old Spearhead.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Final_Trial"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "No Place Like Home",
+   "kind": "main",
+   "level": "19",
+   "start": "After the first three Ugly Baby sub-quests.",
+   "needs_before": [
+    {
+     "quest": "Disturbance",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "To Bait a Forktail...",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "The Final Trial",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q401_reunion"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Eskel Drunk','Use your Witcher Senses to pick up the sound Lambert heard','Examine source of noise'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/No_Place_Like_Home"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Va Fail, Elaine",
+   "kind": "main",
+   "level": "19",
+   "start": "After No Place Like Home.",
+   "needs_before": [
+    {
+     "quest": "No Place Like Home",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q401_the_curse"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Brew Trial Potion Kit','Get the key ingredients','UMA Examination'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Va_Fail,_Elaine"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Berengar's Blade",
+   "kind": "side",
+   "level": "27",
+   "start": "Read Berengar's notes (west wall, middle courtyard) in Kaer Morhen, then talk to Vesemir.",
+   "needs_before": [
+    {
+     "quest": "Ugly Baby",
+     "strength": "hard",
+     "why": "Kaer Morhen unlocked"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Isle of Mists",
+     "why": "Vesemir cannot be talked to afterwards; talk to him before sailing"
+    },
+    {
+     "event": "Council in The Battle of Kaer Morhen",
+     "why": "quest fails"
+    }
+   ],
+   "fails_or_locks_when": "Start of the council in The Battle of Kaer Morhen (practically: before the Isle).",
+   "journal_files": [
+    "mq4005sword"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "By elimination: mq4002-4006 are the five Kaer Morhen valley quests (anomaly=Greenhouse Effect, lake=Monster Slayer, bastion=The Bastion, armor=Witchers' Forge). mq4005sword has 'vesemir' + entrance/source/cave pins, matching Vesemir + chort cave.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Berengar's_Blade",
+    "https://witcher.fandom.com/wiki/The_Battle_of_Kaer_Morhen"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Brothers In Arms: Velen",
+   "kind": "main",
+   "level": "22",
+   "start": "Begins when Uma's curse is lifted.",
+   "needs_before": [
+    {
+     "quest": "Keira questline (Invitation, Towerful of Mice, Favor for a Friend, For the Advancement of Learning)",
+     "strength": "hard",
+     "why": "auto-completes if finished"
+    },
+    {
+     "quest": "Send Keira to Kaer Morhen",
+     "strength": "hard",
+     "why": "else fails"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Isle of Mists",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Fails if Keira not sent to Kaer Morhen; cutoff Isle of Mists.",
+   "journal_files": [
+    "q402velenallies"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Quest Ended - Keira agreed/not agreed'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Brothers_In_Arms:_Velen"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Brothers In Arms: Novigrad",
+   "kind": "main",
+   "level": "22",
+   "start": "Begins when Uma's curse is lifted.",
+   "needs_before": [
+    {
+     "quest": "A Dangerous Game",
+     "strength": "hard",
+     "why": "finish BEFORE asking Zoltan, else it fails"
+    },
+    {
+     "quest": "An Eye for an Eye",
+     "strength": "hard",
+     "why": "Roche joins only if done and Ves lives"
+    },
+    {
+     "quest": "Now or Never",
+     "strength": "soft",
+     "why": "Triss"
+    },
+    {
+     "quest": "Count Reuven's Treasure info",
+     "strength": "soft",
+     "why": "Dijkstra purse"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Isle of Mists",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Isle of Mists.",
+   "journal_files": [
+    "q402novigradallies"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "file name matches quest.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Brothers_In_Arms:_Novigrad"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Brothers In Arms: Skellige",
+   "kind": "main",
+   "level": "22",
+   "start": "Begins when Uma's curse is lifted.",
+   "needs_before": [
+    {
+     "quest": "Possession",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "The Lord of Undvik",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "King's Gambit",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "Coronation",
+     "strength": "hard",
+     "why": "one of Cerys/Hjalmar must be crowned"
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Isle of Mists",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Isle of Mists.",
+   "journal_files": [
+    "q402skelligeallies"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'help Cerys with her Hym quest','help Hjalmar with his Ice Giant quest'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Brothers_In_Arms:_Skellige"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Brothers In Arms: Nilfgaard",
+   "kind": "main",
+   "level": "22",
+   "start": "Begins when Uma's curse is lifted; talk to Emhyr in Vizima.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Isle of Mists",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "Isle of Mists.",
+   "journal_files": [
+    "q402nilfgaardianally"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "file name; single objective 'Talk to Emhyr'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Brothers_In_Arms:_Nilfgaard"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Isle of Mists",
+   "kind": "main",
+   "level": "22",
+   "start": "Quest begins when Uma's curse is lifted; the point of no return is the boat trip near Undvik.",
+   "needs_before": [
+    {
+     "quest": "Ugly Baby",
+     "strength": "hard",
+     "why": "previous"
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "Failing quests: see events.",
+   "journal_files": [
+    "q402ciri",
+    "q402gatheringallies"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "q402ciri: 'reach isle of mists through Skellige','Follow the Wisp','Find Ferenc/Gaspard/Ivo'. q402gatheringallies = 'Allies for Kaer Morhen' umbrella.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Isle_of_Mists_(quest)"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "The Battle of Kaer Morhen",
+   "kind": "main",
+   "level": "24",
+   "start": "After Isle of Mists.",
+   "needs_before": [
+    {
+     "quest": "The Isle of Mists",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q403battle"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "q403battle pins: council, rift_1-3, balista, gate switch, triss, lambert, eskel, barricade. NOT Battle Preparations (route.py misuse).",
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Battle_of_Kaer_Morhen"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Blood on the Battlefield",
+   "kind": "main",
+   "level": "20*",
+   "start": "Right after the Battle.",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q110postbattle"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Q110 Calming Ciri - Snowballs/Drinking', 'Emhyr's Reward - Refused/Accepted'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Blood_on_the_Battlefield"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Final Preparations",
+   "kind": "main",
+   "level": "n/a",
+   "start": "After Bald Mountain (journal q111imlerith).",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "Talking to Ciri about Lodge meeting",
+     "why": "Nobleman/Soldier Statuette fail"
+    }
+   ],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q310preparationsnovigrad"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Help Yennefer','Help Ciri','Help Triss','Gather Lodge'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Final_Preparations"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Reason of State",
+   "kind": "side",
+   "level": "30",
+   "start": "Dijkstra at docks warehouse after Blindingly Obvious bribe.",
+   "needs_before": [
+    {
+     "quest": "A Deadly Plot",
+     "strength": "hard",
+     "why": ""
+    },
+    {
+     "quest": "An Eye for an Eye",
+     "strength": "soft",
+     "why": "may fail but must be obtained and reach Ves health bar"
+    },
+    {
+     "quest": "Redania's Most Wanted",
+     "strength": "soft",
+     "why": "must find Polished crystal"
+    },
+    {
+     "quest": "Blindingly Obvious (bribe Dijkstra)",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "On Thin Ice start (telling Avallac'h everything is done)",
+     "why": "fails"
+    }
+   ],
+   "fails_or_locks_when": "On Thin Ice starts.",
+   "journal_files": [
+    "mq3035_emhyr"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "'Bait Radovid','Follow Roche','Find Radovid','mq3035 Fail' = objectives. Not referenced in route.py.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Reason_of_State",
+    "https://witcher.fandom.com/wiki/Battle_Preparations"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Battle Preparations",
+   "kind": "main",
+   "level": "28",
+   "start": "After Final Preparations.",
+   "needs_before": [
+    {
+     "quest": "Final Preparations",
+     "strength": "hard",
+     "why": ""
+    }
+   ],
+   "must_finish_before": [
+    {
+     "event": "Last chance: Madman Lugos Gwent, Triss' earring, crystal skull for Yennefer",
+     "why": ""
+    }
+   ],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q210preparations",
+    "q210precanaris",
+    "q210emhyr",
+    "q210avallachlab",
+    "q210skjallgrave"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "q210preparations: 'Meet Avallac'h on ship','Find the Sun Stone','Get Fringilla','Tell Avallac'h everything is done'. Sub-quests: Sunstone=q210precanaris, Veni Vidi Vigo=q210emhyr, Child of the Elder Blood=q210avallachlab, Skjall's Grave=q210skjallgrave.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Battle_Preparations"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "On Thin Ice",
+   "kind": "main",
+   "level": "30",
+   "start": "Starts when you tell Avallac'h everything is ready.",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q501eredin"
+   ],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Only 'Follow Eredin' matches.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/On_Thin_Ice"
+   ],
+   "unverified": [
+    "journal file"
+   ]
+  },
+  {
+   "title": "Contract: Devil by the Well",
+   "kind": "contract",
+   "level": "2",
+   "start": "White Orchard.",
+   "needs_before": [],
+   "must_finish_before": [
+    {
+     "event": "On Thin Ice",
+     "why": "fails depending on ending"
+    }
+   ],
+   "fails_or_locks_when": "Before talking to Avallac'h for On Thin Ice.",
+   "journal_files": [],
+   "mapping_confidence": "low",
+   "mapping_evidence": "Not identified.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Contract:_Devil_by_the_Well"
+   ],
+   "unverified": []
+  },
+  {
+   "title": "Imperial Audience",
+   "kind": "main",
+   "level": "2",
+   "start": "After Lilac and Gooseberries.",
+   "needs_before": [],
+   "must_finish_before": [],
+   "fails_or_locks_when": "never",
+   "journal_files": [
+    "q002vizimapalace"
+   ],
+   "mapping_confidence": "high",
+   "mapping_evidence": "'Dress up and talk to chamberlain'.",
+   "sources": [
+    "https://witcher.fandom.com/wiki/Imperial_Audience"
+   ],
+   "unverified": []
+  }
+ ],
+ "events": [
+  {
+   "name": "Ugly Baby: Uma retrieved at Crow's Perch",
+   "journal_files": [
+    "q401_konsylium",
+    "q401_ugliest_man_alive",
+    "searchforugly"
+   ],
+   "fails": [
+    "The Last Wish",
+    "Following the Thread"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Ugly_Baby",
+    "https://witcher.fandom.com/wiki/The_Last_Wish_(quest)",
+    "https://witcher.fandom.com/wiki/Following_the_Thread_(The_Witcher_3)"
+   ]
+  },
+  {
+   "name": "Following the Thread: Lambert talk at Seven Cats Inn",
+   "journal_files": [
+    "sq106killbill"
+   ],
+   "fails": [
+    "Flesh for Sale"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Flesh_for_Sale"
+   ]
+  },
+  {
+   "name": "King's Gambit starts",
+   "journal_files": [
+    "q206berserkers"
+   ],
+   "fails": [
+    "The Cave of Dreams",
+    "Stranger in a Strange Land",
+    "An Unpaid Debt (indirectly)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/King's_Gambit"
+   ]
+  },
+  {
+   "name": "The Isle of Mists (boat trip)",
+   "journal_files": [
+    "q402ciri"
+   ],
+   "fails": [
+    "A Dangerous Game",
+    "A Deadly Plot",
+    "A Favor for a Friend",
+    "A Matter of Life and Death",
+    "A Towerful of Mice",
+    "An Eye for an Eye",
+    "An Invitation from Keira Metz",
+    "Berengar's Blade (really at Battle of KM council)",
+    "Brothers In Arms: Nilfgaard",
+    "Brothers In Arms: Novigrad",
+    "Brothers In Arms: Skellige",
+    "Brothers In Arms: Velen",
+    "Cabaret",
+    "Carnal Sins",
+    "Ciri's Room",
+    "Coronation",
+    "Fencing Lessons",
+    "For the Advancement of Learning",
+    "Ghosts of the Past",
+    "King's Gambit",
+    "Magic Lamp",
+    "Now or Never",
+    "Possession",
+    "Redania's Most Wanted",
+    "Return to Crookback Bog",
+    "The Fall of the House of Reardon",
+    "The Lord of Undvik",
+    "Witch Hunter Raids (unmarked, via Now or Never)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/The_Isle_of_Mists_(quest)"
+   ]
+  },
+  {
+   "name": "The Battle of Kaer Morhen council",
+   "journal_files": [
+    "q403battle"
+   ],
+   "fails": [
+    "Berengar's Blade"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Berengar's_Blade"
+   ]
+  },
+  {
+   "name": "Final Preparations: Ciri Lodge talk",
+   "journal_files": [
+    "q310preparationsnovigrad"
+   ],
+   "fails": [
+    "The Nobleman Statuette",
+    "The Soldier Statuette"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Final_Preparations"
+   ]
+  },
+  {
+   "name": "Battle Preparations ship sails",
+   "journal_files": [
+    "q210preparations"
+   ],
+   "fails": [
+    "Gwent: Skellige Style (Madman Lugos)",
+    "Triss' earring return",
+    "crystal skull to Yennefer"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Battle_Preparations",
+    "https://witcher.fandom.com/wiki/Gwent:_Skellige_Style",
+    "https://witcher.fandom.com/wiki/Crystal_skull"
+   ]
+  },
+  {
+   "name": "On Thin Ice start",
+   "journal_files": [
+    "q501eredin"
+   ],
+   "fails": [
+    "Reason of State",
+    "Gwent: Playing Thaler / Old Pals Thaler",
+    "Gwent: Skellige Style (Crach)",
+    "Contract: Devil by the Well"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/On_Thin_Ice",
+    "https://witcher.fandom.com/wiki/Reason_of_State"
+   ]
+  },
+  {
+   "name": "Finishing Lilac and Gooseberries (Vesemir talk after griffin, before Imperial Audience)",
+   "journal_files": [
+    "q002griffin",
+    "q002vizimapalace"
+   ],
+   "fails": [
+    "Missing in Action",
+    "On Death's Bed",
+    "Twisted Firestarter",
+    "(A Frying Pan, Spick and Span and Precious Cargo: infobox cutoff blank, unverified)"
+   ],
+   "sources": [
+    "https://witcher.fandom.com/wiki/Imperial_Audience",
+    "https://witcher.fandom.com/wiki/Twisted_Firestarter",
+    "https://witcher.fandom.com/wiki/Missing_in_Action"
+   ]
+  }
+ ]
+}

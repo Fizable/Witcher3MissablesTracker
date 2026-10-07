@@ -1,0 +1,24 @@
+[package]
+name = "witcher3-missables-tracker"
+version = "0.1.2"
+description = "Witcher 3 Missables Tracker: reads your save (read-only), warns before you lose a quest, and tells you what to do next"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+regex = "1"
+flate2 = "1"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = "thin"

@@ -1,0 +1,244 @@
+{
+ "hos_main": {
+  "summary": "Hearts of Stone main chain: Olgierd von Everec's three impossible wishes, then the final wager against Gaunter O'Dimm. Wiki main quests: Evil's Soft First Touches, Dead Man's Party, Open Sesame!, Scenes From a Marriage, Whatsoever a Man Soweth...",
+  "quest_names": [
+   "Evil's Soft First Touches",
+   "Dead Man's Party",
+   "Open Sesame!",
+   "Open Sesame: Witcher Seasonings",
+   "Open Sesame: Breaking and Entering",
+   "Open Sesame: The Safecracker",
+   "Scenes From a Marriage",
+   "Whatsoever a Man Soweth..."
+  ],
+  "available_when": "Expansion quests are designed for Geralt level 30+ (wiki). Evil's Soft First Touches starts at the notice board by the Seven Cats Inn (Novigrad): someone nails up a contract for a monster in the Oxenfurt sewers; read it and go to Olgierd at Garin Estate. Dead Man's Party and Open Sesame! both follow it (either order); Scenes From a Marriage needs both done (Open Sesame page: if Dead Man's Party is already finished, Olgierd gives the third task when you report back). Whatsoever a Man Soweth... follows Scenes From a Marriage.",
+  "how_to": [
+   "Evil's Soft First Touches: take the contract at Seven Cats Inn, see Olgierd at Garin Estate, go down the well in the Oxenfurt market to the sewers, find Shani, kill the Toad Prince; Olgierd then sets the wishes (optional duel with Olgierd in this quest).",
+   "Wish 1 - Dead Man's Party: ask Shani at her clinic about Olgierd's brother, go with her to the von Everec crypt, find Vlodimir's grave with Witcher Senses, use the censer at all marked spots, light the central votive, beat the family ghosts; then attend the wedding at Brunwich with Vlodimir possessing Geralt (4 mandatory activities, optional ones give an achievement).",
+   "Wish 2 - Open Sesame!: go to the Borsodi auction house in Oxenfurt (Vimme Vivaldi gets you in), talk to the associates, attend the auction, get thrown out, meet the Stranger at the Herbalist's Hut, complete the three prep subquests (Witcher Seasonings, Breaking and Entering, The Safecracker), do the heist and bring Maximilian Borsodi's House to Olgierd.",
+   "Wish 3 - Scenes From a Marriage: von Everec Estate, kill the Caretaker, bury Iris, restore her memories in the Painted World, beat the Ethereals, then take the rose or leave it (either fulfils the wish).",
+   "Final - Whatsoever a Man Soweth...: meet Olgierd's man at the Alchemy inn, optionally visit Shani and then Professor Shakeslock, go to the Temple of Lilvani (caves east of Toderas), and when O'Dimm claims Olgierd challenge him to the wager."
+  ],
+  "missable": "Open Sesame! armor diagrams and the vault diagram are one-time (see hos_auction). The Viper venomous silver sword and Olgierd's survival require meeting Shakeslock before the temple (see hos_shani). HAPPY ENDING FOR OLGIERD (wiki): challenge O'Dimm at the temple (needs the Shakeslock visit first) and solve the riddle; Olgierd then becomes mortal, his emotions return, and he gives Geralt his sword Iris. The rose choice in Scenes From a Marriage (take it = Iris ceases to exist, leave it = painted rose) only changes how the third wish is fulfilled; the wiki lists no effect on whether Olgierd is saved. If Geralt does not meet Shakeslock, or leaves Olgierd to O'Dimm, Olgierd dies.",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Hearts_of_Stone_quests",
+   "https://witcher.fandom.com/wiki/Evil's_Soft_First_Touches",
+   "https://witcher.fandom.com/wiki/Dead_Man's_Party",
+   "https://witcher.fandom.com/wiki/Open_Sesame!_(Hearts_of_Stone)",
+   "https://witcher.fandom.com/wiki/Scenes_From_a_Marriage",
+   "https://witcher.fandom.com/wiki/Whatsoever_a_Man_Soweth...",
+   "https://witcher.fandom.com/wiki/Olgierd_von_Everec",
+   "https://witcher.fandom.com/wiki/Hearts_of_Stone"
+  ],
+  "verified": "yes"
+ },
+ "hos_shani": {
+  "summary": "Visit Shani and then Professor Shakeslock during Whatsoever a Man Soweth... before going to the temple; that unlocks the option to challenge Gaunter O'Dimm and save Olgierd. The step's claim that you must beat Shani at Gwent first is NOT supported by the wiki pages I fetched.",
+  "quest_names": [
+   "Whatsoever a Man Soweth...",
+   "Dead Man's Party"
+  ],
+  "available_when": "After Scenes From a Marriage, Whatsoever a Man Soweth... starts at the Alchemy inn (Oxenfurt). After Olgierd's man tells you Shani wants to see you, the Shani/Shakeslock section is optional and must be done before the Temple of Lilvani scene. Wiki: if Geralt did not meet the professor, O'Dimm claims Olgierd's soul and you can only watch; if you did meet him, you can challenge O'Dimm (timed choice at the temple).",
+  "how_to": [
+   "At the Alchemy inn, tell Olgierd's man to have Olgierd meet at the Temple of Lilvani.",
+   "Go to Shani's home and talk to her (she is leaving for the front); she says Professor Premethine Shakeslock may know about Olgierd.",
+   "Follow Shani to Oxenfurt Academy; she gets you in another way (jump off the middle of the bridge into the river, kill the drowned dead, climb the rope).",
+   "Kill the witch hunters, get into Shakeslock's house (climb scaffolding to the balcony and Aard the door), talk to Shakeslock about beating O'Dimm with a wager for a soul. He dies afterwards regardless.",
+   "Optionally say goodbye to Shani once more, then go to the temple caves east of Toderas.",
+   "At the temple, when O'Dimm claims Olgierd, choose to challenge him (help Olgierd)."
+  ],
+  "missable": "Academy grounds are a one-time visit (loot before leaving). Skipping Shani/Shakeslock means no way to save Olgierd and no Viper venomous silver sword (only obtainable in the wager world). Gwent with Shani: the wiki says only that you can win the Olgierd von Everec card from Shani, and that if you have not won it before the quest completes you can find it in her clinic on the upstairs table; I found no source that a Gwent win is a prerequisite for the help option. I did not verify when the Shani Gwent match is offered.",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Whatsoever_a_Man_Soweth...",
+   "https://witcher.fandom.com/wiki/Shani",
+   "https://witcher.fandom.com/wiki/Scavenger_Hunt:_Viper_School_Gear"
+  ],
+  "verified": "partial"
+ },
+ "hos_auction": {
+  "summary": "The four Viper armor diagrams (armor, boots, gauntlets, trousers) are bought from Countess Mignole at the Borsodi auction during Open Sesame!, not from the auction itself.",
+  "quest_names": [
+   "Open Sesame!",
+   "Scavenger Hunt: Viper School Gear"
+  ],
+  "available_when": "Inside Open Sesame!: at the Borsodi Brothers' Auction House in Oxenfurt, enter as Vimme Vivaldi's plus-one, go upstairs, and accept his introductions to his associates before the auction. Mignole is one of them.",
+  "how_to": [
+   "Enter the auction house with Vivaldi and go to the auction floor upstairs.",
+   "Accept Vivaldi's introduction to Countess Mignole and keep talking until the merchant dialogue option appears.",
+   "Buy all four diagrams: Viper armor, boots, gauntlets, trousers.",
+   "Optional: offer to help find her earring (100 XP).",
+   "Later in the same quest, in the vault, loot the chest near Maximilian Borsodi's house for Diagram: Viper venomous steel sword (the vault cannot be re-entered).",
+   "Separate auction items: Starry Night Over the Pontar (20 crowns, 60 if outbidding Vivaldi; correct art-dealer guess needed to unlock Avid Collector), eagle statuette 300 crowns (unlocks A Dark Legacy), the Professor's spectacles 350 crowns; buying all three gives the Shopaholic achievement (can bug)."
+  ],
+  "missable": "One-time. Wiki: 'This is your only chance to get all four armor diagrams'; each associate conversation is a one-time opportunity. The vault diagram is also lost if you leave without it. The venomous silver sword has no diagram; it is found in O'Dimm's wager world (see hos_shani).",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Open_Sesame!_(Hearts_of_Stone)",
+   "https://witcher.fandom.com/wiki/Viper_School_Gear",
+   "https://witcher.fandom.com/wiki/Scavenger_Hunt:_Viper_School_Gear"
+  ],
+  "verified": "yes"
+ },
+ "hos_save": {
+  "summary": "Make a manual save before the Temple of Lilvani: saving is disabled inside O'Dimm's wager world and running out of time is a game over.",
+  "quest_names": [
+   "Whatsoever a Man Soweth..."
+  ],
+  "available_when": "At the Temple of Lilvani (caves east of Toderas) at the end of Whatsoever a Man Soweth..., when O'Dimm claims Olgierd; the challenge option appears only if you met Shakeslock.",
+  "how_to": [
+   "Save manually before entering the temple (wiki: have a recent save; the game also makes a checkpoint at the start of the challenge).",
+   "Take the challenge; the timer starts when Geralt passes the temple threshold; avoid decoy points of interest.",
+   "Route per wiki: down the path from the temple; at the fork take the right; kill foglet specters, cross the bridge; take the left at the next split; go under the bridge and take the left path, then right at the split to the red glowing point with a Hym specter (Viper venomous silver sword is in the stone up the stairs); head left to the house on the hill; deal with 2 gargoyle specters; enter; have at least half health; go down the stairs; find the dry fountain in the courtyard; Aard the cracked wall near the dry steps to finish.",
+   "Afterwards Olgierd gives you the sword Iris."
+  ],
+  "missable": "Not missable by itself, but failing the timer means reloading. Quen does not help in the final area. The Viper venomous silver sword can only be taken during the challenge.",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Whatsoever_a_Man_Soweth...",
+   "https://witcher.fandom.com/wiki/Scavenger_Hunt:_Viper_School_Gear"
+  ],
+  "verified": "yes"
+ },
+ "bw_fangs": {
+  "summary": "In The Night of Long Fangs you choose between finding Damien (path to Syanna and the Land of a Thousand Fables) and finding Orianna (path to the Unseen Elder). The Syanna path is required to bring Syanna to Dettlaff and for the both-sisters-live ending; the Unseen Elder route cannot save both sisters.",
+  "quest_names": [
+   "The Night of Long Fangs",
+   "Beyond Hill and Dale...",
+   "Tesham Mutna",
+   "What Lies Unseen",
+   "Blood Simple"
+  ],
+  "available_when": "Starts right after Capture the Castle (3 days later, audience with the duchess, then Dettlaff's vampires attack Beauclair). Level 47 per wiki. Regis offers two options; the wiki says that early choice only decides whether Regis accompanies you.",
+  "how_to": [
+   "Kill the first bruxa, talk to Regis, choose to find Damien (Regis accompanies you only on this path).",
+   "Fight through Beauclair; reach Damien near Cianfanelli Bank; he says Syanna was last seen taken to the palace playroom.",
+   "Meet Regis at the playroom, open the door, go upstairs and read the journal (read ALL entries; the Pomp page says only the first 2 are needed for the good ending).",
+   "Interact with the painting for the golden key, open the locked wardrobe, interact with the book 'The Land of a Thousand Fables' - the wiki says this locks in your path.",
+   "Then do Beyond Hill and Dale... and take Syanna to Tesham Mutna."
+  ],
+  "missable": "Committing to Orianna's path (Blood Simple, Unseen Elder) locks you to a single ending (wiki). The path is final once you interact with the book; you can still change your mind after Blood Simple. SAVE before interacting with the book (my advice; wiki only says choice is final). At Tesham Mutna, Syanna survives only if she has the Little Flint Girl's ribbon; otherwise she dies and Anna Henrietta jails Geralt (Burlap is the New Stripe). Also save before the Dettlaff fight (3 stages, no autosaves, wiki).",
+  "sources": [
+   "https://witcher.fandom.com/wiki/The_Night_of_Long_Fangs",
+   "https://witcher.fandom.com/wiki/Tesham_Mutna",
+   "https://witcher.fandom.com/wiki/Pomp_and_Strange_Circumstance",
+   "https://witcher.fandom.com/wiki/Blood_and_Wine_quests"
+  ],
+  "verified": "yes"
+ },
+ "bw_hill": {
+  "summary": "Beyond Hill and Dale... is the Land of a Thousand Fables quest: find three magic beans with Syanna, plant them, kill the Cloud Giant, leave through the well. For the both-sisters-live ending you must get Syanna's ribbon and hear her story.",
+  "quest_names": [
+   "Beyond Hill and Dale...",
+   "Tesham Mutna",
+   "Pomp and Strange Circumstance"
+  ],
+  "available_when": "Via the book in the wardrobe of the palace playroom at the end of The Night of Long Fangs (Damien path). Level 47.",
+  "how_to": [
+   "Follow the yellow brick road, kill the archespore, reach the Wicked Witch's hut, kill her, free Jack; ask Syanna about the beans.",
+   "Find Joss (a liar - he reverses the truth) and save him from wolves.",
+   "Red bean: Big Bad Wolf's red hut; get Little Red Riding Hood's hood from the well, act the tale, kill the wolf.",
+   "Yellow bean: kill Longlocks' wraith in her tower, loot the pillow.",
+   "Blue bean: Three Little Pigs' brick house (Aard it, kill the piglets); do not loot the Three Bears' table.",
+   "After each bean talk to Syanna and ask what happened / use her side conversations (wiki: on the first bean ask what happened to hear her story if you want a good ending).",
+   "Little Flint Girl (village north of Longlocks' tower): get Syanna's ribbon, either 500 crowns or beat her at Gwent. Wiki says required for a good ending. Do it before planting the beans (it stays optional afterwards).",
+   "Plant beans near the settlement, kill the Cloud Giant, jump into the well. The Syanna sex scene is optional with no consequences."
+  ],
+  "missable": "Ribbon: without it Syanna dies at Tesham Mutna. Both-sisters-live requirements per the wiki Pomp page: completed Beyond Hill and Dale, read the first 2 governess journal entries (playroom journal), agreed to listen to Syanna's story during the beans, investigated the 5th victim and then asked Syanna about it, and used the correct responses. Do side quests in the fablesphere (e.g. Duck, Duck, Goosed!; consume the golden egg) before leaving; items from inside do not carry out. The diary entries are read in The Night of Long Fangs (playroom), not in this quest.",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Beyond_Hill_and_Dale...",
+   "https://witcher.fandom.com/wiki/Tesham_Mutna",
+   "https://witcher.fandom.com/wiki/Pomp_and_Strange_Circumstance",
+   "https://witcher.fandom.com/wiki/The_Night_of_Long_Fangs"
+  ],
+  "verified": "yes"
+ },
+ "bw_warble": {
+  "summary": "Secondary quest where Geralt enters the Toussaint tournament in Guillaume's place to lift Vivienne's bird curse. It fails if not finished before meeting Damien in Capture the Castle.",
+  "quest_names": [
+   "The Warble of a Smitten Knight",
+   "The Beast of Toussaint",
+   "Capture the Castle",
+   "There Can Be Only One"
+  ],
+  "available_when": "Starts after defeating the Shaelmaar in The Beast of Toussaint: the quest log directs you to the medics' tent at the Tourney Grounds where Guillaume de Launfal waits. Level 35.",
+  "how_to": [
+   "Agree to help Guillaume; register as Geralt of Rivia or Ravix of Fourhorn (Geralt of Rivia allows a Proof of Honor for There Can Be Only One).",
+   "Compete in the shooting range and the race (winning both is needed for the final duel), search Vivienne's tent, then the duel/fistfight (winning the mounted duel counts as Proof of Honor).",
+   "Follow the oriole to Vivienne in the woods; she is cursed.",
+   "Choose: keep her secret (egg ritual, Vivienne lives about 7 years) or reveal it (Guillaume takes the curse and the two become a couple per the wiki). Refusing to reveal counts as Proof of Honor.",
+   "Stay in the tournament to win it (Proof of Valor): win the 5v5 battle and fight Gregoire de Gorgon (you can save at the start of that duel).",
+   "Lift the curse at Vivienne's tent; Guillaume pays the reward."
+  ],
+  "missable": "Quest fails if not completed before meeting Captain Damien de la Tour in Capture the Castle (wiki). Tournament rewards are lost if you leave the tournament.",
+  "sources": [
+   "https://witcher.fandom.com/wiki/The_Warble_of_a_Smitten_Knight",
+   "https://witcher.fandom.com/wiki/Pomp_and_Strange_Circumstance"
+  ],
+  "verified": "yes"
+ },
+ "bw_pomp": {
+  "summary": "After beating Dettlaff with Syanna alive, you investigate the 5th victim, talk to Syanna in her cell, then attend the ceremony. The both-sisters-live outcome depends on earlier choices and two specific dialogue lines; the step's wording 'say she is guilty but deserves mercy' does not match the wiki lines.",
+  "quest_names": [
+   "Pomp and Strange Circumstance",
+   "Tesham Mutna",
+   "Beyond Hill and Dale...",
+   "Burlap is the New Stripe",
+   "Be It Ever So Humble..."
+  ],
+  "available_when": "Follows Tesham Mutna only if Syanna lives (she needs the ribbon); if she dies the next quest is Burlap is the New Stripe. Level 49.",
+  "how_to": [
+   "After Dettlaff, tell Regis you want to find out the 5th victim; visit the bootblack (daytime), then the shelter, knock out the two men, get the 5th letter: the victim is Anna Henrietta.",
+   "Go to the palace and talk to Syanna in her cell (the wiki order is Syanna, then Damien).",
+   "Wiki-correct choices: 1) 'Cause she turned her back on you, forgot about you.' 2) 'Ever thought to forgive her?'",
+   "Talk to Damien (reveal the truth or not, no effect), then the ceremony; Syanna and Anna argue and forgive each other.",
+   "Then mandrake hunting with Regis."
+  ],
+  "missable": "Both sisters live only if ALL are true (wiki): completed Beyond Hill and Dale..., read the first 2 entries in the governess' journal, listened to Syanna's story during the bean hunt, investigated the 5th victim then asked Syanna about it, and used the correct responses. Otherwise Syanna kills Anna Henrietta and Damien shoots Syanna. If you took the Unseen Elder route you cannot save them. The ribbon is needed so Syanna survives Dettlaff (Tesham Mutna page).",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Pomp_and_Strange_Circumstance",
+   "https://witcher.fandom.com/wiki/Tesham_Mutna",
+   "https://witcher.fandom.com/wiki/Beyond_Hill_and_Dale...",
+   "https://witcher.fandom.com/wiki/The_Night_of_Long_Fangs"
+  ],
+  "verified": "yes"
+ },
+ "bw_main": {
+  "summary": "Blood and Wine main chain per the wiki quest list: Envoys, Wineboys; The Beast of Toussaint; Blood Run; La Cage au Fou; Where Children Toil, Toys Waste Away; Wine is Sacred; The Man from Cintra; Capture the Castle; The Night of Long Fangs; Beyond Hill and Dale... (or Blood Simple / What Lies Unseen); Tesham Mutna; Pomp and Strange Circumstance (or Burlap is the New Stripe); Be It Ever So Humble...",
+  "quest_names": [
+   "Envoys, Wineboys",
+   "The Beast of Toussaint",
+   "Blood Run",
+   "La Cage au Fou",
+   "Where Children Toil, Toys Waste Away",
+   "Wine is Sacred",
+   "The Man from Cintra",
+   "Capture the Castle",
+   "The Night of Long Fangs",
+   "Beyond Hill and Dale...",
+   "Blood Simple",
+   "What Lies Unseen",
+   "Tesham Mutna",
+   "Pomp and Strange Circumstance",
+   "Burlap is the New Stripe",
+   "Be It Ever So Humble..."
+  ],
+  "available_when": "Expansion designed for level 34+. Envoys, Wineboys: after completing A Poet Under Pressure (per the wiki) the contract appears on notice boards in Velen; read it, go to Stonecutters' Settlement and meet knights Palmerin de Launfal and Milton de Peyrac-Peyran, accept the duchess' summons, and travel to Toussaint. Not verified: exact notice-board locations.",
+  "how_to": [
+   "Envoys, Wineboys: read the notice, meet the knights, accept the contract.",
+   "Do side content that has cut-offs before Capture the Castle (e.g. The Warble of a Smitten Knight).",
+   "The Night of Long Fangs: pick the Damien/Syanna path (see bw_fangs); Beyond Hill and Dale... with ribbon and Syanna's story (see bw_hill).",
+   "Tesham Mutna: save before the 3-stage Dettlaff fight (no autosaves); bring Syanna who has the ribbon so she is teleported away.",
+   "Pomp and Strange Circumstance: 5th victim, correct Syanna dialogue (see bw_pomp).",
+   "Be It Ever So Humble... at Corvo Bianco (final quest, level 49)."
+  ],
+  "missable": "Choices in The Night of Long Fangs lock the ending (Orianna/Unseen Elder path = single ending, cannot save both sisters). Tesham Mutna without the ribbon = Syanna dies and Burlap is the New Stripe follows. Warble of a Smitten Knight fails at Capture the Castle. I did not fetch individual pages for Blood Run, La Cage au Fou, Where Children Toil, Wine is Sacred, The Man from Cintra, Capture the Castle, Blood Simple, What Lies Unseen, Burlap, or Be It Ever So Humble; their order and levels come only from the Blood and Wine quests list.",
+  "sources": [
+   "https://witcher.fandom.com/wiki/Blood_and_Wine_quests",
+   "https://witcher.fandom.com/wiki/Blood_and_Wine",
+   "https://witcher.fandom.com/wiki/Envoys,_Wineboys",
+   "https://witcher.fandom.com/wiki/The_Night_of_Long_Fangs",
+   "https://witcher.fandom.com/wiki/Tesham_Mutna",
+   "https://witcher.fandom.com/wiki/Pomp_and_Strange_Circumstance",
+   "https://witcher.fandom.com/wiki/Beyond_Hill_and_Dale..."
+  ],
+  "verified": "partial"
+ }
+}

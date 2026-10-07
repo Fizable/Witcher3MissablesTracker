@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Witcher 3 Missables Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Header: static, patched in place so inputs never lose focus -->
+  <header id="hdr">
+    <div class="hdr-row">
+      <h1><span class="gold">WITCHER 3</span> <span class="dim">missables tracker</span></h1>
+      <button class="gear" data-act="gear" title="Tell the tracker about your game (Letho, Keira, romances)">⚙ my game</button>
+      <label class="pin" title="Keep this window on top of the game"><input type="checkbox" id="pin" checked> pin</label>
+    </div>
+    <div class="hdr-row sub">
+      <span id="saveName" class="dim save-name">no save loaded</span>
+      <span id="saveAge" class="dim"></span>
+      <label class="lvl dim">level <input type="number" id="level" min="0" max="100" step="1" value="0" title="Your level (0 = unknown)"></label>
+    </div>
+    <div id="saveError" class="save-error hidden" role="alert"></div>
+    <div id="flagsPanel" class="hidden"><p class="dim small">Things the save cannot show. Set what applies to you; quests that cannot exist in your game stop counting.</p><div id="flags"></div><h3 class="sechead">Folders</h3><p class="dim small">Found automatically. Only change these if something shows as not found. Leave a box empty and press Use to go back to automatic.</p><div id="folders"></div><div id="foldermsg" class="foldermsg hidden"></div></div>
+  </header>
+
+  <!-- List view -->
+  <main id="listPane" class="pane">
+    <div class="searchbar">
+      <input type="search" id="q" placeholder="can I do this now? (contract, quest name)" autocomplete="off" spellcheck="false">
+      <div id="verdict" class="hidden"></div>
+      <ul id="hits" class="hits hidden"></ul>
+    </div>
+
+    <section id="alertsSec" class="hidden"><div id="alerts" class="stack"></div></section>
+
+    <section id="holdSec" class="hidden">
+      <h2 class="red">HOLD OFF <span class="count" id="holdCount"></span></h2>
+      <div id="hold" class="stack"></div>
+    </section>
+
+    <section id="todoSec">
+      <h2 class="gold">DO NEXT</h2>
+      <p class="explain dim">In your quest log = confirmed by your save. Not in your log yet = no known prerequisite is missing, but whether it is on the board or the NPC offers it depends on where you are and your level. The save cannot show that.</p>
+      <div id="todoCards" class="stack"></div>
+      <div id="todoMore" class="collapsible closed"><div class="inner"><div id="todoRows" class="rows"></div></div></div>
+      <button id="todoToggle" class="linkbtn hidden" data-act="toggle-all"></button>
+      <p id="todoEmpty" class="dim hidden">Nothing queued.</p>
+    </section>
+
+    <section id="progSec">
+      <h2 class="gold">PROGRESS</h2>
+      <p class="legend dim">✔ done · ◐ in progress · ○ not started · ✔? assumed from later progress (click to confirm) · ✎ you tick it</p>
+      <div id="sections" class="stack"></div>
+    </section>
+  </main>
+
+  <!-- Detail view -->
+  <main id="detailPane" class="pane hidden">
+    <div class="detail-top"><button class="btn" data-act="back">◂ back</button></div>
+    <div id="detail"></div>
+  </main>
+</div>
+<script src="api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

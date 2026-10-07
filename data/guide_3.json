@@ -1,0 +1,318 @@
+{
+  "sk_lastwish": {
+    "summary": "Secondary quest in Skellige where Yennefer takes Geralt to find a Djinn; it is the quest that decides the Yennefer romance.",
+    "available_when": "Becomes available after the main quest 'The Calm Before the Storm' (one source says after 'Nameless'): Yennefer asks Geralt to meet her in Larvik (Hindarsfjall). Level ~15. Can be done immediately or later, but only before Ugly Baby.",
+    "how_to": [
+      "Travel to Larvik and talk to Yennefer at the inn/harbor",
+      "Board the boat with her; sit at the opposite end of the boat to progress",
+      "Explore the underwater wrecks with Witcher Senses, recover the broken seal and the matching half on the sunken ship",
+      "Defeat the Djinn on the ship deck (silver sword + Quen)",
+      "After the fight choose the romance dialogue 'I still love you, too' to keep Yennefer (the other option 'Sorry, but I don't want to be with you anymore' ends it)"
+    ],
+    "missable": "Fails automatically once you retrieve Uma from Crow's Perch in Ugly Baby (guides4gamers, consolepulse 'before beginning Ugly Baby'). One older walkthrough (almarsguides) says it fails when The Isle of Mists starts; the sources disagree, so treat Ugly Baby as the safe cutoff. Missing it closes the Yennefer romance for the playthrough.",
+    "sources": [
+      "https://guides4gamers.com/witcher-3-wild-hunt/quests/the-last-wish/",
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/Sidequests/Skellige/TheLastWish/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-optimal-quest-order-missables-guide"
+    ],
+    "quest_names": ["The Last Wish", "The Calm Before the Storm", "Ugly Baby"],
+    "verified": "yes"
+  },
+  "sk_flesh": {
+    "summary": "Skellige side quest in Trottheim (Faroe) where you free slaves held by pirates and receive Diagram: Ban Ard Breastplate.",
+    "available_when": "Starts automatically when you enter/approach Trottheim, a pirate-occupied island in the southeast of the Skellige map.",
+    "how_to": [
+      "Sail to Trottheim",
+      "Either pose as a Nilfgaardian at the guarded entrance and meet the pirate boss for the cell key, or fight through and loot the key from the boss",
+      "Free the slaves with the key",
+      "Receive Diagram: Ban Ard Breastplate from a freed slave"
+    ],
+    "missable": "Becomes unavailable after you complete the step 'Speak with Lambert at the Seven Cats Inn' in Following the Thread (the quest then fails/completes and cannot be done). Outcome is the same whether you keep the disguise or fight.",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/Sidequests/Skellige/FleshForSale/",
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/Sidequests/Novigrad/FollowingTheThread/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-skellige-side-quests-complete-guide"
+    ],
+    "quest_names": ["Flesh for Sale", "Following the Thread"],
+    "verified": "yes"
+  },
+  "sk_thread": {
+    "summary": "Novigrad-started contract-style quest where you help Lambert track a killer; part of it takes you to Skellige to meet Hammond near Trottheim.",
+    "available_when": "Accepted from any Notice Board in Novigrad (not from Skellige). The Skellige leg is unlocked by the Seven Cats Inn step.",
+    "how_to": [
+      "Take the notice in Novigrad, talk to the guard at the Southern Gate and search the body south of him",
+      "Follow footprints to the dock, help Lambert kill the Ekimmara; talk to Lambert again (scenes, short fight)",
+      "(Do Flesh for Sale first) then meet Lambert at the Seven Cats Inn",
+      "Sail to Skellige, find Hammond east of Trottheim near stone ruins",
+      "Return to Lambert at the Seven Cats Inn, confront Jed Karadin and decide his fate (kill, spare or let Lambert decide)"
+    ],
+    "missable": "Per almarsguides: 'Complete this quest before The Isle of Mists or it will automatically fail'. The sources I fetched do NOT say it ends at Ugly Baby, so the tracker note 'finish before Ugly Baby' is not confirmed; the verified cutoff is the Isle of Mists. Talking to Lambert at the Seven Cats Inn permanently locks Flesh for Sale if it is not done. Lambert's Triss Merigold Gwent card is also available here (consolepulse says this is the earliest convenient window).",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/Sidequests/Novigrad/FollowingTheThread/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-gwent-questline-card-collector-guide"
+    ],
+    "quest_names": ["Following the Thread", "Flesh for Sale"],
+    "verified": "partial"
+  },
+  "sk_cave": {
+    "summary": "Skellige side quest where you accompany Blueboy Lugos into the Cave of Dreams and fight fear-based visions; requires the Phantom of Eldberg contract first.",
+    "available_when": "After finishing the contract 'The Phantom of Eldberg' (then 'Stranger in a Strange Land' triggers when you return to the Arinbjorn inn and you are sentenced by Madman Lugos). The Cave of Dreams starts when you talk to Blueboy Lugos on his boat next to the cave in Ard Skellig (use Axii or threaten the guards to board).",
+    "how_to": [
+      "Complete Contract: The Phantom of Eldberg",
+      "Return to the Arinbjorn inn: Stranger in a Strange Land (Axii the guard, beat prisoners, or accept Simun's help - Simun's route unlocks the optional 'An Unpaid Debt')",
+      "Madman Lugos pays your debt; go to the boat by the cave and talk to Blueboy Lugos",
+      "Kill four nekkers, drink the hallucinogen, fight through the dreams ending with Geralt's own nightmare (Wild Hunt hounds and master)"
+    ],
+    "missable": "Must be finished before King's Gambit (starting the succession feast closes it permanently per consolepulse). The tracker's 'lost at Battle Preparations' is consistent with a separate source saying Lugos becomes unavailable during late Battle Preparations, but I only verified the King's Gambit cutoff directly.",
+    "sources": [
+      "https://gamerguides.com/witcher3/guide/walkthrough/skellige/cave-of-dreams",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-madman-lugos-cave-dreams-questline",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-gwent-questline-card-collector-guide"
+    ],
+    "quest_names": ["Contract: The Phantom of Eldberg", "Stranger in a Strange Land", "The Cave of Dreams", "An Unpaid Debt"],
+    "verified": "yes"
+  },
+  "sk_possession": {
+    "summary": "Two Skellige quests for Crach an Craite's children: Cerys's 'Possession' (cure Jarl Udalryk on Spikeroog) and Hjalmar's 'The Lord of Undvik' (hunt a giant on Undvik).",
+    "available_when": "Both are given by Crach an Craite at the end of 'The King is Dead - Long Live the King' at Kaer Trolde.",
+    "how_to": [
+      "Possession: go to Svorlag (Spikeroog), talk to Udalryk/Bergthora, rescue Eiric from drowners, find Cerys in the abandoned town, find the Brokvar sword, place it underwater, then trust Cerys's plan (put the baby in the oven; Hjort catches it) or fight the Hym",
+      "The Lord of Undvik: question Crach, gather info at New Port Inn, sail to Undvik, follow Hjalmar's trail with Witcher Senses, rescue Folan from the ice trolls (riddles 'troll' and 'rock' or fight), free Vigi with the cage key, reach the giant's lair and defeat the ice giant"
+    ],
+    "missable": "Possession fails automatically if The Isle of Mists starts first. Missing Folan/Vigi means they do not join your army. King's Gambit triggers automatically after both are done.",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/Sidequests/Skellige/Possession/",
+      "https://guides4gamers.com/witcher-3-wild-hunt/quests/the-lord-of-undvik/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-skellige-succession-questline"
+    ],
+    "quest_names": ["Possession", "The Lord of Undvik", "The King is Dead - Long Live the King"],
+    "verified": "yes"
+  },
+  "sk_succession": {
+    "summary": "King's Gambit and Coronation decide who rules Skellige (Cerys or Hjalmar); neutral gives Svanrige.",
+    "available_when": "King's Gambit triggers automatically after completing both Possession and The Lord of Undvik (return to Kaer Trolde, steward Arnvald leads you to the feast). Coronation then triggers after the choice.",
+    "how_to": [
+      "Finish Possession and The Lord of Undvik (and The Cave of Dreams first)",
+      "Return to Kaer Trolde feast hall; optionally fight vildkaarls for rewards, receive silver sword 'Fate' from Crach, kill the three bears",
+      "Pick a side: Cerys route = investigate with Witcher Senses, mead with mardroeme, chase Arnvald, unmask Birna Bran (opens a Place of Power under Kaer Trolde); Hjalmar route = Fornhala, vildkaarl Halgrim, druid Artis (no Place of Power)",
+      "Go to Gedyneith for the Coronation (about 200 XP)"
+    ],
+    "missable": "Cannot be done after the Isle of Mists starts (consolepulse lists King's Gambit and Coronation as failing). The Place of Power and full truth only come with Cerys's route. Staying out makes Svanrige king. Note: sources I fetched describe the choice mainly as which ruler you want; one guide argues Cerys is the best outcome, but that is opinion.",
+    "sources": [
+      "https://www.gamebanshee.com/thewitcher3/walkthrough/kingsgambit.php",
+      "https://gamerwalkthroughs.com/witcher-3-wild-hunt/skellige/kings-gambit/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-skellige-succession-questline",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-isle-of-mists"
+    ],
+    "quest_names": ["King's Gambit", "Coronation"],
+    "verified": "yes"
+  },
+  "sk_gwent": {
+    "summary": "Gwent side quest chain in Skellige: Ermion, Gremist, Crach an Craite, then Sjusta the Tailor and Madman Lugos.",
+    "available_when": "Accept the Gwent letter from the Kaer Trolde Notice Board. Ermion needs 'Echoes of the Past' done first; Gremist needs 'Practicum in Advanced Alchemy' done.",
+    "how_to": [
+      "Take the Gwent letter at the Kaer Trolde notice board",
+      "Beat Ermion (Leshen card), then Gremist (Mysterious Elf) and Crach an Craite at Kaer Trolde harbor (Draug)",
+      "After beating Gremist/Crach, play Sjusta the Tailor (Yaevinn) and Madman Lugos (Vampire: Katakan)"
+    ],
+    "missable": "Do it before leaving for the Isle of Mists. Madman Lugos becomes unavailable during late Battle Preparations on most ruler routes (consolepulse), so play him before the succession/Battle Preparations.",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/ps4/thewitcher3/sidequests/skellige/gwentskelligestyle/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-gwent-questline-card-collector-guide"
+    ],
+    "quest_names": ["Gwent: Skellige Style", "Echoes of the Past", "Practicum in Advanced Alchemy"],
+    "verified": "yes"
+  },
+  "km_keep": {
+    "summary": "The Kaer Morhen portion of Ugly Baby: Disturbance (Yennefer), The Final Trial (Lambert), To Bait a Forktail (Eskel), then No Place Like Home and Va Fail, Elaine to cure Uma.",
+    "available_when": "Triggered when you arrive at Kaer Morhen and talk to Vesemir during Ugly Baby: Disturbance, The Final Trial and To Bait a Forktail can be done in any order. No Place Like Home unlocks after all three; Va Fail, Elaine follows.",
+    "how_to": [
+      "Disturbance: use the potestaquisitor near Vesemir, have him move the boxes, return to Yennefer",
+      "The Final Trial: follow Lambert north, boat, fight drowners/water hag, cave with cyclops Old Speartip, chest and Place of Power, three rock trolls",
+      "To Bait a Forktail: follow footprints south to Eskel's camp, chase the forktail to its cave (Diagram: Enhanced Wolven Gauntlets), horse race back",
+      "Return to the keep: No Place Like Home (drinking/Gwent with Lambert, optional Eskel search, optional megascope), then Va Fail, Elaine"
+    ],
+    "missable": "Completing these ends Ugly Baby and unlocks the Brothers in Arms quests and The Isle of Mists. The optional parts of No Place Like Home (staying for the party, Eskel hunt, megascope) can be skipped by going to bed early. The exact 'lost at...' consequences for the Kaer Morhen valley side quests are covered in the Berengar's Blade step.",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/StoryQuests/KaerMorhen/UglyBaby/",
+      "https://guides4gamers.com/witcher-3-wild-hunt/quests/no-place-like-home/"
+    ],
+    "quest_names": ["Ugly Baby", "Disturbance", "The Final Trial", "To Bait a Forktail", "No Place Like Home", "Va Fail, Elaine"],
+    "verified": "partial"
+  },
+  "km_berengar": {
+    "summary": "Kaer Morhen side quest to recover the Tor'haerne silver sword diagram (level 27 relic) from a chort's cave.",
+    "available_when": "Loot Berengar's Notes from a chest on the western side of the outer courtyard/middle courtyard, then talk to Vesemir in the main hall.",
+    "how_to": [
+      "Loot the notes in the western courtyard chest",
+      "Talk to Vesemir in the main hall (not at the front gate with Uma; progress Disturbance first if he is there)",
+      "Go east to the chort's cave, apply Relict Oil, kill the chort",
+      "Loot the sack in the cave: Diagram Tor'haerne and Superior Wolven Boots diagram"
+    ],
+    "missable": "Fails when the council starts in The Battle of Kaer Morhen (after the Isle of Mists). Fandom-derived summary also says Vesemir cannot be talked to after the Isle of Mists, so finish before boarding. Tor'haerne diagram is lost otherwise.",
+    "sources": [
+      "http://www.gamebanshee.com/thewitcher3/walkthrough/berengarsblade.php",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-kaer-morhen-side-quests-guide",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-battle-of-kaer-morhen"
+    ],
+    "quest_names": ["Berengar's Blade"],
+    "verified": "yes"
+  },
+  "km_brothers": {
+    "summary": "Four regional recruitment quests (Nilfgaard, Novigrad, Skellige, Velen) to gather allies for the Battle of Kaer Morhen; seven possible allies.",
+    "available_when": "All four trigger at the end of Ugly Baby.",
+    "how_to": [
+      "Nilfgaard: skippable, Emhyr gives no recruits",
+      "Novigrad: Triss (needs her quest line), Roche and Ves (An Eye for an Eye, must survive), Zoltan (A Dangerous Game), Dijkstra optionally",
+      "Skellige: Ermion at Gedyneith (joins automatically), Hjalmar (new monarch or Hjalmar quests), Crach gives a sword instead",
+      "Velen: Keira joins if you sent her to Kaer Morhen rather than Radovid; Letho only if he is alive"
+    ],
+    "missable": "All four fail once The Isle of Mists starts. Full Crew trophy needs seven allies: Ermion, Hjalmar, Keira, Triss, Roche, Ves, Zoltan. Allies appear at Kaer Morhen only after the Isle of Mists. (Gamerguides says Hjalmar/Ermion/Triss are guaranteed; Roche/Ves, Keira and Zoltan conditional.)",
+    "sources": [
+      "https://www.gamebanshee.com/thewitcher3/walkthrough/brothersinarms.php",
+      "https://gamerguides.com/witcher3/guide/walkthrough/the-wild-hunt/gather-allies",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-isle-of-mists"
+    ],
+    "quest_names": ["Brothers in Arms: Nilfgaard", "Brothers in Arms: Novigrad", "Brothers in Arms: Skellige", "Brothers in Arms: Velen"],
+    "verified": "yes"
+  },
+  "km_gwent": {
+    "summary": "Gwent matches at Kaer Morhen: Lambert gives the Triss Merigold card; Eskel and Roche are not confirmed by my sources.",
+    "available_when": "Lambert can be played during Following the Thread or at Kaer Morhen (during Ugly Baby / No Place Like Home drinking session). Roche appears at the Temerian hideout and can be played before Reason of State.",
+    "how_to": [
+      "Beat Lambert at Kaer Morhen (return to the main room in Ugly Baby, or during the No Place Like Home drinking) for the Triss Merigold card",
+      "Roche is played at the Temerian hideout (Gwent: Old Pals chain)"
+    ],
+    "missable": "Lambert eventually leaves the open world, so earlier is safer (Following the Thread is the earliest window). I could NOT verify any Eskel Gwent match or a Roche match at Kaer Morhen; the tracker's 'Eskel is not checked automatically' remains unverified.",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/StoryQuests/KaerMorhen/UglyBaby/",
+      "https://guides4gamers.com/witcher-3-wild-hunt/quests/no-place-like-home/",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-gwent-questline-card-collector-guide"
+    ],
+    "quest_names": ["Gwent: Old Pals", "No Place Like Home", "Ugly Baby"],
+    "verified": "partial"
+  },
+  "km_save": {
+    "summary": "Checklist and manual save before boarding for the Isle of Mists; not an in-game quest.",
+    "available_when": "After Ugly Baby and the Brothers in Arms quests, immediately before sailing to the Isle of Mists.",
+    "how_to": [
+      "Finish Keira's whole Velen chain and send her to Kaer Morhen; finish Baron quests",
+      "Finish Triss through Now or Never; Roche/Ves recruitment via An Eye for an Eye; Zoltan via A Dangerous Game",
+      "Resolve the Skellige succession and optional Skellige quests",
+      "Preserve the Radovid political chain and collect temporary Gwent cards",
+      "Make a named permanent manual save before boarding"
+    ],
+    "missable": "The game warns that some quests will fail but does not list them in the prompt; consolepulse says roughly 24+ quests fail at the Isle of Mists (Keira chain, King's Gambit/Coronation, Cabaret, Carnal Sins, Redania's Most Wanted, all Brothers in Arms). Fast travel is disabled until after Bald Mountain.",
+    "sources": [
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-isle-of-mists-what-to-finish-checklist",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-optimal-quest-order-missables-guide",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-isle-of-mists"
+    ],
+    "quest_names": ["The Isle of Mists"],
+    "verified": "partial"
+  },
+  "ci_isle": {
+    "summary": "Main quest that starts the Isle of Mists / Battle of Kaer Morhen sequence; the biggest point of no return in the game.",
+    "available_when": "Begins right after Ugly Baby's curse is lifted and the four Brothers in Arms quests are available; triggered when you board the boat guided by Avallac'h's firefly.",
+    "how_to": [
+      "Complete everything on the pre-Isle checklist",
+      "Create a named manual save",
+      "Board the boat"
+    ],
+    "missable": "Once you board, fast travel is disabled until after Bald Mountain, the story becomes a continuous sequence and approx. 24+ documented quests fail permanently (Brothers in Arms, Keira's quests, King's Gambit, Coronation, Cabaret, Carnal Sins, Redania's Most Wanted, Berengar's Blade at the council, etc.). I only verified a partial list; the exact full count of ~19 is not confirmed.",
+    "sources": [
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-isle-of-mists",
+      "https://consolepulse.com/multiplatform/the-witcher/guides/the-witcher-3-isle-of-mists-what-to-finish-checklist"
+    ],
+    "quest_names": ["The Isle of Mists", "The Battle of Kaer Morhen"],
+    "verified": "yes"
+  },
+  "ci_c1": {
+    "summary": "First of the Ciri-fate choices: in Blood on the Battlefield pick the snowball-fight dialogue option.",
+    "available_when": "Dialogue with Ciri in Blood on the Battlefield (the quest after the Battle of Kaer Morhen).",
+    "how_to": [
+      "Choose 'Think I know what might lift your spirits' to trigger the snowball fight",
+      "You can win or lose the fight; the choice itself is what counts"
+    ],
+    "missable": "Not missable as a separate quest, but choosing the other option gives a negative Ciri reaction. Ciri-fate choices are mutually counted: Shacknews lists five decisions with the 'correct' option each; more positives than negatives leads to the Witcher ending.",
+    "sources": [
+      "https://www.shacknews.com/article/116329/ciris-fate-and-best-ending-the-witcher-3"
+    ],
+    "quest_names": ["Blood on the Battlefield"],
+    "verified": "yes"
+  },
+  "ci_c2": {
+    "summary": "Second choice in Blood on the Battlefield: do not go to Emhyr first; choose Velen.",
+    "available_when": "Same dialogue with Ciri when planning what to do next.",
+    "how_to": [
+      "Choose 'Velen, then' (i.e. do not pick 'Gotta visit the emperor first')"
+    ],
+    "missable": "Shacknews: going to the Emperor first does not remove Ciri's fate, but prevents the Witcher outcome. thegamer.com agrees the 'visit the emperor first' option is the wrong one for the best ending.",
+    "sources": [
+      "https://www.shacknews.com/article/116329/ciris-fate-and-best-ending-the-witcher-3",
+      "https://www.thegamer.com/witcher-3-good-ending/"
+    ],
+    "quest_names": ["Blood on the Battlefield"],
+    "verified": "yes"
+  },
+  "ci_c3": {
+    "summary": "In Final Preparations let Ciri speak to the sorceresses (Lodge) on her own.",
+    "available_when": "Late in the Battle Preparations arc (Final Preparations), when the Lodge meeting dialogue appears.",
+    "how_to": [
+      "Choose 'You'll do fine on your own' so Ciri meets the Lodge alone",
+      "Do not go with her and speak for her (that reduces her confidence)"
+    ],
+    "missable": "Choice can't be redone afterward; wrong choice counts as a negative.",
+    "sources": [
+      "https://www.shacknews.com/article/116329/ciris-fate-and-best-ending-the-witcher-3"
+    ],
+    "quest_names": ["Final Preparations", "Battle Preparations"],
+    "verified": "yes"
+  },
+  "ci_c4": {
+    "summary": "In Child of the Elder Blood let Ciri destroy Avallac'h's laboratory.",
+    "available_when": "During the Child of the Elder Blood quest (part of Battle Preparations) when Ciri expresses wanting to wreck the lab.",
+    "how_to": [
+      "Choose 'Go for it' (do not tell her to calm down)"
+    ],
+    "missable": "Wrong option is a negative Ciri point; one-time dialogue.",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/StoryQuests/Skellige/BattlePreparations/ChildoftheElderBlood/",
+      "https://www.shacknews.com/article/116329/ciris-fate-and-best-ending-the-witcher-3"
+    ],
+    "quest_names": ["Child of the Elder Blood", "Battle Preparations"],
+    "verified": "yes"
+  },
+  "ci_c5": {
+    "summary": "At the end of Child of the Elder Blood, agree to go with Ciri to Skjall's grave.",
+    "available_when": "A timed dialogue near the end of Child of the Elder Blood, asking whether you'll visit Skjall's grave; leads to the quest Skjall's Grave (Hindarsfjall).",
+    "how_to": [
+      "Choose 'Yeah. I'll go with you' (not 'We don't have time')",
+      "Then do Skjall's Grave with her"
+    ],
+    "missable": "Saying there is no time is a negative. One guide (almarsguides) notes the later dialogue at the grave itself has no bearing; the decisive choice is the earlier one. The tracker calls this 'second Battle Preparations choice': matches almarsguides ('two pivotal decisions' in Child of the Elder Blood).",
+    "sources": [
+      "https://almarsguides.com/retro/walkthroughs/PS4/TheWitcher3/StoryQuests/Skellige/BattlePreparations/ChildoftheElderBlood/",
+      "https://www.shacknews.com/article/116329/ciris-fate-and-best-ending-the-witcher-3"
+    ],
+    "quest_names": ["Child of the Elder Blood", "Skjall's Grave", "Battle Preparations"],
+    "verified": "yes"
+  },
+  "ci_reason": {
+    "summary": "Finish Reason of State before telling Avallac'h you are ready in On Thin Ice.",
+    "available_when": "Reason of State needs A Deadly Plot, Redania's Most Wanted, An Eye for an Eye and Blindingly Obvious (Novigrad, level ~30, share info with Dijkstra).",
+    "how_to": [
+      "Meet Roche/Thaler/Dijkstra at the Novigrad docks warehouse",
+      "Board Radovid's boat and assassinate him",
+      "After the fight choose 'Do what you want' (Dijkstra takes control) or 'Won't let you kill them' (fight Dijkstra to protect Roche)",
+      "Do any other remaining quests, then make a manual save before speaking to Avallac'h"
+    ],
+    "missable": "Reason of State fails automatically if you talk to Avallac'h in On Thin Ice first. The choice affects who rules the north. I could not verify which romance quests (conditional) are also locked by On Thin Ice; the fetched pages do not mention them.",
+    "sources": [
+      "https://gamerguides.com/witcher3/guide/walkthrough/the-wild-hunt/reason-of-state",
+      "https://guides4gamers.com/witcher-3-wild-hunt/quests/reason-of-state/"
+    ],
+    "quest_names": ["Reason of State", "On Thin Ice", "A Deadly Plot", "Redania's Most Wanted", "An Eye for an Eye", "Blindingly Obvious"],
+    "verified": "partial"
+  }
+}

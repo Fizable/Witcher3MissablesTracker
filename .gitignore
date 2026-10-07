@@ -1,0 +1,15 @@
+# build output and generated files
+/target/
+/gen/
+/dist/
+*.exe
+
+# personal / local state, never commit
+/data/progress.json
+/data/reference_python.json
+/data/rust_dump*.json
+.cargo/config.toml
+*.pdb
+
+# browser-test data generated from a real save (not for release)
+/ui/mock/
