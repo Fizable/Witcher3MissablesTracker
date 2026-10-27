@@ -34,6 +34,11 @@
 
     <section id="alertsSec" class="hidden"><div id="alerts" class="stack"></div></section>
 
+    <section id="feedSec" class="hidden">
+      <h2 class="gold">QUEST ORDER <span class="count" id="feedCount"></span></h2>
+      <div id="feed" class="stack"></div>
+    </section>
+
     <section id="holdSec" class="hidden">
       <h2 class="red">HOLD OFF <span class="count" id="holdCount"></span></h2>
       <div id="hold" class="stack"></div>
@@ -41,7 +46,6 @@
 
     <section id="todoSec">
       <h2 class="gold">DO NEXT</h2>
-      <p class="explain dim">In your quest log = confirmed by your save. Not in your log yet = no known prerequisite is missing, but whether it is on the board or the NPC offers it depends on where you are and your level. The save cannot show that.</p>
       <div id="todoCards" class="stack"></div>
       <div id="todoMore" class="collapsible closed"><div class="inner"><div id="todoRows" class="rows"></div></div></div>
       <button id="todoToggle" class="linkbtn hidden" data-act="toggle-all"></button>

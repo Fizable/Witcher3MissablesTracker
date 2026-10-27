@@ -3,6 +3,7 @@
 //! Unofficial fan tool, not affiliated with CD PROJEKT RED.
 
 mod bundles;
+mod journalidx;
 mod model;
 mod save;
 
@@ -35,9 +36,12 @@ struct Inner {
     kb: HashMap<String, Value>,      // journal file -> audit quest
     guide: Value,                    // merged guide_*.json
     guide_alias: HashMap<String, String>,
+    feed: Value,                     // data/feed.json: quest-order warnings with evidence labels
     // save state
     state: HashMap<String, String>,
     objectives: HashMap<String, Vec<String>>,
+    tracked: Option<String>,         // guid of the quest tracked in the game (read from the save)
+    tracked_file: Option<String>,    // journal file of that quest, as the save names it
     save_path: Option<PathBuf>,
     save_mtime: Option<SystemTime>,
     ok_mtime: Option<SystemTime>,
@@ -145,6 +149,25 @@ fn load_quest_index(app_dir: &Path, game: &Path) -> Result<Value, String> {
     Ok(db)
 }
 
+/// game entry names carry an internal id: 'mq3005 Shady Deal' -> 'Shady Deal' (names without one are kept)
+fn clean_name(s: &str) -> String {
+    let t = s.trim();
+    if let Some(i) = t.find(|c: char| c.is_ascii_digit()) {
+        if i <= 4 && t[..i].chars().all(|c| c.is_ascii_alphabetic()) {
+            let rest = t[i..].trim_start_matches(|c: char| c.is_ascii_digit()).trim_start_matches(|c: char| c == '_' || c == ' ');
+            if rest.len() >= 3 {
+                return rest.to_string();
+            }
+        }
+    }
+    t.to_string()
+}
+
+/// research titles the audit could not identify ('Unmapped journal file ...') are not names
+fn is_placeholder(title: &str) -> bool {
+    title.starts_with("Unmapped") || title.starts_with("Unknown")
+}
+
 impl Inner {
     fn load(data_dir: PathBuf) -> Result<Inner, String> {
         let app_dir = find_app_dir(&data_dir);
@@ -182,10 +205,12 @@ impl Inner {
         let level = prog["level"].as_i64().unwrap_or(0);
         let flags: HashMap<String, String> = prog["flags"].as_object().map(|m| m.iter().filter_map(|(k, v)| Some((k.clone(), v.as_str()?.to_string()))).collect()).unwrap_or_default();
         let settings = read_json(&app_dir.join("settings.json")).unwrap_or(json!({}));
+        let feed = read_json(&data_dir.join("feed.json")).unwrap_or(json!({"items": []}));
         let mut inner = Inner {
             data_dir,
             app_dir,
             route,
+            feed,
             db: save::QuestDb { quests: vec![], display: vec![] },
             db_error: String::new(),
             game_dir: None,
@@ -195,6 +220,8 @@ impl Inner {
             guide_alias,
             state: HashMap::new(),
             objectives: HashMap::new(),
+            tracked: None,
+            tracked_file: None,
             save_path: None,
             save_mtime: None,
             ok_mtime: None,
@@ -241,6 +268,7 @@ impl Inner {
         // readable names: first entry name, then alias, then the route title for single-file nodes
         let mut display = self.db.display.clone();
         for (short, name) in display.iter_mut() {
+            *name = clean_name(name);
             if let Some((_, a)) = ALIASES.iter().find(|(k, _)| k == short) {
                 *name = a.to_string();
             }
@@ -332,6 +360,8 @@ impl Inner {
             Ok(s) => {
                 self.state = s.state;
                 self.objectives = s.objectives;
+                self.tracked = s.tracked;
+                self.tracked_file = s.tracked_file;
                 self.ok_mtime = Some(m);
                 self.error.clear();
             }
@@ -343,8 +373,71 @@ impl Inner {
         true
     }
 
+    /// the route plus a card for the quest tracked in the game, when no route step covers that quest
+    fn effective_route(&self) -> RouteData {
+        let mut rt = self.route.clone();
+        let Some(short) = self.tracked_short() else { return rt };
+        if rt.nodes.iter().any(|n| model::tracks(n, &short)) {
+            return rt;
+        }
+        let kb = self.kb.get(&short).filter(|q| !q["title"].as_str().map(is_placeholder).unwrap_or(false));
+        let game_name = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
+        let title = kb.and_then(|q| q["title"].as_str()).map(String::from).unwrap_or(game_name);
+        let kind = kb.and_then(|q| q["kind"].as_str()).unwrap_or("side").to_string();
+        let lv = kb.and_then(|q| q["level"].as_str()).filter(|l| l.chars().any(|c| c.is_ascii_digit())).unwrap_or("").to_string();
+        if !rt.sections.iter().any(|s| s == "Tracked") {
+            rt.sections.insert(0, "Tracked".into());
+        }
+        rt.nodes.push(model::Node {
+            section: "Tracked".into(),
+            id: format!("tracked_{short}"),
+            title,
+            lv,
+            files: vec![short],
+            conf: "high".into(),
+            hard: vec![],
+            by: vec![],
+            note: "Tracked in your game. Not in the route, so it is listed from your save.".into(),
+            kind,
+            opt: false,
+            when: vec![],
+        });
+        rt
+    }
+
     fn eval(&self) -> Eval {
-        model::evaluate(&self.route, &self.state, &self.ticks, &self.flags)
+        model::evaluate(&self.effective_route(), &self.state, &self.ticks, &self.flags)
+    }
+
+    /// the journal quest file (short name) of the quest tracked in the game, if the tracker knows it
+    fn tracked_short(&self) -> Option<String> {
+        self.tracked_file.clone().or_else(|| self.tracked.as_deref().and_then(|g| save::quest_for_guid(&self.db, g)))
+    }
+
+    /// the route steps of the tracked quest that are still open (held-back and lost ones included, so they can be warned about)
+    fn tracked_steps(&self, ev: &Eval, short: &str) -> Vec<usize> {
+        (0..ev.steps.len()).filter(|&i| model::tracks(&ev.steps[i].n, short) && !matches!(ev.steps[i].status.as_str(), "Done" | "N/A")).collect()
+    }
+
+    /// DO NEXT order: the steps for the quest tracked in the game come first, wherever they are; the rest keep the route order
+    fn todo_order(&self, ev: &Eval) -> Vec<usize> {
+        let Some(short) = self.tracked_short() else { return ev.todo.clone() };
+        let mine = self.tracked_steps(ev, &short);
+        mine.iter().copied().chain(ev.todo.iter().copied().filter(|i| !mine.contains(i))).collect()
+    }
+
+    /// the quest tracked in the game for the UI (null when the save has none)
+    fn tracked_json(&self, ev: &Eval) -> Value {
+        if self.tracked.is_none() {
+            return Value::Null;
+        }
+        let Some(short) = self.tracked_short() else {
+            return json!({"short": "", "display": "a quest the tracker does not know yet", "status": "", "steps": [], "warning": null});
+        };
+        let display = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
+        let steps: Vec<String> = self.tracked_steps(ev, &short).iter().map(|&i| ev.steps[i].n.id.clone()).collect();
+        let warning = model::tracked_warning(ev, &short).map(|(level, headline, details)| json!({"level": level, "headline": headline, "details": details}));
+        json!({"short": short, "display": display, "status": self.state.get(&short).cloned().unwrap_or_default(), "steps": steps, "warning": warning})
     }
 
     fn start_text(&self, i: usize, ev: &Eval) -> String {
@@ -375,10 +468,11 @@ impl Inner {
     }
 
     fn view(&self) -> Value {
-        let ev = self.eval();
+        let rt = self.effective_route();
+        let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags);
         let age = self.save_mtime.and_then(|m| SystemTime::now().duration_since(m).ok()).map(|d| d.as_secs()).unwrap_or(0);
         let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("");
-        let steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&self.route, &ev, i, &self.start_text(i, &ev))).collect();
+        let steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i, &self.start_text(i, &ev))).collect();
         let mut objs = serde_json::Map::new();
         for s in &ev.steps {
             if s.manual {
@@ -403,10 +497,12 @@ impl Inner {
                 "saves": {"path": self.saves_dir().map(|p| p.display().to_string()).unwrap_or_default(), "ok": self.saves_dir().and_then(|d| newest_in(&d)).is_some(), "auto": self.saves_override.is_none()},
                 "message": self.folder_msg,
             },
-            "sections": self.route.sections,
+            "sections": rt.sections,
             "steps": steps,
-            "todo": ev.todo.iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": self.todo_order(&ev).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "tracked": self.tracked_json(&ev),
             "holdoff": model::holdoff_json(&ev),
+            "feed": self.feed.get("items").cloned().unwrap_or(json!([])),
             "alerts": model::alerts_json(&ev),
             "objectives": Value::Object(objs),
             "flags": self.route.flags.iter().map(|f| json!({"id": f.id, "label": f.label, "note": f.note, "value": self.flags.get(&f.id).cloned().unwrap_or_default()})).collect::<Vec<_>>(),
@@ -434,7 +530,8 @@ fn get_view(st: State<Shared>) -> Value {
 #[tauri::command]
 fn get_detail(id: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
-    let ev = g.eval();
+    let rt = g.effective_route();
+    let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags);
     let Some(&i) = ev.byid.get(&id) else { return Value::Null };
     let n = &ev.steps[i].n;
     let tracking = if n.files.is_empty() {
@@ -444,14 +541,14 @@ fn get_detail(id: String, st: State<Shared>) -> Value {
         format!("Read automatically from your save ({}{}, match: {}).", names.join(", "), if n.files.len() > 4 { "..." } else { "" }, n.conf)
     };
     json!({
-        "step": model::step_json(&g.route, &ev, i, &g.start_text(i, &ev)),
+        "step": model::step_json(&rt, &ev, i, &g.start_text(i, &ev)),
         "kb": g.kb_for(&n.files).cloned().unwrap_or(Value::Null),
         "guide": g.guide_for(&n.id).cloned().unwrap_or(Value::Null),
         "tracking": tracking,
         "overridden": g.ticks.contains(&n.id) && !ev.steps[i].manual,
         "verdict": n.files.first().map(|f| {
             let sh = f.split('|').next().unwrap_or(f).split('#').next().unwrap_or(f).to_string();
-            let v = model::check_quest(&g.route, &ev, &sh, &g.state);
+            let v = model::check_quest(&rt, &ev, &sh, &g.state);
             model::verdict_json(&v, short_title(&n.title))
         }).unwrap_or(Value::Null),
     })
@@ -479,8 +576,9 @@ fn search(q: String, st: State<Shared>) -> Value {
 #[tauri::command]
 fn check_quest(short: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
-    let ev = g.eval();
-    let v = model::check_quest(&g.route, &ev, &short, &g.state);
+    let rt = g.effective_route();
+    let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags);
+    let v = model::check_quest(&rt, &ev, &short, &g.state);
     let display = g.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
     model::verdict_json(&v, &display)
 }
@@ -618,6 +716,24 @@ fn main() {
         }
     };
     inner.refresh_save();
+    // `--names out.txt` writes every name the newest save holds (quests, facts, flags) and exits (used to find signals)
+    if let Some(i) = a0.iter().position(|a| a == "--names") {
+        let out = a0.get(i + 1).cloned().unwrap_or_else(|| "names.txt".into());
+        let names = inner.save_path.as_ref().and_then(|p| save::load_raw(p).ok()).and_then(|raw| save::name_table(&raw).ok()).unwrap_or_default();
+        let _ = std::fs::write(out, names.join("\n"));
+        return;
+    }
+    // `--facts out.txt [needle]` writes the save's FactsDB (name -> values), optionally filtered, and exits
+    // (ground truth for what one quest sets and another checks, independent of journal status)
+    if let Some(i) = a0.iter().position(|a| a == "--facts") {
+        let out = a0.get(i + 1).cloned().unwrap_or_else(|| "facts.txt".into());
+        let needle = a0.get(i + 2).cloned().unwrap_or_default();
+        let facts = inner.save_path.as_ref().and_then(|p| save::load_raw(p).ok()).and_then(|raw| save::facts(&raw).ok()).unwrap_or_default();
+        let mut lines: Vec<String> = facts.iter().filter(|(k, _)| k.contains(&needle)).map(|(k, v)| format!("{k} = {v:?}")).collect();
+        lines.sort();
+        let _ = std::fs::write(out, lines.join("\n"));
+        return;
+    }
     // `--dump out.json` writes the computed state and exits (used to verify the build)
     let args: Vec<String> = std::env::args().collect();
     if let Some(i) = args.iter().position(|a| a == "--dump") {
@@ -629,7 +745,8 @@ fn main() {
             "quest_files": inner.db.quests.len(),
             "states": inner.state,
             "status": status,
-            "todo": ev.todo.iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": inner.todo_order(&ev).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "tracked": inner.tracked_json(&ev),
             "objectives": inner.objectives,
             "alerts": ev.alerts.iter().map(|a| a.msg.clone()).collect::<Vec<_>>(),
             "dont_start": model::dont_start(&ev).iter().map(|h| h.name.clone()).collect::<Vec<_>>(),

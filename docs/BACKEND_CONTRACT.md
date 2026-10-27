@@ -20,7 +20,11 @@ The backend emits `view` (same payload as `get_view`) whenever a new save appear
   "level": 0,                       // 0 = unknown
   "sections": ["White Orchard", ...],           // play order
   "steps": [ Step, ... ],                        // every route node, play order
-  "todo": ["ve_invite", ...],                    // ordered ids for DO NEXT (full list)
+  "todo": ["ve_invite", ...],                    // ordered ids for DO NEXT (full list); the open steps of the tracked quest come first, even when held back or not in todo
+  "tracked": null | { "short": "q301dreamer", "display": "Pyres of Novigrad", "status": "Active", "steps": ["no_pyres"],
+                      "warning": null | { "level": "stop"|"warn", "headline": "...", "details": ["..."] } },
+                                                // the quest tracked in the game (from the save). short "" + display "a quest the tracker does not know yet" when the guid is not in the index; steps = route ids that read it (not Done/N/A)
+                                                // warning: "stop" (red) = finishing it (or its next step) triggers a cutoff that fails open quests; "warn" (amber) = the route says to wait (held) or a soft cutoff
   "holdoff": [ { "kind": "event"|"hold", "name": "...", "status": ""|"Active"|"Not started", "why": "...", "missing": [ {"id","title"} ] } ],
   "alerts":  [ { "level": "stop"|"warn", "msg": "...", "missing": [ {"id","title"} ] } ],
   "objectives": { "<step id>": ["Find daughter", ...] }   // readable objectives active in the quest log right now

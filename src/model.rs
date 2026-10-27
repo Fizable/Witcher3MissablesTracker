@@ -36,6 +36,13 @@ pub struct EventDef {
     pub near: Vec<String>,
     #[serde(default)]
     pub soft: bool,
+    /// extra context shown in the hold-off warning, e.g. a verified detail about the exact trigger
+    #[serde(default)]
+    pub note: String,
+    /// true only once this event's fires/near/soft mapping has been checked against real evidence (a save-file
+    /// diff, or a structural bundle-resource scan) rather than taken as-is from a wiki page
+    #[serde(default)]
+    pub verified: bool,
 }
 
 #[derive(Deserialize, Clone)]
@@ -45,6 +52,7 @@ pub struct Pref {
     pub why: String,
 }
 
+#[derive(Clone)]
 pub struct RouteData {
     pub sections: Vec<String>,
     pub nodes: Vec<Node>,
@@ -90,6 +98,7 @@ pub struct Ev {
     pub fired: bool,
     pub open: Vec<usize>,
     pub near: bool,
+    pub near_active: Vec<usize>, // which of def.near are already Active/Done (why `near` is true)
 }
 
 pub struct Alert {
@@ -176,6 +185,31 @@ pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet
             }
         }
     }
+    // a hard requirement is clearly done when something it gates has engaged (the game would not have allowed
+    // that otherwise) - catches journal entries that never flip to Done even once the quest is over, by letting
+    // real progress on what comes after it prove it happened. Runs to a fixpoint for multi-step chains.
+    loop {
+        let mut to_assume: Vec<usize> = Vec::new();
+        for i in 0..steps.len() {
+            if is_ok(&steps[i].status) || steps[i].status == "Failed" || steps[i].status == "N/A" {
+                continue;
+            }
+            // gwent/treasure dependents are excluded: their own "Active" is often just as unreliable a journal
+            // placeholder as the thing we are trying to prove here, not real evidence of story progress
+            let dependent_engaged = steps
+                .iter()
+                .any(|s| s.n.hard.iter().any(|h| h == &steps[i].n.id) && matches!(s.status.as_str(), "Active" | "Done" | "Assumed") && s.n.kind != "gwent" && s.n.kind != "treasure");
+            if dependent_engaged {
+                to_assume.push(i);
+            }
+        }
+        if to_assume.is_empty() {
+            break;
+        }
+        for i in to_assume {
+            steps[i].status = "Assumed".into();
+        }
+    }
     // hard needs (game rules)
     for i in 0..steps.len() {
         let engaged = matches!(steps[i].status.as_str(), "Active" | "Done" | "Assumed");
@@ -200,8 +234,9 @@ pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet
     for (eid, def) in &rd.events {
         let fired = def.fires.iter().any(|(r, sts)| state.get(r).map(|s| sts.contains(s)).unwrap_or(false));
         let open: Vec<usize> = (0..steps.len()).filter(|&i| steps[i].n.by.contains(eid) && matches!(steps[i].status.as_str(), "Active" | "Not started")).collect();
-        let near = def.near.iter().filter_map(|x| byid.get(x)).any(|&i| matches!(steps[i].status.as_str(), "Active" | "Done"));
-        events.push(Ev { id: eid.clone(), def: def.clone(), fired, open, near });
+        let near_active: Vec<usize> = def.near.iter().filter_map(|x| byid.get(x)).filter(|&&i| matches!(steps[i].status.as_str(), "Active" | "Done")).copied().collect();
+        let near = !near_active.is_empty();
+        events.push(Ev { id: eid.clone(), def: def.clone(), fired, open, near, near_active });
     }
     let mut alerts: Vec<Alert> = Vec::new();
     for e in &events {
@@ -278,7 +313,16 @@ pub fn dont_start(ev: &Eval) -> Vec<HoldOff> {
             doable(ev, d, &mut Vec::new(), &mut now);
         }
         let names: Vec<&str> = e.open.iter().take(6).map(|&d| short(&ev.steps[d].n.title)).collect();
-        let mut why = format!("This would fail or lock: {}{}.", names.join("; "), if e.open.len() > 6 { "..." } else { "" });
+        // name what's already under way, so the warning has a concrete action attached instead of just the event's
+        // name. `near` is only a proximity signal (this cutoff is getting close), not necessarily the trigger itself -
+        // only `def.note` (filled in once an event's exact trigger has been verified, e.g. E_KG) may claim causation.
+        let near_names: Vec<&str> = e.near_active.iter().map(|&d| short(&ev.steps[d].n.title)).collect();
+        let mut why = format!("Already under way: {}.", near_names.join(", "));
+        if !e.def.note.is_empty() {
+            why.push(' ');
+            why.push_str(&e.def.note);
+        }
+        why.push_str(&format!(" This would fail or lock: {}{}.", names.join("; "), if e.open.len() > 6 { "..." } else { "" }));
         if e.open.iter().all(|&d| !ev.steps[d].locked.is_empty()) {
             why.push_str(" You cannot do them yet, so stay away from this for now.");
         }
@@ -352,7 +396,7 @@ pub fn check_quest(rd: &RouteData, ev: &Eval, short_name: &str, state: &HashMap<
 // ------------------------------------------------------------------ JSON views for the UI
 
 fn r(ev: &Eval, i: usize) -> Value {
-    json!({"id": ev.steps[i].n.id, "title": short(&ev.steps[i].n.title)})
+    json!({"id": ev.steps[i].n.id, "title": short(&ev.steps[i].n.title), "manual": ev.steps[i].manual})
 }
 
 pub fn step_json(rd: &RouteData, ev: &Eval, i: usize, start: &str) -> Value {
@@ -384,7 +428,184 @@ pub fn verdict_json(v: &Verdict, display: &str) -> Value {
     json!({"verdict": v.verdict, "headline": v.headline, "details": v.details, "display": display})
 }
 
+/// true when the route step reads this journal quest file (or one of its objectives / alternatives)
+pub fn tracks(n: &Node, short_name: &str) -> bool {
+    n.files.iter().any(|f| f.split('#').next() == Some(short_name) || f.split('|').any(|x| x == short_name))
+}
+
 /// the route step that tracks this journal quest file, if any
 pub fn step_for_short(ev: &Eval, short_name: &str) -> Option<usize> {
-    (0..ev.steps.len()).find(|&i| ev.steps[i].n.files.iter().any(|f| f.split('#').next() == Some(short_name) || f.split('|').any(|x| x == short_name)))
+    (0..ev.steps.len()).find(|&i| tracks(&ev.steps[i].n, short_name))
+}
+
+/// warning for the quest you are tracking: "stop" when finishing it closes open quests, "warn" when the route says to wait
+pub fn tracked_warning(ev: &Eval, short_name: &str) -> Option<(&'static str, String, Vec<String>)> {
+    for e in &ev.events {
+        if e.fired {
+            continue;
+        }
+        let Some((r, sts)) = e.def.fires.iter().find(|(r, _)| r.split('#').next() == Some(short_name)) else { continue };
+        // open steps of the same quest do not count: finishing it does not fail it
+        let others: Vec<usize> = e.open.iter().copied().filter(|&d| !tracks(&ev.steps[d].n, short_name)).collect();
+        if others.is_empty() {
+            continue;
+        }
+        let names: Vec<&str> = others.iter().take(8).map(|&d| short(&ev.steps[d].n.title)).collect();
+        // say what the event waits for: an objective of this quest, its end, or (rarely) its start
+        let headline = if r.contains('#') {
+            format!("Its next step triggers \"{}\"", e.def.name)
+        } else if sts.iter().all(|s| s == "Done") {
+            format!("Finishing this triggers \"{}\"", e.def.name)
+        } else {
+            format!("This triggers \"{}\"", e.def.name)
+        };
+        // soft events are the same amber "warn" the alerts use
+        let level = if e.def.soft { "warn" } else { "stop" };
+        return Some((level, headline, vec![format!("It would fail or lock: {}", names.join("; ")), "Finish those first.".into()]));
+    }
+    for s in &ev.steps {
+        if let (true, Some(h)) = (tracks(&s.n, short_name), &s.held) {
+            let names: Vec<&str> = h.blockers.iter().take(3).map(|&x| short(&ev.steps[x].n.title)).collect();
+            return Some(("warn", "Recommended to wait".into(), vec![h.why.clone(), format!("Do first: {}", names.join("; "))]));
+        }
+    }
+    None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn route() -> RouteData {
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/data/route.json");
+        let v: Value = serde_json::from_str(&std::fs::read_to_string(p).unwrap()).unwrap();
+        load_route(&v).unwrap()
+    }
+
+    fn state(pairs: &[(&str, &str)]) -> HashMap<String, String> {
+        pairs.iter().map(|(k, v)| (k.to_string(), v.to_string())).collect()
+    }
+
+    /// steps no journal entry shows (a tutorial, Gwent matches, a visit): the user ticks them, so they may gate a hold-off
+    const INHERENTLY_MANUAL: [&str; 3] = ["wo_prologue", "no_vegelbud", "hos_shakes"];
+    /// cutoffs that happen where the save records nothing (leaving a place)
+    const UNDETECTABLE_EVENTS: [&str; 1] = ["E_LAMP"];
+
+    /// the save has to be able to tell when a step that gates a hold-off is done, or the hold-off can never clear on its own
+    #[test]
+    fn steps_that_gate_a_hold_off_can_be_read_from_the_save() {
+        let rd = route();
+        let mut gating: Vec<&str> = rd.nodes.iter().filter(|n| !n.by.is_empty()).map(|n| n.id.as_str()).collect();
+        gating.extend(rd.prefs.iter().flat_map(|p| p.needs.iter().map(|s| s.as_str())));
+        for id in gating {
+            let n = rd.nodes.iter().find(|n| n.id == id).unwrap_or_else(|| panic!("unknown step {id}"));
+            assert!(
+                !n.files.is_empty() || INHERENTLY_MANUAL.contains(&id),
+                "'{}' ({id}) gates a hold-off but reads no journal file: link it to its journal entry, or list it in INHERENTLY_MANUAL",
+                n.title
+            );
+        }
+    }
+
+    /// an event that can never fire never lets the tracker say it has happened
+    #[test]
+    fn every_cutoff_can_be_detected() {
+        for (id, e) in route().events {
+            assert!(!e.fires.is_empty() || UNDETECTABLE_EVENTS.contains(&id.as_str()), "{id} ({}) has no journal trigger", e.name);
+        }
+    }
+
+    /// whatever way a step is marked done (its journal quest, or your tick), it never stays in DO NEXT or as something to do first
+    #[test]
+    fn a_finished_step_never_stays_open() {
+        let rd = route();
+        let flags = HashMap::new();
+        for n in &rd.nodes {
+            let (st, ticks) = if n.files.is_empty() {
+                (HashMap::new(), HashSet::from([n.id.clone()]))
+            } else {
+                (n.files.iter().map(|f| (f.split('|').next().unwrap().to_string(), "Done".to_string())).collect(), HashSet::new())
+            };
+            let ev = evaluate(&rd, &st, &ticks, &flags);
+            let i = ev.byid[&n.id];
+            assert_eq!(ev.steps[i].status, "Done", "{} is not Done once its quest is", n.id);
+            assert!(!ev.todo.contains(&i), "{} is Done but still in DO NEXT", n.id);
+            for h in dont_start(&ev) {
+                assert!(!h.missing.contains(&i), "{} is Done but '{}' still says to do it first", n.id, h.name);
+            }
+        }
+    }
+
+    /// A Walk on the Waterfront shows up in the journal as 'Shady Deal'; once that is done the outpost hold-off must go
+    #[test]
+    fn finishing_the_waterfront_quest_clears_the_outpost_hold_off() {
+        let rd = route();
+        let held = |st: HashMap<String, String>| {
+            let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new());
+            dont_start(&ev).iter().any(|h| h.name.contains("witch-hunter outpost"))
+        };
+        assert!(held(state(&[("q303treasure", "Active")])));
+        assert!(!held(state(&[("q303treasure", "Active"), ("mq3005badalley", "Done")])));
+        // once the outpost section has started or the quest is over, the cutoff has happened and holding off is moot
+        assert!(!held(state(&[("q303treasure", "Active"), ("q303treasure#Follow Witch Hunter Leader", "Active")])));
+        assert!(!held(state(&[("q303treasure", "Done")])));
+    }
+
+    /// Destination: Skellige's journal entry is a phase placeholder that stays "Active" forever, even long after the
+    /// player has sailed on: the only proof it finished is that The King is Dead (which hard-requires it) is itself
+    /// under way. Same for a longer chain: Echoes of the Past hard-requires The King is Dead.
+    #[test]
+    fn a_hard_prereq_is_assumed_done_once_what_it_gates_has_engaged() {
+        let rd = route();
+        let ev = evaluate(&rd, &state(&[("q201traveltoskellige", "Active"), ("pirate", "Active")]), &HashSet::new(), &HashMap::new());
+        let dest = ev.byid["sk_dest"];
+        assert_eq!(ev.steps[dest].status, "Assumed", "sk_dest should be inferred done once sk_king (which hard-requires it) has engaged");
+        assert!(!ev.todo.contains(&dest));
+
+        // sk_king's own journal file is itself stuck on a non-representative first entry; only the next quest down
+        // the chain (Echoes of the Past) shows real progress, two hops away from Destination: Skellige
+        let chain = evaluate(&rd, &state(&[("q201traveltoskellige", "Active"), ("pirate", "Not started"), ("q203cataclysm", "Active")]), &HashSet::new(), &HashMap::new());
+        let king = chain.byid["sk_king"];
+        let dest2 = chain.byid["sk_dest"];
+        assert_eq!(chain.steps[king].status, "Assumed", "sk_king should be inferred done once sk_echoes (which hard-requires it) has engaged");
+        assert_eq!(chain.steps[dest2].status, "Assumed", "sk_dest should be inferred done transitively through sk_king");
+    }
+
+    /// Gwent: Skellige Style hard-requires Echoes of the Past, but its own "Active" status comes from a single
+    /// card-win objective that is just as often a stuck placeholder (caught against a real save: Mousesack's entry
+    /// reads Active with no card actually won yet). A gwent/treasure step engaging must never "prove" a main quest
+    /// done, or a quest the player is genuinely mid-way through (and that should still show up in DO NEXT) vanishes.
+    #[test]
+    fn a_gwent_step_engaging_does_not_assume_the_main_quest_it_needs_is_done() {
+        let rd = route();
+        let ev = evaluate(&rd, &state(&[("q203cataclysm", "Not started"), ("cgskellige#Win unique card from Mousesack", "Active")]), &HashSet::new(), &HashMap::new());
+        let echoes = ev.byid["sk_echoes"];
+        assert_eq!(ev.steps[echoes].status, "Not started", "a gwent card win must not assume Echoes of the Past is done");
+    }
+
+    /// King's Gambit starts automatically off Possession and Lord of Undvik with no in-game prompt - the hold-off
+    /// must say that plainly (which quest is already under way, and that finishing it is the trigger), not just
+    /// name the event, or a player has no way to know finishing a conversation is the dangerous action.
+    #[test]
+    fn starting_kings_gambit_names_what_is_already_under_way() {
+        let rd = route();
+        let ev = evaluate(&rd, &state(&[("q203him", "Active")]), &HashSet::new(), &HashMap::new());
+        let hold = dont_start(&ev).into_iter().find(|h| h.name == "Starting King's Gambit").expect("Possession in progress should hold off King's Gambit");
+        assert!(hold.why.contains("Possession"), "why should name Possession as already under way: {}", hold.why);
+        assert!(hold.why.contains("no choice or prompt to decline"), "why should warn there is no in-game prompt, from the verified note: {}", hold.why);
+        assert!(hold.why.contains("Needs both Possession and Lord of Undvik"), "why should carry the verified trigger note: {}", hold.why);
+    }
+
+    /// `near` is only a proximity signal (this cutoff may be getting close) - for events with no verified `note`
+    /// explaining the actual trigger, the hold-off must not claim the active step is what triggers the event, or
+    /// it overclaims causation the way it did for King's Gambit's neighbors (Isle of Mists, Ugly Baby) before
+    /// their own triggers were ever checked.
+    #[test]
+    fn an_unverified_event_near_an_active_step_does_not_claim_it_triggers_it() {
+        let rd = route();
+        let ev = evaluate(&rd, &state(&[("q206berserkers", "Active")]), &HashSet::new(), &HashMap::new());
+        let hold = dont_start(&ev).into_iter().find(|h| h.name.contains("Ugly Baby")).expect("King's Gambit under way should flag the nearby Ugly Baby cutoff");
+        assert!(hold.why.contains("King's Gambit"), "why should name King's Gambit as already under way: {}", hold.why);
+        assert!(!hold.why.contains("triggers this"), "near is a proximity signal, not a confirmed trigger, without a verified note: {}", hold.why);
+    }
 }

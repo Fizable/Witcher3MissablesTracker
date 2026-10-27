@@ -154,8 +154,28 @@ pub fn build_quest_db(game: &Path) -> Result<Value, String> {
             if data.len() < 4 || &data[..4] != b"CR2W" {
                 continue;
             }
-            let ids: Vec<Value> = ident_re.captures_iter(&data).map(|c| json!([latin1(&c[1]), latin1(&c[2])])).collect();
+            let mut ids: Vec<Value> = ident_re.captures_iter(&data).map(|c| json!([latin1(&c[1]), latin1(&c[2])])).collect();
             let key = latin1(m.as_bytes()).to_lowercase();
+            // the scan above takes every "name GUID" string in file order, and the first one is often a
+            // map pin or a description entry rather than the quest: 46 of 441 quests were read from the
+            // wrong entry that way (Lord of Undvik read a mappin and never registered in any save). The
+            // file's own CJournalQuest export is the quest, so put that entry first.
+            if let Some(q) = crate::journalidx::parse(&data) {
+                match ids.iter().position(|v| v.get(1).and_then(|x| x.as_str()) == Some(q.guid.as_str())) {
+                    Some(i) if i > 0 => {
+                        let entry = ids.remove(i);
+                        ids.insert(0, entry);
+                    }
+                    Some(_) => {}
+                    None => {
+                        let name = q.name.clone().unwrap_or_else(|| {
+                            let f = key.rsplit('\\').next().unwrap_or(&key);
+                            f.strip_suffix(".journal").unwrap_or(f).to_string()
+                        });
+                        ids.insert(0, json!([name, q.guid]));
+                    }
+                }
+            }
             db.insert(key, json!({"file": fname, "ids": ids}));
         }
     }

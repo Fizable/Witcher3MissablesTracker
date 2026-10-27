@@ -13,3 +13,9 @@
 
 # browser-test data generated from a real save (not for release)
 /ui/mock/
+
+# tools/: derived indexes and reports, regenerate per tools/README.md
+/tools/*_index.json
+/tools/gate_report.md
+/tools/*.log
+__pycache__/

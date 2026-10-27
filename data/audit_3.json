@@ -353,14 +353,16 @@
    ],
    "must_finish_before": [],
    "fails_or_locks_when": "Not stated by wiki.",
-   "journal_files": [],
-   "mapping_confidence": "low",
-   "mapping_evidence": "No matching journal file identified; not in route.py.",
+   "journal_files": [
+    "mq2051unfinishedbusiness"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "mq2051unfinishedbusiness is titled 'MQ2051 Unfinished Business' in the game files: 'Meet with Simun at the lake house', 'Kill Simun's enemy', 'Kill Simun', endings EndProWarrior / EndProSimun. That matches the wiki story (Simun asks you to settle his debt at the lake house). The in-game title differs from the wiki name.",
    "sources": [
     "https://witcher.fandom.com/wiki/An_Unpaid_Debt"
    ],
    "unverified": [
-    "journal file",
+    "journal file matched by its objectives, not by an exact title",
     "cutoff"
    ]
   },

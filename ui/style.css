@@ -86,6 +86,11 @@ button.title.link:hover { color: var(--gold); }
 .lbl { margin-top: 7px; font-size: 10.5px; letter-spacing: .1em; color: var(--dim); font-weight: 600; }
 .lbl.gold { color: var(--gold); }
 .card-foot { display: flex; align-items: center; gap: 10px; margin-top: 9px; flex-wrap: wrap; }
+.blockers { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 12px; margin-top: 3px; }
+.blocker { display: inline-flex; align-items: center; gap: 7px; }
+.trk-warn { margin-top: 8px; padding: 7px 9px; border: 1px solid var(--amber); border-radius: 6px; background: rgba(232,162,58,.08); }
+.trk-warn.red { border-color: var(--red); background: rgba(229,83,75,.12); }
+.trk-warn .title { font-weight: 600; margin-top: 2px; }
 .x { color: var(--dim); padding: 2px 6px; border-radius: 4px; } .x:hover { color: var(--text); background: var(--card2); }
 .msg { font-weight: 600; }
 

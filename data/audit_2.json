@@ -688,14 +688,16 @@
     }
    ],
    "fails_or_locks_when": "Fails if Ginter dies; unavailable once the outpost section of Count Reuven's Treasure starts.",
-   "journal_files": [],
-   "mapping_confidence": "low",
-   "mapping_evidence": "No journal file with objective names about Ginter/nobleman/suppliers was found in journal_names_2.json.",
+   "journal_files": [
+    "mq3005badalley"
+   ],
+   "mapping_confidence": "med",
+   "mapping_evidence": "mq3005badalley is titled 'mq3005 Shady Deal' in the game files, with objectives 'Follow the noble' and 'Defeat the bandits'. That matches the wiki story (escort the nobleman through the harbour bandits to his supplier). The in-game title differs from the wiki name.",
    "sources": [
     "https://witcher.fandom.com/wiki/A_Walk_on_the_Waterfront"
    ],
    "unverified": [
-    "Journal file unknown."
+    "Journal file matched by its objectives, not by an exact title."
    ]
   },
   {

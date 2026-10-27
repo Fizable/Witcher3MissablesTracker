@@ -26,7 +26,7 @@ const store = {
 const short = (s, n) => (s.length > n ? s.slice(0, n).trimEnd() + '…' : s);
 const noParen = (t) => t.replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\s+/g, ' ').trim();
 const lvNum = (s) => { const n = parseInt(s.lv, 10); return Number.isFinite(n) ? n : 0; };
-const lvlChip = (s) => s.section.toUpperCase() + (s.lv ? ' · L' + s.lv : '');
+const lvlChip = (s) => s.section.toUpperCase() + (/\d/.test(s.lv || '') ? ' · L' + s.lv : '');
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 /** Keyed list: keeps one element per key, rebuilds it only when sig changes, keeps order. */
@@ -171,6 +171,22 @@ function renderAlerts(v) {
   });
 }
 
+const feedList = keyedList($('#feed'));
+
+function renderFeed(v) {
+  const items = (v.feed || []).filter((x) => x.show !== false);
+  $('#feedSec').classList.toggle('hidden', !items.length);
+  $('#feedCount').textContent = items.length ? '· ' + items.length : '';
+  feedList(items, (x) => x.id, (x) => x, (x) => {
+    const col = x.level === 'stop' ? 'red' : x.level === 'amber' ? 'amber' : 'blue';
+    const c = h('div', 'card accent-' + col);
+    const ev = x.evidence === 'save' ? 'CONFIRMED IN YOUR SAVES' : x.evidence === 'save+graph' ? 'SAVES + GAME FILES' : x.evidence === 'graph' ? 'FROM GAME FILES (UNVERIFIED)' : 'REFUTED BY SAVES';
+    add(c, h('div', 'tag ' + col, (x.level === 'stop' ? 'CUTOFF AHEAD' : x.level === 'amber' ? 'CAUTION' : 'NOTE') + ' · ' + ev), h('div', 'title', x.headline));
+    (x.details || []).forEach((d) => add(c, h('div', 'why', d)));
+    return c;
+  });
+}
+
 function renderHold(v) {
   const hold = v.holdoff || [];
   $('#holdSec').classList.toggle('hidden', !hold.length);
@@ -181,22 +197,44 @@ function renderHold(v) {
     const label = event ? "DON'T TRIGGER YET" : x.status === 'Active' ? 'PAUSE (already started)' : "DON'T START YET";
     add(c, h('div', 'tag ' + (event ? 'red' : 'amber'), label), h('div', 'title', x.name));
     if (x.why) add(c, h('div', 'why', x.why));
-    if (x.missing && x.missing.length) add(c, h('div', 'dim small', 'Do first: ' + missingText(x.missing)));
+    if (x.missing && x.missing.length) add(c, blockerRow(x.missing));
     return c;
   });
+}
+
+/** "Do first: A, B": steps the save cannot show get their own button, so you can clear them when you have done them. */
+function blockerRow(missing) {
+  const row = h('div', 'blockers');
+  add(row, h('span', 'dim small', 'Do first:'));
+  missing.forEach((m) => {
+    const item = h('span', 'blocker');
+    add(item, h('span', 'dim small', m.title));
+    if (m.manual) add(item, h('button', 'btn sm', 'mark done', { 'data-act': 'tick', 'data-id': m.id, title: 'The save cannot show this one. Click it if you have already done it.' }));
+    row.append(item);
+  });
+  return row;
 }
 
 // ---------- DO NEXT ----------
 const cardList = keyedList($('#todoCards'));
 const rowList = keyedList($('#todoRows'));
 
-function buildCard(s, objs) {
+function buildCard(s, objs, tracked) {
   const active = s.status === 'Active';
-  const c = h('article', 'card todo accent-' + (active ? 'green' : s.conditional ? 'blue' : 'gold'));
+  const w = tracked ? tracked.warning : null;
+  const accent = w ? (w.level === 'stop' ? 'red' : 'amber') : active ? 'green' : s.conditional ? 'blue' : 'gold';
+  const c = h('article', 'card todo accent-' + accent);
   const top = h('div', 'card-top');
-  add(top, h('span', 'chip', lvlChip(s)),
+  add(top, h('span', 'chip', lvlChip(s)), tracked ? h('span', 'tag blue', 'TRACKED IN YOUR GAME') : null,
     h('span', 'sidetag ' + (active ? 'green' : 'dim'), active ? 'in your quest log' : s.conditional ? 'only if it exists in your game' : 'not in your log yet'));
   add(c, top, h('button', 'title link', s.title, { 'data-act': 'detail', 'data-id': s.id }));
+  if (w) {
+    const col = w.level === 'stop' ? 'red' : 'amber';
+    const box = h('div', 'trk-warn ' + col);
+    add(box, h('div', 'tag ' + col, w.level === 'stop' ? 'CUTOFF AHEAD' : 'RECOMMENDED TO WAIT'), h('div', 'title', w.headline));
+    (w.details || []).forEach((d) => add(box, h('div', 'why', d)));
+    add(c, box);
+  }
 
   if (active && objs.length) {
     const ul = h('ul', 'bul');
@@ -231,9 +269,12 @@ function buildRow(s, rank) {
 function renderTodo(v) {
   const ids = (v.todo || []).filter((id) => stepsById.has(id));
   const first = ids.slice(0, FIRST_N), rest = ids.slice(FIRST_N);
+  // the quest tracked in the game is first in the list (the backend orders it), labelled and warned here
+  const tr = v.tracked, trackedSteps = new Set(tr ? tr.steps : []);
+  const trackedOf = (id) => (trackedSteps.has(id) ? tr : null);
   $('#todoEmpty').classList.toggle('hidden', ids.length > 0);
-  cardList(first, (id) => id, (id) => [stepsById.get(id), v.objectives[id] || [], v.level],
-    (id) => buildCard(stepsById.get(id), v.objectives[id] || []));
+  cardList(first, (id) => id, (id) => [stepsById.get(id), v.objectives[id] || [], v.level, trackedOf(id)],
+    (id) => buildCard(stepsById.get(id), v.objectives[id] || [], trackedOf(id)));
   const rank = new Map(ids.map((id, i) => [id, i + 1]));
   rowList(rest, (id) => id, (id) => [stepsById.get(id), rank.get(id)], (id) => buildRow(stepsById.get(id), rank.get(id)));
   $('#todoToggle').classList.toggle('hidden', !rest.length);
@@ -324,7 +365,7 @@ function render(v) {
     const s = stepsById.get(id);
     if (!s || s.status !== d.step.status || s.note !== d.step.note) detailCache.delete(id);
   }
-  renderHeader(v); renderFlags(v); renderFolders(v); renderAlerts(v); renderHold(v); renderTodo(v); renderProgress(v);
+  renderHeader(v); renderFlags(v); renderFolders(v); renderAlerts(v); renderFeed(v); renderHold(v); renderTodo(v); renderProgress(v);
   if (detailId && !detailCache.has(detailId)) openDetail(detailId, true);
 }
 

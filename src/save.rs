@@ -121,6 +121,7 @@ pub fn name_table(r: &[u8]) -> Result<Vec<String>, String> {
 pub struct JEntry {
     pub guid: Option<[u8; 16]>,
     pub status: String,
+    pub resource: Option<String>, // journal file path, e.g. gameplay\journal\quests\q201traveltoskellige.journal
 }
 
 fn vint(r: &[u8], q: &mut usize) -> Result<usize, String> {
@@ -174,7 +175,7 @@ pub fn journal(r: &[u8], names: &[String]) -> Result<Vec<JEntry>, String> {
         if t == b"BS" {
             let i = u16le(r, q + 2)?;
             if i == ses {
-                entries.push(JEntry { guid: None, status: String::new() });
+                entries.push(JEntry { guid: None, status: String::new(), resource: None });
                 cur = true;
             } else if nm(i) == "CWitcherJournalManager" {
                 break;
@@ -198,6 +199,11 @@ pub fn journal(r: &[u8], names: &[String]) -> Result<Vec<JEntry>, String> {
             q += sz;
         } else if tn == "String" {
             let ln = vint(r, &mut q)?;
+            if cur && name == "resource" {
+                if let Some(v) = r.get(q..q + ln) {
+                    entries.last_mut().unwrap().resource = Some(v.iter().map(|&b| b as char).collect());
+                }
+            }
             q += ln;
         } else if tn == "CName" || tn.starts_with('E') {
             let v = nm(u16le(r, q)?).to_string();
@@ -212,11 +218,62 @@ pub fn journal(r: &[u8], names: &[String]) -> Result<Vec<JEntry>, String> {
     Ok(entries)
 }
 
+/// CFactsDB entries from the save: fact name -> its recorded values (quest scripts gate on these with FactsDo/FactsQuerySum;
+/// this is the ground truth for what one quest sets and another checks, independent of any journal entry status).
+pub fn facts(r: &[u8]) -> Result<HashMap<String, Vec<u16>>, String> {
+    let re = regex::bytes::Regex::new(r"(?s-u)([\x81-\xff])([A-Za-z0-9_.\-]+)\x00\x00(.)\x00").map_err(|e| e.to_string())?;
+    let mut out = HashMap::new();
+    for caps in re.captures_iter(r) {
+        let len_byte = caps.get(1).unwrap().as_bytes()[0];
+        let name = caps.get(2).unwrap().as_bytes();
+        if name.len() != (len_byte - 0x80) as usize {
+            continue;
+        }
+        let count = caps.get(3).unwrap().as_bytes()[0] as usize;
+        let mut p = caps.get(0).unwrap().end();
+        let mut vals = Vec::with_capacity(count);
+        for _ in 0..count {
+            match r.get(p..p + 2) {
+                Some(b) => vals.push(u16::from_le_bytes([b[0], b[1]])),
+                None => break,
+            }
+            p += 10; // value (u16) + time (f32) + expiry (f32)
+        }
+        out.insert(String::from_utf8_lossy(name).to_string(), vals);
+    }
+    Ok(out)
+}
+
 pub fn guid_str(g: &[u8; 16]) -> String {
     (0..4)
         .map(|k| format!("{:08X}", u32::from_le_bytes([g[4 * k], g[4 * k + 1], g[4 * k + 2], g[4 * k + 3]])))
         .collect::<Vec<_>>()
         .join("-")
+}
+
+/// CWitcherJournalManager.JTrackedQuest.guid -> the quest the player is tracking in the game (None if the save has none)
+pub fn tracked_guid(r: &[u8], names: &[String]) -> Option<String> {
+    let idx = |n: &str| names.iter().rposition(|x| x == n).map(|i| (i + 1) as u16);
+    let (jt, guid, cguid) = (idx("JTrackedQuest")?, idx("guid")?, idx("CGUID")?);
+    let mut pat = b"BS".to_vec();
+    pat.extend_from_slice(&jt.to_le_bytes());
+    let mut from = 0;
+    while let Some(p) = find(r, &pat, from) {
+        // object header (4 bytes), then its first field: VL guid: CGUID
+        let q = p + 4;
+        if r.get(q..q + 2) == Some(&b"VL"[..]) && r.get(q + 2..q + 4) == Some(&guid.to_le_bytes()[..]) && r.get(q + 4..q + 6) == Some(&cguid.to_le_bytes()[..]) {
+            let g: [u8; 16] = r.get(q + 6..q + 22)?.try_into().ok()?;
+            return Some(guid_str(&g));
+        }
+        from = p + 1;
+    }
+    None
+}
+
+/// the quest file (short name) a journal guid belongs to: its top-level guid first, then any of its entries
+pub fn quest_for_guid(db: &QuestDb, g: &str) -> Option<String> {
+    let top = db.quests.iter().find(|(_, ids)| ids.first().map(|(_, x)| x == g).unwrap_or(false));
+    top.or_else(|| db.quests.iter().find(|(_, ids)| ids.iter().any(|(_, x)| x == g))).map(|(s, _)| s.clone())
 }
 
 fn map_status(s: &str) -> &'static str {
@@ -225,6 +282,16 @@ fn map_status(s: &str) -> &'static str {
         "JS_Active" => "Active",
         "JS_Failed" => "Failed",
         _ => "Inactive",
+    }
+}
+
+/// how far an entry is; used to pick between entries of one journal file
+fn rank(s: &str) -> u8 {
+    match s {
+        "Done" => 3,
+        "Active" => 2,
+        "Failed" => 1,
+        _ => 0,
     }
 }
 
@@ -278,13 +345,26 @@ const NOISE: [&str; 8] = ["mappin", "map pin", "desc", "objectives", "test ", "b
 pub struct SaveState {
     pub state: HashMap<String, String>,
     pub objectives: HashMap<String, Vec<String>>,
+    pub tracked: Option<String>,      // guid of the quest the player is tracking in the game
+    pub tracked_file: Option<String>, // journal file (short) of that guid, from the save's own journal entry
+}
+
+/// 'gameplay\journal\quests\q201traveltoskellige.journal' -> 'q201traveltoskellige'
+fn journal_short(resource: &str) -> String {
+    let f = resource.rsplit('\\').next().unwrap_or(resource);
+    f.strip_suffix(".journal").unwrap_or(f).to_string()
 }
 
 /// quest file (short) -> Done/Active/Failed/Inactive/Not started, plus 'file#objective' keys and readable active objectives.
 pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
     let raw = load_raw(path)?;
     let names = name_table(&raw)?;
+    let tracked = tracked_guid(&raw, &names);
     let entries = journal(&raw, &names)?;
+    // the save's journal entry with the tracked guid names the file; the quest index does not list every entry guid
+    let tracked_file = tracked.as_deref().and_then(|g| {
+        entries.iter().find(|e| e.guid.as_ref().map(guid_str).as_deref() == Some(g)).and_then(|e| e.resource.as_deref()).map(journal_short)
+    });
     let mut by_guid: HashMap<String, &'static str> = HashMap::new();
     for e in &entries {
         if let Some(g) = &e.guid {
@@ -294,8 +374,24 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
     let mut state: HashMap<String, String> = HashMap::new();
     let mut objectives: HashMap<String, Vec<String>> = HashMap::new();
     for (short, ids) in &db.quests {
-        let first = ids.first().and_then(|(_, g)| by_guid.get(g)).copied().unwrap_or("Not started");
-        state.insert(short.clone(), first.to_string());
+        let own = ids.first().and_then(|(_, g)| by_guid.get(g)).copied().unwrap_or("Not started");
+        // The quest's own entry decides whenever the game moves it. For a handful of quests the game
+        // leaves that entry absent or Inactive and moves a description entry instead (Novigrad, Under
+        // Control; the four Brothers In Arms; Destination: Skellige's siblings). Checked against 517
+        // saves: reading only the quest's own entry would lose registration for 8 of them, so fall back
+        // to the most advanced entry of the same file rather than calling the quest not started.
+        let st = if rank(own) == 0 {
+            ids.iter()
+                .skip(1)
+                .filter_map(|(_, g)| by_guid.get(g))
+                .copied()
+                .max_by_key(|s| rank(s))
+                .filter(|s| rank(s) > 0)
+                .unwrap_or(own)
+        } else {
+            own
+        };
+        state.insert(short.clone(), st.to_string());
         for (name, g) in ids.iter().skip(1) {
             let nl = name.trim().to_lowercase();
             let upper = name.chars().next().map(|c| c.is_uppercase()).unwrap_or(false);
@@ -316,5 +412,12 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
             }
         }
     }
-    Ok(SaveState { state, objectives })
+    // the tracked quest's own save entry is the authority for its file: the file's first id is not always the quest
+    // (q304dandelion starts with a 'Rosa' entry that completes mid-quest while the quest stays open)
+    if let (Some(f), Some(g)) = (&tracked_file, &tracked) {
+        if let Some(&s) = by_guid.get(g) {
+            state.insert(f.clone(), s.to_string());
+        }
+    }
+    Ok(SaveState { state, objectives, tracked, tracked_file })
 }

@@ -23,9 +23,10 @@ Unofficial fan tool. Not affiliated with CD PROJEKT RED. See `NOTICE.txt`.
 ## Status and limits
 
 - Developed and tested on the Steam PC version 5.00 (next-gen). Other versions may have different quest data.
-- Tested on an early-game save only. Skellige, the endgame and the expansions have not been tested on real saves.
-- The rules are compiled from the Witcher Wiki and public guides and may be wrong. Quests marked "quest match: low/med"
-  are the least certain. The in-game quest log has the final word.
+- The save reading has been checked against 500+ real saves, from White Orchard to the Blood and Wine epilogue.
+- The rules are compiled from the Witcher Wiki and public guides and may be wrong, unless the QUEST ORDER section says
+  otherwise: its entries are checked against the game's own quest files and your saves, and each one carries the label
+  saying which. Quests marked "quest match: low/med" are the least certain. The in-game quest log has the final word.
 - Spoilers: quest names, events and ending choices are shown.
 
 ## Use of AI and sources
@@ -59,6 +60,7 @@ build, build from the matching source and compare behaviour; the code is small e
 | `data/route.json` | The route: quests, prerequisites, events, tags. Edit this to correct the route. |
 | `data/audit_*.json`, `data/guide_*.json` | Per-quest research with source links. |
 | `docs/BACKEND_CONTRACT.md` | Interface between the backend and the UI. |
+| `tools/` | The scripts that check the route against the game's own files and your saves (read-only). |
 
 ## Contributing corrections
 

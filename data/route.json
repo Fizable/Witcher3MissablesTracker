@@ -841,13 +841,15 @@
    "id": "no_waterfront",
    "title": "A Walk on the Waterfront",
    "lv": "12",
-   "files": [],
-   "conf": "",
+   "files": [
+    "mq3005badalley"
+   ],
+   "conf": "med",
    "hard": [],
    "by": [
     "E_REUVEN"
    ],
-   "note": "No journal entry. Do it before the witch-hunter outpost part of Count Reuven's Treasure.",
+   "note": "Do it before the witch-hunter outpost part of Count Reuven's Treasure. Your quest log calls it Shady Deal.",
    "kind": "side",
    "opt": false,
    "when": []
@@ -1371,7 +1373,7 @@
    "by": [
     "E_KG"
    ],
-   "note": "Must be done before King's Gambit.",
+   "note": "Gate for Stranger in a Strange Land. Not lost when King's Gambit starts: your saves show it finished after King's Gambit in 101 of 102 saves.",
    "kind": "side",
    "opt": false,
    "when": []
@@ -1391,7 +1393,7 @@
    "by": [
     "E_KG"
    ],
-   "note": "Locks once King's Gambit starts.",
+   "note": "Not lost when King's Gambit starts: your saves show it done afterwards. Needs Contract: The Phantom of Eldberg.",
    "kind": "side",
    "opt": false,
    "when": []
@@ -1406,12 +1408,12 @@
    ],
    "conf": "high",
    "hard": [
-    "sk_king"
+    "sk_stranger"
    ],
    "by": [
     "E_KG"
    ],
-   "note": "Locks once King's Gambit starts.",
+   "note": "Starts from Stranger in a Strange Land (one quest phase runs both). Not lost when King's Gambit starts: finished after King's Gambit in 101 of 102 saves.",
    "kind": "side",
    "opt": false,
    "when": []
@@ -1421,14 +1423,16 @@
    "id": "sk_unpaid",
    "title": "An Unpaid Debt",
    "lv": "15",
-   "files": [],
-   "conf": "",
+   "files": [
+    "mq2051unfinishedbusiness"
+   ],
+   "conf": "med",
    "hard": [
     "sk_cave",
     "sk_stranger"
    ],
    "by": [],
-   "note": "No journal file found.",
+   "note": "Your quest log calls it Unfinished Business (meet Simun at the lake house).",
    "kind": "side",
    "opt": false,
    "when": []
@@ -1489,7 +1493,7 @@
    "by": [
     "E_ISLE"
    ],
-   "note": "Starts when Possession and Lord of Undvik are both done.",
+   "note": "Added at the end of The Lord of Undvik, and only if Possession's 'helping with him' outcome happened (the game checks the fact q203_cerys_saved). The other branch of the same block adds Echoes of the Past instead.",
    "kind": "side",
    "opt": false,
    "when": []
@@ -2651,7 +2655,21 @@
   },
   "E_REUVEN": {
    "name": "The witch-hunter outpost part of Count Reuven's Treasure",
-   "fires": [],
+   "fires": [
+    [
+     "q303treasure#Follow Witch Hunter Leader",
+     [
+      "Active",
+      "Done"
+     ]
+    ],
+    [
+     "q303treasure",
+     [
+      "Done"
+     ]
+    ]
+   ],
    "near": [
     "no_reuven"
    ],
@@ -2776,7 +2794,8 @@
     "sk_gambit"
    ],
    "soft": false,
-   "src": "wiki: The Cave of Dreams"
+   "note": "Needs both Possession and Lord of Undvik: a save-file diff across ~10 checkpoints showed Lord of Undvik sitting Done by itself for a long stretch with no effect, then King's Gambit starting right as Possession's ending resolved. It fires mid-cutscene with no choice or prompt to decline.",
+   "src": "wiki: The Cave of Dreams; verified 2026-10-25 from the player's own save history (see w3tracker-kings-gambit-trigger memory)"
   },
   "E_UMA": {
    "name": "Ugly Baby: retrieving Uma at Crow's Perch",
