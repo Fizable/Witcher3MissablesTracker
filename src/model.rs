@@ -13,6 +13,12 @@ pub struct Node {
     pub files: Vec<String>,
     pub conf: String,
     pub hard: Vec<String>,
+    /// Some `hard` prerequisites are not "the other quest is finished" but "its story has reached
+    /// the point that opens this step", and the game states that with a fact of its own. Keyed by
+    /// prerequisite id: a prerequisite is satisfied when it reads done or one of its facts is set.
+    /// Settled and re-checked by tools/prereqs.py (data/prereqs_review.json).
+    #[serde(default)]
+    pub hard_facts: HashMap<String, Vec<String>>,
     pub by: Vec<String>,
     pub note: String,
     pub kind: String,
@@ -164,7 +170,22 @@ fn cond_unknown(n: &Node, flags: &HashMap<String, String>) -> bool {
     n.when.iter().any(|c| c.split_once('=').map(|(k, _)| flags.get(k).map(|f| f.is_empty()).unwrap_or(true)).unwrap_or(false))
 }
 
-pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet<String>, flags: &HashMap<String, String>) -> Eval {
+/// Is a hard prerequisite satisfied?
+///
+/// The prerequisite's own journal status is the usual answer. Where the files showed the real rule is
+/// "the prerequisite's story got as far as X" - and no save ever has this step under way without that
+/// fact - the game's own fact answers instead, which is what the saves were objecting to: they hold
+/// several of these steps under way while the prerequisite reads unfinished.
+fn prereq_ok(n: &Node, h: &str, byid: &HashMap<String, usize>, steps: &[Step], facts: &HashSet<String>) -> bool {
+    if let Some(&j) = byid.get(h) {
+        if is_ok(&steps[j].status) {
+            return true;
+        }
+    }
+    n.hard_facts.get(h).map(|fs| fs.iter().any(|f| facts.contains(f))).unwrap_or(false)
+}
+
+pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet<String>, flags: &HashMap<String, String>, facts: &HashSet<String>) -> Eval {
     let secrank: HashMap<&str, usize> = rd.sections.iter().enumerate().map(|(i, s)| (s.as_str(), i)).collect();
     let mut steps: Vec<Step> = rd
         .nodes
@@ -196,9 +217,11 @@ pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet
             }
             // gwent/treasure dependents are excluded: their own "Active" is often just as unreliable a journal
             // placeholder as the thing we are trying to prove here, not real evidence of story progress
+            // a fact-gated dependent does not prove this step happened: its story can reach that
+            // point with this step still unfinished, which is exactly what the saves show
             let dependent_engaged = steps
                 .iter()
-                .any(|s| s.n.hard.iter().any(|h| h == &steps[i].n.id) && matches!(s.status.as_str(), "Active" | "Done" | "Assumed") && s.n.kind != "gwent" && s.n.kind != "treasure");
+                .any(|s| s.n.hard.iter().any(|h| h == &steps[i].n.id && !s.n.hard_facts.contains_key(h)) && matches!(s.status.as_str(), "Active" | "Done" | "Assumed") && s.n.kind != "gwent" && s.n.kind != "treasure");
             if dependent_engaged {
                 to_assume.push(i);
             }
@@ -213,10 +236,17 @@ pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet
     // hard needs (game rules)
     for i in 0..steps.len() {
         let engaged = matches!(steps[i].status.as_str(), "Active" | "Done" | "Assumed");
-        let locked: Vec<usize> = if engaged {
+        let unlocked = steps[i].n.hard.iter().all(|h| prereq_ok(&steps[i].n, h, &byid, &steps, facts));
+        let locked: Vec<usize> = if engaged || unlocked {
             vec![]
         } else {
-            steps[i].n.hard.iter().filter_map(|h| byid.get(h).copied()).filter(|&j| !is_ok(&steps[j].status)).collect()
+            steps[i]
+                .n
+                .hard
+                .iter()
+                .filter(|h| !prereq_ok(&steps[i].n, h, &byid, &steps, facts))
+                .filter_map(|h| byid.get(h).copied())
+                .collect()
         };
         steps[i].locked = locked;
     }
@@ -526,7 +556,7 @@ mod tests {
             } else {
                 (n.files.iter().map(|f| (f.split('|').next().unwrap().to_string(), "Done".to_string())).collect(), HashSet::new())
             };
-            let ev = evaluate(&rd, &st, &ticks, &flags);
+            let ev = evaluate(&rd, &st, &ticks, &flags, &HashSet::new());
             let i = ev.byid[&n.id];
             assert_eq!(ev.steps[i].status, "Done", "{} is not Done once its quest is", n.id);
             assert!(!ev.todo.contains(&i), "{} is Done but still in DO NEXT", n.id);
@@ -541,7 +571,7 @@ mod tests {
     fn finishing_the_waterfront_quest_clears_the_outpost_hold_off() {
         let rd = route();
         let held = |st: HashMap<String, String>| {
-            let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new());
+            let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
             dont_start(&ev).iter().any(|h| h.name.contains("witch-hunter outpost"))
         };
         assert!(held(state(&[("q303treasure", "Active")])));
@@ -557,14 +587,14 @@ mod tests {
     #[test]
     fn a_hard_prereq_is_assumed_done_once_what_it_gates_has_engaged() {
         let rd = route();
-        let ev = evaluate(&rd, &state(&[("q201traveltoskellige", "Active"), ("pirate", "Active")]), &HashSet::new(), &HashMap::new());
+        let ev = evaluate(&rd, &state(&[("q201traveltoskellige", "Active"), ("pirate", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::new());
         let dest = ev.byid["sk_dest"];
         assert_eq!(ev.steps[dest].status, "Assumed", "sk_dest should be inferred done once sk_king (which hard-requires it) has engaged");
         assert!(!ev.todo.contains(&dest));
 
         // sk_king's own journal file is itself stuck on a non-representative first entry; only the next quest down
         // the chain (Echoes of the Past) shows real progress, two hops away from Destination: Skellige
-        let chain = evaluate(&rd, &state(&[("q201traveltoskellige", "Active"), ("pirate", "Not started"), ("q203cataclysm", "Active")]), &HashSet::new(), &HashMap::new());
+        let chain = evaluate(&rd, &state(&[("q201traveltoskellige", "Active"), ("pirate", "Not started"), ("q203cataclysm", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::new());
         let king = chain.byid["sk_king"];
         let dest2 = chain.byid["sk_dest"];
         assert_eq!(chain.steps[king].status, "Assumed", "sk_king should be inferred done once sk_echoes (which hard-requires it) has engaged");
@@ -578,7 +608,7 @@ mod tests {
     #[test]
     fn a_gwent_step_engaging_does_not_assume_the_main_quest_it_needs_is_done() {
         let rd = route();
-        let ev = evaluate(&rd, &state(&[("q203cataclysm", "Not started"), ("cgskellige#Win unique card from Mousesack", "Active")]), &HashSet::new(), &HashMap::new());
+        let ev = evaluate(&rd, &state(&[("q203cataclysm", "Not started"), ("cgskellige#Win unique card from Mousesack", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::new());
         let echoes = ev.byid["sk_echoes"];
         assert_eq!(ev.steps[echoes].status, "Not started", "a gwent card win must not assume Echoes of the Past is done");
     }
@@ -589,7 +619,7 @@ mod tests {
     #[test]
     fn starting_kings_gambit_names_what_is_already_under_way() {
         let rd = route();
-        let ev = evaluate(&rd, &state(&[("q203him", "Active")]), &HashSet::new(), &HashMap::new());
+        let ev = evaluate(&rd, &state(&[("q203him", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::new());
         let hold = dont_start(&ev).into_iter().find(|h| h.name == "Starting King's Gambit").expect("Possession in progress should hold off King's Gambit");
         assert!(hold.why.contains("Possession"), "why should name Possession as already under way: {}", hold.why);
         assert!(hold.why.contains("no choice or prompt to decline"), "why should warn there is no in-game prompt, from the verified note: {}", hold.why);
@@ -603,9 +633,60 @@ mod tests {
     #[test]
     fn an_unverified_event_near_an_active_step_does_not_claim_it_triggers_it() {
         let rd = route();
-        let ev = evaluate(&rd, &state(&[("q206berserkers", "Active")]), &HashSet::new(), &HashMap::new());
+        let ev = evaluate(&rd, &state(&[("q206berserkers", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::new());
         let hold = dont_start(&ev).into_iter().find(|h| h.name.contains("Ugly Baby")).expect("King's Gambit under way should flag the nearby Ugly Baby cutoff");
         assert!(hold.why.contains("King's Gambit"), "why should name King's Gambit as already under way: {}", hold.why);
         assert!(!hold.why.contains("triggers this"), "near is a proximity signal, not a confirmed trigger, without a verified note: {}", hold.why);
+    }
+
+    /// Some prerequisites are not "the other quest is finished": the game's own condition for them is a
+    /// fact set partway through it. Five route edges were settled that way against every save
+    /// (data/prereqs_review.json). Those have to open on the fact, and a step engaging on one must not
+    /// mark its prerequisite done - which is what the saves were objecting to.
+    #[test]
+    fn a_fact_gated_prerequisite_opens_on_the_game_fact() {
+        let rd = route();
+        let n = rd.nodes.iter().find(|n| n.id == "no_highstakes").expect("no_highstakes in the route");
+        let fact = n.hard_facts.get("no_pyres").and_then(|f| f.first()).cloned().expect("no_highstakes should carry its gate fact");
+        // Pyres of Novigrad still under way, but its doppelganger has been burned
+        let ev = evaluate(&rd, &state(&[("q301dreamer", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::from([fact.clone()]));
+        let i = ev.byid["no_highstakes"];
+        assert!(ev.steps[i].locked.is_empty(), "High Stakes should open on {fact}, not only once Pyres of Novigrad is Done");
+        assert!(ev.todo.contains(&i), "and it belongs in DO NEXT once the fact is set");
+        assert_eq!(ev.steps[ev.byid["no_pyres"]].status, "Active", "the gate fact must not mark Pyres of Novigrad done");
+        // without the fact it is still locked, and the lock names the prerequisite
+        let before = evaluate(&rd, &state(&[("q301dreamer", "Active")]), &HashSet::new(), &HashMap::new(), &HashSet::new());
+        let b = before.byid["no_highstakes"];
+        assert_eq!(before.steps[b].locked, vec![before.byid["no_pyres"]], "before the fact it is locked by Pyres of Novigrad");
+        assert!(!before.todo.contains(&b), "and it is not in DO NEXT before the fact is set");
+    }
+
+    /// 222 saves hold Count Reuven's Treasure under way while Get Junior is unfinished. The old edge
+    /// read that as proof Get Junior had happened (its 'Assumed' rule), which took a quest the player is
+    /// genuinely in the middle of out of DO NEXT. Nothing may be inferred from a refuted edge now.
+    #[test]
+    fn a_step_running_alongside_another_does_not_mark_it_done() {
+        let rd = route();
+        let st = state(&[("q302mafia", "Active"), ("q303treasure", "Active"), ("q302favourforradovid", "Active")]);
+        let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
+        let junior = ev.byid["no_junior"];
+        assert_eq!(ev.steps[junior].status, "Active", "Get Junior must stay exactly as the save reads it");
+        assert!(ev.todo.contains(&junior), "Get Junior is still to do, so it belongs in DO NEXT");
+        for id in ["no_reuven", "no_visiting", "no_favor"] {
+            let i = ev.byid[id];
+            assert!(ev.steps[i].locked.is_empty(), "{id} must not be locked: no save supports that prerequisite");
+            assert!(ev.todo.contains(&i), "{id} should be doable while Get Junior runs: it starts inside it");
+        }
+    }
+
+    /// Every prerequisite the saves refuted is gone from the route, so nothing is locked on a rule the
+    /// corpus contradicts. tools/prereqs.py re-checks this, and re-tests the dropped edges too.
+    #[test]
+    fn refuted_prerequisites_lock_nothing() {
+        let rd = route();
+        for id in ["no_reuven", "no_visiting", "no_favor", "sk_thread"] {
+            let n = rd.nodes.iter().find(|n| n.id == id).unwrap_or_else(|| panic!("{id} in the route"));
+            assert!(n.hard.is_empty(), "{id} still hard-requires {:?}", n.hard);
+        }
     }
 }

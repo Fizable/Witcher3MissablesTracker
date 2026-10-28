@@ -44,9 +44,28 @@ all, so "no activator found" never means "cannot start".
 
 ## Scripts
 
+## The pipeline that produces the app's data
+
+`questindex` → `cutoffs` → `derive` → `prereqs` → `contradictions`, then `regen` to prove it repeats:
+
 | script | what it does |
 |---|---|
-| `cr2w.py` | CR2W reader for REDkit resources (`.w2phase`, `.journal`). Underlies everything else. |
+| `stringsdb.py` | The game's own text, from REDkit's SQLite string database: quest-log names, objective lists and dialogue choices by locId. |
+| `questindex.py` | Per quest: its own journal entry and objectives, the block that activates it, its facts, its scenes and dialogue choices, and what its phases switch off. Joins bundled and REDkit names by entry GUID. |
+| `cutoffs.py` | Cutoff candidates: quest E switches off resource R, quest X references R. Each is then judged on the order the saves were written. |
+| `derive.py` | Writes `../data/derived.json` (what the app shows) and the machine-checkable `checks` in `../data/feed.json`. |
+| `prereqs.py` | Settles every route prerequisite from the game's files *and* the saves: keeps it as a lock, re-tests it on the fact the game actually gates on, or drops it. Re-checks the reviewed decisions in `../data/prereqs_review.json` and writes `prereq_relations.json`. |
+| `contradictions.py` | Tests every derived claim and every route prerequisite against all saves; writes `contradiction_report.md` and `../data/route_disputes.json`. |
+| `regen.py` | Runs the whole chain and compares the bytes of every output against `goldens.json` (`--update` to record). |
+| `fuzz.py` | Feeds truncated and corrupted files to the readers: they must fail cleanly or parse, never misread. |
+
+`py questindex.py build` (30s) · `py cutoffs.py build` (25s) · `py derive.py --feed` (5s) · `py prereqs.py check` (~2 min) · `py contradictions.py` (15s)
+
+## The older checkers
+
+| script | what it does |
+|---|---|
+| `cr2w.py` | CR2W reader for REDkit resources (`.w2phase`, `.w2scene`, `.journal`). Underlies everything else. Refuses container versions it does not decode instead of misreading them. |
 | `questgraph.py` | One quest phase: journal paths, which blocks activate a journal entry, graph walks. |
 | `gateindex.py` | Every quest `.w2phase` → every journal-activation row (`gate_index.json`). |
 | `factgates.py` | Sets/tests index over the same files (`fact_index.json`). |
@@ -56,6 +75,20 @@ all, so "no activator found" never means "cannot start".
 | `statuscheck.py` | Old vs new quest-status reading, over every save. |
 | `cutoff_check.py` | "Does finishing quest E deactivate a spawnset or community X needs?" |
 | `gatecheck.py` | The report: `route.json` vs game files vs saves → `gate_report.md`. |
+
+### Two limits worth remembering
+
+The saves can **refute** a claim and can show no contradiction, but they cannot prove that a quest
+stopped being possible: a quest nobody finishes looks the same as one that cannot be finished. A
+cutoff is a claim about the files; the saves are corroboration, and `contradictions.py` says which
+of the two each warning rests on.
+
+A quest can read `Failed` in a save where it was never available (`q402skelligeallies`,
+`q402novigradallies`, `q302war`), so a `Failed` reading is not on its own proof that something was
+lost. That is why a disagreement between the saves and the route is *decided* rather than trusted
+either way: `prereqs.py` settles it from the files and `../data/prereqs_review.json` records the
+decision, including the ones that were dropped from the route. `../data/route_disputes.json` holds
+whatever is still undecided, and is empty when the route and the saves agree.
 
 ## Running it
 
@@ -81,7 +114,7 @@ py statuscheck.py                              # regressions when the reading ru
 it waits on and who sets them, and for each claimed prerequisite whether any save holds the quest
 without it done.
 
-## Two things this rebuild exposed
+## Four things this rebuild exposed
 
 **1. The tracker read 46 of 441 quests from the wrong journal entry.** `bundles.rs` took the first
 "name GUID" string in a journal file; for those 46 that is a map pin or a description entry.
@@ -94,6 +127,23 @@ and The King is Dead went 0 → 315 and The Lord of Undvik 0 → 270.
 Brothers In Arms; Destination: Skellige's siblings) the game leaves the quest's own entry `JS_Inactive`
 and moves a `Descriptions` / `Quest Start` / `Quest End` entry instead, so `save.rs` falls back to the
 most advanced entry of the same file rather than calling the quest not started.
+
+**3. The app kept the index that fix 1 had just made obsolete.** The index is cached in
+`%APPDATA%\Witcher3MissablesTracker\quest_index.json` and was keyed on the game's `witcher3.exe`
+alone, so a player who upgraded kept an index built by the old rule and went on reading those 46
+quests from a description entry - the code was right and the data on disk was not. `main.rs` now
+stamps the cache with an index version (`INDEX_VERSION`) so a corrected builder reaches them. The
+symptom was the app and the save index disagreeing on 4 of 421 statuses; it is 0 of 424 now, and
+`contradictions.py` no longer allows a difference.
+
+**4. The tool chain read only the base game's journal files.** `saveindex.quest_table` globbed one
+folder, `gameplay\journal\quests`, but the expansions keep theirs in `dlc\ep1\journal\quests` and
+`dlc\bob\journal\quests` - 116 of the 424 quest journal files. Those quests were read from the first
+entry in the quest database, again usually `Descriptions`, and a finished expansion quest could read
+`Active`. `quest_files()` now finds them all, and `py statuscheck.py` measures what the wrong rule
+cost over all 517 saves: `pirate` 0 -> 315 and `giant` 0 -> 270 saves in which the quest never
+registered, *Destination: Skellige* differing in 313 saves, `q103secondreplacerciri` 199, `lwsb24` and
+`tombraider` 171 each.
 
 ## Evidence labels in `../data/feed.json`
 

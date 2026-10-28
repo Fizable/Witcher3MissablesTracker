@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "note": "Reviewed cutoffs. tools/cutoffs.py generates every candidate the files can suggest (tools/cutoff_index.json: 6276 rows, 12 of them consistent with the saves). This file is the human pass over that pool: only what is listed here becomes a warning in the app, and each entry names the game-file mechanism that causes it. Add an entry only when the mechanism is named and the saves do not contradict it, and say which of the two you are relying on.",
+  "reviewed": "2026-10-27",
+  "pending_review": [
+    {
+      "candidate": "q201traveltoskellige / q002healingwoman -> q205lofoten",
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm",
+      "why_not_shipped": "Both 'closers' are early (the prologue follow-up and Destination: Skellige) while q205lofoten is a Skellige quest that comes later, and 2 saves do have it finished. The community is switched off somewhere else in the story too, so the pair very likely reflects a phase transition rather than Yennefer being gone for good. Left out until someone can say which phase switches her off for the last time.",
+      "saves": { "open_before": 171, "finished_after": 0 }
+    }
+  ],
+  "items": [
+    {
+      "id": "triss_statuettes",
+      "level": "stop",
+      "mechanism": "spawnset",
+      "resource": "quests\\main_npcs\\community_files\\triss.w2comm",
+      "affects": ["mq3012noblestatuette", "mq3012warriorstatuette"],
+      "closed_by": ["q301dreamer", "q301helpdreamer", "q303treasure", "q309mages", "sq301triss"],
+      "action": "Give the Soldier Statuette and the Nobleman Statuette to Triss",
+      "headline": "Hand both statuettes to Triss before {binding}",
+      "why": "Finishing {binding} switches off Triss's community - the game file triss.w2comm, which is what puts her in the world - and both statuette quests play their scenes with her. Once that file is switched off, they cannot be finished. Five different quests switch her off, so the one that matters is whichever of them you reach first: {binding} here.",
+      "files": [
+        "quests\\sidequests\\novigrad\\sq301_triss.w2phase switches off quests\\main_npcs\\community_files\\triss.w2comm (CQuestStoryPhaseSetterBlock -> CDeactivateSpawnset)",
+        "quests\\minor_quests\\novigrad\\quest_files\\mq3012_jade_statuettes\\scenes\\mq3012_04_triss_remove_curse.w2scene is played with Triss, and the quest's phase files reference triss.w2comm, triss.w2ent and triss_default.w2scene",
+        "quests\\minor_quests\\novigrad\\quest_files\\mq3012_jade_statuettes\\scenes\\mq3012_05_lifting_curse.w2scene tests the facts that decide which statuette has been handed over"
+      ],
+      "evidence": "files+saves",
+      "caveats": [
+        "No save in the corpus has ever finished either statuette quest, so the saves cannot confirm the cutoff on their own: they are consistent with it (198 saves where Now or Never is done with a statuette quest still under way, none finishing it later) but a quest nobody finishes looks the same as one that cannot be finished. The mechanism is what makes this a cutoff, not the save count.",
+        "The journal never marks them failed, so the tracker's own status still reads Active after Triss is gone."
+      ]
+    }
+  ]
+}

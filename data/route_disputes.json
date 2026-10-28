@@ -1,0 +1,4 @@
+{
+ "disputes": [],
+ "note": "Prerequisites in data/route.json that the saves disagree with, found by tools/contradictions.py. Empty is the healthy state: it means every prerequisite the app locks on holds against all 517 saves. The nine that did not were settled in data/prereqs_review.json - four dropped (the two quests simply run alongside each other) and five re-tested on the game's own condition instead of the prerequisite's journal status - after the reader was proven to attach statuses to the right entries, so a Failed in a save is the game's own record rather than a misread. The reading side was corrected with it: the app reads each quest from its journal file's own entry (the index cache is versioned now, so a corrected builder reaches players who already had a cached index) and the tool chain reads the expansions' journal files as well, which it did not - 116 quests were being read from a 'Descriptions' entry instead of the quest."
+}

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "note": "Quest-order warnings with evidence. 'save' = confirmed by your saves; 'graph' = from the game's own files (REDkit quest graphs and facts database); 'save+graph' = both; 'refuted' = saves contradict it, shown so it is not repeated. Improve by adding entries; keep the evidence label honest. Rebuilt against the game files and 517 saves on 2026-10-27.",
+  "note": "Quest-order warnings with evidence. 'save' = confirmed by your saves; 'graph' = from the game's own files (REDkit quest graphs and facts database); 'save+graph' = both; 'refuted' = saves contradict it, shown so it is not repeated. Improve by adding entries; keep the evidence label honest. Every item carries a `checks` list with the claim in a form contradictions.py can test against the saves; keep the evidence label honest when adding an entry.",
   "items": [
     {
       "id": "kg_start_gate",
@@ -12,6 +12,19 @@
         "Game files: at the end of The Lord of Undvik the graph branches on the fact q203_cerys_saved, which is set at the end of Possession's 'helping with him' phase. The branch it takes adds King's Gambit's journal entry to your log; the other branch adds Echoes of the Past instead.",
         "Your saves: 102 saves contain King's Gambit and every one has both The Lord of Undvik and Possession finished.",
         "Earlier note said it needed both quests complete; the game's own file shows why, and names the check it makes."
+      ],
+      "checks": [
+        {
+          "kind": "implies_done",
+          "if_present": [
+            "q206berserkers"
+          ],
+          "then_done": [
+            "q203him",
+            "giant"
+          ],
+          "why": "King's Gambit's journal entry is only added from The Lord of Undvik's graph, on the branch that needs Cerys saved in Possession."
+        }
       ]
     },
     {
@@ -24,6 +37,29 @@
         "Finishing Now or Never removes Triss's spawnset, and the statuette quests still need her.",
         "Your saves: in 195 saves where Now or Never is done, the Nobleman Statuette is still Active in all 195 and the Soldier Statuette in 173 (Inactive in 22, never given). Neither statuette is finished in any save.",
         "The journal does not mark them failed, so they still show as next. This is a cutoff."
+      ],
+      "checks": [
+        {
+          "kind": "cutoff_consistent",
+          "affected": [
+            "mq3012noblestatuette",
+            "mq3012warriorstatuette"
+          ],
+          "closed_by": [
+            "q301dreamer",
+            "q301helpdreamer",
+            "q303treasure",
+            "q309mages",
+            "sq301triss"
+          ],
+          "why": "no save has a statuette quest finished after Triss's community was switched off"
+        },
+        {
+          "kind": "saves_present",
+          "quest": "sq301triss",
+          "least": 50,
+          "why": "the cutoff rests on saves that actually reached Now or Never"
+        }
       ]
     },
     {
@@ -36,6 +72,28 @@
         "Game files: the Cave of Dreams' journal entry is added from the quest phase that runs Stranger in a Strange Land, and that phase is reached from The Phantom of Eldberg.",
         "Your saves: 115 saves hold the Cave of Dreams and Stranger in a Strange Land is finished in all 115.",
         "It is not lost when King's Gambit starts: 101 of the 102 saves with King's Gambit under way have the Cave of Dreams finished."
+      ],
+      "checks": [
+        {
+          "kind": "implies_done",
+          "if_present": [
+            "sq209weregildb"
+          ],
+          "then_done": [
+            "sq209weregild"
+          ],
+          "why": "The Cave of Dreams' entry is added from the quest phase that runs Stranger in a Strange Land"
+        },
+        {
+          "kind": "not_failed",
+          "quests": [
+            "mh207wraith",
+            "sq209weregild",
+            "sq209weregildb"
+          ],
+          "when": "q206berserkers",
+          "why": "starting King's Gambit does not fail them"
+        }
       ]
     },
     {
@@ -47,6 +105,28 @@
       "details": [
         "Your saves: in the 102 saves where King's Gambit has started, Phantom of Eldberg is done in 101 (1 still open), and Stranger in a Strange Land and the Cave of Dreams are done in 101 each.",
         "Earlier notes claiming otherwise were wrong; the earlier tracker's off-by-one journal lookup also hid these."
+      ],
+      "checks": [
+        {
+          "kind": "implies_done",
+          "if_present": [
+            "sq209weregildb"
+          ],
+          "then_done": [
+            "sq209weregild"
+          ],
+          "why": "The Cave of Dreams' entry is added from the quest phase that runs Stranger in a Strange Land"
+        },
+        {
+          "kind": "not_failed",
+          "quests": [
+            "mh207wraith",
+            "sq209weregild",
+            "sq209weregildb"
+          ],
+          "when": "q206berserkers",
+          "why": "starting King's Gambit does not fail them"
+        }
       ]
     },
     {
@@ -59,6 +139,16 @@
         "Your saves: 35 saves reach Coronation, 33 of them finish it, none has it failed, and King's Gambit is finished in all 35.",
         "This replaces the earlier 'may cut off Heroesmead' amber warning, which no longer had support once Coronation could be read from saves.",
         "Still unverified: whether some interaction inside Heroesmead itself is time-limited; the quest is not."
+      ],
+      "checks": [
+        {
+          "kind": "not_failed",
+          "quests": [
+            "q208heroesmead"
+          ],
+          "when": "q206berserkers",
+          "why": "no save has Coronation failed"
+        }
       ]
     }
   ]

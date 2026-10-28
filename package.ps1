@@ -67,7 +67,13 @@ $targetDir = if ($env:CARGO_TARGET_DIR) { $env:CARGO_TARGET_DIR } else { Join-Pa
 $dist = Join-Path 'dist' $name
 New-Item -ItemType Directory -Force (Join-Path $dist 'data') | Out-Null
 Copy-Item (Join-Path $targetDir 'release\witcher3-missables-tracker.exe') (Join-Path $dist 'Witcher3MissablesTracker.exe')
-foreach ($f in 'route.json', 'guide_alias.json', 'feed.json') { Copy-Item "data\$f" (Join-Path $dist 'data') }
+# derived.json is what the app shows for the quest-order data (built by tools/derive.py);
+# cutoffs.json is the reviewed cutoff selection, prereqs_review.json how each disputed route
+# prerequisite was settled against the saves, and route_disputes.json the ones still disputed
+# (empty now) - they all have to be in the release or the app silently shows less
+foreach ($f in 'route.json', 'guide_alias.json', 'feed.json', 'derived.json', 'cutoffs.json', 'route_disputes.json', 'prereqs_review.json') {
+    if (Test-Path "data\$f") { Copy-Item "data\$f" (Join-Path $dist 'data') } else { Write-Warning "missing data\$f" }
+}
 Copy-Item data\audit_*.json, data\guide_*.json (Join-Path $dist 'data') -Force
 foreach ($f in 'LICENSE', 'LICENSE-DATA.md', 'NOTICE.txt', 'THIRD-PARTY-LICENSES.txt') { Copy-Item $f $dist }
 $readme = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'packaging\README.md')).Replace('{{VERSION}}', $version).Replace('{{SOURCE_URL}}', $SourceUrl)

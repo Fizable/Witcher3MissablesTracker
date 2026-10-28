@@ -739,10 +739,15 @@
    "by": [
     "E_ISLE"
    ],
-   "note": "Right after Broken Flowers.",
+   "note": "Opens once you have visited Rosa at the estate, during Broken Flowers (its file waits on q304_rosa_visited, which Broken Flowers sets) - not after Broken Flowers is over.",
    "kind": "side",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {
+    "no_broken": [
+     "q304_rosa_visited"
+    ]
+   }
   },
   {
    "section": "Novigrad",
@@ -777,10 +782,15 @@
    "by": [
     "E_REDANIAN"
    ],
-   "note": "Talk to Cleaver before you clear both the arena and the casino yourself.",
+   "note": "Talk to Cleaver before you clear both the arena and the casino yourself. Opens from Get Junior's cleaver phase, when you ask him for help, once you have found Whoreson Junior (the quest's own file waits on q302_whoreson). 7 saves show it Failed with Get Junior still open: do the arena and the casino with his men, not yourself.",
    "kind": "side",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {
+    "no_junior": [
+     "q302_whoreson"
+    ]
+   }
   },
   {
    "section": "Novigrad",
@@ -795,10 +805,15 @@
     "no_junior"
    ],
    "by": [],
-   "note": "",
+   "note": "Comes from Get Junior's own King of Beggars segment, once you have freed Rico in the casino: its file waits on q302_freed_rico, which Get Junior sets while you are still in there.",
    "kind": "side",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {
+    "no_junior": [
+     "q302_freed_rico"
+    ]
+   }
   },
   {
    "section": "Novigrad",
@@ -809,14 +824,13 @@
     "q302rescuingdudu"
    ],
    "conf": "high",
-   "hard": [
-    "no_junior"
-   ],
+   "hard": [],
    "by": [],
-   "note": "",
+   "note": "A Ciri flashback created by Get Junior's own quest file, so it appears while you are doing Get Junior (6 saves have it finished with Get Junior still open).",
    "kind": "main",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {}
   },
   {
    "section": "Novigrad",
@@ -827,14 +841,13 @@
     "q302favourforradovid"
    ],
    "conf": "med",
-   "hard": [
-    "no_junior"
-   ],
+   "hard": [],
    "by": [],
-   "note": "Never triggers if you leave Junior's compound without talking to Radovid's soldiers.",
+   "note": "Never triggers if you leave Junior's compound without talking to Radovid's soldiers: its entry is added by the scene q302_39_radovid_about_favour in Get Junior's postmafia phase, while Get Junior is still in your log.",
    "kind": "main",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {}
   },
   {
    "section": "Novigrad",
@@ -863,14 +876,13 @@
     "q303treasure"
    ],
    "conf": "high",
-   "hard": [
-    "no_junior"
-   ],
+   "hard": [],
    "by": [],
-   "note": "Ask Menge about Dijkstra's treasure.",
+   "note": "Ask Menge about Dijkstra's treasure. Runs alongside Get Junior: its journal entry comes from Get Junior's own shared phase and from its own, and 222 saves hold both at once - there is no need to finish Get Junior first.",
    "kind": "main",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {}
   },
   {
    "section": "Novigrad",
@@ -1062,10 +1074,15 @@
    "by": [
     "E_ISLE"
    ],
-   "note": "Ves is needed to recruit Roche.",
+   "note": "Ves is needed to recruit Roche. Opens once you have found Whoreson Junior during Get Junior (its file waits on q302_whoreson_found), not once Get Junior is finished.",
    "kind": "side",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {
+    "no_junior": [
+     "q302_whoreson_found"
+    ]
+   }
   },
   {
    "section": "Novigrad",
@@ -1202,10 +1219,15 @@
     "no_pyres"
    ],
    "by": [],
-   "note": "Scaled to level 26. No cards-or-coins choice.",
+   "note": "Scaled to level 26. No cards-or-coins choice. Opens once the doppelganger has been burned in Pyres of Novigrad (its file waits on q301_burn_doppler), partway through that quest.",
    "kind": "gwent",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {
+    "no_pyres": [
+     "q301_burn_doppler"
+    ]
+   }
   },
   {
    "section": "Skellige",
@@ -1347,16 +1369,15 @@
     "sq106killbill"
    ],
    "conf": "high",
-   "hard": [
-    "sk_dest"
-   ],
+   "hard": [],
    "by": [
     "E_UMA"
    ],
-   "note": "Can start in Novigrad at L11; pause before the Seven Cats Inn talk until Flesh for Sale is done.",
+   "note": "Can start in Novigrad at L11; pause before the Seven Cats Inn talk until Flesh for Sale is done. It does not need Destination: Skellige finished: 153 saves run both at once, and the only fact linking them (q201_landed_on_skellige) gates its later Skellige stage, not its start.",
    "kind": "side",
    "opt": false,
-   "when": []
+   "when": [],
+   "hard_facts": {}
   },
   {
    "section": "Skellige",

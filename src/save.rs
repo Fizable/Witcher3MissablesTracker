@@ -2,7 +2,7 @@
 //! Port of the Python w3sav.py / w3journal.py (reverse-engineered format).
 
 use serde_json::Value;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
 fn u32le(b: &[u8], o: usize) -> Result<u32, String> {
@@ -347,6 +347,10 @@ pub struct SaveState {
     pub objectives: HashMap<String, Vec<String>>,
     pub tracked: Option<String>,      // guid of the quest the player is tracking in the game
     pub tracked_file: Option<String>, // journal file (short) of that guid, from the save's own journal entry
+    /// Names of the game's facts this save has set (a value of 1 or more). Some route prerequisites
+    /// are not "the other quest is finished" but "its story has reached the point that opens this",
+    /// and the game's own condition for that is a fact (see data/prereqs_review.json).
+    pub facts: HashSet<String>,
 }
 
 /// 'gameplay\journal\quests\q201traveltoskellige.journal' -> 'q201traveltoskellige'
@@ -419,5 +423,10 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
             state.insert(f.clone(), s.to_string());
         }
     }
-    Ok(SaveState { state, objectives, tracked, tracked_file })
+    let facts: HashSet<String> = facts(&raw)?
+        .into_iter()
+        .filter(|(_name, vals)| vals.iter().any(|v| *v > 0))
+        .map(|(name, _vals)| name)
+        .collect();
+    Ok(SaveState { state, objectives, tracked, tracked_file, facts })
 }

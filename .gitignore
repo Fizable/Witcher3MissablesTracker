@@ -14,8 +14,13 @@
 # browser-test data generated from a real save (not for release)
 /ui/mock/
 
-# tools/: derived indexes and reports, regenerate per tools/README.md
+# tools/: derived indexes, caches and reports, regenerate per tools/README.md
 /tools/*_index.json
+/tools/save_facts.json
 /tools/gate_report.md
+/tools/contradictions.json
 /tools/*.log
 __pycache__/
+
+# the per-edge evidence dump tools/prereqs.py regenerates from the game files and the saves
+/data/prereq_relations.json

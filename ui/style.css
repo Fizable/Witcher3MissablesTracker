@@ -191,3 +191,7 @@ a.src:hover { text-decoration: underline; }
 .finput{flex:1;min-width:0;background:#13151a;border:1px solid #2c313c;border-radius:6px;color:#e8e6df;padding:5px 8px;font:inherit;font-size:12px}
 .finput:focus{outline:none;border-color:#d4a84b}
 .foldermsg{margin-top:8px;padding:7px 9px;border-radius:6px;background:#2a1d1d;color:#e5534b;font-size:12px}
+
+/* a step that carries a cutoff worked out from the game's own files */
+.warnmark { color: #d9a441; font-size: 12px; margin-right: 4px; }
+.trk-warn.blue { border-left-color: #6fa8dc; }

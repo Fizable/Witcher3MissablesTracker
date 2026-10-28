@@ -8,6 +8,8 @@ Every path can be overridden with an environment variable, so nothing here is ti
   W3_TRACKER_DIR  the tracker repo root (for data/route.json)
   W3_QDB          quest_db.json: the journal-file index the tracker's own build also produces.
                   Only needed for the old-vs-new comparisons; defaults to the research copy.
+  W3_STRINGDB     REDkit's LocalEditorStringDataBaseW3_UTF8.db: the game's own text for every
+                  resource and property, including quest-log text and dialogue choices.
 """
 import os
 from pathlib import Path
@@ -19,6 +21,7 @@ REDKIT_R4 = Path(os.environ.get("W3_REDKIT_DIR", r"F:\SteamLibrary\steamapps\com
 SAVES = Path(os.environ.get("W3_SAVES_DIR", r"C:\Users\Desktop-Isac\Documents\The Witcher 3\gamesaves"))
 TRACKER = Path(os.environ.get("W3_TRACKER_DIR", str(HERE.parent)))
 QDB = Path(os.environ.get("W3_QDB", str(GAME / "w3check" / "quest_db.json")))
+STRING_DB = Path(os.environ.get("W3_STRINGDB", str(REDKIT_R4 / "LocalEditorStringDataBaseW3_UTF8.db")))
 
 QUEST_ROOT = REDKIT_R4 / "quests"
 JOURNAL_DIR = REDKIT_R4 / "gameplay" / "journal" / "quests"
@@ -29,6 +32,6 @@ ROUTE = TRACKER / "data" / "route.json"
 def missing():
     """(name, path) for every path that is not there, so a script can say so plainly."""
     for name, p in (("game", GAME), ("redkit r4data", REDKIT_R4), ("saves", SAVES),
-                    ("quest_db.json", QDB), ("route.json", ROUTE)):
+                    ("quest_db.json", QDB), ("route.json", ROUTE), ("string database", STRING_DB)):
         if not p.exists():
             yield name, p

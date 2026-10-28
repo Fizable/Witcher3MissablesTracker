@@ -20,7 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import save_reader as sr
 
-from paths import HERE, QDB, SAVES
+from paths import HERE, QDB, REDKIT_R4, SAVES
 
 CACHE = HERE / "save_index.json"
 
@@ -37,6 +37,37 @@ def quest_db():
     return out
 
 
+def quest_files():
+    r"""short -> [(resource path, file)], every quest journal the REDkit install ships.
+
+    They are not all in one folder: the base game's are `gameplay\journal\quests`, and the two
+    expansions' are `dlc\ep1\journal\quests` and `dlc\bob\journal\quests`. Looking only under the
+    first left 116 of the 424 quest journal files - a quarter of the game - without their own entry,
+    so Heart of Stone and Blood and Wine quests were read from whichever entry quest_db happened to
+    list first (usually 'Descriptions'), which is how a finished expansion quest came to read Active.
+    """
+    out = {}
+    for p in REDKIT_R4.rglob("*.journal"):
+        rel = p.relative_to(REDKIT_R4).as_posix().lower()
+        if "/journal/quests/" not in "/" + rel:
+            continue  # bestiary, characters, tutorial, storybook journals are not quests
+        out.setdefault(p.stem.lower(), []).append((rel, p))
+    return out
+
+
+def own_entry_guid(path):
+    """The guid of one journal file's own CJournalQuest export, or None when it cannot be read."""
+    import questgraph as qg
+
+    g = qg.G(path)
+    for e in g.p["exports"]:
+        if e["className"] != "CJournalQuest":
+            continue
+        gd = g.props(e["index"]).get("guid")
+        return gd.get("raw_hex") if isinstance(gd, dict) else None
+    return None
+
+
 def quest_table():
     """journal short -> (quest-level guid, [other entry guids]).
 
@@ -47,22 +78,21 @@ def quest_table():
     """
     db = quest_db()
     try:
-        import questgraph as qg
-        for key in qg.JOURNAL_DIR.glob("*.journal"):
-            short = key.stem.lower()
+        # the ids came from one resource path per short name; when two paths share a stem (one
+        # pseudo-quest does), read the one they came from, which is the last quest_db key
+        order = {k.lower().replace("/", "\\"): i for i, k in enumerate(json.load(open(QDB)))}
+        for short, cands in quest_files().items():
             if short not in db:
                 continue
-            try:
-                g = qg.G(key)
-            except Exception:
-                continue
-            for e in g.p["exports"]:
-                if e["className"] != "CJournalQuest":
+            cands.sort(key=lambda c: (order.get(c[0].replace("/", "\\"), -1), c[0]), reverse=True)
+            for _rel, path in cands:
+                try:
+                    gd = own_entry_guid(path)
+                except Exception:
                     continue
-                gd = g.props(e["index"]).get("guid")
-                if isinstance(gd, dict) and gd.get("raw_hex"):
-                    db[short] = [[db[short][0][0] if db[short] else short, gd["raw_hex"]]] + db[short]
-                break
+                if gd:
+                    db[short] = [[db[short][0][0] if db[short] else short, gd]] + db[short]
+                    break
     except Exception as ex:
         print(f"quest_table: REDkit journal read failed ({ex}); using quest_db order", flush=True)
     out = {}

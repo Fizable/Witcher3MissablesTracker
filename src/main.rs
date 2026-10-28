@@ -37,11 +37,13 @@ struct Inner {
     guide: Value,                    // merged guide_*.json
     guide_alias: HashMap<String, String>,
     feed: Value,                     // data/feed.json: quest-order warnings with evidence labels
+    derived: Value,                  // data/derived.json: what the game's own files say, built by tools/derive.py
     // save state
     state: HashMap<String, String>,
     objectives: HashMap<String, Vec<String>>,
     tracked: Option<String>,         // guid of the quest tracked in the game (read from the save)
     tracked_file: Option<String>,    // journal file of that quest, as the save names it
+    facts: HashSet<String>,          // the game's facts this save has set (facts with a value of 1 or more)
     save_path: Option<PathBuf>,
     save_mtime: Option<SystemTime>,
     ok_mtime: Option<SystemTime>,
@@ -135,10 +137,19 @@ fn auto_saves_dir() -> Option<PathBuf> {
     best.or_else(|| existing.into_iter().next())
 }
 
+/// Bumped whenever `bundles::build_quest_db` would read the same game files differently. The stamp
+/// alone is the game's own version, so without this a player who upgraded the tracker kept the index
+/// built by the older rule: 0.1.6 shipped while the app was still reading a description entry's
+/// status for quests whose journal file the builder had just learned to read from the quest entry,
+/// and no amount of correct route data could fix what the save reader was told to look at.
+/// v1: the journal's own CJournalQuest entry is read first (see bundles.rs).
+const INDEX_VERSION: &str = "v1";
+
 /// quest index built from the player's own game files, cached in the app folder until the game is patched
+/// or the builder changes
 fn load_quest_index(app_dir: &Path, game: &Path) -> Result<Value, String> {
     let cache = app_dir.join("quest_index.json");
-    let stamp = bundles::game_stamp(game);
+    let stamp = format!("{}:{}", bundles::game_stamp(game), INDEX_VERSION);
     if let Ok(c) = read_json(&cache) {
         if c["stamp"].as_str() == Some(stamp.as_str()) && c["db"].is_object() {
             return Ok(c["db"].clone());
@@ -206,11 +217,14 @@ impl Inner {
         let flags: HashMap<String, String> = prog["flags"].as_object().map(|m| m.iter().filter_map(|(k, v)| Some((k.clone(), v.as_str()?.to_string()))).collect()).unwrap_or_default();
         let settings = read_json(&app_dir.join("settings.json")).unwrap_or(json!({}));
         let feed = read_json(&data_dir.join("feed.json")).unwrap_or(json!({"items": []}));
+        // derived from the player's copy of the game's files by tools/derive.py; absent is not an error
+        let derived = read_json(&data_dir.join("derived.json")).unwrap_or(json!({"steps": {}, "quests": {}}));
         let mut inner = Inner {
             data_dir,
             app_dir,
             route,
             feed,
+            derived,
             db: save::QuestDb { quests: vec![], display: vec![] },
             db_error: String::new(),
             game_dir: None,
@@ -222,6 +236,7 @@ impl Inner {
             objectives: HashMap::new(),
             tracked: None,
             tracked_file: None,
+            facts: HashSet::new(),
             save_path: None,
             save_mtime: None,
             ok_mtime: None,
@@ -362,6 +377,7 @@ impl Inner {
                 self.objectives = s.objectives;
                 self.tracked = s.tracked;
                 self.tracked_file = s.tracked_file;
+                self.facts = s.facts;
                 self.ok_mtime = Some(m);
                 self.error.clear();
             }
@@ -396,6 +412,7 @@ impl Inner {
             files: vec![short],
             conf: "high".into(),
             hard: vec![],
+            hard_facts: HashMap::new(),
             by: vec![],
             note: "Tracked in your game. Not in the route, so it is listed from your save.".into(),
             kind,
@@ -406,7 +423,28 @@ impl Inner {
     }
 
     fn eval(&self) -> Eval {
-        model::evaluate(&self.effective_route(), &self.state, &self.ticks, &self.flags)
+        model::evaluate(&self.effective_route(), &self.state, &self.ticks, &self.flags, &self.facts)
+    }
+
+    /// Every fact-gated prerequisite in the route and whether this save has the game's own condition for
+    /// it set. Written out by `--dump` so tools/contradictions.py can check the settlement against what
+    /// the app actually did with a real save, not only against the data files.
+    fn gates(&self, ev: &Eval) -> Value {
+        let mut out: Vec<Value> = Vec::new();
+        for s in ev.steps.iter() {
+            for (h, facts) in s.n.hard_facts.iter() {
+                let set: Vec<&String> = facts.iter().filter(|f| self.facts.contains(*f)).collect();
+                out.push(json!({
+                    "step": s.n.id,
+                    "requires": h,
+                    "prereq_status": ev.byid.get(h).map(|&j| ev.steps[j].status.clone()).unwrap_or_default(),
+                    "facts": facts,
+                    "set": set,
+                    "locked": !s.locked.is_empty(),
+                }));
+            }
+        }
+        Value::Array(out)
     }
 
     /// the journal quest file (short name) of the quest tracked in the game, if the tracker knows it
@@ -440,6 +478,37 @@ impl Inner {
         json!({"short": short, "display": display, "status": self.state.get(&short).cloned().unwrap_or_default(), "steps": steps, "warning": warning})
     }
 
+    /// Attach what the game's own files say about a step: the game's name for it, its quest-log
+    /// objective list, the block that adds its journal entry, its dialogue choices, and the
+    /// reviewed cutoffs (each naming the mechanism behind it).
+    fn attach_derived(&self, step: &mut Value) {
+        let Some(id) = step.get("id").and_then(|v| v.as_str()).map(|s| s.to_string()) else { return };
+        let Some(d) = self.derived.get("steps").and_then(|s| s.get(&id)) else { return };
+        for k in ["game_title", "objectives", "activators", "choices", "watch", "stems"] {
+            if let Some(v) = d.get(k) {
+                if !v.is_null() {
+                    step[k] = v.clone();
+                }
+            }
+        }
+    }
+
+    /// The first reviewed cutoff that applies to this journal quest file, if any.
+    fn derived_watch_for(&self, short_name: &str) -> Option<Value> {
+        let steps = self.derived.get("steps")?.as_object()?;
+        for (_id, d) in steps {
+            let hit = d.get("quests")?.as_array()?.iter().any(|q| q.as_str().map(|x| x.eq_ignore_ascii_case(short_name)).unwrap_or(false));
+            if !hit {
+                continue;
+            }
+            let items = d.get("watch")?.as_array()?;
+            if let Some(first) = items.first() {
+                return Some(first.clone());
+            }
+        }
+        None
+    }
+
     fn start_text(&self, i: usize, ev: &Eval) -> String {
         let n = &ev.steps[i].n;
         if let Some(q) = self.kb_for(&n.files) {
@@ -469,10 +538,13 @@ impl Inner {
 
     fn view(&self) -> Value {
         let rt = self.effective_route();
-        let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags);
+        let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags, &self.facts);
         let age = self.save_mtime.and_then(|m| SystemTime::now().duration_since(m).ok()).map(|d| d.as_secs()).unwrap_or(0);
         let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("");
-        let steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i, &self.start_text(i, &ev))).collect();
+        let mut steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i, &self.start_text(i, &ev))).collect();
+        for s in steps.iter_mut() {
+            self.attach_derived(s);
+        }
         let mut objs = serde_json::Map::new();
         for s in &ev.steps {
             if s.manual {
@@ -531,7 +603,7 @@ fn get_view(st: State<Shared>) -> Value {
 fn get_detail(id: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
     let rt = g.effective_route();
-    let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags);
+    let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags, &g.facts);
     let Some(&i) = ev.byid.get(&id) else { return Value::Null };
     let n = &ev.steps[i].n;
     let tracking = if n.files.is_empty() {
@@ -542,6 +614,8 @@ fn get_detail(id: String, st: State<Shared>) -> Value {
     };
     json!({
         "step": model::step_json(&rt, &ev, i, &g.start_text(i, &ev)),
+        "derived": g.derived.get("steps").and_then(|s| s.get(&id)).cloned().unwrap_or(Value::Null),
+        "derived_source": g.derived.get("note").cloned().unwrap_or(Value::Null),
         "kb": g.kb_for(&n.files).cloned().unwrap_or(Value::Null),
         "guide": g.guide_for(&n.id).cloned().unwrap_or(Value::Null),
         "tracking": tracking,
@@ -577,10 +651,25 @@ fn search(q: String, st: State<Shared>) -> Value {
 fn check_quest(short: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
     let rt = g.effective_route();
-    let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags);
+    let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags, &g.facts);
     let v = model::check_quest(&rt, &ev, &short, &g.state);
     let display = g.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
-    model::verdict_json(&v, &display)
+    let mut out = model::verdict_json(&v, &display);
+    // a cutoff this tracker has worked out from the game's own files outranks a general answer:
+    // it names the mechanism, so it can say why and what to do instead of saying "probably fine"
+    if let Some(w) = g.derived_watch_for(&short) {
+        let level = w["level"].as_str().unwrap_or("warn");
+        let mut details: Vec<Value> = vec![w["why"].clone(), json!(format!("Do this first: {}.", w["action"].as_str().unwrap_or("")))];
+        if let Some(cs) = w["caveats"].as_array() {
+            details.extend(cs.iter().cloned());
+        }
+        out["verdict"] = json!(if level == "stop" { "stop" } else { "warn" });
+        out["headline"] = w["headline"].clone();
+        out["details"] = json!(details);
+        out["from_game_files"] = json!(true);
+        out["evidence"] = w["evidence"].clone();
+    }
+    out
 }
 
 #[tauri::command]
@@ -748,8 +837,23 @@ fn main() {
             "todo": inner.todo_order(&ev).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": inner.tracked_json(&ev),
             "objectives": inner.objectives,
+            // the route's fact-gated prerequisites, and whether this save has the game's own condition
+            // set, so the settlement can be checked against what the app actually did
+            "gates": inner.gates(&ev),
             "alerts": ev.alerts.iter().map(|a| a.msg.clone()).collect::<Vec<_>>(),
             "dont_start": model::dont_start(&ev).iter().map(|h| h.name.clone()).collect::<Vec<_>>(),
+            // what the app actually shows for each step, so the data files can be checked against it
+            "watch": ev.steps.iter().map(|s| {
+                let d = inner.derived.get("steps").and_then(|m| m.get(&s.n.id));
+                let items = d.and_then(|x| x.get("watch")).and_then(|x| x.as_array());
+                json!({
+                    "id": s.n.id, "title": s.n.title,
+                    "watch": items.map(|a| a.len()).unwrap_or(0),
+                    "headline": items.and_then(|a| a.first()).and_then(|x| x.get("headline")).cloned().unwrap_or(Value::Null),
+                    "game_title": d.and_then(|x| x.get("game_title")).cloned().unwrap_or(Value::Null),
+                })
+            }).collect::<Vec<_>>(),
+            "derived_note": inner.derived.get("note").cloned().unwrap_or(Value::Null),
             "error": if inner.db_error.is_empty() { inner.error.clone() } else { inner.db_error.clone() },
         });
         let out = args.get(i + 1).cloned().unwrap_or_else(|| "dump.json".into());

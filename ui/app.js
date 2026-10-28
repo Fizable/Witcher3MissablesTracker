@@ -160,6 +160,23 @@ const holdList = keyedList($('#hold'));
 
 function missingText(list) { return (list || []).map((m) => m.title).join(', '); }
 
+/**
+ * A cutoff the tracker worked out from the game's own files (backend: data/derived.json). It always
+ * names the mechanism - the file one quest switches off that another quest needs - so the warning
+ * says why, not just "be careful".
+ */
+function watchBox(x) {
+  const col = x.level === 'stop' ? 'red' : x.level === 'warn' ? 'amber' : 'blue';
+  const ev = x.evidence === 'files+saves' ? 'GAME FILES + YOUR SAVES' : 'GAME FILES';
+  const box = h('div', 'trk-warn ' + col);
+  add(box, h('div', 'tag ' + col, (x.level === 'stop' ? 'CUTOFF AHEAD' : 'CAREFUL') + ' · ' + ev),
+    h('div', 'title', x.headline));
+  if (x.why) add(box, h('div', 'why', x.why));
+  if (x.action) add(box, h('div', 'why', 'Do this first: ' + x.action + '.'));
+  (x.caveats || []).forEach((t) => add(box, h('div', 'dim small', t)));
+  return box;
+}
+
 function renderAlerts(v) {
   const alerts = v.alerts || [];
   $('#alertsSec').classList.toggle('hidden', !alerts.length);
@@ -235,6 +252,8 @@ function buildCard(s, objs, tracked) {
     (w.details || []).forEach((d) => add(box, h('div', 'why', d)));
     add(c, box);
   }
+  // cutoffs derived from the game's own files, with the mechanism named
+  (s.watch || []).forEach((x) => add(c, watchBox(x)));
 
   if (active && objs.length) {
     const ul = h('ul', 'bul');
@@ -261,6 +280,7 @@ function buildCard(s, objs, tracked) {
 function buildRow(s, rank) {
   const b = h('button', 'row', null, { 'data-act': 'detail', 'data-id': s.id });
   const st = s.status === 'Active' ? 'in your log' : s.conditional ? 'if it exists' : 'not in log';
+  if ((s.watch || []).length) add(b, h('span', 'warnmark', '⚠', { title: s.watch[0].headline }));
   add(b, h('span', 'rank dim', String(rank)), h('span', 'rtitle', noParen(s.title)),
     h('span', 'dim small rreg', s.section), h('span', 'small ' + (s.status === 'Active' ? 'green' : 'dim'), st));
   return b;
@@ -402,7 +422,8 @@ async function showVerdict(sh) {
   const top = h('div', 'card-top');
   add(top, h('span', 'tag ' + color, (v.display || '').toUpperCase()), h('span', 'grow'),
     h('button', 'x', '✕', { 'data-act': 'closeverdict', 'aria-label': 'close' }));
-  add(c, top, h('div', 'title', v.headline));
+  if (v.from_game_files) add(c, h('div', 'tag green', (v.evidence === 'files+saves' ? 'GAME FILES + YOUR SAVES' : 'GAME FILES')));
+  add(c, h('div', 'title', v.headline));
   (v.details || []).forEach((d) => add(c, h('div', 'why', d)));
   el.verdict.replaceChildren(c);
   el.verdict.classList.remove('hidden');
@@ -424,16 +445,37 @@ function renderDetail(d) {
   const s = d.step, kb = d.kb, g = d.guide;
   const root = el.detail;
   root.replaceChildren();
+  const dv = d.derived || null;
   add(root, h('div', 'chip', lvlChip(s) + ' · ' + s.status), h('h2', 'dtitle', s.title));
-  const badge = kb ? ['green', '✔ from the wiki audit (single source: Witcher wiki)']
-    : g ? ['amber', '◐ from guide pages (older research)'] : ['dim', 'no researched info for this step yet'];
+  const badge = dv && (dv.watch || []).length
+    ? ['green', '✔ cutoffs from the game\'s own files, checked against your saves']
+    : kb ? ['green', '✔ from the wiki audit (single source: Witcher wiki)']
+      : g ? ['amber', '◐ from guide pages (older research)'] : ['dim', 'no researched info for this step yet'];
   add(root, h('div', 'badge ' + badge[0], badge[1]));
   if (d.verdict) {
     const vc = { safe: 'green', warn: 'amber', stop: 'red', info: 'blue' }[d.verdict.verdict] || 'blue';
     const box = h('div', 'card verdict accent-' + vc);
     add(box, h('div', 'lbl ' + vc, 'CAN I DO THIS NOW?'), h('div', 'title', d.verdict.headline));
     (d.verdict.details || []).forEach((t) => add(box, h('div', 'why', t)));
+    if (d.verdict.from_game_files) add(box, h('div', 'dim small', 'Answered from the game\'s own files, not from a guide.'));
     add(root, box);
+  }
+
+  // what the game's own files say about this step
+  if (dv && (dv.game_title || (dv.objectives || []).length || (dv.watch || []).length || (dv.activators || []).length)) {
+    const b = block(root, 'FROM THE GAME\'S FILES');
+    add(b, h('div', 'dim small', 'Read out of your own install by tools/derive.py: the quest log text, the graph block that adds the journal entry, and the cutoffs that have been reviewed.'));
+    if (dv.game_title) add(b, h('div', 'txt', 'Quest log name: ' + dv.game_title));
+    const objs = (dv.objectives || []).map((o) => o.text).filter(Boolean);
+    if (objs.length) { add(b, h('div', 'lbl', 'OBJECTIVES, IN QUEST-LOG ORDER')); add(b, bullets(objs)); }
+    (dv.activators || []).slice(0, 1).forEach((a) => add(b, h('div', 'dim small', 'Added to your quest log by ' + a.class + ' in ' + a.file + '.')));
+    (dv.watch || []).forEach((x) => add(b, watchBox(x)));
+    const ch = (dv.choices || []).filter((c) => c.text);
+    if (ch.length) {
+      add(b, h('div', 'lbl', 'CHOICES IN ITS SCENES'));
+      add(b, bullets(ch.slice(0, 12).map((c) => c.text + (c.one_shot ? '   (can only be picked once)' : ''))));
+    }
+    if (dv.stems && dv.stems.length) add(b, h('div', 'dim small', 'Game files: ' + dv.stems.join(', ')));
   }
 
   if (kb && kb.title) add(block(root, 'IN-GAME QUEST'), h('div', 'txt', kb.title));

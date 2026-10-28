@@ -1,0 +1,12 @@
+{
+ "hashes": {
+  "contradiction_report.md": "09e5e609367524ed",
+  "cutoff_index.json": "13d95727370a3d0b",
+  "derived.json": "72d5d0b162094d6b",
+  "feed.json": "4c11aef7ba1586f3",
+  "prereq_relations.json": "33c419c7f7da9d7c",
+  "quest_index.json": "282461fb78442fdb",
+  "route_disputes.json": "50fc694e8122ef83"
+ },
+ "note": "sha256 (first 16) of the pipeline outputs; py regen.py compares against these"
+}
