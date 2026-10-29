@@ -9,9 +9,11 @@ Two questions, one per source:
 
   files   which quest E switches off resource R (its own phase file, named keys), and which
           quests X reference R at all (their phase files and their scenes, via `ref_import`).
+          The index includes the base game and every DLC pack, so both sides cover DLC paths.
   saves   what actually followed: of the saves where E is finished with X still open, does any
-          LATER save have X finished? If none does, the cutoff holds in practice; if several do,
-          the pair is refuted and kept only so it is not warned about.
+          LATER save have X finished? If several do, the pair is refuted. A candidate also records
+          whether any save marks X `Failed` after E: that, not a missing NPC, is the evidence that
+          the quest can actually be lost. A community switch alone is only a candidate.
 
 Output `cutoff_index.json` (git-ignored): one row per (E, X, R) with the save counts and a
 verdict of `confirmed`, `refuted`, `thin` (too few saves to say) or `untested`.
@@ -88,7 +90,7 @@ def judge(timeline, e, x):
     it cannot demonstrate that stopping was impossible.
     """
     with_from, open_before = 0, 0
-    later_finished, later_still_open = 0, 0
+    later_finished, later_still_open, later_failed = 0, 0, 0
     ever_open = False
     seen_open = False
     for _name, _mt, st in timeline:
@@ -103,6 +105,8 @@ def judge(timeline, e, x):
             if seen_open:
                 if xs == "Done":
                     later_finished += 1
+                elif xs == "Failed":
+                    later_failed += 1
                 elif xs in ("Active", "Not started", "Inactive", ""):
                     later_still_open += 1
     verdict = "untested"
@@ -115,7 +119,7 @@ def judge(timeline, e, x):
             verdict = "thin"
     return {"with_from": with_from, "open_before": open_before,
             "later_finished": later_finished, "later_still_open": later_still_open,
-            "ever_open": ever_open, "verdict": verdict}
+            "later_failed": later_failed, "ever_open": ever_open, "verdict": verdict}
 
 
 def build(verbose=True):
@@ -205,7 +209,8 @@ def report(only=None, consistent=False, limit=None):
         print(f"{r['verdict']:10s} spec{r['specificity']:<4d} {r['from_names'][0]:24s} -> {r['to_names'][0]:24s} "
               f"via {Path(r['resource']).name:34s} "
               f"[E done {s.get('with_from', 0)}, X open before {s.get('open_before', 0)}, "
-              f"finished later {s.get('later_finished', 0)}, still open {s.get('later_still_open', 0)}]")
+              f"finished later {s.get('later_finished', 0)}, failed later {s.get('later_failed', 0)}, "
+              f"still open {s.get('later_still_open', 0)}]")
 
 
 if __name__ == "__main__":

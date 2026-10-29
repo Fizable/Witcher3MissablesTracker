@@ -1,0 +1,226 @@
+{
+ "note": "Reviewed 1.0.0 overrides. The 11 baseline manual steps are audited in docs/MANUAL-STEPS-AUDIT.md: 2 exact duplicates were replaced by file-derived rows, 9 are kept and labelled manual_reviewed. Generated route.json must carry the label.",
+ "manual": [
+  {
+   "id": "wo_prologue",
+   "title": "Prologue bookkeeping",
+   "section": "Main",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "The prologue is a sequence of visits and choices with no CJournalQuest entry; the save exposes no quest status for it.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#wo_prologue",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "wo_poi",
+   "title": "White Orchard bookkeeping",
+   "section": "Secondary",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "White Orchard points of interest have no CJournalQuest entry; the save cannot distinguish a visited point from an unvisited one.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#wo_poi",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "ve_keira_km",
+   "title": "Keira sent to Kaer Morhen",
+   "section": "Secondary",
+   "kind": "manual",
+   "opt": true,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "Sending Keira to Kaer Morhen is a world-state choice; it is answered by the keira_sent flag, not by a separate quest journal.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#ve_keira_km",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "no_vegelbud",
+   "title": "Vegelbud Gwent matches",
+   "section": "Gwent",
+   "kind": "gwent",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "The Vegelbud Gwent matches are bookkeeping for individual wins; the Gwent journal entries do not record each match as a separate quest.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#no_vegelbud",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "km_save",
+   "title": "Pre-Isle of Mists save",
+   "section": "Main",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "A pre-Isle of Mists save is a player checkpoint, not game progress; no journal entry exists for it.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#km_save",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "ci_c1",
+   "title": "Blood on the Battlefield: a choice here",
+   "section": "Main",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "This Ciri choice is a scene branch, not a separate journal entry; the exact choice text is not shipped in the route.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#ci_c1",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "ci_c2",
+   "title": "Blood on the Battlefield: a second choice here",
+   "section": "Main",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "This Ciri choice is a scene branch, not a separate journal entry; the exact choice text is not shipped in the route.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#ci_c2",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "ci_c3",
+   "title": "Final Preparations: a choice here",
+   "section": "Main",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "This Ciri choice is a scene branch, not a separate journal entry; the exact choice text is not shipped in the route.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#ci_c3",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "hos_shakes",
+   "title": "Hearts of Stone start bookkeeping",
+   "section": "Secondary",
+   "kind": "manual",
+   "opt": false,
+   "when": [],
+   "reason": "bookkeeping for something the save cannot show; no game-file claim",
+   "provenance": "manual_reviewed",
+   "review_reason": "The Hearts of Stone start is a scene and quest transition, not a separate CJournalQuest entry.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#hos_shakes",
+   "reviewed": "2026-10-28"
+  }
+ ],
+ "opt": [
+  "mq0003freshwater",
+  "mq1003trailofdead",
+  "q704vampires",
+  "q705prison",
+  "q705prisonstash"
+ ],
+ "when": {
+  "sq102letho": [
+   "letho=yes"
+  ],
+  "q402velenallies": [
+   "keira_sent=yes"
+  ],
+  "q310romancefailure": [
+   "triss_romance=yes",
+   "yen_romance=yes"
+  ],
+  "q310keira": [
+   "keira_sent=no"
+  ]
+ },
+ "conditional": [
+  "q310keira",
+  "q310romancefailure",
+  "sq102letho"
+ ],
+ "gwent_exclude": [
+  "mq7001restinpeace"
+ ],
+ "gwent_files": {
+  "cgnomansland": [
+   "cgnomansland#Win unique card from Baron"
+  ],
+  "cginnkeepers": [
+   "cginnkeepers#Win unique card from Stjepan the innkeeper",
+   "cginnkeepers#Win unique card from crossroads innkeeper",
+   "cginnkeepers#Win unique card fro Olivier"
+  ],
+  "cgnovigrad": [
+   "cgnovigrad#Win unique card from Dijkstra"
+  ],
+  "cgtalar": [
+   "cgtalar#Win unique card from Talar"
+  ],
+  "cgskellige": [
+   "cgskellige#Win unique card from Mousesack",
+   "cgskellige#Win unique card from Crach",
+   "cgskellige#Win unique card from Dagobert",
+   "cgskellige#Win unique card from Sjusta the Tailor",
+   "cgskellige#Win unique card from Lugos the Mad"
+  ],
+  "cgoldfriends": [
+   "cgoldfriends#Win unique card from Roche",
+   "cgoldfriends#Win unique card from Lambert|cgoldfriends#When occasion presents itself win unique card from Lambert"
+  ]
+ },
+ "flags": [
+  {
+   "id": "letho",
+   "label": "Letho is alive in my world state",
+   "note": "Needed for Ghosts of the Past. It comes from your Witcher 2 import or the default world state. Answer No and that quest stops counting."
+  },
+  {
+   "id": "keira_sent",
+   "label": "I sent Keira to Kaer Morhen",
+   "note": "Decides between Brothers In Arms: Velen (sent) and A Final Kindness (not sent)."
+  },
+  {
+   "id": "triss_romance",
+   "label": "I am romancing Triss",
+   "note": "It Takes Three to Tango only exists if you romance both Triss and Yennefer."
+  },
+  {
+   "id": "yen_romance",
+   "label": "I am romancing Yennefer",
+   "note": "It Takes Three to Tango only exists if you romance both Triss and Yennefer."
+  }
+ ],
+ "sections": [
+  "Main",
+  "Secondary",
+  "Contracts",
+  "Treasure Hunts",
+  "Gwent"
+ ],
+ "manual_replaced": [
+  {
+   "id": "ve_forefathers",
+   "title": "Forefathers' Eve",
+   "replaced_by": "q108eve",
+   "reason": "Exact duplicate of the file-derived q108eve journal; the legacy manual row had no separate state.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#ve_forefathers",
+   "reviewed": "2026-10-28"
+  },
+  {
+   "id": "ci_bald",
+   "title": "Bald Mountain",
+   "replaced_by": "q111imlerith",
+   "reason": "Exact duplicate of the file-derived q111imlerith journal; the manual row had no separate choice or bookkeeping state.",
+   "review_source": "docs/MANUAL-STEPS-AUDIT.md#ci_bald",
+   "reviewed": "2026-10-28"
+  }
+ ]
+}

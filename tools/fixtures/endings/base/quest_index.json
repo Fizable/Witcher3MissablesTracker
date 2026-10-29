@@ -1,0 +1,17 @@
+{
+  "note": "Test fixture for tools/endings.py; not game data.",
+  "quests": {
+    "test_heirs": {
+      "stem": "test_heirs",
+      "bundle_names": ["test_step_heirs"],
+      "branch_facts": ["test_heirs_live_fact"],
+      "has_branch": true
+    },
+    "test_guard": {
+      "stem": "test_guard",
+      "bundle_names": ["test_step_guard"],
+      "branch_facts": ["test_heirs_live_guard"],
+      "has_branch": true
+    }
+  }
+}

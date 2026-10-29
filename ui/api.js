@@ -7,6 +7,13 @@ const Api = (() => {
       mock: false,
       get_view: () => T.core.invoke('get_view'),
       get_detail: (id) => T.core.invoke('get_detail', { id }),
+      get_targets: () => T.core.invoke('get_targets'),
+      get_outcomes: () => T.core.invoke('get_outcomes'),
+      get_plan: (targets) => T.core.invoke('get_plan', { targets }),
+      set_target: (ids) => T.core.invoke('set_target', { ids }),
+      set_guidance: (on) => T.core.invoke('set_guidance', { on }),
+      get_cards: () => T.core.invoke('get_cards'),
+      set_card: (id, owned) => T.core.invoke('set_card', { id, owned }),
       search: (q) => T.core.invoke('search', { q }),
       check_quest: (short) => T.core.invoke('check_quest', { short }),
       toggle_tick: (id) => T.core.invoke('toggle_tick', { id }),
@@ -34,6 +41,24 @@ const Api = (() => {
     async set_flag() { return ensure(); },
     async set_folder() { return ensure(); },
     async pick_folder() { return ensure(); },
+    async get_targets() { return { targets: [], presets: [] }; },
+    async get_outcomes() { return { version: 1, groups: [], selected: [], conflicts: [], counts: {} }; },
+    async get_plan() { return { version: 1, state: 'empty', selected: [], steps: [], conflicts: [], blocked_by: [], coverage: {} }; },
+    async set_target(ids) {
+      await ensure();
+      view.target = ids && ids.length ? { ids, labels: ids, guidance: 'on', states: {} } : null;
+      if (view.setup) view.setup.needed = false;
+      return clone(view);
+    },
+    async set_guidance(on) {
+      await ensure();
+      if (view.target) view.target.guidance = on ? 'on' : 'off';
+      return clone(view);
+    },
+    async get_cards() {
+      return { cards: [], counts: { owned: 0, not_owned: 0, unknown: 0, total: 0 }, block_ok: false, reason: 'mock backend has no card data', missable_windows: { proven: false } };
+    },
+    async set_card() { return this.get_cards(); },
     async get_view() { await ensure(); return clone(view); },
     async get_detail(id) {
       await ensure();

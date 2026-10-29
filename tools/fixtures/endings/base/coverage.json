@@ -1,0 +1,20 @@
+{
+  "packs": {
+    "base": {
+      "quests": 0,
+      "with_phases": 0,
+      "with_scenes": 0,
+      "with_branches": 0,
+      "with_cards": 0,
+      "with_cutoffs": 0
+    },
+    "bob": {
+      "quests": 2,
+      "with_phases": 0,
+      "with_scenes": 0,
+      "with_branches": 0,
+      "with_cards": 0,
+      "with_cutoffs": 0
+    }
+  }
+}

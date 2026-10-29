@@ -71,6 +71,7 @@ h2 .count { color: var(--dim); font-weight: 400; }
   box-shadow: 0 1px 3px rgba(0,0,0,.35); transition: background var(--t), transform var(--t), box-shadow var(--t);
 }
 .card:hover { background: var(--card2); box-shadow: 0 3px 10px rgba(0,0,0,.4); }
+.card[data-act="detail"] { cursor: pointer; }
 .accent-red { border-left-color: var(--red); } .accent-amber { border-left-color: var(--amber); }
 .accent-green { border-left-color: var(--green); } .accent-blue { border-left-color: var(--blue); }
 .accent-gold { border-left-color: var(--gold); }
@@ -79,10 +80,15 @@ h2 .count { color: var(--dim); font-weight: 400; }
 .sidetag { margin-left: auto; font-size: 11px; }
 .tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; }
 .tag.red { color: var(--red); } .tag.amber { color: var(--amber); } .tag.green { color: var(--green); } .tag.blue { color: var(--blue); }
+.tag.lost { color: var(--dim); }
+/* what the save says right now, under a warning: the part that proves it is not a fixed note */
+.live { color: var(--text); opacity: .78; margin-top: 3px; padding-left: 7px; border-left: 2px solid var(--line); }
 .title { font-weight: 650; font-size: 14px; margin: 4px 0 2px; display: block; overflow-wrap: anywhere; }
 button.title.link { text-align: left; transition: color var(--t); }
 button.title.link:hover { color: var(--gold); }
 .why, .txt { color: #cfcdc6; overflow-wrap: anywhere; }
+/* top section: the one thing to do about the warning, separate from the headline */
+.action { margin-top: 4px; color: var(--gold); overflow-wrap: anywhere; }
 .lbl { margin-top: 7px; font-size: 10.5px; letter-spacing: .1em; color: var(--dim); font-weight: 600; }
 .lbl.gold { color: var(--gold); }
 .card-foot { display: flex; align-items: center; gap: 10px; margin-top: 9px; flex-wrap: wrap; }
@@ -90,12 +96,19 @@ button.title.link:hover { color: var(--gold); }
 .blocker { display: inline-flex; align-items: center; gap: 7px; }
 .trk-warn { margin-top: 8px; padding: 7px 9px; border: 1px solid var(--amber); border-radius: 6px; background: rgba(232,162,58,.08); }
 .trk-warn.red { border-color: var(--red); background: rgba(229,83,75,.12); }
+/* a cutoff that already happened: history, not advice */
+.trk-warn.lost { border-color: var(--line); border-left-color: var(--dim); background: rgba(140,147,163,.06); }
+.accent-lost { border-left-color: var(--dim); }
 .trk-warn .title { font-weight: 600; margin-top: 2px; }
 .x { color: var(--dim); padding: 2px 6px; border-radius: 4px; } .x:hover { color: var(--text); background: var(--card2); }
 .msg { font-weight: 600; }
 
 ul.bul { margin: 3px 0 0; padding-left: 18px; }
 ul.bul li { margin: 1px 0; overflow-wrap: anywhere; }
+ul.bul li.current { color: var(--gold); }
+/* spoiler-free card tags: choice / Gwent / missable / tick disagrees */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.tagchip { font-size: 10.5px; letter-spacing: .06em; padding: 1px 7px; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); color: var(--dim); }
 ol.num { margin: 3px 0 0; padding-left: 20px; } ol.num li { margin: 3px 0; }
 
 /* buttons */
@@ -145,6 +158,7 @@ ol.num { margin: 3px 0 0; padding-left: 20px; } ol.num li { margin: 3px 0; }
 /* detail */
 .detail-top { position: sticky; top: 0; background: var(--bg); padding: 12px 0 8px; z-index: 3; }
 .dtitle { font-size: 18px; letter-spacing: 0; margin: 8px 0 6px; line-height: 1.25; }
+.ddesc { color: #cfcdc6; margin: -2px 0 6px; }
 .badge { font-size: 12px; margin-bottom: 4px; }
 .badge.green { color: var(--green); } .badge.amber { color: var(--amber); } .badge.dim { color: var(--dim); }
 .dblock { background: var(--card); border-radius: 9px; padding: 9px 12px; margin-top: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
@@ -155,6 +169,17 @@ ol.num { margin: 3px 0 0; padding-left: 20px; } ol.num li { margin: 3px 0; }
 a.src { color: var(--blue); text-decoration: none; overflow-wrap: anywhere; font-size: 12px; }
 a.src:hover { text-decoration: underline; }
 .dblock .btn { margin-top: 8px; }
+
+/* source-file trail: available when wanted, never in the way */
+.evidence { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 8px; }
+.evidence > summary { cursor: pointer; color: var(--dim); font-size: 11.5px; list-style: none; }
+.evidence > summary::-webkit-details-marker { display: none; }
+.evidence > summary::before { content: "▸ "; }
+.evidence[open] > summary::before { content: "▾ "; }
+.evidence > summary:hover { color: var(--text); }
+.evbody { padding: 6px 0 2px 14px; }
+.evline { color: var(--dim); font-size: 11.5px; margin: 4px 0; overflow-wrap: anywhere; }
+.evbody .linkbtn { padding: 4px 0; }
 
 @media (max-width: 400px) {
   .pane { padding: 0 9px 24px; }
@@ -195,3 +220,252 @@ a.src:hover { text-decoration: underline; }
 /* a step that carries a cutoff worked out from the game's own files */
 .warnmark { color: #d9a441; font-size: 12px; margin-right: 4px; }
 .trk-warn.blue { border-left-color: #6fa8dc; }
+
+/* ---------- 1.0: run header, goal gate and target picker ---------- */
+.goldbtn { background: rgba(212,168,75,.14); border-color: var(--gold); color: var(--gold); font-weight: 600; }
+.goldbtn:hover { background: rgba(212,168,75,.24); border-color: var(--gold); }
+.goldbtn:disabled { opacity: .45; }
+
+.setup-card {
+  margin-top: 14px; padding: 12px 14px; background: var(--card); border-radius: 9px;
+  border-left: 3px solid var(--gold); box-shadow: 0 1px 3px rgba(0,0,0,.35);
+}
+.setup-card h2 { color: var(--gold); margin-bottom: 4px; }
+.setup-card p { margin: 0; }
+.setup-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+.run { margin-top: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--card); }
+.run-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.run-head h2 { margin: 0; }
+.run-targets { display: flex; flex-wrap: wrap; gap: 6px; }
+.goalchip { display: inline-flex; align-items: baseline; gap: 7px; max-width: 100%; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; background: var(--card2); border: 1px solid var(--line); }
+.goalchip .goalstate { font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+.goalchip.green { border-color: rgba(87,171,90,.5); }
+.goalchip.green .goalstate { color: var(--green); }
+.goalchip.red { border-color: rgba(229,83,75,.5); }
+.goalchip.red .goalstate { color: var(--red); }
+.goalchip.blue { border-color: rgba(108,182,255,.45); }
+.goalchip.blue .goalstate { color: var(--blue); }
+.runcounts { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--line); }
+.runcount { font-size: 11.5px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.goalrow { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line); }
+.goaltext { flex: 1; min-width: 170px; }
+.goalbuttons { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.picker { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 18px; background: rgba(0,0,0,.66); }
+.picker-box { width: min(640px, 100%); max-height: min(84vh, 760px); overflow: auto; padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 55px rgba(0,0,0,.65); }
+.picker-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.picker-head h2 { margin: 0; }
+.picker-box > p { margin: 4px 0 0; }
+.target-options { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.target-group .lbl { margin-top: 0; }
+.target-option { display: flex; align-items: flex-start; gap: 9px; padding: 8px 9px; background: var(--card2); border-radius: 8px; cursor: pointer; transition: background var(--t); }
+.target-option:hover { background: #2b303b; }
+.target-option input { margin-top: 2px; accent-color: var(--gold); }
+.target-text { min-width: 0; }
+.picker-foot { position: sticky; bottom: -16px; display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; padding: 10px 0 0; background: var(--card); border-top: 1px solid var(--line); }
+
+/* ---------- 1.0: cards, coverage and friendly goal text ---------- */
+.desc { color: #b3b1a9; }
+.tagchip.goalchip { color: var(--gold); border-color: rgba(212,168,75,.45); background: rgba(212,168,75,.12); }
+.goal-line { color: var(--gold); font-size: 14px; font-weight: 600; line-height: 1.4; }
+
+.cards-list { margin-top: 4px; }
+.cards-collapse { background: var(--card); border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.cards-collapse > summary { cursor: pointer; padding: 9px 12px; color: var(--dim); list-style: none; transition: color var(--t), background var(--t); }
+.cards-collapse > summary::-webkit-details-marker { display: none; }
+.cards-collapse > summary::before { content: "▸ "; }
+.cards-collapse[open] > summary::before { content: "▾ "; }
+.cards-collapse > summary:hover { color: var(--text); background: var(--card2); }
+.cards-body { padding: 2px 12px 10px; }
+.card-group { margin-top: 8px; }
+.cardrow { display: grid; grid-template-columns: minmax(0, 1.4fr) auto minmax(0, 1.6fr); gap: 10px; align-items: baseline; padding: 3px 0; border-top: 1px solid rgba(44,49,60,.6); }
+.cardrow:first-of-type { border-top: 0; }
+.cardname { color: var(--text); overflow-wrap: anywhere; }
+.cardname:hover { color: var(--gold); }
+.card-src { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+#coverage { overflow-x: auto; }
+.coverage-table { width: 100%; min-width: 520px; border-collapse: collapse; background: var(--card); border-radius: 9px; overflow: hidden; font-size: 12px; }
+.coverage-table th, .coverage-table td { padding: 6px 8px; text-align: left; border-top: 1px solid var(--line); }
+.coverage-table thead th { font-size: 10.5px; letter-spacing: .07em; color: var(--dim); border-top: 0; }
+.coverage-table tbody tr:hover { background: var(--card2); }
+.coverage-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 520px) {
+  .cardrow { grid-template-columns: minmax(0, 1fr) auto; }
+  .card-src { grid-column: 1 / -1; white-space: normal; }
+  .goalrow { flex-direction: column; }
+}
+
+
+/* 1.0: run header, spoiler gate, target picker, cards and coverage */
+.setup-card { margin-top: 10px; padding: 11px 13px; border: 1px solid var(--gold); border-radius: 9px; background: rgba(212,168,75,.07); }
+.setup-card h2 { margin-bottom: 5px; }
+.setup-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.goldbtn { border-color: var(--gold); color: var(--gold); }
+.goldbtn:hover { background: rgba(212,168,75,.15); }
+.btn:disabled { opacity: .45; }
+.run { margin-top: 12px; }
+.run-head { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+.run-targets { display: flex; gap: 5px; flex-wrap: wrap; }
+.runcounts { margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
+.runcount { font-size: 12px; color: #cfcdc6; }
+.goalchip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); font-size: 11px; }
+.goalchip.green { border-color: rgba(87,171,90,.55); }
+.goalchip.blue { border-color: rgba(108,182,255,.55); }
+.goalchip.red { border-color: rgba(229,83,75,.55); }
+.goalstate { font-size: 10px; letter-spacing: .04em; opacity: .8; text-transform: uppercase; }
+.goalrow { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid #242832; flex-wrap: wrap; }
+.goaltext { flex: 1; min-width: 180px; }
+.goalbuttons { display: flex; gap: 5px; flex-wrap: wrap; }
+.picker { position: fixed; inset: 0; z-index: 20; background: rgba(8,10,14,.72); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.picker-box { width: min(560px, 100%); max-height: 88vh; overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 11px; padding: 12px 14px; box-shadow: 0 16px 50px rgba(0,0,0,.6); }
+.picker-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.picker-head h2 { margin: 0; }
+.picker-foot { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; position: sticky; bottom: 0; background: var(--card); padding-top: 8px; }
+.target-options { margin-top: 8px; }
+.target-group { margin-top: 10px; }
+.target-group .btn { margin: 3px 5px 3px 0; }
+.target-option { display: flex; gap: 8px; align-items: flex-start; padding: 5px 4px; border-radius: 6px; cursor: pointer; }
+.target-option:hover { background: var(--card2); }
+.target-option input { margin-top: 3px; accent-color: var(--gold); }
+.target-text { flex: 1; min-width: 0; }
+.cards-collapse { background: var(--card); border-radius: 9px; padding: 7px 11px; }
+.cards-collapse > summary { cursor: pointer; color: var(--dim); font-size: 11.5px; list-style: none; }
+.cards-collapse > summary::-webkit-details-marker { display: none; }
+.cards-collapse > summary::before { content: "▸ "; }
+.cards-collapse[open] > summary::before { content: "▾ "; }
+.cards-body { margin-top: 7px; max-height: 330px; overflow: auto; padding-right: 4px; }
+.card-group { margin-top: 8px; }
+.cardrow { display: flex; align-items: baseline; gap: 7px; padding: 2px 0; border-top: 1px solid rgba(44,49,60,.55); }
+.cardrow:first-child { border-top: 0; }
+.cardname { flex: 0 0 auto; color: var(--text); }
+.cardname:hover { color: var(--gold); }
+.card-src { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.coverage-table { width: 100%; border-collapse: collapse; font-size: 11.5px; background: var(--card); border-radius: 8px; overflow: hidden; }
+.coverage-table th, .coverage-table td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.coverage-table th { color: var(--dim); font-weight: 600; font-size: 10.5px; letter-spacing: .05em; }
+.coverage-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.coverage-table tr:last-child td { border-bottom: 0; }
+.dblock h3.gold { color: var(--gold); }
+.goal-line { color: var(--text); font-weight: 600; margin: 3px 0; }
+@media (max-width: 430px) { .coverage-table { font-size: 10.5px; } .coverage-table th, .coverage-table td { padding: 4px 3px; } }
+
+/* 1.1: one-run plan and the opt-in outcome matrix */
+.plan-line {
+  margin: 6px 0 1px;
+  padding: 7px 9px;
+  background: rgba(212, 175, 55, .08);
+  border-left: 2px solid var(--gold);
+  border-radius: 4px;
+  color: var(--text);
+  line-height: 1.35;
+}
+.outcome-matrix {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.matrix-group { margin-top: 8px; }
+.matrix-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+.matrix-row .fl { min-width: 0; }
+.picker-foot { flex-wrap: wrap; }
+
+/* 4.4: every card has a reviewed window, a one-time source or a documented no-window reason. */
+.cardwindow {
+  grid-column: 1 / -1;
+  flex-basis: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 1px 0 3px;
+}
+.windowtag {
+  flex: 0 0 auto;
+  font-size: 9.5px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--dim);
+}
+.windowtag.red { color: var(--red); border-color: rgba(229,83,75,.55); }
+.windowtag.amber { color: var(--gold); border-color: rgba(212,175,55,.55); }
+.windowtag.lost { color: var(--red); border-color: rgba(229,83,75,.55); background: rgba(229,83,75,.08); }
+.windowtag.blue { color: #8ec5ff; border-color: rgba(108,182,255,.45); }
+.windowtag.green { color: var(--green); border-color: rgba(87,171,90,.45); }
+.cardwindow-text { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 520px) { .cardwindow { flex-direction: column; gap: 2px; } }
+
+/* A card row can carry its own collapsed evidence without breaking the flexible row. */
+.cardrow { flex-wrap: wrap; }
+.cardrow > .evidence { flex-basis: 100%; margin-top: 0; padding-top: 2px; border-top: 0; }
+
+/* ---------- cockpit: NOW, UP NEXT and one MORE drawer ---------- */
+/* The pane is its own scroll box, so the warning band pins to the pane top. The search box is a
+   tool, not the play loop: it scrolls away instead of competing for the same sticky slot. */
+.searchbar { position: static; padding: 10px 0 6px; }
+#topSec {
+  position: sticky; top: 0; z-index: 6; max-height: 52vh; overflow-y: auto;
+  margin: 0 -14px 0; padding: 9px 14px 10px;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  box-shadow: 0 8px 14px rgba(0,0,0,.22);
+}
+#topSec h2 { margin-bottom: 4px; }
+#topSec .stack { gap: 7px; }
+#topSec .card { padding-top: 8px; padding-bottom: 8px; }
+.top-later { margin-left: auto; }
+.top-later .linkbtn { padding: 0; font-size: 11px; }
+
+/* Future plan steps are reference order, not the play queue. One collapsed line keeps them
+   reachable without making them look like the next thing to do. */
+.plan-ahead { margin-top: 10px; border-top: 1px solid var(--line); }
+.plan-ahead > summary { cursor: pointer; padding: 8px 2px 6px; color: var(--dim); font-size: 11.5px; letter-spacing: .04em; list-style: none; }
+.plan-ahead > summary::-webkit-details-marker { display: none; }
+.plan-ahead > summary::before { content: "▸ "; }
+.plan-ahead[open] > summary::before { content: "▾ "; }
+.plan-ahead > summary:hover { color: var(--text); }
+.plan-ahead-list { margin: 0; padding: 0 2px 6px 18px; color: var(--dim); font-size: 11.5px; }
+.plan-ahead-list li { margin: 4px 0; overflow-wrap: anywhere; }
+.plan-ahead-name { color: var(--text); }
+.plan-ahead-meta { margin-left: 7px; color: var(--dim); }
+.plan-guidance {
+  margin: 8px 0 4px; padding: 8px 10px; border-left: 3px solid var(--gold);
+  border-radius: 6px; background: rgba(212,168,75,.08);
+}
+.plan-guidance .lbl { margin-top: 0; }
+.plan-guidance .goal-line { margin-top: 2px; }
+.more {
+  position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+  padding: 18px; background: rgba(8,10,14,.72);
+}
+.more-box {
+  width: min(760px, 100%); max-height: 90vh; display: flex; flex-direction: column;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.65); overflow: hidden;
+}
+.more-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px 9px; border-bottom: 1px solid var(--line); }
+.more-head h2 { margin: 0; }
+.more-tabs { display: flex; gap: 4px; flex-wrap: wrap; padding: 8px 12px 0; border-bottom: 1px solid var(--line); }
+.more-tab { padding: 5px 10px; border-radius: 6px 6px 0 0; color: var(--dim); font-size: 10.5px; letter-spacing: .08em; }
+.more-tab:hover { color: var(--text); background: var(--card2); }
+.more-tab.on { color: var(--gold); background: var(--card2); box-shadow: inset 0 -2px var(--gold); }
+#morePanes { overflow-y: auto; min-height: 0; padding: 0 14px 18px; }
+.more-pane > section:first-child { margin-top: 14px; }
+.filterbar { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 10px; }
+.filter { font-size: 10px; letter-spacing: .06em; padding: 2px 8px; border: 1px solid var(--line); border-radius: 10px; color: var(--dim); }
+.filter:hover { color: var(--text); border-color: #3d4452; }
+.filter.on { color: var(--gold); border-color: var(--gold); background: rgba(212,168,75,.1); }
+@media (max-width: 520px) { .more { padding: 8px; } .more-box { max-height: 94vh; } }
+@media (max-width: 400px) {
+  #topSec { margin-left: -9px; margin-right: -9px; padding-left: 9px; padding-right: 9px; }
+}

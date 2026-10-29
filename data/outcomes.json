@@ -1,0 +1,477 @@
+{
+  "version": 1,
+  "note": "Reviewed terminal outcomes. Every fact and line points at the game file that sets or shows it; the reviewer only decides which outcome is wanted. `selection: one` means the game's own journal descriptions are alternatives, not that a wiki says so.",
+  "groups": {
+    "main_ciri": {
+      "pack": "base",
+      "label": "Main story: Ciri's fate",
+      "selection": "one",
+      "outcomes": [
+        "ciri_witcher",
+        "ciri_empress",
+        "ciri_dead"
+      ]
+    },
+    "baron_family": {
+      "pack": "base",
+      "label": "Baron family: Anna's fate",
+      "selection": "one",
+      "outcomes": [
+        "baron_wife_cured",
+        "baron_anna_lost",
+        "baron_anna_burnt",
+        "baron_anna_disenchanted"
+      ]
+    },
+    "hos_olgierd": {
+      "pack": "ep1",
+      "label": "Hearts of Stone: Olgierd's fate",
+      "selection": "one",
+      "outcomes": [
+        "olgierd_saved",
+        "olgierd_dead"
+      ]
+    },
+    "bw_sisters": {
+      "pack": "bob",
+      "label": "Blood and Wine: the sisters",
+      "selection": "one",
+      "outcomes": [
+        "bw_both_sisters",
+        "bw_henrietta_dies"
+      ]
+    }
+  },
+  "outcomes": {
+    "ciri_witcher": {
+      "group": "main_ciri",
+      "pack": "base",
+      "label": "Ciri lives: witcher ending",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Ciri survives q502 and this save never set q110_to_emperor, so the q505 free-Ciri epilogue is the terminal state. The q110 Velen line is the decision; the q502 phase fact is the confirmation; the q505 journal ending is the evidence.",
+      "guidance_status": "guided",
+      "requires": [
+        {
+          "fact": "q110_to_emperor",
+          "value": false,
+          "source": {
+            "kind": "scene_choice",
+            "step": "q110postbattle",
+            "branch": "q110postbattle__550211__q110_activity_talk_to_ciri_finish",
+            "file": "quests\\part_3\\quest_files\\q110_postbattle\\scenes\\q110_03_01_ciri_wakes_geralt.w2scene",
+            "locid": 550211
+          }
+        },
+        {
+          "fact": "q502_ciri_survives",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q502avallach",
+            "file": "quests\\part_3\\q502_avallach.w2phase",
+            "fact": "q502_ciri_survives"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "step": "q110postbattle",
+          "kind": "scene_choice",
+          "branch": "q110postbattle__550164__q110_activity_talk_to_ciri_finish",
+          "instruction": "All right, Velen it is.",
+          "facts": [],
+          "source": {
+            "kind": "scene_choice",
+            "step": "q110postbattle",
+            "branch": "q110postbattle__550164__q110_activity_talk_to_ciri_finish",
+            "file": "quests\\part_3\\quest_files\\q110_postbattle\\scenes\\q110_03_01_ciri_wakes_geralt.w2scene",
+            "locid": 550164
+          },
+          "mechanism": "Choosing Velen keeps Ciri away from Emhyr; the other line sets q110_to_emperor. The line itself does not set q502_ciri_survives, which q502_avallach sets later."
+        }
+      ],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q505cirifree.journal",
+        "locid": 1055913,
+        "base_name": "Q505 Ending Ciri Free"
+      }
+    },
+    "ciri_empress": {
+      "group": "main_ciri",
+      "pack": "base",
+      "label": "Ciri lives: empress ending",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Ciri survives q502 and q110_to_emperor is set. The q504 epilogue journal is the terminal evidence; this is not one of the four requested targets.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "The emperor path is reachable, but it is not one of the requested outcomes; the matrix reports its state without recommending its line.",
+      "requires": [
+        {
+          "fact": "q110_to_emperor",
+          "value": true,
+          "source": {
+            "kind": "scene_choice",
+            "step": "q110postbattle",
+            "branch": "q110postbattle__550211__q110_activity_talk_to_ciri_finish",
+            "file": "quests\\part_3\\quest_files\\q110_postbattle\\scenes\\q110_03_01_ciri_wakes_geralt.w2scene",
+            "locid": 550211
+          }
+        },
+        {
+          "fact": "q502_ciri_survives",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q502avallach",
+            "file": "quests\\part_3\\q502_avallach.w2phase",
+            "fact": "q502_ciri_survives"
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q504ciriempress.journal",
+        "locid": 1056068,
+        "base_name": "q504 Ending"
+      }
+    },
+    "ciri_dead": {
+      "group": "main_ciri",
+      "pack": "base",
+      "label": "Ciri dies in the White Frost",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "q502_ciri_dead is set in q502_avallach and tested by the epilogue and ending boards; the q503 ending journal is the terminal evidence. Not guided: several earlier choices lead here and no single line is the decision.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "No single reviewed line decides this outcome; the q502 phase fact is the terminal evidence.",
+      "requires": [
+        {
+          "fact": "q502_ciri_dead",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q502avallach",
+            "file": "quests\\part_3\\q502_avallach.w2phase",
+            "fact": "q502_ciri_dead"
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q503newquest.journal",
+        "locid": 1048618,
+        "base_name": "Quest Ended"
+      }
+    },
+    "baron_wife_cured": {
+      "group": "baron_family",
+      "pack": "base",
+      "label": "Baron: his wife is alive",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "The mission calls this the cured outcome. The save's own q107 journal is 1002193 (Q107 Anna Crazy End): Anna is alive but her mind is lost, and the baron takes her away to find help. q105_evil_spirit sets q105_evil_spirit_destroyed on the branch that reaches this end; q107_swamps sets q107_anna_is_crazy. The data does not claim she is sane, and it does not require the release branch.",
+      "guidance_status": "guided",
+      "requires": [
+        {
+          "fact": "q105_evil_spirit_destroyed",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q105evilspirit",
+            "file": "quests\\part_1\\quest_files\\q105_witches\\phases\\q105_evil_spirit.w2phase",
+            "fact": "q105_evil_spirit_destroyed"
+          }
+        },
+        {
+          "fact": "q107_anna_is_crazy",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q107swamps",
+            "file": "quests\\part_2\\q107_swamps.w2phase",
+            "fact": "q107_anna_is_crazy"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "step": "q105evilspirit",
+          "kind": "journal_objective",
+          "branch": "",
+          "instruction": "Speak to the spirit in the cave beneath the Whispering Hillock.",
+          "facts": [],
+          "source": {
+            "kind": "journal_objective",
+            "step": "q105evilspirit",
+            "file": "gameplay\\journal\\quests\\q105evilspirit.journal",
+            "locid": 453250
+          },
+          "mechanism": "No dialogue line is the reviewed decision: this is the journal objective for the spirit encounter. The terminal branch is the phase fact q105_evil_spirit_destroyed, and q107_swamps sets q107_anna_is_crazy."
+        }
+      ],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q107swamps.journal",
+        "locid": 1002193,
+        "base_name": "Q107 Anna Crazy End"
+      }
+    },
+    "baron_anna_lost": {
+      "group": "baron_family",
+      "pack": "base",
+      "label": "Baron: his wife is lost",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "q107_baron_hanged_himself is set in q107_swamps; the q107 journal description 1002197 says the baron hanged himself after Anna was lost. This is the alternative terminal state, not a recommended goal.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "This is the alternative to the requested cured outcome; the matrix reports its state without recommending its line.",
+      "requires": [
+        {
+          "fact": "q107_baron_hanged_himself",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q107swamps",
+            "file": "quests\\part_2\\q107_swamps.w2phase",
+            "fact": "q107_baron_hanged_himself"
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q107swamps.journal",
+        "locid": 1002197,
+        "base_name": "Q107 Ending Baron hanged"
+      }
+    },
+    "olgierd_saved": {
+      "group": "hos_olgierd",
+      "pack": "ep1",
+      "label": "Hearts of Stone: Olgierd is saved",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "The q605 temple line [Help Olgierd.] is the reviewed action. q605_finale sets q605_mirror_banished when Gaunter is defeated; the q605 journal ending 1124241 says Olgierd is safe and the pact dissolved.",
+      "guidance_status": "guided",
+      "requires": [
+        {
+          "fact": "q605_mirror_banished",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q605finale",
+            "file": "dlc\\ep1\\data\\quests\\q605_finale.w2phase",
+            "fact": "q605_mirror_banished"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "step": "q605finale",
+          "kind": "scene_line",
+          "branch": "",
+          "instruction": "[Help Olgierd.]",
+          "facts": [],
+          "source": {
+            "kind": "scene_line",
+            "step": "q605finale",
+            "file": "dlc\\ep1\\data\\quests\\quest_files\\q605_finale\\scenes\\q605_04_temple_meeting.w2scene",
+            "locid": 1104139
+          },
+          "mechanism": "This line has no fact-setting branch in branches.json; the q605_finale phase sets q605_mirror_banished, and the q605 journal ending 1124241 confirms Olgierd is safe."
+        }
+      ],
+      "journal_outcome": {
+        "file": "dlc\\ep1\\journal\\quests\\q605finale.journal",
+        "locid": 1124241,
+        "base_name": "quest ended - Olgierd saved"
+      }
+    },
+    "olgierd_dead": {
+      "group": "hos_olgierd",
+      "pack": "ep1",
+      "label": "Hearts of Stone: Olgierd dies",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "q605_mirror_banished is absent after q605_finale, so the pact was fulfilled; the q605 journal ending 1124242 says Olgierd's life came to an end. This is the alternative, not a recommended goal.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "This is the alternative to the requested outcome; the negative q605 fact is the terminal evidence, so no line is recommended.",
+      "requires": [
+        {
+          "fact": "q605_mirror_banished",
+          "value": false,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q605finale",
+            "file": "dlc\\ep1\\data\\quests\\q605_finale.w2phase",
+            "fact": "q605_mirror_banished"
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "dlc\\ep1\\journal\\quests\\q605finale.journal",
+        "locid": 1124242,
+        "base_name": "quest ended - Olgierd dead"
+      }
+    },
+    "bw_both_sisters": {
+      "group": "bw_sisters",
+      "pack": "bob",
+      "label": "Blood and Wine: both sisters live",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Buying the ribbon at the fairy tale keeps Syanna alive for the ceremony, and the reconciliation line keeps Henrietta alive. Both are extracted scene choices with exact lines; the q705 journal ending 1154626 is the terminal evidence.",
+      "guidance_status": "guided",
+      "requires": [
+        {
+          "fact": "q704_ft_ribbon_won",
+          "value": true,
+          "source": {
+            "kind": "scene_choice",
+            "step": "q704bfairyland",
+            "branch": "q704bfairyland__1154229__q704_ft_ribbon_won",
+            "file": "dlc\\bob\\data\\quests\\main_quests\\quest_files\\q704b_fairy_tale\\scenes\\q704_ft_08_match_girl.w2scene",
+            "locid": 1154229
+          }
+        },
+        {
+          "fact": "q705_henrietta_alive",
+          "value": true,
+          "source": {
+            "kind": "scene_choice",
+            "step": "q705ceremony",
+            "branch": "q705ceremony__1191986__q705_henrietta_alive",
+            "file": "dlc\\bob\\data\\quests\\main_quests\\quest_files\\q705_epilog\\scenes\\q705_15_ceremony_begins.w2scene",
+            "locid": 1191986
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "step": "q704bfairyland",
+          "kind": "scene_choice",
+          "branch": "q704bfairyland__1154229__q704_ft_ribbon_won",
+          "instruction": "I'll pay you for the ribbon.",
+          "facts": [
+            "q704_ft_ribbon_won"
+          ],
+          "source": {
+            "kind": "scene_choice",
+            "step": "q704bfairyland",
+            "branch": "q704bfairyland__1154229__q704_ft_ribbon_won",
+            "file": "dlc\\bob\\data\\quests\\main_quests\\quest_files\\q704b_fairy_tale\\scenes\\q704_ft_08_match_girl.w2scene",
+            "locid": 1154229
+          },
+          "mechanism": "The line sets q704_ft_ribbon_won, which is required for Syanna to survive the fairy tale."
+        },
+        {
+          "step": "q705ceremony",
+          "kind": "scene_choice",
+          "branch": "q705ceremony__1191986__q705_henrietta_alive",
+          "instruction": "You were children then, both.",
+          "facts": [
+            "q705_henrietta_alive"
+          ],
+          "source": {
+            "kind": "scene_choice",
+            "step": "q705ceremony",
+            "branch": "q705ceremony__1191986__q705_henrietta_alive",
+            "file": "dlc\\bob\\data\\quests\\main_quests\\quest_files\\q705_epilog\\scenes\\q705_15_ceremony_begins.w2scene",
+            "locid": 1191986
+          },
+          "mechanism": "The line sets q705_henrietta_alive; the q705 journal ending 1154626 is the terminal evidence."
+        }
+      ],
+      "journal_outcome": {
+        "file": "dlc\\bob\\journal\\quests\\q705ceremony.journal",
+        "locid": 1154626,
+        "base_name": "henrietta lives"
+      }
+    },
+    "bw_henrietta_dies": {
+      "group": "bw_sisters",
+      "pack": "bob",
+      "label": "Blood and Wine: Anna Henrietta dies",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "The ceremony line 1198496 sets q705_henrietta_dead; the q705 journal ending 1154625 says Syanna killed her sister. This is the alternative, not a recommended goal.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "This is the alternative to the requested both-sisters outcome; the matrix reports its state without recommending its line.",
+      "requires": [
+        {
+          "fact": "q705_henrietta_dead",
+          "value": true,
+          "source": {
+            "kind": "scene_choice",
+            "step": "q705ceremony",
+            "branch": "q705ceremony__1198496__q705_henrietta_dead",
+            "file": "dlc\\bob\\data\\quests\\main_quests\\quest_files\\q705_epilog\\scenes\\q705_15_ceremony_begins.w2scene",
+            "locid": 1198496
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "dlc\\bob\\journal\\quests\\q705ceremony.journal",
+        "locid": 1154625,
+        "base_name": "henrietta died"
+      }
+    },
+    "baron_anna_burnt": {
+      "group": "baron_family",
+      "pack": "base",
+      "label": "Baron: his wife burns",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "q107_anna_burnt is set in q107_swamps; the q107 journal description 1002195 says Anna burst into flames and died after the attempt to lift the curse. This is an alternative terminal state, not a recommended goal.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "This is an alternative to the requested cured outcome; the matrix reports its state without recommending its line.",
+      "requires": [
+        {
+          "fact": "q107_anna_burnt",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q107swamps",
+            "file": "quests\\part_2\\q107_swamps.w2phase",
+            "fact": "q107_anna_burnt"
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q107swamps.journal",
+        "locid": 1002195,
+        "base_name": "Q107 Uncurse failed"
+      }
+    },
+    "baron_anna_disenchanted": {
+      "group": "baron_family",
+      "pack": "base",
+      "label": "Baron: his wife dies after the curse",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "q107_anna_disenchanted is set in q107_swamps; the q107 journal description 1002196 says the curse was lifted but Anna died soon afterwards. This is an alternative terminal state, not a recommended goal.",
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "This is an alternative to the requested cured outcome; the matrix reports its state without recommending its line.",
+      "requires": [
+        {
+          "fact": "q107_anna_disenchanted",
+          "value": true,
+          "source": {
+            "kind": "phase_fact",
+            "step": "q107swamps",
+            "file": "quests\\part_2\\q107_swamps.w2phase",
+            "fact": "q107_anna_disenchanted"
+          }
+        }
+      ],
+      "guidance": [],
+      "journal_outcome": {
+        "file": "gameplay\\journal\\quests\\q107swamps.journal",
+        "locid": 1002196,
+        "base_name": "Q107 Uncurse success"
+      }
+    }
+  }
+}

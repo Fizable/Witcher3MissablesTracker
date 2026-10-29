@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "note": "Test fixture for tools/endings.py; not shipped game data.",
+  "targets": {
+    "test_heirs_live": {
+      "label": "Blood and Wine: both heirs live",
+      "pack": "bob",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Test fixture; not a reviewed game goal.",
+      "requires": [
+        {
+          "fact": "test_heirs_live_fact",
+          "value": true,
+          "source": {
+            "kind": "scene_choice",
+            "step": "test_step_heirs",
+            "branch": "test_heirs_branch",
+            "file": "quests\\test\\scenes\\heirs.w2scene",
+            "locid": 900001
+          }
+        },
+        {
+          "fact": "test_heirs_live_guard",
+          "value": true,
+          "source": {
+            "kind": "scene_choice",
+            "step": "test_step_guard",
+            "branch": "test_guard_branch",
+            "file": "quests\\test\\scenes\\guard.w2scene",
+            "locid": 900002
+          }
+        }
+      ],
+      "guidance_status": "guided",
+      "guidance": [
+        {
+          "step": "test_step_heirs",
+          "branch": "test_heirs_branch",
+          "instruction": "Let them both live.",
+          "source": {
+            "kind": "scene_choice",
+            "file": "quests\\test\\scenes\\heirs.w2scene",
+            "locid": 900001
+          }
+        },
+        {
+          "step": "test_step_guard",
+          "branch": "test_guard_branch",
+          "instruction": "Spare the guard.",
+          "source": {
+            "kind": "scene_choice",
+            "file": "quests\\test\\scenes\\guard.w2scene",
+            "locid": 900002
+          }
+        }
+      ]
+    },
+    "test_heirs_pending": {
+      "label": "Blood and Wine: both heirs live (not guided yet)",
+      "pack": "bob",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Test fixture; not a reviewed game goal.",
+      "requires": [],
+      "guidance_status": "not_guided_yet",
+      "guidance_reason": "The scene text has not been extracted.",
+      "guidance": []
+    }
+  },
+  "presets": {
+    "recommended": {
+      "label": "Recommended endings",
+      "targets": ["test_heirs_live", "test_heirs_pending"],
+      "reviewed": "2026-10-28",
+      "note": "Test fixture; a reviewed preference, not a game ranking."
+    }
+  }
+}

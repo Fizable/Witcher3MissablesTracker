@@ -3,11 +3,16 @@
 //! Unofficial fan tool, not affiliated with CD PROJEKT RED.
 
 mod bundles;
+mod cards;
 mod journalidx;
 mod model;
+mod outcomes;
+mod plan;
 mod save;
+mod targets;
 
 use model::{Eval, RouteData};
+use targets::BranchGraph;
 use serde_json::{json, Value};
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
@@ -26,21 +31,32 @@ const ALIASES: [(&str, &str); 7] = [
 ];
 
 struct Inner {
-    data_dir: PathBuf,   // read-only research data shipped with the app
     app_dir: PathBuf,    // per-user folder: progress, settings, cached quest index
     route: RouteData,
     db: save::QuestDb,
     db_error: String,
     game_dir: Option<PathBuf>,
     display: Vec<(String, String)>,
-    kb: HashMap<String, Value>,      // journal file -> audit quest
-    guide: Value,                    // merged guide_*.json
-    guide_alias: HashMap<String, String>,
-    feed: Value,                     // data/feed.json: quest-order warnings with evidence labels
     derived: Value,                  // data/derived.json: what the game's own files say, built by tools/derive.py
+    graph: Value,                    // data/quest_graph.json: starts / requires / lost_when, build source + evidence
+    qtitles: HashMap<String, String>, // quest stem -> the game's own name, from derived.json
+    // reviewed completion data
+    endings: Value,                  // data/endings.json: targets and presets, never generated
+    outcomes: Value,                 // data/outcomes.json: reviewed terminal facts and lines
+    branches: BranchGraph,           // data/branches.json: fact-setting scene choices
+    ending_branch_ids: HashSet<String>,
+    cards: cards::CardIndex,         // data/gwent_cards.json
+    coverage: Value,                 // data/coverage.json
+    exclusive: Value,                // data/exclusive.json
+    // selected target state
+    selected: Vec<String>,
+    guidance_on: bool,
+    setup_v1: bool,
+    card_manual: HashMap<String, bool>,
     // save state
     state: HashMap<String, String>,
-    objectives: HashMap<String, Vec<String>>,
+    objective_guids: HashMap<String, Vec<String>>, // journal short -> active objective GUIDs
+    objectives: HashMap<String, Vec<String>>,      // the save's own labels, debug only
     tracked: Option<String>,         // guid of the quest tracked in the game (read from the save)
     tracked_file: Option<String>,    // journal file of that quest, as the save names it
     facts: HashSet<String>,          // the game's facts this save has set (facts with a value of 1 or more)
@@ -58,6 +74,17 @@ struct Inner {
 }
 
 struct Shared(Mutex<Inner>);
+
+/// What the route counts as finished, split by how it knows.
+///
+/// `done` is the journal, or a tick where the save cannot show the step at all (a visit, a tutorial). `ticked` is
+/// a step you ticked while the journal still has its quest open - the tick records your memory, the journal records
+/// the game, and a warning may never be silenced by the weaker of the two.
+#[derive(Default)]
+struct DoneQuests {
+    done: HashSet<String>,
+    ticked: HashSet<String>,
+}
 
 fn read_json(p: &Path) -> Result<Value, String> {
     let t = std::fs::read_to_string(p).map_err(|e| format!("{}: {e}", p.display()))?;
@@ -174,65 +201,77 @@ fn clean_name(s: &str) -> String {
     t.to_string()
 }
 
-/// research titles the audit could not identify ('Unmapped journal file ...') are not names
-fn is_placeholder(title: &str) -> bool {
-    title.starts_with("Unmapped") || title.starts_with("Unknown")
-}
-
 impl Inner {
     fn load(data_dir: PathBuf) -> Result<Inner, String> {
         let app_dir = find_app_dir(&data_dir);
         let route = model::load_route(&read_json(&data_dir.join("route.json"))?)?;
-        // research data
-        let mut kb: HashMap<String, Value> = HashMap::new();
-        let mut guide = serde_json::Map::new();
-        let mut files: Vec<PathBuf> = std::fs::read_dir(&data_dir).map_err(|e| e.to_string())?.filter_map(|e| e.ok()).map(|e| e.path()).collect();
-        files.sort();
-        for p in &files {
-            let name = p.file_name().and_then(|x| x.to_str()).unwrap_or("");
-            if name.starts_with("audit_") && name.ends_with(".json") {
-                if let Ok(v) = read_json(p) {
-                    for q in v["quests"].as_array().into_iter().flatten() {
-                        for jf in q["journal_files"].as_array().into_iter().flatten().filter_map(|x| x.as_str()) {
-                            kb.entry(jf.to_string()).or_insert_with(|| q.clone());
-                        }
-                    }
-                }
-            } else if name.starts_with("guide_") && name.ends_with(".json") && name != "guide_alias.json" {
-                if let Ok(Value::Object(m)) = read_json(p) {
-                    for (k, v) in m {
-                        guide.insert(k, v);
-                    }
-                }
-            }
-        }
-        let guide_alias: HashMap<String, String> = read_json(&data_dir.join("guide_alias.json"))
-            .ok()
-            .and_then(|v| serde_json::from_value(v).ok())
-            .unwrap_or_default();
         // progress lives in the per-user folder (an old copy next to the exe is migrated once)
         let prog = read_json(&app_dir.join("progress.json")).or_else(|_| read_json(&data_dir.join("progress.json"))).unwrap_or(json!({}));
         let ticks: HashSet<String> = prog["ticks"].as_array().into_iter().flatten().filter_map(|x| x.as_str().map(String::from)).collect();
         let level = prog["level"].as_i64().unwrap_or(0);
         let flags: HashMap<String, String> = prog["flags"].as_object().map(|m| m.iter().filter_map(|(k, v)| Some((k.clone(), v.as_str()?.to_string()))).collect()).unwrap_or_default();
         let settings = read_json(&app_dir.join("settings.json")).unwrap_or(json!({}));
-        let feed = read_json(&data_dir.join("feed.json")).unwrap_or(json!({"items": []}));
         // derived from the player's copy of the game's files by tools/derive.py; absent is not an error
         let derived = read_json(&data_dir.join("derived.json")).unwrap_or(json!({"steps": {}, "quests": {}}));
+        // the build graph: start blocks and the reviewed loss edges, used as evidence in the detail pane
+        let graph = read_json(&data_dir.join("quest_graph.json")).unwrap_or(json!({"starts": {}, "requires": {}, "lost_when": []}));
+        let endings = read_json(&data_dir.join("endings.json")).unwrap_or(json!({"version": 1, "targets": {}, "presets": {}}));
+        let outcomes = read_json(&data_dir.join("outcomes.json")).unwrap_or(json!({"version": 1, "groups": {}, "outcomes": {}}));
+        let branches_doc = read_json(&data_dir.join("branches.json")).unwrap_or(json!({"version": 1, "branches": {}}));
+        let branches = BranchGraph::from_json(&branches_doc);
+        let mut ending_branch_ids = BranchGraph::ending_branch_ids(&endings);
+        ending_branch_ids.extend(outcomes::branch_ids(&outcomes));
+        let cards = cards::CardIndex::from_json(&read_json(&data_dir.join("gwent_cards.json")).unwrap_or(json!({"cards": []})));
+        let coverage = read_json(&data_dir.join("coverage.json")).unwrap_or(json!({"packs": {}}));
+        let exclusive = read_json(&data_dir.join("exclusive.json")).unwrap_or(json!({"edges": []}));
+        let known_targets: HashSet<String> = targets::all_ids(&endings).into_iter().collect();
+        let mut selected: Vec<String> = settings["endings"]
+            .as_array()
+            .map(|a| a.iter().filter_map(|x| x.as_str().map(String::from)).collect())
+            .unwrap_or_default();
+        selected.retain(|id| known_targets.contains(id));
+        selected = targets::canonical_ids(&endings, selected);
+        let mut guidance_on = !selected.is_empty() && settings["guidance"].as_str() == Some("on");
+        if selected.is_empty() {
+            guidance_on = false;
+        }
+        let mut setup_v1 = settings["setup_v1"].as_bool().unwrap_or(false);
+        if !selected.is_empty() {
+            setup_v1 = true;
+        }
+        let card_manual: HashMap<String, bool> = prog["cards"]
+            .as_object()
+            .map(|m| m.iter().filter_map(|(k, v)| Some((k.clone(), v.as_bool()?))).collect())
+            .unwrap_or_default();
+        // the game's own names, so a warning can name the quest it is talking about instead of its stem
+        let qtitles: HashMap<String, String> = derived
+            .get("quests")
+            .and_then(|q| q.as_object())
+            .map(|m| m.iter().filter_map(|(k, v)| Some((k.to_ascii_lowercase(), v.get("title")?.as_str()?.to_string()))).collect())
+            .unwrap_or_default();
         let mut inner = Inner {
-            data_dir,
             app_dir,
             route,
-            feed,
             derived,
+            graph,
+            qtitles,
+            endings,
+            outcomes,
+            branches,
+            ending_branch_ids,
+            cards,
+            coverage,
+            exclusive,
+            selected,
+            guidance_on,
+            setup_v1,
+            card_manual,
             db: save::QuestDb { quests: vec![], display: vec![] },
             db_error: String::new(),
             game_dir: None,
             display: vec![],
-            kb,
-            guide: Value::Object(guide),
-            guide_alias,
             state: HashMap::new(),
+            objective_guids: HashMap::new(),
             objectives: HashMap::new(),
             tracked: None,
             tracked_file: None,
@@ -308,9 +347,104 @@ impl Inner {
         auto_saves_dir()
     }
 
+    /// Write the app's settings immediately, preserving keys this version does not know about. A
+    /// temporary file in the same folder followed by a rename keeps a crash from truncating it.
     fn write_settings(&self) {
-        let v = json!({"game_dir": self.game_override, "saves_dir": self.saves_override});
-        let _ = std::fs::write(self.app_dir.join("settings.json"), serde_json::to_string(&v).unwrap_or_default());
+        let path = self.app_dir.join("settings.json");
+        let mut doc = read_json(&path)
+            .ok()
+            .and_then(|v| v.as_object().cloned())
+            .unwrap_or_default();
+        doc.insert("game_dir".into(), json!(self.game_override));
+        doc.insert("saves_dir".into(), json!(self.saves_override));
+        doc.insert("endings".into(), json!(self.selected));
+        doc.insert("guidance".into(), json!(if self.guidance_on { "on" } else { "off" }));
+        doc.insert("setup_v1".into(), json!(self.setup_v1));
+        let text = serde_json::to_string(&Value::Object(doc)).unwrap_or_default();
+        let tmp = path.with_extension("json.tmp");
+        if std::fs::write(&tmp, text).is_ok() {
+            let _ = std::fs::rename(&tmp, &path);
+        }
+    }
+
+    fn set_target(&mut self, ids: Vec<String>) -> Result<(), String> {
+        let known: HashSet<String> = targets::all_ids(&self.endings).into_iter().collect();
+        if let Some(bad) = ids.iter().find(|id| !known.contains(*id)) {
+            return Err(format!("unknown ending target: {bad}"));
+        }
+        self.selected = targets::canonical_ids(&self.endings, ids);
+        self.guidance_on = !self.selected.is_empty();
+        self.setup_v1 = true;
+        self.write_settings();
+        Ok(())
+    }
+
+    fn set_guidance(&mut self, on: bool) {
+        self.guidance_on = on && !self.selected.is_empty();
+        self.write_settings();
+    }
+
+    fn target_evals(&self, ev: &Eval) -> HashMap<String, targets::TargetEval> {
+        let ok = self.ok_mtime.is_some();
+        let mut out = targets::evaluate(&self.endings, &self.branches, ev, &self.facts, ok);
+        out.extend(outcomes::evaluate_targets(&self.endings, &self.outcomes, ev, &self.facts, ok));
+        out
+    }
+
+    /// The opt-in outcome matrix. It is never part of `view()`: the spoiler-free payload must not
+    /// receive an ending label or a terminal description.
+    fn outcome_report(&self) -> Value {
+        let ev = self.eval();
+        outcomes::matrix(
+            &self.endings,
+            &self.outcomes,
+            &self.exclusive,
+            &ev,
+            &self.facts,
+            self.ok_mtime.is_some(),
+            &self.selected,
+        )
+    }
+
+    fn plan_report(&self, requested: Option<Vec<String>>) -> Value {
+        let ev = self.eval();
+        let ids = requested.unwrap_or_else(|| self.selected.clone());
+        plan::build(
+            &self.endings,
+            &self.outcomes,
+            &ids,
+            &ev,
+            &self.facts,
+            self.ok_mtime.is_some(),
+            &self.exclusive,
+        )
+    }
+
+    fn cards_report(&self) -> Value {
+        // A card window reads the same route statuses the quest matrix reads; ownership is still
+        // only the save or a manual tick, never the quest status.
+        let ev = self.eval();
+        let statuses: HashMap<String, String> = ev
+            .steps
+            .iter()
+            .map(|s| (s.n.id.clone(), s.status.clone()))
+            .collect();
+        let Some(path) = self.save_path.as_ref() else {
+            return self.cards.report(None, false, "No save loaded.", &self.facts, &self.card_manual, &statuses);
+        };
+        match save::card_collection(path) {
+            Ok(col) => self.cards.report(Some(&col), true, "", &self.facts, &self.card_manual, &statuses),
+            Err(e) => self.cards.report(None, false, &e, &self.facts, &self.card_manual, &statuses),
+        }
+    }
+
+    fn set_card(&mut self, id: String, owned: bool) -> Result<(), String> {
+        if !self.cards.cards.iter().any(|c| c.id == id) {
+            return Err(format!("unknown card: {id}"));
+        }
+        self.card_manual.insert(id, owned);
+        self.save_progress();
+        Ok(())
     }
 
     /// apply a folder the user typed or picked ("game" or "saves"); returns an error text when it is not valid
@@ -374,6 +508,7 @@ impl Inner {
         match save::quest_states(&p, &self.db) {
             Ok(s) => {
                 self.state = s.state;
+                self.objective_guids = s.objective_guids;
                 self.objectives = s.objectives;
                 self.tracked = s.tracked;
                 self.tracked_file = s.tracked_file;
@@ -389,6 +524,30 @@ impl Inner {
         true
     }
 
+    /// The active objectives of a quest, in the game's own wording. The save carries GUIDs; the
+    /// labels built by the game's bundles are internal ("SQ202 At Larvik"), so the text comes from
+    /// the same derived index the cards use.
+    fn current_objectives(&self, id: &str, files: &[String]) -> Vec<String> {
+        let listed = self.derived.get("steps").and_then(|m| m.get(id))
+            .and_then(|d| d.get("objectives")).and_then(|x| x.as_array());
+        let mut out: Vec<String> = Vec::new();
+        for f in files {
+            let stem = f.split('#').next().unwrap_or(f);
+            let (Some(guids), Some(list)) = (self.objective_guids.get(stem), listed) else { continue };
+            for guid in guids {
+                let text = list.iter()
+                    .find(|o| o.get("guid").and_then(|x| x.as_str()) == Some(guid.as_str()))
+                    .and_then(|o| o.get("text")).and_then(|x| x.as_str());
+                if let Some(t) = text {
+                    if !t.is_empty() && !out.iter().any(|x| x == t) {
+                        out.push(t.to_string());
+                    }
+                }
+            }
+        }
+        out
+    }
+
     /// the route plus a card for the quest tracked in the game, when no route step covers that quest
     fn effective_route(&self) -> RouteData {
         let mut rt = self.route.clone();
@@ -396,11 +555,11 @@ impl Inner {
         if rt.nodes.iter().any(|n| model::tracks(n, &short)) {
             return rt;
         }
-        let kb = self.kb.get(&short).filter(|q| !q["title"].as_str().map(is_placeholder).unwrap_or(false));
-        let game_name = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
-        let title = kb.and_then(|q| q["title"].as_str()).map(String::from).unwrap_or(game_name);
-        let kind = kb.and_then(|q| q["kind"].as_str()).unwrap_or("side").to_string();
-        let lv = kb.and_then(|q| q["level"].as_str()).filter(|l| l.chars().any(|c| c.is_ascii_digit())).unwrap_or("").to_string();
+        // The 0.2 route covers every quest journal, so this is only reached for a save the game
+        // builds from something the route does not know (a debug or cut container). Name it from
+        // the save's own display list; do not invent a section, a level or a note for it.
+        let title = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
+        let lv = "".to_string();
         if !rt.sections.iter().any(|s| s == "Tracked") {
             rt.sections.insert(0, "Tracked".into());
         }
@@ -410,14 +569,23 @@ impl Inner {
             title,
             lv,
             files: vec![short],
-            conf: "high".into(),
             hard: vec![],
             hard_facts: HashMap::new(),
             by: vec![],
-            note: "Tracked in your game. Not in the route, so it is listed from your save.".into(),
-            kind,
+            note: String::new(),
+            kind: "side".into(),
             opt: false,
             when: vec![],
+            order: 0,
+            desc: String::new(),
+            branch: false,
+            dialogue_choice: false,
+            ending_relevant: false,
+            start_known: false,
+            provenance: "save_only".into(),
+            review_reason: String::new(),
+            review_source: String::new(),
+            reviewed: String::new(),
         });
         rt
     }
@@ -457,11 +625,42 @@ impl Inner {
         (0..ev.steps.len()).filter(|&i| model::tracks(&ev.steps[i].n, short) && !matches!(ev.steps[i].status.as_str(), "Done" | "N/A")).collect()
     }
 
-    /// DO NEXT order: the steps for the quest tracked in the game come first, wherever they are; the rest keep the route order
-    fn todo_order(&self, ev: &Eval) -> Vec<usize> {
-        let Some(short) = self.tracked_short() else { return ev.todo.clone() };
-        let mine = self.tracked_steps(ev, &short);
-        mine.iter().copied().chain(ev.todo.iter().copied().filter(|i| !mine.contains(i))).collect()
+    /// DO NEXT order, from the live cutoff boxes the view already computed.
+    ///
+    /// A step that a fired cutoff already cost is `unsafe`: it is not something to do, it is in the
+    /// top section. A step that is the closing quest of a live cutoff is unsafe too: doing it costs
+    /// another open quest, and the top section names it. The protected quest is `caution` - it keeps
+    /// its place in DO NEXT, with the warning above it.
+    fn todo_order(&self, ev: &Eval, steps: &[Value]) -> Vec<usize> {
+        let mut unsafe_ids: HashSet<usize> = HashSet::new();
+        let mut caution: HashSet<usize> = HashSet::new();
+        for (i, v) in steps.iter().enumerate() {
+            let Some(list) = v.get("watch").and_then(|x| x.as_array()) else { continue };
+            let mut live_here = false;
+            for w in list {
+                let Some(live) = w.get("live").and_then(|x| x.as_str()) else { continue };
+                if live.is_empty() {
+                    continue;
+                }
+                live_here = true;
+                if matches!(live, "passed" | "lost") {
+                    unsafe_ids.insert(i);
+                }
+                if matches!(live, "inside" | "ahead") {
+                    for c in w.get("closed_by").and_then(|x| x.as_array()).into_iter().flatten().filter_map(|x| x.as_str()) {
+                        for (j, s) in ev.steps.iter().enumerate() {
+                            if model::tracks(&s.n, c) {
+                                unsafe_ids.insert(j);
+                            }
+                        }
+                    }
+                }
+            }
+            if live_here && !unsafe_ids.contains(&i) {
+                caution.insert(i);
+            }
+        }
+        model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution)
     }
 
     /// the quest tracked in the game for the UI (null when the save has none)
@@ -481,14 +680,53 @@ impl Inner {
     /// Attach what the game's own files say about a step: the game's name for it, its quest-log
     /// objective list, the block that adds its journal entry, its dialogue choices, and the
     /// reviewed cutoffs (each naming the mechanism behind it).
-    fn attach_derived(&self, step: &mut Value) {
+    /// Quests the route already counts as finished - including a step you ticked yourself - so a warning
+    /// never contradicts the step card beside it. A tick that the journal contradicts is kept apart instead:
+    /// it must not answer for a quest the save still carries as open.
+    fn done_quests(&self, ev: &model::Eval) -> DoneQuests {
+        let mut out = DoneQuests::default();
+        for s in &ev.steps {
+            if !matches!(s.status.as_str(), "Done" | "Assumed" | "N/A") {
+                continue;
+            }
+            let Some(d) = self.derived.get("steps").and_then(|m| m.get(&s.n.id)) else { continue };
+            let journal = if s.manual { "Not started".to_string() } else { model::journal_status(&s.n, &self.state) };
+            let tick_disagrees = self.ticks.contains(&s.n.id) && journal == "Active";
+            for k in ["quests", "stems"] {
+                for q in d.get(k).and_then(|v| v.as_array()).into_iter().flatten().filter_map(|x| x.as_str()) {
+                    let q = q.to_ascii_lowercase();
+                    if tick_disagrees {
+                        out.ticked.insert(q);
+                    } else {
+                        out.done.insert(q);
+                    }
+                }
+            }
+        }
+        out
+    }
+
+    fn attach_derived(&self, step: &mut Value, st: &model::Step, done_q: &DoneQuests) {
         let Some(id) = step.get("id").and_then(|v| v.as_str()).map(|s| s.to_string()) else { return };
         let Some(d) = self.derived.get("steps").and_then(|s| s.get(&id)) else { return };
-        for k in ["game_title", "objectives", "activators", "choices", "watch", "stems"] {
+        for k in ["game_title", "objectives", "activators", "watch", "stems"] {
             if let Some(v) = d.get(k) {
                 if !v.is_null() {
                     step[k] = v.clone();
                 }
+            }
+        }
+        // each cutoff is read against this save: one that protects something already finished is dropped,
+        // one that already fired reads as the loss it is, and one you are standing inside says so.
+        // A step ticked done while the journal still has its quest open is not over: the cutoff stays on the card.
+        let journal = if st.manual { "Not started".to_string() } else { model::journal_status(&st.n, &self.state) };
+        let tick_only = self.ticks.contains(&st.n.id) && journal == "Active";
+        let over = matches!(st.status.as_str(), "Done" | "Failed" | "N/A") && !tick_only;
+        if let Some(Value::Array(list)) = step.get_mut("watch") {
+            if over {
+                list.clear();
+            } else {
+                list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
             }
         }
     }
@@ -509,57 +747,247 @@ impl Inner {
         None
     }
 
-    fn start_text(&self, i: usize, ev: &Eval) -> String {
-        let n = &ev.steps[i].n;
-        if let Some(q) = self.kb_for(&n.files) {
-            if let Some(s) = q["start"].as_str() {
-                if !s.is_empty() {
-                    return s.to_string();
+    /// Completion is not a single percentage. The audited matrix has 412 route nodes (403 quests +
+    /// 9 reviewed manual rows); the old 403-only quest line stays for callers that already read it,
+    /// while `matrix` carries all six states and the manual split. Cards keep `unknown` separate
+    /// from `not owned`. A save-only row is counted in `outside_route`, never in the 412.
+    fn completion(&self, ev: &Eval, steps: &[Value], card_report: &Value) -> Value {
+        let slot = |s: &str| match s {
+            "done" => 0,
+            "obtainable" => 1,
+            "at_risk" => 2,
+            "lost" => 3,
+            "excluded" => 4,
+            _ => 5,
+        };
+        let mut q = [0i64; 6];
+        let mut m = [0i64; 6];
+        let mut mx = [0i64; 6];
+        let mut outside = 0i64;
+        let mut exclusions: Vec<Value> = Vec::new();
+        // The matrix owns both the overall totals and the per-section totals. The UI reads these
+        // counts rather than recounting statuses, so the section headers cannot drift from the
+        // matrix line when a node is manual, optional or excluded.
+        let mut section_counts: HashMap<String, [i64; 6]> = self
+            .route
+            .sections
+            .iter()
+            .map(|name| (name.clone(), [0i64; 6]))
+            .collect();
+        let mut section_manual: HashMap<String, i64> = HashMap::new();
+        for (i, s) in ev.steps.iter().enumerate() {
+            let c = steps[i].get("classification").cloned().unwrap_or_else(|| json!({}));
+            let state = c.get("state").and_then(|x| x.as_str()).unwrap_or("unknown");
+            let k = slot(state);
+            if steps[i].get("in_route").and_then(Value::as_bool) == Some(true) {
+                mx[k] += 1;
+                if s.manual { m[k] += 1 } else { q[k] += 1 }
+                let sc = section_counts.entry(s.n.section.clone()).or_insert([0i64; 6]);
+                sc[k] += 1;
+                if s.manual {
+                    *section_manual.entry(s.n.section.clone()).or_insert(0) += 1;
                 }
+                if state == "excluded" {
+                    exclusions.push(json!({
+                        "id": s.n.id, "title": model::short(&s.n.title),
+                        "mechanism": s.n.when, "reason": c.get("reason").cloned().unwrap_or(Value::Null),
+                    }));
+                }
+            } else {
+                outside += 1;
             }
         }
-        self.guide_for(&n.id).and_then(|g| g["available_when"].as_str().map(String::from)).unwrap_or_default()
-    }
-
-    fn kb_for(&self, files: &[String]) -> Option<&Value> {
-        for f in files {
-            for x in f.split('|') {
-                if let Some(q) = self.kb.get(x.split('#').next().unwrap_or(x)) {
-                    return Some(q);
-                }
-            }
+        let sum = |a: [i64; 6]| a.iter().sum::<i64>();
+        let (qt, mt, mxt) = (sum(q), sum(m), sum(mx));
+        let mut sections = serde_json::Map::new();
+        for name in &self.route.sections {
+            let a = section_counts.get(name).copied().unwrap_or([0i64; 6]);
+            sections.insert(name.clone(), json!({
+                "total": sum(a),
+                "done": a[0],
+                "obtainable": a[1],
+                "at_risk": a[2],
+                "lost": a[3],
+                "excluded": a[4],
+                "unknown": a[5],
+                "manual": section_manual.get(name).copied().unwrap_or(0),
+            }));
         }
-        None
+        let audit = &self.route.manual_audit;
+        let baseline = audit.get("baseline").and_then(|x| x.as_i64()).unwrap_or(11);
+        let replaced = audit.get("replaced").and_then(|x| x.as_i64()).unwrap_or(2);
+        let cc = card_report.get("counts").cloned().unwrap_or_else(|| json!({}));
+        let card_total = cc.get("total").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_owned = cc.get("owned").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_available = cc.get("not_owned").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_unknown = cc.get("unknown").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_missable = cc.get("missable").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_at_risk = cc.get("active").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_ahead = cc.get("ahead").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_check = cc.get("check").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_windows_lost = cc.get("lost").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_tier_a = cc.get("tier_a").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_tier_b = cc.get("tier_b").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_missable_tier_a = cc.get("missable_tier_a").and_then(|x| x.as_i64()).unwrap_or(0);
+        let card_missable_tier_b = cc.get("missable_tier_b").and_then(|x| x.as_i64()).unwrap_or(0);
+        json!({
+            "quests": {
+                "done": q[0],
+                "available": q[1],
+                "at_risk": q[2],
+                "lost": q[3],
+                "excluded": q[4],
+                "unknown": q[5],
+                "total": qt,
+                "max_achievable": q[0] + q[1] + q[2],
+            },
+            "matrix": {
+                "total": mxt,
+                "quests": qt,
+                "manual": mt,
+                "done": mx[0],
+                "obtainable": mx[1],
+                "at_risk": mx[2],
+                "lost": mx[3],
+                "excluded": mx[4],
+                "unknown": mx[5],
+                "max_achievable": mx[0] + mx[1] + mx[2],
+                "outside_route": outside,
+                "sections": sections,
+                "manual_audit": audit,
+            },
+            "manual": {
+                "baseline": baseline,
+                "kept": mt,
+                "replaced": replaced,
+                "reviewed": mt,
+                "done": m[0],
+                "obtainable": m[1],
+                "at_risk": m[2],
+                "lost": m[3],
+                "excluded": m[4],
+                "unknown": m[5],
+            },
+            "exclusions": exclusions,
+            "cards": {
+                "owned": card_owned,
+                "available": card_available,
+                "at_risk": card_at_risk,
+                "ahead": card_ahead,
+                "check": card_check,
+                "lost": card_windows_lost,
+                "excluded": 0,
+                "unknown": card_unknown,
+                "total": card_total,
+                "missable": card_missable,
+                "window_tier_a": card_tier_a,
+                "window_tier_b": card_tier_b,
+                "missable_tier_a": card_missable_tier_a,
+                "missable_tier_b": card_missable_tier_b,
+                "max_achievable": card_owned + card_available,
+            },
+        })
     }
 
-    fn guide_for(&self, id: &str) -> Option<&Value> {
-        self.guide.get(id).or_else(|| self.guide_alias.get(id).and_then(|a| self.guide.get(a)))
-    }
-
+    /// The top section: only what still has a cost in this save.
+    ///
+    /// One entry per reviewed loss edge, already re-read against the save by `live_cutoff`: a cutoff
+    /// that fired over an open quest is a loss, one whose closing quest is in the log is urgent, and
+    /// one whose closer is still ahead is missable. `settled`/`unknown`/done never reach here. A
+    /// Failed quest is its own entry. The list is empty when nothing is at stake - no heading, no
+    /// reassuring placeholder.
     fn view(&self) -> Value {
         let rt = self.effective_route();
         let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags, &self.facts);
+        let target_evals = self.target_evals(&ev);
+        let goal_steps = targets::goal_steps(&self.selected, &target_evals, self.guidance_on);
         let age = self.save_mtime.and_then(|m| SystemTime::now().duration_since(m).ok()).map(|d| d.as_secs()).unwrap_or(0);
         let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("");
-        let mut steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i, &self.start_text(i, &ev))).collect();
-        for s in steps.iter_mut() {
-            self.attach_derived(s);
+        let mut steps: Vec<Value> = (0..ev.steps.len())
+            .map(|i| model::step_json_goal(&rt, &ev, i, goal_steps.contains(&ev.steps[i].n.id)))
+            .collect();
+        let done_q = self.done_quests(&ev);
+        let route_ids: HashSet<String> = self.route.nodes.iter().map(|n| n.id.clone()).collect();
+        for (i, s) in steps.iter_mut().enumerate() {
+            self.attach_derived(s, &ev.steps[i], &done_q);
+            let watch = s.get("watch").and_then(Value::as_array).map(Vec::as_slice).unwrap_or(&[]);
+            let c = model::classify(&ev.steps[i], watch, self.ticks.contains(&ev.steps[i].n.id));
+            s["in_route"] = json!(route_ids.contains(&ev.steps[i].n.id));
+            s["classification"] = json!({
+                "state": c.state, "reason": c.reason, "source": c.source,
+            });
         }
+        // The current objective is the one the save has active; when the quest is not started, the
+        // game's first objective is the next-best thing. The source of each is the same index.
         let mut objs = serde_json::Map::new();
         for s in &ev.steps {
             if s.manual {
                 continue;
             }
-            let mut v: Vec<String> = Vec::new();
-            for f in &s.n.files {
-                if let Some(o) = self.objectives.get(f.split('#').next().unwrap_or(f)) {
-                    v.extend(o.iter().cloned());
+            let mut v = self.current_objectives(&s.n.id, &s.n.files);
+            if v.is_empty() {
+                if let Some(list) = self.derived.get("steps").and_then(|m| m.get(&s.n.id)).and_then(|d| d.get("objectives")) {
+                    v.extend(list.as_array().into_iter().flatten().filter_map(|o| o.get("text")).filter_map(|x| x.as_str().map(String::from)).take(2));
                 }
             }
             v.truncate(4);
             objs.insert(s.n.id.clone(), json!(v));
         }
         let error = if !self.db_error.is_empty() { self.db_error.clone() } else { self.error.clone() };
+        let card_report = self.cards_report();
+        let mut top = top_items(&ev, &steps);
+        if let Some(list) = top.as_array_mut() {
+            list.extend(cards::top_items(&card_report));
+        }
+        let completion = self.completion(&ev, &steps, &card_report);
+        let target = targets::target_json(&self.endings, &self.selected, &target_evals, self.guidance_on);
+        // Tradeoffs are spoilers: they name endings the player did not select. Keep the whole list
+        // out of the spoiler-free payload, and with a target selected show only the edges touching
+        // that goal. The raw ids stay for the detail payload; labels are added for the card.
+        let tradeoffs = if self.selected.is_empty() {
+            json!([])
+        } else {
+            let selected_outcomes: HashSet<String> = self
+                .selected
+                .iter()
+                .filter_map(|tid| outcomes::target_outcome(&self.endings, tid))
+                .collect();
+            let hit = |value: &str| {
+                let value = value
+                    .strip_prefix("target:")
+                    .or_else(|| value.strip_prefix("outcome:"))
+                    .unwrap_or(value);
+                self.selected.iter().any(|tid| tid == value) || selected_outcomes.contains(value)
+            };
+            let rows: Vec<Value> = self
+                .exclusive
+                .get("edges")
+                .and_then(|x| x.as_array())
+                .into_iter()
+                .flatten()
+                .filter(|e| {
+                    hit(e.get("a").and_then(|x| x.as_str()).unwrap_or(""))
+                        || hit(e.get("b").and_then(|x| x.as_str()).unwrap_or(""))
+                })
+                .map(|e| {
+                    let mut e = e.clone();
+                    if let Some(a) = e.get("a").and_then(|x| x.as_str()) {
+                        let label = edge_label(&self.endings, &self.outcomes, a);
+                        e["a_label"] = json!(label);
+                    }
+                    if let Some(b) = e.get("b").and_then(|x| x.as_str()) {
+                        let label = edge_label(&self.endings, &self.outcomes, b);
+                        e["b_label"] = json!(label);
+                    }
+                    e
+                })
+                .collect();
+            json!(rows)
+        };
+        let setup = json!({
+            "needed": !self.setup_v1 && self.selected.is_empty(),
+            "has_targets": !targets::all_ids(&self.endings).is_empty(),
+        });
         json!({
             "save": {"name": name, "age_secs": age, "error": error},
             "level": self.level,
@@ -571,13 +999,16 @@ impl Inner {
             },
             "sections": rt.sections,
             "steps": steps,
-            "todo": self.todo_order(&ev).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": self.todo_order(&ev, &steps).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": self.tracked_json(&ev),
-            "holdoff": model::holdoff_json(&ev),
-            "feed": self.feed.get("items").cloned().unwrap_or(json!([])),
-            "alerts": model::alerts_json(&ev),
+            "top": top,
             "objectives": Value::Object(objs),
             "flags": self.route.flags.iter().map(|f| json!({"id": f.id, "label": f.label, "note": f.note, "value": self.flags.get(&f.id).cloned().unwrap_or_default()})).collect::<Vec<_>>(),
+            "target": target,
+            "setup": setup,
+            "completion": completion,
+            "coverage": {"packs": self.coverage.get("packs").cloned().unwrap_or_else(|| json!({}))},
+            "tradeoffs": tradeoffs,
         })
     }
 
@@ -585,13 +1016,112 @@ impl Inner {
         let p = self.app_dir.join("progress.json");
         let mut ticks: Vec<&String> = self.ticks.iter().collect();
         ticks.sort();
-        let cur = json!({"ticks": ticks, "level": self.level, "flags": self.flags});
+        let cur = json!({"ticks": ticks, "level": self.level, "flags": self.flags, "cards": self.card_manual});
         let _ = std::fs::write(&p, serde_json::to_string(&cur).unwrap_or_default()); // only ever written in the tracker's own app folder
     }
 }
 
+fn top_items(ev: &Eval, steps: &[Value]) -> Value {
+    let mut out: Vec<Value> = Vec::new();
+    let mut seen: HashSet<String> = HashSet::new();
+    let mut covered: HashSet<usize> = HashSet::new();
+    for v in steps {
+        let Some(list) = v.get("watch").and_then(|x| x.as_array()) else { continue };
+        for w in list {
+            let Some(id) = w.get("id").and_then(|x| x.as_str()) else { continue };
+            let Some(live) = w.get("live").and_then(|x| x.as_str()) else { continue };
+            let (kind, level, tag) = match live {
+                "lost" => ("lost", "lost", "LOST IN THIS SAVE"),
+                // the cutoff fired but the journal still has the quest open: say what the save says
+                "passed" | "check" => ("risk", "stop", "CUTOFF PASSED - CHECK NOW"),
+                "inside" => ("risk", "stop", "DO THIS NOW"),
+                "ahead" => ("missable", "warn", "MISSABLE"),
+                _ => continue,
+            };
+            let affected: Vec<String> = w.get("affected").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str().map(String::from)).collect();
+            // A quest the save has started is actionable even before its cutoff fires; that is the
+            // MISSABLE case. A quest the journal never started is only shown when you are already
+            // inside the closer, because then the next step can still save it. A wall of late-game
+            // cutoffs in the prologue would be the noise 0.2 exists to remove.
+            let hits: Vec<usize> = ev.steps.iter().enumerate()
+                .filter(|(_, s)| {
+                    let reachable = match live {
+                        "inside" => matches!(s.journal.as_str(), "Active" | "Not started" | "Failed"),
+                        "ahead" => matches!(s.journal.as_str(), "Active" | "Failed"),
+                        _ => matches!(s.journal.as_str(), "Active" | "Failed"),
+                    };
+                    affected.iter().any(|a| model::tracks(&s.n, a)) && (reachable || s.tick_disagrees)
+                })
+                .map(|(i, _)| i).collect();
+            if hits.is_empty() || !seen.insert(id.to_string()) {
+                continue;
+            }
+            covered.extend(hits.iter().copied());
+            let mut quests: Vec<String> = w.get("affected_titles").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str().map(String::from)).collect();
+            for t in w.get("closed_by_titles").and_then(|x| x.as_array()).into_iter().flatten().filter_map(|x| x.as_str()) {
+                if !quests.iter().any(|q| q == t) {
+                    quests.push(t.to_string());
+                }
+            }
+            let file = w.get("files").and_then(|x| x.as_array()).and_then(|x| x.first()).and_then(|x| x.as_str()).unwrap_or("");
+            out.push(json!({
+                "kind": kind, "level": level, "tag": tag,
+                "headline": w.get("headline").cloned().unwrap_or(Value::Null),
+                "detail": w.get("why").cloned().unwrap_or(Value::Null),
+                "action": if live == "lost" { Value::Null } else { w.get("action").cloned().unwrap_or(Value::Null) },
+                "live_note": w.get("live_note").cloned().unwrap_or(Value::Null),
+                "mechanism": match w.get("mechanism").and_then(|x| x.as_str()) {
+                    Some("spawnset") => "CDeactivateSpawnset",
+                    Some("journal_failure") => "journal Failure block",
+                    other => other.unwrap_or("game files"),
+                },
+                "file": file,
+                "quests": quests,
+                "ids": hits.iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            }));
+        }
+    }
+    for (i, s) in ev.steps.iter().enumerate() {
+        if s.status == "Failed" && !s.n.opt && !covered.contains(&i) {
+            out.push(json!({
+                "kind": "failed", "level": "lost", "tag": "FAILED IN YOUR QUEST LOG",
+                "headline": format!("{} failed in your journal.", model::short(&s.n.title)),
+                "detail": Value::Null, "action": Value::Null, "live_note": Value::Null,
+                "mechanism": "save", "file": "your save's quest log", "quests": [s.n.title], "ids": [s.n.id],
+            }));
+        }
+    }
+    out.sort_by_key(|item| match item.get("kind").and_then(|x| x.as_str()) {
+        Some("risk") => 0,
+        Some("lost") => 1,
+        Some("failed") => 2,
+        _ => 3,
+    });
+    Value::Array(out)
+}
+
 fn short_title(t: &str) -> &str {
     model::short(t)
+}
+
+/// A tradeoff edge names either a target id or an outcome id; the card should show the game's own
+/// reviewed label, never the internal id.
+fn edge_label(endings: &Value, outcomes_doc: &Value, value: &str) -> String {
+    let value = value
+        .strip_prefix("target:")
+        .or_else(|| value.strip_prefix("outcome:"))
+        .unwrap_or(value);
+    if let Some(label) = endings
+        .get("targets")
+        .and_then(|x| x.get(value))
+        .and_then(|x| x.get("label"))
+        .and_then(|x| x.as_str())
+    {
+        return label.to_string();
+    }
+    outcomes::label(outcomes_doc, value)
 }
 
 #[tauri::command]
@@ -602,22 +1132,48 @@ fn get_view(st: State<Shared>) -> Value {
 #[tauri::command]
 fn get_detail(id: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
+    detail_json(&g, &id)
+}
+
+// Shared by the command and the headless `--detail` check so the two can never drift.
+fn detail_json(g: &Inner, id: &str) -> Value {
     let rt = g.effective_route();
     let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags, &g.facts);
-    let Some(&i) = ev.byid.get(&id) else { return Value::Null };
+    let Some(&i) = ev.byid.get(id) else { return Value::Null };
+    let target_evals = g.target_evals(&ev);
+    let branches = targets::branches_for_step(&g.branches, &g.ending_branch_ids, &id);
+    let guidance = targets::guidance_for_step(&g.endings, &g.selected, &target_evals, g.guidance_on, &id);
     let n = &ev.steps[i].n;
     let tracking = if n.files.is_empty() {
         "Not readable from the save: tick it yourself.".to_string()
     } else {
         let names: Vec<&str> = n.files.iter().take(4).map(|f| f.rsplit('#').next().unwrap_or(f)).collect();
-        format!("Read automatically from your save ({}{}, match: {}).", names.join(", "), if n.files.len() > 4 { "..." } else { "" }, n.conf)
+        format!("Read automatically from your save ({}).", names.join(", "))
     };
+    // The graph is the evidence behind the route: the game's own start block and the reviewed
+    // loss edge. The card never shows this; the detail pane does.
+    let starts = n.files.iter().find_map(|f| {
+        let stem = f.split('|').next().unwrap_or(f).split('#').next().unwrap_or(f);
+        g.graph.get("starts").and_then(|s| s.get(stem)).cloned()
+    }).unwrap_or(json!([]));
+    let requires: Vec<Value> = n.hard.iter().map(|h| json!({
+        "step": h, "facts": n.hard_facts.get(h).cloned().unwrap_or_default(),
+    })).collect();
+    let lost: Vec<Value> = g.graph.get("lost_when").and_then(|x| x.as_array()).into_iter().flatten()
+        .filter(|l| l.get("affected").and_then(|a| a.as_array()).map(|a| a.iter().any(|x| x.as_str() == Some(n.id.as_str()))).unwrap_or(false))
+        .cloned().collect();
+    // The objectives the save itself marks active, worded by the game; the journal's full list is
+    // the fallback for a quest that has not started (or a save with no active objective for it).
+    let mut current = g.current_objectives(&n.id, &n.files);
+    current.truncate(4);
     json!({
-        "step": model::step_json(&rt, &ev, i, &g.start_text(i, &ev)),
-        "derived": g.derived.get("steps").and_then(|s| s.get(&id)).cloned().unwrap_or(Value::Null),
+        "step": model::step_json(&rt, &ev, i),
+        "current_objectives": current,
+        "derived": g.derived.get("steps").and_then(|s| s.get(id)).cloned().unwrap_or(Value::Null),
         "derived_source": g.derived.get("note").cloned().unwrap_or(Value::Null),
-        "kb": g.kb_for(&n.files).cloned().unwrap_or(Value::Null),
-        "guide": g.guide_for(&n.id).cloned().unwrap_or(Value::Null),
+        "graph": {"starts": starts, "requires": requires, "lost_when": lost},
+        "branches": branches,
+        "guidance": guidance,
         "tracking": tracking,
         "overridden": g.ticks.contains(&n.id) && !ev.steps[i].manual,
         "verdict": n.files.first().map(|f| {
@@ -626,6 +1182,65 @@ fn get_detail(id: String, st: State<Shared>) -> Value {
             model::verdict_json(&v, short_title(&n.title))
         }).unwrap_or(Value::Null),
     })
+}
+
+#[tauri::command]
+fn get_targets(st: State<Shared>) -> Value {
+    let g = st.0.lock().unwrap();
+    let ev = g.eval();
+    let evals = g.target_evals(&ev);
+    json!({
+        "targets": targets::target_options(&g.endings, &evals),
+        "presets": targets::preset_options(&g.endings),
+    })
+}
+
+#[tauri::command]
+fn get_outcomes(st: State<Shared>) -> Value {
+    st.0.lock().unwrap().outcome_report()
+}
+
+#[tauri::command]
+fn get_plan(targets: Option<Vec<String>>, st: State<Shared>) -> Value {
+    st.0.lock().unwrap().plan_report(targets)
+}
+
+#[tauri::command]
+fn set_target(ids: Vec<String>, app: tauri::AppHandle, st: State<Shared>) -> Result<Value, String> {
+    let v = {
+        let mut g = st.0.lock().unwrap();
+        g.set_target(ids)?;
+        g.view()
+    };
+    let _ = app.emit("view", v.clone());
+    Ok(v)
+}
+
+#[tauri::command]
+fn set_guidance(on: bool, app: tauri::AppHandle, st: State<Shared>) -> Value {
+    let v = {
+        let mut g = st.0.lock().unwrap();
+        g.set_guidance(on);
+        g.view()
+    };
+    let _ = app.emit("view", v.clone());
+    v
+}
+
+#[tauri::command]
+fn get_cards(st: State<Shared>) -> Value {
+    st.0.lock().unwrap().cards_report()
+}
+
+#[tauri::command]
+fn set_card(id: String, owned: bool, app: tauri::AppHandle, st: State<Shared>) -> Result<Value, String> {
+    let (report, view) = {
+        let mut g = st.0.lock().unwrap();
+        g.set_card(id, owned)?;
+        (g.cards_report(), g.view())
+    };
+    let _ = app.emit("view", view);
+    Ok(report)
 }
 
 #[tauri::command]
@@ -825,32 +1440,89 @@ fn main() {
     }
     // `--dump out.json` writes the computed state and exits (used to verify the build)
     let args: Vec<String> = std::env::args().collect();
-    if let Some(i) = args.iter().position(|a| a == "--dump") {
+    // `--view out.json` writes exactly what the window is handed, so the rendered text can be checked
+    if let Some(i) = args.iter().position(|a| a == "--view") {
+        let out = args.get(i + 1).cloned().unwrap_or_else(|| "view.json".into());
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&inner.view()).unwrap_or_default());
+        return;
+    }
+    // `--detail <step id> <out.json>` writes one mission's detail pane, including guidance
+    if let Some(i) = args.iter().position(|a| a == "--detail") {
+        let id = args.get(i + 1).cloned().unwrap_or_default();
+        let out = args.get(i + 2).cloned().unwrap_or_else(|| "detail.json".into());
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&detail_json(&inner, &id)).unwrap_or_default());
+        return;
+    }
+    // `--cards out.json` and `--targets out.json` expose the two reports the screen builds from,
+    // so a packaged build can be checked without opening a window.
+    if let Some(i) = args.iter().position(|a| a == "--cards") {
+        let out = args.get(i + 1).cloned().unwrap_or_else(|| "cards.json".into());
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&inner.cards_report()).unwrap_or_default());
+        return;
+    }
+    if let Some(i) = args.iter().position(|a| a == "--targets") {
+        let out = args.get(i + 1).cloned().unwrap_or_else(|| "targets.json".into());
         let ev = inner.eval();
+        let evals = inner.target_evals(&ev);
+        let doc = json!({
+            "targets": targets::target_options(&inner.endings, &evals),
+            "presets": targets::preset_options(&inner.endings),
+        });
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&doc).unwrap_or_default());
+        return;
+    }
+    // `--outcomes out.json` and `--plan out.json [id,id]` are the headless forms of the two
+    // spoiler-gated commands. The plan accepts an explicit target list so a packaged build can be
+    // checked without editing the user's settings.
+    if let Some(i) = args.iter().position(|a| a == "--outcomes") {
+        let out = args.get(i + 1).cloned().unwrap_or_else(|| "outcomes-report.json".into());
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&inner.outcome_report()).unwrap_or_default());
+        return;
+    }
+    if let Some(i) = args.iter().position(|a| a == "--plan") {
+        let out = args.get(i + 1).cloned().unwrap_or_else(|| "plan.json".into());
+        let ids: Option<Vec<String>> = args
+            .get(i + 2)
+            .filter(|a| !a.starts_with("--"))
+            .map(|s| s.split(',').filter(|x| !x.trim().is_empty()).map(|x| x.trim().to_string()).collect());
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&inner.plan_report(ids)).unwrap_or_default());
+        return;
+    }
+    if let Some(i) = args.iter().position(|a| a == "--dump") {
+        let rt = inner.effective_route();
+        let ev = model::evaluate(&rt, &inner.state, &inner.ticks, &inner.flags, &inner.facts);
         let status: serde_json::Map<String, Value> = ev.steps.iter().map(|s| (s.n.id.clone(), json!(s.status))).collect();
+        let done_q = inner.done_quests(&ev);
+        let mut steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i)).collect();
+        for (i, s) in steps.iter_mut().enumerate() {
+            inner.attach_derived(s, &ev.steps[i], &done_q);
+        }
+        let top = top_items(&ev, &steps);
         let dump = json!({
             "save": inner.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or(""),
             "game_dir": inner.game_dir.as_ref().map(|p| p.display().to_string()),
             "quest_files": inner.db.quests.len(),
             "states": inner.state,
             "status": status,
-            "todo": inner.todo_order(&ev).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": inner.todo_order(&ev, &steps).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": inner.tracked_json(&ev),
             "objectives": inner.objectives,
             // the route's fact-gated prerequisites, and whether this save has the game's own condition
             // set, so the settlement can be checked against what the app actually did
             "gates": inner.gates(&ev),
-            "alerts": ev.alerts.iter().map(|a| a.msg.clone()).collect::<Vec<_>>(),
-            "dont_start": model::dont_start(&ev).iter().map(|h| h.name.clone()).collect::<Vec<_>>(),
+            // the top section, exactly as the window is handed it (empty is a valid, tested answer)
+            "top": top,
             // what the app actually shows for each step, so the data files can be checked against it
-            "watch": ev.steps.iter().map(|s| {
-                let d = inner.derived.get("steps").and_then(|m| m.get(&s.n.id));
-                let items = d.and_then(|x| x.get("watch")).and_then(|x| x.as_array());
+            "watch": steps.iter().map(|s| {
+                let items = s.get("watch").and_then(|x| x.as_array()).cloned().unwrap_or_default();
                 json!({
-                    "id": s.n.id, "title": s.n.title,
-                    "watch": items.map(|a| a.len()).unwrap_or(0),
-                    "headline": items.and_then(|a| a.first()).and_then(|x| x.get("headline")).cloned().unwrap_or(Value::Null),
-                    "game_title": d.and_then(|x| x.get("game_title")).cloned().unwrap_or(Value::Null),
+                    "id": s.get("id"), "title": s.get("title"), "status": s.get("status"),
+                    "watch": items.len(),
+                    "headline": items.first().and_then(|x| x.get("headline")).cloned().unwrap_or(Value::Null),
+                    "live": items.first().and_then(|x| x.get("live")).cloned().unwrap_or(Value::Null),
+                    "tag": items.first().and_then(|x| x.get("tag")).cloned().unwrap_or(Value::Null),
+                    "live_note": items.first().and_then(|x| x.get("live_note")).cloned().unwrap_or(Value::Null),
+                    "game_title": s.get("game_title").cloned().unwrap_or(Value::Null),
                 })
             }).collect::<Vec<_>>(),
             "derived_note": inner.derived.get("note").cloned().unwrap_or(Value::Null),
@@ -887,7 +1559,127 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![get_view, get_detail, search, check_quest, toggle_tick, set_level, set_flag, set_folder, pick_folder, set_pin, open_url])
+        .invoke_handler(tauri::generate_handler![
+            get_view, get_detail, get_targets, get_outcomes, get_plan, set_target, set_guidance, get_cards, set_card,
+            search, check_quest, toggle_tick, set_level, set_flag, set_folder, pick_folder, set_pin, open_url
+        ])
         .run(tauri::generate_context!())
         .expect("error while running the tracker");
+}
+#[cfg(test)]
+mod top_tests {
+    use super::*;
+    use model::{Node, RouteData};
+
+    fn node(id: &str, files: &[&str]) -> Node {
+        Node {
+            section: "Main".into(), id: id.into(), title: id.into(), lv: String::new(),
+            files: files.iter().map(|f| f.to_string()).collect(), hard: vec![],
+            hard_facts: HashMap::new(), by: vec![], note: String::new(), kind: "side".into(),
+            opt: false, when: vec![], order: 0, desc: String::new(), branch: false,
+            dialogue_choice: false, ending_relevant: false, start_known: true,
+            provenance: "game_file".into(), review_reason: String::new(),
+            review_source: String::new(), reviewed: String::new(),
+        }
+    }
+
+    fn eval(id: &str, status: &str) -> Eval {
+        let rd = RouteData { sections: vec!["Main".into()], nodes: vec![node(id, &[id])], events: vec![],
+                             prefs: vec![], conditional: HashSet::new(), flags: vec![], manual_audit: Value::Null };
+        let st = HashMap::from([(id.to_string(), status.to_string())]);
+        model::evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new())
+    }
+
+    fn step(id: &str, watch: Value) -> Value {
+        json!({"id": id, "watch": watch})
+    }
+
+    fn watch(live: &str, affected: &str) -> Value {
+        json!([{
+            "id": "edge", "live": live, "level": "stop",
+            "affected": [affected], "affected_titles": ["The Quest"],
+            "closed_by": ["closer"], "closed_by_titles": ["The Closer"],
+            "headline": "A sentence about the loss.", "why": "the file mechanism",
+            "action": "Finish The Quest", "files": ["quests\\x.w2phase switches off y.w2comm"],
+            "mechanism": "spawnset", "live_note": "In this save: ..."
+        }])
+    }
+
+    #[test]
+    fn nothing_at_stake_renders_nothing() {
+        let ev = eval("mq3012noblestatuette", "Active");
+        let top = top_items(&ev, &[step("mq3012noblestatuette", json!([]))]);
+        assert_eq!(top, json!([]), "an empty top section is the correct answer");
+    }
+
+    #[test]
+    fn settled_and_unknown_never_reach_the_top() {
+        let ev = eval("mq3012noblestatuette", "Active");
+        for live in ["settled", "unknown", ""] {
+            let top = top_items(&ev, &[step("mq3012noblestatuette", watch(live, "mq3012noblestatuette"))]);
+            assert_eq!(top, json!([]), "{live} must not render");
+        }
+    }
+
+    #[test]
+    fn only_the_journal_can_declare_a_loss() {
+        let ev = eval("mq3012noblestatuette", "Active");
+        let lost = top_items(&ev, &[step("mq3012noblestatuette", watch("lost", "mq3012noblestatuette"))]);
+        assert_eq!(lost[0]["kind"], "lost");
+        assert!(lost[0]["tag"].as_str().unwrap().contains("LOST"));
+        assert_eq!(lost[0]["mechanism"], "CDeactivateSpawnset");
+        assert!(lost[0]["file"].as_str().unwrap().contains("w2phase"));
+        // a cutoff that passed without a Failed journal entry is a check, not a loss
+        let check = top_items(&ev, &[step("mq3012noblestatuette", watch("passed", "mq3012noblestatuette"))]);
+        assert_eq!(check[0]["kind"], "risk");
+        assert!(check[0]["tag"].as_str().unwrap().contains("CHECK NOW"));
+        assert_eq!(check[0]["action"], "Finish The Quest");
+        let risk = top_items(&ev, &[step("mq3012noblestatuette", watch("inside", "mq3012noblestatuette"))]);
+        assert_eq!(risk[0]["kind"], "risk");
+        assert!(risk[0]["tag"].as_str().unwrap().contains("DO THIS NOW"));
+        assert_eq!(risk[0]["action"], "Finish The Quest");
+        let miss = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
+        assert_eq!(miss[0]["kind"], "missable");
+        assert!(miss[0]["tag"].as_str().unwrap().contains("MISSABLE"));
+    }
+
+    #[test]
+    fn an_unstarted_quest_inside_the_closer_is_urgent_but_a_distant_one_is_silent() {
+        let ev = eval("mq3012noblestatuette", "Not started");
+        let inside = top_items(&ev, &[step("mq3012noblestatuette", watch("inside", "mq3012noblestatuette"))]);
+        assert_eq!(inside[0]["kind"], "risk", "the closer is in the log and this quest can still be saved");
+        assert!(inside[0]["action"].as_str().unwrap().contains("Finish"));
+        let ahead = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
+        assert_eq!(ahead, json!([]), "a distant cutoff on an unstarted quest is not yet a decision");
+        // the same unstarted quest is not reported as a loss: a fired cutoff did not catch it open
+        let lost = top_items(&ev, &[step("mq3012noblestatuette", watch("passed", "mq3012noblestatuette"))]);
+        assert_eq!(lost, json!([]));
+    }
+
+    #[test]
+    fn a_failed_quest_is_its_own_entry() {
+        let ev = eval("sq301triss", "Failed");
+        let top = top_items(&ev, &[step("sq301triss", json!([]))]);
+        assert_eq!(top[0]["kind"], "failed");
+        assert!(top[0]["headline"].as_str().unwrap().contains("failed"));
+    }
+
+    #[test]
+    fn a_ticked_step_with_a_fired_cutoff_still_appears_at_the_top() {
+        let id = "mq3012noblestatuette";
+        let rd = RouteData {
+            sections: vec!["Main".into()], nodes: vec![node(id, &[id])], events: vec![],
+            prefs: vec![], conditional: HashSet::new(), flags: vec![], manual_audit: Value::Null,
+        };
+        let st = HashMap::from([(id.to_string(), "Active".to_string())]);
+        let ticks = HashSet::from([id.to_string()]);
+        let ev = model::evaluate(&rd, &st, &ticks, &HashMap::new(), &HashSet::new());
+        assert!(ev.steps[0].tick_disagrees);
+        let mut w = watch("check", id);
+        w[0]["live_note"] = json!("In this save: done: Now or Never. You ticked The Nobleman Statuette done, but the journal still has it open - the journal wins here.");
+        let top = top_items(&ev, &[step(id, w)]);
+        assert_eq!(top[0]["kind"], "risk", "a tick must not hide the passed cutoff");
+        assert!(top[0]["tag"].as_str().unwrap().contains("CHECK NOW"));
+        assert!(top[0]["live_note"].as_str().unwrap().contains("You ticked"));
+    }
 }

@@ -1,0 +1,300 @@
+# Legacy 0.1.9 route vs the generated 0.2 route
+
+135 legacy route nodes, 414 generated route nodes. 106 legacy nodes carry a note, a changed level or a changed title.
+
+## Suggested levels
+
+22 live step(s) changed level. Every level in `route.json` now comes from the game's own `quest_levels.csv`; the old levels were hand-typed.
+
+- `wo_missing` -> mq0001battlefieldmother
+  - mq0001battlefieldmother: 2 -> 1
+- `wo_cargo` -> mq0002thefield
+  - mq0002thefield: 2 -> 1
+- `wo_frying` -> mq0004lockedshed
+  - mq0004lockedshed: 2 -> 1
+- `wo_twisted` -> mq0005dwarfsmith
+  - mq0005dwarfsmith: 2 -> 1
+- `ve_gwent_baron` -> cgnomansland
+  - cgnomansland: - -> 1
+- `ve_shadows` -> q103thirdreplacerciri
+  - q103thirdreplacerciri: - -> 5
+- `ve_hazard` -> mq1003trailofdead
+  - mq1003trailofdead: - -> 1
+- `no_innk` -> cginnkeepers
+  - cginnkeepers: - -> 1
+- `no_gwent_dij` -> cgnovigrad
+  - cgnovigrad: - -> 1
+- `no_gwent_thaler` -> cgtalar
+  - cgtalar: - -> 1
+- `sk_nameless` -> q205herbarium, q205lofoten
+  - q205herbarium: 15 -> 14
+- `sk_phantom` -> mh207wraith
+  - mh207wraith: 14 -> 17
+- `sk_gwent` -> cgskellige
+  - cgskellige: - -> 1
+- `km_keep` -> q401_hunt_with_eskel, q401_megascope, q401_phylactery, q401_reunion, q401_the_curse
+  - q401_megascope: 19 -> -
+- `km_gwent` -> cgoldfriends
+  - cgoldfriends: - -> 1
+- `ci_prep` -> q310preparationsnovigrad
+  - q310preparationsnovigrad: 26 -> 1
+- `ci_c4` -> q210avallachlab
+  - q210avallachlab: - -> 31
+- `ci_c5` -> q210skjallgrave
+  - q210skjallgrave: - -> 28
+- `bw_warble` -> mq7002knight, sq701tournament
+  - mq7002knight: 35 -> 45
+- `bw_cage` -> q702hunt, q702wightdecision
+  - q702wightdecision: 39 -> 42
+- `bw_mill` -> q702mill
+  - q702mill: - -> 42
+- `bw_unseen` -> q704vampires, q705prison, q705prisonstash
+  - q704vampires: 49 -> 47
+
+## Titles
+
+64 live step(s) use the game's own quest-log name instead of the old editorial title. The old title often carried the note; that note is no longer part of the route.
+
+- `wo_beast`
+  - q002griffin: The Beast of White Orchard (griffin) -> The Beast of White Orchard
+- `wo_viper`
+  - th1001viper: Viper School gear: both sword diagrams (silver: Kolgrim crypt, steel: castle ruins chest) -> Scavenger Hunt: Viper School Gear
+- `wo_incident`
+  - q002bandits: The Incident at White Orchard (talk to Vesemir at the inn) -> The Incident at White Orchard
+- `ve_nilf`
+  - q101agent: The Nilfgaardian Connection (gate for all of Velen) -> The Nilfgaardian Connection
+- `ve_lynch`
+  - mq1015lynch: Lynch Mob (Hangman's Alley) -> Lynch Mob
+- `ve_advance`
+  - q109wrapup: For the Advancement of Learning (send Keira to Kaer Morhen) -> For the Advancement of Learning
+- `ve_family`
+  - family: Family Matters (Bloody Baron line) -> Family Matters
+- `ve_gwent_baron`
+  - cgnomansland: Beat the Baron at Gwent -> Gwent: Velen Players
+- `ve_ghosts`
+  - sq102letho: Ghosts of the Past (only if Letho is alive in your world state) -> Ghosts of the Past
+- `no_dreaming`
+  - q301helpdreamer: Novigrad Dreaming (let the godling Sarah stay) -> Novigrad Dreaming
+- `no_innk`
+  - cginnkeepers: Gwent: Playing Innkeeps (Stjepan, crossroads innkeeper, Olivier) -> Gwent: Playing Innkeeps
+- `no_broken`
+  - q304dandelion: Broken Flowers (win BOTH Rosa duels; play Zoltan at Gwent) -> Broken Flowers
+- `no_matter`
+  - sq301triss: A Matter of Life and Death (Triss) -> A Matter of Life and Death
+- `no_dangerous`
+  - sq310dangerousgame: A Dangerous Game (take the three cards; loot the jade figurine) -> A Dangerous Game
+- `no_redania`
+  - sq302philippa: Redania's Most Wanted (at least get the polished crystal in Philippa's hideout) -> Redania's Most Wanted
+- `no_eye`
+  - sq312vincentves: An Eye for an Eye (keep Ves alive) -> An Eye for an Eye
+- `no_now`
+  - q309mages: Now or Never (Triss: rescue/romance) -> Now or Never
+- `no_gwent_dij`
+  - cgnovigrad: Gwent: beat Dijkstra -> Gwent: Big City Players
+- `no_gwent_thaler`
+  - cgtalar: Gwent: beat Thaler at the Seven Cats Inn -> Gwent: Playing Thaler
+- `no_highstakes`
+  - sq306maverick: High Stakes (win every match; you get the leader cards and 4,500 crowns) -> High Stakes
+- `sk_nameless`
+  - q205herbarium: Missing Persons and Nameless -> Nameless
+  - q205lofoten: Missing Persons and Nameless -> Missing Persons
+- `sk_flesh`
+  - mq2020fleshforcash: Flesh for Sale (Trottheim) -> Flesh for Sale
+- `sk_gwent`
+  - cgskellige: Gwent: Skellige Style (Mousesack, Crach, Dagobert, Sjusta, Madman Lugos) -> Gwent: Skellige Style
+- `km_ugly`
+  - q401_konsylium: Ugly Baby (collecting Uma at Crow's Perch fails The Last Wish and Following the Thread) -> Ugly Baby
+  - q401_ugliest_man_alive: Ugly Baby (collecting Uma at Crow's Perch fails The Last Wish and Following the Thread) -> The Key to the Riddle
+- `km_keep`
+  - q401_hunt_with_eskel: Keep quests: Disturbance, To Bait a Forktail, The Final Trial, No Place Like Home, Va Fail Elaine -> To Bait a Forktail...
+  - q401_megascope: Keep quests: Disturbance, To Bait a Forktail, The Final Trial, No Place Like Home, Va Fail Elaine -> Disturbance
+  - q401_phylactery: Keep quests: Disturbance, To Bait a Forktail, The Final Trial, No Place Like Home, Va Fail Elaine -> The Final Trial
+  - q401_reunion: Keep quests: Disturbance, To Bait a Forktail, The Final Trial, No Place Like Home, Va Fail Elaine -> No Place Like Home
+  - q401_the_curse: Keep quests: Disturbance, To Bait a Forktail, The Final Trial, No Place Like Home, Va Fail Elaine -> Va Fail, Elaine
+- `km_berengar`
+  - mq4005sword: Berengar's Blade (talk to Vesemir first) -> Berengar's Blade
+- `km_bia_v`
+  - q402velenallies: Brothers In Arms: Velen (needs Keira sent to Kaer Morhen) -> Brothers In Arms: Velen
+- `km_bia_n`
+  - q402novigradallies: Brothers In Arms: Novigrad (ask Zoltan only after A Dangerous Game) -> Brothers In Arms: Novigrad
+- `km_gwent`
+  - cgoldfriends: Gwent: Old Pals (Roche, Lambert; Zoltan) -> Gwent: Old Pals
+- `ci_isle`
+  - q402ciri: The Isle of Mists (boat trip to Undvik + final confirm) -> The Isle of Mists
+- `ci_prep`
+  - q310preparationsnovigrad: Final Preparations (Ciri meets the Lodge alone) -> Final Preparations
+- `ci_blinding`
+  - q310pregeels: Blindingly Obvious (diplomatic option: 'I need her', then 'Tell you what the emperor's after...') -> Blindingly Obvious
+- `ci_tango`
+  - q310romancefailure: It Takes Three to Tango (only if both Triss and Yennefer are romanced) -> It Takes Three to Tango
+- `ci_kindness`
+  - q310keira: A Final Kindness (only if Keira was NOT sent to Kaer Morhen) -> A Final Kindness
+- `ci_reason`
+  - mq3035_emhyr: Reason of State (before telling Avallac'h you are ready) -> Reason of State
+- `ci_c4`
+  - q210avallachlab: Child of the Elder Blood: let her wreck Avallac'h's lab ('Go for it') -> Child of the Elder Blood
+- `ci_c5`
+  - q210skjallgrave: Skjall's Grave: go with her ('Yeah. I'll go with you') -> Skjall's Grave
+- `ci_thin`
+  - q501eredin: On Thin Ice (point of no return: fails Reason of State, Thaler, Crach, Devil by the Well) -> On Thin Ice
+- `hos_eviles`
+  - q601intro: Evil's Soft First Touches (loot Garin manor first; accept Rose on a Red Field) -> Evil's Soft First Touches
+- `hos_dead`
+  - q602wedding: Dead Man's Party (do the wedding activities) -> Dead Man's Party
+- `hos_midnight`
+  - q602romance: A Midnight Clear (before leaving the wedding) -> A Midnight Clear
+- `hos_open`
+  - q603bank: Open Sesame! (buy all four Viper armor diagrams from Countess Mignole; Hilbert Gwent) -> Open Sesame!
+- `hos_open_subs`
+  - q603diversion: Open Sesame sub-quests: Witcher Seasonings, Breaking and Entering, The Safecracker -> Open Sesame: Witcher Seasonings
+  - q603getinman: Open Sesame sub-quests: Witcher Seasonings, Breaking and Entering, The Safecracker -> Open Sesame: Breaking and Entering
+  - q603vaultspecialist: Open Sesame sub-quests: Witcher Seasonings, Breaking and Entering, The Safecracker -> Open Sesame: The Safecracker
+- `hos_whatsoever`
+  - q605finale: Whatsoever a Man Soweth... (SAVE first; help Olgierd, solve the riddle) -> Whatsoever a Man Soweth…
+- `bw_envoys`
+  - q701ahook: Envoys, Wineboys (needs A Poet Under Pressure from Novigrad) -> Envoys, Wineboys
+- `bw_warble`
+  - mq7002knight: The Warble of a Smitten Knight (win the tournament; finish BEFORE Capture the Castle) -> Feet as Cold as Ice
+  - sq701tournament: The Warble of a Smitten Knight (win the tournament; finish BEFORE Capture the Castle) -> The Warble of a Smitten Knight
+- `bw_cage`
+  - q702wightdecision: La Cage au Fou -> The Hunger Game
+- `bw_capture`
+  - q703allforone: Capture the Castle (point of no return for side quests; finish Warble and open side quests first) -> Capture the Castle
+- `bw_fangs`
+  - q704starting: The Night of Long Fangs (SAVE before the wardrobe book: take Syanna to Dettlaff, not the Unseen Elder) -> The Night of Long Fangs
+- `bw_hill`
+  - q704bfairyland: Beyond Hill and Dale (get Syanna's ribbon; read the first 2 playroom journal entries; listen to her story; investigate the 5th victim) -> Beyond Hill and Dale...
+- `bw_pomp`
+  - q705ceremony: Pomp and Strange Circumstance (visit Syanna first; "Cause she turned her back on you, forgot about you" then "Ever thought to forgive her?") -> Pomp and Strange Circumstance
+- `bw_humble`
+  - q705home: Be It Ever So Humble... -> Be It Ever So Humble…
+- `bw_unseen`
+  - q704vampires: ALT SAVE: What Lies Unseen / Burlap is the New Stripe / The Perks of Being a Jailbird (excludes the both-sisters-live path) -> What Lies Unseen
+  - q705prison: ALT SAVE: What Lies Unseen / Burlap is the New Stripe / The Perks of Being a Jailbird (excludes the both-sisters-live path) -> Burlap is the New Stripe
+  - q705prisonstash: ALT SAVE: What Lies Unseen / Burlap is the New Stripe / The Perks of Being a Jailbird (excludes the both-sisters-live path) -> The Perks of Being a Jailbird
+
+## Notes removed from the route
+
+Every 0.1.9 hand-written `note` is gone. Where the note contained a rule, it is either a reviewed cutoff (`data/cutoffs.json`), a reviewed prerequisite (`data/prereqs_review.json`) or it is not shipped. This is the full list for comparison.
+
+- `wo_prologue` -> (manual): Manual. Play Aldert (the scholar) and buy from Elsa on the way; Aldert is hanged later in Velen.
+- `wo_beast` -> q002griffin: Reporting the griffin is safe. The point of no return is the later talk with Vesemir at the inn.
+- `wo_deathbed` -> q002healingwoman: Fails when the prologue ends (talking to Vesemir).
+- `wo_cargo` -> mq0002thefield: Cutoff is presumed (the wiki is blank): do it before the Vesemir talk.
+- `wo_frying` -> mq0004lockedshed: Cutoff is presumed (the wiki is blank): do it before the Vesemir talk.
+- `wo_viper` -> th1001viper: No source says they are lost when you leave, but your route collects them here.
+- `wo_poi` -> (manual): Unverified whether a Place of Power here is missable.
+- `wo_incident` -> q002bandits: MAKE A MANUAL SAVE FIRST. This talk ends the prologue and fails the White Orchard side quests.
+- `wo_devil` -> mq0003freshwater: NOT lost when White Orchard ends. It fails at On Thin Ice, so it can wait.
+- `ve_hunting` -> q104lookingforwitch: Journal file has no readable entries, so detection is weak: tick it if it looks wrong.
+- `ve_wander` -> mine: Accept and finish Magic Lamp INSIDE the elven ruins before you leave.
+- `ve_lamp` -> q104postmine: Must be finished inside the ruins; skipping it also blocks the Place of Power there.
+- `ve_invite` -> q106findkeira: Only needs Wandering in the Dark (Magic Lamp is recommended first).
+- `ve_lynch` -> mq1015lynch: Do it BEFORE A Favor for a Friend starts (the end of Towerful of Mice).
+- `ve_tower` -> q106tower: Fyke Isle. Finish Lynch Mob before you return to Keira.
+- `ve_favor` -> sq101keira: Starts after the Towerful of Mice. Do not refuse to play along at dinner.
+- `ve_advance` -> q109wrapup: On Fyke Isle: 'What's with the notes?' > 'Radovid never forgets' > 'It's suicide' > the Kaer Morhen option. Do NOT demand the notes first.
+- `ve_forefathers` -> (manual): Optional; only after Towerful of Mice. No journal file found.
+- `ve_family` -> family: Cannot be finished until Ladies of the Wood is done. The final Baron conversation is the last chance to play him at Gwent.
+- `ve_hillock` -> q105evilspirit: A sub-quest of Ladies of the Wood. Consult the Downwarren ealdorman BEFORE freeing the spirit, or Return to Crookback Bog changes.
+- `ve_gwent_baron` -> cgnomansland: Last chance is the final Family Matters conversation. After that the card is in his office.
+- `ve_bog` -> q107swamps: If you freed the spirit: pick the doll with the violet hollyhock bloom or Anna dies.
+- `ve_shadows` -> q103thirdreplacerciri: Triggered by the final Baron conversation.
+- `ve_hazard` -> mq1003trailofdead: Do it before Ghosts of the Past.
+- `ve_reardon` -> sq102dolores: Always available.
+- `ve_ghosts` -> sq102letho: Only exists if Letho is alive in your world state (set it under My game). Do not stray from Letho or he leaves.
+- `ve_keira_km` -> (manual): Needed for Brothers In Arms: Velen. Excludes the late quest A Final Kindness.
+- `no_pyres` -> q301dreamer: Entry quest: unlocks High Stakes and the Nobleman Statuette.
+- `no_innk` -> cginnkeepers: Olivier can die in Now or Never.
+- `no_broken` -> q304dandelion: Mapped by elimination (its journal file has no entries).
+- `no_fencing` -> mq3036rosaromance: Opens once you have visited Rosa at the estate, during Broken Flowers (its file waits on q304_rosa_visited, which Broken Flowers sets) - not after Broken Flowers is over.
+- `no_junior` -> q302mafia: Visit Cleaver first (The Gangs of Novigrad) before meeting the Redanian contact.
+- `no_gangs` -> q302war: Talk to Cleaver before you clear both the arena and the casino yourself. Opens from Get Junior's cleaver phase, when you ask him for help, once you have found Whoreson Junior (the quest's own file waits on q302_whoreson). 7 saves show it Failed with Get Junior still open: do the arena and the casino with his men, not yourself.
+- `no_honor` -> q302debt: Comes from Get Junior's own King of Beggars segment, once you have freed Rico in the casino: its file waits on q302_freed_rico, which Get Junior sets while you are still in there.
+- `no_visiting` -> q302rescuingdudu: A Ciri flashback created by Get Junior's own quest file, so it appears while you are doing Get Junior (6 saves have it finished with Get Junior still open).
+- `no_favor` -> q302favourforradovid: Never triggers if you leave Junior's compound without talking to Radovid's soldiers: its entry is added by the scene q302_39_radovid_about_favour in Get Junior's postmafia phase, while Get Junior is still in your log.
+- `no_waterfront` -> mq3005badalley: Do it before the witch-hunter outpost part of Count Reuven's Treasure. Your quest log calls it Shady Deal.
+- `no_reuven` -> q303treasure: Ask Menge about Dijkstra's treasure. Runs alongside Get Junior: its journal entry comes from Get Junior's own shared phase and from its own, and 222 saves hold both at once - there is no need to finish Get Junior first.
+- `no_poet` -> q305lookingfordandelion: Starts Cabaret and A Dangerous Game. Also unlocks Blood and Wine.
+- `no_matter` -> sq301triss: Win all 3 Vegelbud Gwent matches before the party ends.
+- `no_vegelbud` -> (manual): Temporary opponents: only chance, inside A Matter of Life and Death.
+- `no_carnal` -> q308psycho: Pauses the Vegelbud race and postpones the ball; do the Vegelbud party first.
+- `no_dangerous` -> sq310dangerousgame: Loot the jade figurine in Caesar's cupboard (the only chance for The Soldier Statuette).
+- `no_redania` -> sq302philippa: Do it before Now or Never so Triss can examine the crystal.
+- `no_eye` -> sq312vincentves: Ves is needed to recruit Roche. Opens once you have found Whoreson Junior during Get Junior (its file waits on q302_whoreson_found), not once Get Junior is finished.
+- `no_noble` -> mq3012noblestatuette: Give it to Triss BEFORE Now or Never.
+- `no_soldier` -> mq3012warriorstatuette: Give it to Triss BEFORE Now or Never.
+- `no_now` -> q309mages: Triss leaves Novigrad afterwards. Do the statuettes, the crystal and Olivier's Gwent first.
+- `no_deadly` -> sq315talar: Starts when Now or Never ends.
+- `no_gwent_dij` -> cgnovigrad: Unreachable from the start of Final Preparations.
+- `no_gwent_thaler` -> cgtalar: Deadline is Reason of State / On Thin Ice.
+- `no_highstakes` -> sq306maverick: Scaled to level 26. No cards-or-coins choice. Opens once the doppelganger has been burned in Pyres of Novigrad (its file waits on q301_burn_doppler), partway through that quest.
+- `sk_king` -> pirate: Unlocks Possession, Lord of Undvik, Cave of Dreams, Phantom of Eldberg.
+- `sk_calm` -> q205cirireplacer: Do it before the final Baron conversation in Velen (it fails A Mysterious Passenger).
+- `sk_lastwish` -> sq202yen: Do it as soon as it is offered. Fails when you retrieve Uma in Ugly Baby.
+- `sk_flesh` -> mq2020fleshforcash: Locks when you talk to Lambert at the Seven Cats Inn in Following the Thread.
+- `sk_thread` -> sq106killbill: Can start in Novigrad at L11; pause before the Seven Cats Inn talk until Flesh for Sale is done. It does not need Destination: Skellige finished: 153 saves run both at once, and the only fact linking them (q201_landed_on_skellige) gates its later Skellige stage, not its start.
+- `sk_phantom` -> mh207wraith: Gate for Stranger in a Strange Land. Not lost when King's Gambit starts: your saves show it finished after King's Gambit in 101 of 102 saves.
+- `sk_stranger` -> sq209weregild: Not lost when King's Gambit starts: your saves show it done afterwards. Needs Contract: The Phantom of Eldberg.
+- `sk_cave` -> sq209weregildb: Starts from Stranger in a Strange Land (one quest phase runs both). Not lost when King's Gambit starts: finished after King's Gambit in 101 of 102 saves.
+- `sk_unpaid` -> mq2051unfinishedbusiness: Your quest log calls it Unfinished Business (meet Simun at the lake house).
+- `sk_possession` -> q203him: Finish after the Cave of Dreams and Stranger in a Strange Land.
+- `sk_gambit` -> q206berserkers: Added at the end of The Lord of Undvik, and only if Possession's 'helping with him' outcome happened (the game checks the fact q203_cerys_saved). The other branch of the same block adds Echoes of the Past instead.
+- `sk_gwent` -> cgskellige: Lugos is lost when the ship sails in Battle Preparations, Crach at the On Thin Ice battle.
+- `km_ugly` -> q401_konsylium, q401_ugliest_man_alive: Start it only when Velen, Novigrad and Skellige are in order. Mapped at medium confidence.
+- `km_berengar` -> mq4005sword: Fails at the council in the Battle of Kaer Morhen.
+- `km_gwent` -> cgoldfriends: Roche and Thaler are Novigrad players; Eskel has no card of his own.
+- `km_save` -> (manual): Everything with the Isle of Mists as its cutoff must be done. Check Keira, Baron, Triss, Dandelion, Zoltan, Roche/Dijkstra, succession, Letho, Gwent.
+- `ci_isle` -> q402ciri: Point of no return for 20+ quests. q402ciri starts earlier, when Uma's curse lifts.
+- `ci_bald` -> (manual): No journal file identified.
+- `ci_prep` -> q310preparationsnovigrad: Do Payback, Blindingly Obvious, The Great Escape. The statuettes fail at the Lodge talk.
+- `ci_blinding` -> q310pregeels: Creates Reason of State.
+- `ci_tango` -> q310romancefailure: Tick to skip if it does not apply.
+- `ci_kindness` -> q310keira: Does not exist if you sent Keira to Kaer Morhen. Tick to skip.
+- `ci_reason` -> mq3035_emhyr: Also finish Warehouse of Woe and Thaler Gwent. Save here.
+- `ci_thin` -> q501eredin: Do not talk to Avallac'h by the boat until these are done.
+- `hos_eviles` -> q601intro: Seven Cats Inn notice board.
+- `hos_midnight` -> q602romance: Fails if you leave the wedding area without doing it.
+- `hos_open` -> q603bank: One-time chance for the diagrams. Do the three sub-quests.
+- `hos_avid` -> q603painting: Lost when Open Sesame! ends.
+- `hos_shakes` -> (manual): Skip Shakeslock and O'Dimm just takes Olgierd. Shani's Gwent card: win it or find it in her clinic upstairs.
+- `bw_envoys` -> q701ahook: Delay accepting until you are ready.
+- `bw_warble` -> mq7002knight, sq701tournament: Fails when you meet Damien in Capture the Castle.
+- `bw_mill` -> q702mill: Closes once Where Children Toil finishes.
+- `bw_capture` -> q703allforone: No manual saves from its start.
+- `bw_fangs` -> q704starting: The path choice is final once you interact with the book.
+- `bw_hill` -> q704bfairyland: Ribbon: Little Flint Girl, 500 crowns or beat her at Gwent. Without it Syanna dies at Tesham Mutna.
+- `bw_goose` -> q704ftgoose: Fails when Beyond Hill and Dale finishes.
+- `bw_tesham` -> q704adettlaff: SAVE before the Dettlaff fight.
+- `bw_humble` -> q705home: Also needs Something Ends, Something Begins.
+- `bw_unseen` -> q704vampires, q705prison, q705prisonstash: Needs a separate save.
+
+## The 25 legacy events
+
+1 replaced by a reviewed `CDeactivateSpawnset` edge, 24 dropped with the reason recorded. Nothing from `legacy_events.json` is a rule in 0.2.
+
+- replaced: **The Isle of Mists (boat trip to Undvik and confirm)** by `brothers_in_arms`
+- dropped: **The final Family Matters conversation with the Baron** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **The ship sails in Battle Preparations** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Asking Zoltan for help in Brothers In Arms: Novigrad** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Meeting Damien in Capture the Castle (side-content cutoff)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **The council at the Battle of Kaer Morhen** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Starting A Favor for a Friend (the end of A Towerful of Mice)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Starting Final Preparations (Dijkstra becomes unreachable)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Starting Ghosts of the Past** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Beyond Hill and Dale finishes** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Starting King's Gambit** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Talking to Lambert at the Seven Cats Inn (Following the Thread)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Leaving the elven ruins** - the event names no journal trigger this install can read
+- dropped: **The Lodge talk in Final Preparations** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **The Vegelbud party ends (A Matter of Life and Death finishes)** - the event's affected steps are not journal quests
+- dropped: **Finishing Now or Never (Triss leaves Novigrad)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Open Sesame! finishes (the auction ends)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Meeting Roche's Redanian contact in Get Junior** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **The witch-hunter outpost part of Count Reuven's Treasure** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Whatsoever a Man Soweth... without meeting Shakeslock** - the event's affected steps are not journal quests
+- dropped: **On Thin Ice: talking to Avallac'h by the boat** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Ugly Baby: retrieving Uma at Crow's Perch** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Talking to Vesemir at the inn after the griffin (ends the prologue)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Leaving the wedding (Dead Man's Party)** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest
+- dropped: **Where Children Toil, Toys Waste Away finishes** - no reviewed CDeactivateSpawnset edge names both the closing and the affected quest

@@ -414,10 +414,15 @@ def check(deep=True, verbose=True):
         # (set in the fewest saves without the step) is the closest thing to the real moment.
         good = sorted((s for s in signals if s["refuted"] == 0),
                       key=lambda s: (s["kind"] != "chain", s["fact_set_without_s"], s["fact"]))
-        # Only keep an edge as a fact gate when the game's own condition is unambiguous: one fact
-        # that no save breaks. Where the files name several candidates, or none, the honest move is
-        # to drop the lock instead of picking one and calling it the rule.
-        chosen = good[0] if len(good) == 1 else {}
+        # A reviewed fact is the settlement, so test it directly. A new save can add another
+        # candidate fact without refuting the reviewed one; that must not silently overturn the
+        # decision. Unreviewed edges still need exactly one unrefuted candidate.
+        item = rev.get((sid, h))
+        settled = []
+        if item and item.get("decision") == "fact":
+            wanted = set(item.get("facts") or [])
+            settled = [s for s in signals if s["fact"] in wanted and s["refuted"] == 0]
+        chosen = settled[0] if settled else (good[0] if len(good) == 1 else {})
         if refuted >= MIN_REFUTE and chosen:
             # the prerequisite is real and the game names its condition; the journal status was the
             # wrong signal to test it with, which is what the saves were objecting to
@@ -614,13 +619,20 @@ def save_facts(names, interest, refresh=False):
 
 
 def signal_test(rows, facts_by_save, s_files, fact):
-    """How the saves read for one candidate gate: S engaged while the fact is not set."""
+    """How the saves read for one candidate gate: S under way while the fact is not set.
+
+    `Done` is deliberately not "under way": a completed quest can have its setup fact cleared,
+    and counting that as a refutation would make a fact gate look broken after the content is over.
+    The claim being tested is that the fact exists whenever the step is still open.
+    """
     engaged = set_seen = refuted = 0
     for name, _mt, st in rows:
-        if any(st.get(f) in PRESENT for f in s_files):
+        if any(st.get(f) in ("Active", "Failed") for f in s_files):
             engaged += 1
             if fact not in (facts_by_save.get(name) or {}):
                 refuted += 1
+        elif any(st.get(f) in PRESENT for f in s_files):
+            engaged += 1
         elif fact in (facts_by_save.get(name) or {}):
             set_seen += 1
     return {"s_engaged": engaged, "refuted": refuted, "fact_set_without_s": set_seen}
@@ -711,7 +723,7 @@ def pair(a, b):
                 print(f"     {name:48s} {a}={sv:<12s} {b}={hv}")
 
 
-def reading_result(n=25):
+def reading_result(n=25, names=None):
     """Is the reader attaching statuses to the right entries?
 
     Returns {saves, entries, unknown, statuses, mismatches}. Every journal entry carries the GUID of
@@ -719,6 +731,10 @@ def reading_result(n=25):
     resources would land on the wrong GUID. So the test is whether each entry's resource really is
     the file its GUID belongs to - which is what settles "is the journal status reading wrong" for
     the disputed prerequisites: a Failed in a save is the game's own record, not a misread.
+
+    `names` lets the release check read the saves the index was built from. The game can add a new
+    autosave while a check is running; sampling the live folder would then change the report without
+    any code or data changing.
     """
     idx = load("quest_index.json")
     g2 = {}
@@ -728,7 +744,7 @@ def reading_result(n=25):
         for o in v.get("objectives", []):
             if o.get("guid"):
                 g2.setdefault(o["guid"].lower(), set()).add((stem, "objective"))
-    names = sorted(p.name for p in SAVES.glob("*.sav"))
+    names = sorted(names) if names is not None else sorted(p.name for p in SAVES.glob("*.sav"))
     if not names:
         return {"saves": 0, "entries": 0, "unknown": 0, "statuses": {}, "mismatches": [],
                 "error": f"no saves found at {SAVES}"}

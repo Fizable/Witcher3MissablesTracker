@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "note": "Test fixture for tools/endings.py; a shape, not game data.",
+  "branches": {
+    "test_step_heirs": {
+      "step": "test_step_heirs",
+      "choices": [
+        {
+          "id": "test_heirs_branch",
+          "scene": "quests\\test\\scenes\\heirs.w2scene",
+          "choice_locid": 900001,
+          "choice_text": "Let them both live.",
+          "sets": ["test_heirs_live_fact"],
+          "tests": [],
+          "one_shot": false,
+          "source": {
+            "kind": "scene_choice",
+            "file": "quests\\test\\scenes\\heirs.w2scene",
+            "locid": 900001
+          }
+        }
+      ]
+    },
+    "test_step_guard": {
+      "step": "test_step_guard",
+      "choices": [
+        {
+          "id": "test_guard_branch",
+          "scene": "quests\\test\\scenes\\guard.w2scene",
+          "choice_locid": 900002,
+          "choice_text": "Spare the guard.",
+          "sets": ["test_heirs_live_guard"],
+          "tests": [],
+          "one_shot": false,
+          "source": {
+            "kind": "scene_choice",
+            "file": "quests\\test\\scenes\\guard.w2scene",
+            "locid": 900002
+          }
+        }
+      ]
+    }
+  },
+  "consequences": []
+}

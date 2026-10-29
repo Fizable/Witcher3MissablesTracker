@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "note": "Reviewed outcome-exclusion edges only. Each edge names the file fact, the scene line or the journal descriptions that make the two outcomes alternatives. Cross-group outcomes are not listed: no file proves they conflict.",
+  "edges": [
+    {
+      "kind": "outcome",
+      "a": "ciri_witcher",
+      "b": "ciri_empress",
+      "reason": "Ciri cannot both stay away from Emhyr and visit him at q110.",
+      "mechanism": "q110_to_emperor is set only by the Emhyr line and is absent on the Velen line; q505 and q504 are the alternative journal endings.",
+      "evidence": [
+        {
+          "kind": "branch",
+          "value": "q110postbattle__550211__q110_activity_talk_to_ciri_finish"
+        },
+        {
+          "kind": "file",
+          "value": "quests\\part_3\\q502_avallach.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1055913
+        },
+        {
+          "kind": "locid",
+          "value": 1056068
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "ciri_witcher",
+      "b": "ciri_dead",
+      "reason": "Ciri cannot both survive q502 and die in it.",
+      "mechanism": "q502_ciri_survives and q502_ciri_dead are set in the same q502_avallach phase; q505 and q503 are the alternative journal endings.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_3\\q502_avallach.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1055913
+        },
+        {
+          "kind": "locid",
+          "value": 1048618
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "ciri_empress",
+      "b": "ciri_dead",
+      "reason": "Ciri cannot both survive q502 and die in it.",
+      "mechanism": "q502_ciri_survives and q502_ciri_dead are set in the same q502_avallach phase; q504 and q503 are the alternative journal endings.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_3\\q502_avallach.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1056068
+        },
+        {
+          "kind": "locid",
+          "value": 1048618
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "baron_wife_cured",
+      "b": "baron_anna_lost",
+      "reason": "The baron's wife cannot both be taken away alive and be lost with the baron hanged.",
+      "mechanism": "q107_anna_is_crazy and q107_baron_hanged_himself are alternative terminal facts set in q107_swamps; 1002193 and 1002197 are alternative journal descriptions.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_2\\q107_swamps.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1002193
+        },
+        {
+          "kind": "locid",
+          "value": 1002197
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "olgierd_saved",
+      "b": "olgierd_dead",
+      "reason": "Olgierd cannot both survive the pact and die when it is fulfilled.",
+      "mechanism": "q605_mirror_banished is set in q605_finale only when Gaunter is defeated; its absence after q605_finale is the fulfilled-pact branch. 1124241 and 1124242 are alternative journal descriptions.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "dlc\\ep1\\data\\quests\\q605_finale.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1124241
+        },
+        {
+          "kind": "locid",
+          "value": 1124242
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "bw_both_sisters",
+      "b": "bw_henrietta_dies",
+      "reason": "Henrietta cannot both live through the ceremony and be killed by Syanna.",
+      "mechanism": "q705_henrietta_alive and q705_henrietta_dead are set by alternative ceremony lines; 1154626 and 1154625 are alternative journal descriptions.",
+      "evidence": [
+        {
+          "kind": "branch",
+          "value": "q705ceremony__1191986__q705_henrietta_alive"
+        },
+        {
+          "kind": "branch",
+          "value": "q705ceremony__1198496__q705_henrietta_dead"
+        },
+        {
+          "kind": "locid",
+          "value": 1154626
+        },
+        {
+          "kind": "locid",
+          "value": 1154625
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "baron_wife_cured",
+      "b": "baron_anna_burnt",
+      "reason": "The baron's family cannot end two ways in one save.",
+      "mechanism": "The q107 terminal facts are alternatives set in q107_swamps; 1002193 and 1002195 are alternative journal descriptions in the same description group.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_2\\q107_swamps.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1002193
+        },
+        {
+          "kind": "locid",
+          "value": 1002195
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "baron_wife_cured",
+      "b": "baron_anna_disenchanted",
+      "reason": "The baron's family cannot end two ways in one save.",
+      "mechanism": "The q107 terminal facts are alternatives set in q107_swamps; 1002193 and 1002196 are alternative journal descriptions in the same description group.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_2\\q107_swamps.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1002193
+        },
+        {
+          "kind": "locid",
+          "value": 1002196
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "baron_anna_lost",
+      "b": "baron_anna_burnt",
+      "reason": "The baron's family cannot end two ways in one save.",
+      "mechanism": "The q107 terminal facts are alternatives set in q107_swamps; 1002197 and 1002195 are alternative journal descriptions in the same description group.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_2\\q107_swamps.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1002197
+        },
+        {
+          "kind": "locid",
+          "value": 1002195
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "baron_anna_lost",
+      "b": "baron_anna_disenchanted",
+      "reason": "The baron's family cannot end two ways in one save.",
+      "mechanism": "The q107 terminal facts are alternatives set in q107_swamps; 1002197 and 1002196 are alternative journal descriptions in the same description group.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_2\\q107_swamps.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1002197
+        },
+        {
+          "kind": "locid",
+          "value": 1002196
+        }
+      ]
+    },
+    {
+      "kind": "outcome",
+      "a": "baron_anna_burnt",
+      "b": "baron_anna_disenchanted",
+      "reason": "The baron's family cannot end two ways in one save.",
+      "mechanism": "The q107 terminal facts are alternatives set in q107_swamps; 1002195 and 1002196 are alternative journal descriptions in the same description group.",
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests\\part_2\\q107_swamps.w2phase"
+        },
+        {
+          "kind": "locid",
+          "value": 1002195
+        },
+        {
+          "kind": "locid",
+          "value": 1002196
+        }
+      ]
+    }
+  ]
+}

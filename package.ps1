@@ -67,14 +67,15 @@ $targetDir = if ($env:CARGO_TARGET_DIR) { $env:CARGO_TARGET_DIR } else { Join-Pa
 $dist = Join-Path 'dist' $name
 New-Item -ItemType Directory -Force (Join-Path $dist 'data') | Out-Null
 Copy-Item (Join-Path $targetDir 'release\witcher3-missables-tracker.exe') (Join-Path $dist 'Witcher3MissablesTracker.exe')
-# derived.json is what the app shows for the quest-order data (built by tools/derive.py);
-# cutoffs.json is the reviewed cutoff selection, prereqs_review.json how each disputed route
-# prerequisite was settled against the saves, and route_disputes.json the ones still disputed
-# (empty now) - they all have to be in the release or the app silently shows less
-foreach ($f in 'route.json', 'guide_alias.json', 'feed.json', 'derived.json', 'cutoffs.json', 'route_disputes.json', 'prereqs_review.json') {
+# route.json, derived.json and quest_graph.json are what the app reads; cutoffs.json,
+# prereqs_review.json and route_disputes.json are the reviewed inputs behind them and ship as
+# evidence. The wiki-era audit_*.json / guide_*.json stay in the checkout for comparison and are
+# deliberately not packaged: the app never loads them.
+# 1.0 reads the reviewed targets, the extracted branch graph, the card index, coverage and the
+# exclusivity rows as well; a build without them would start with the 1.0 screen but none of its data.
+foreach ($f in 'route.json', 'derived.json', 'quest_graph.json', 'cutoffs.json', 'cutoff_windows.json', 'route_disputes.json', 'prereqs_review.json', 'prereq_relations.json', 'endings.json', 'outcomes.json', 'branches.json', 'gwent_cards.json', 'card_windows.json', 'card_window_review.json', 'coverage.json', 'exclusive.json') {
     if (Test-Path "data\$f") { Copy-Item "data\$f" (Join-Path $dist 'data') } else { Write-Warning "missing data\$f" }
 }
-Copy-Item data\audit_*.json, data\guide_*.json (Join-Path $dist 'data') -Force
 foreach ($f in 'LICENSE', 'LICENSE-DATA.md', 'NOTICE.txt', 'THIRD-PARTY-LICENSES.txt') { Copy-Item $f $dist }
 $readme = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'packaging\README.md')).Replace('{{VERSION}}', $version).Replace('{{SOURCE_URL}}', $SourceUrl)
 [IO.File]::WriteAllText((Join-Path (Resolve-Path $dist) 'README.md'), $readme, $utf8)
@@ -82,3 +83,8 @@ $readme = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'packaging\README.md')
 $zip = "dist\$name.zip"
 Compress-Archive -Path $dist -DestinationPath $zip
 Write-Host "built $dist and $zip"
+
+# the one you actually run: it sits next to this folder's own data/ (the live copy the tools write),
+# so the newest build is always a double-click here - dist/ stays the archive and the thing to hand out
+Copy-Item (Join-Path $dist 'Witcher3MissablesTracker.exe') (Join-Path $PSScriptRoot 'Witcher3MissablesTracker.exe') -Force
+Write-Host "updated $PSScriptRoot\Witcher3MissablesTracker.exe"

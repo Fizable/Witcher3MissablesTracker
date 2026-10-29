@@ -19,7 +19,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import cr2w
 
-from paths import HERE, QUEST_ROOT, REDKIT_R4 as R4  # noqa: F401
+from paths import HERE, REDKIT_R4 as R4  # noqa: F401
+import resources
 
 CACHE = HERE / "fact_index.json"
 
@@ -71,7 +72,9 @@ def scan(path):
 
 
 def build(limit=None):
-    files = sorted(QUEST_ROOT.rglob("*.w2phase"))
+    # Base game plus every DLC data root. The cache is keyed on the path relative to r4data, so
+    # adding DLC files only scans the new ones and never rewrites a base row.
+    files = resources.phase_files()
     if limit:
         files = files[:limit]
     rows = json.load(open(CACHE)) if CACHE.exists() else []

@@ -2,30 +2,45 @@ Witcher 3 Missables Tracker - notices
 
 UNOFFICIAL FAN TOOL
 This tool is not affiliated with, endorsed by or supported by CD PROJEKT S.A. "The Witcher" and "Wild Hunt" are trademarks
-of CD PROJEKT S.A. No game assets are included. The list of quest journals the tool needs is built on your own computer
-from your own game files the first time it runs.
+of CD PROJEKT S.A. No game assets are included.
+
+WHAT THE APP READS
+- The route, sections, suggested levels, one-line descriptions, journal-activation blocks, fact prerequisites and cutoffs
+  are generated from the game's own journal files, level tables and phase graphs by the scripts in tools/. They are shipped
+  as data/route.json, data/derived.json, data/quest_graph.json and the reviewed inputs beside them.
+- At run time the app reads your own copy of the game to build its quest-name index. It reads your save files read-only.
+  It never writes to your saves folder or the game folder.
+- The older wiki-era files data/audit_*.json, data/guide_*.json, data/guide_alias.json, data/legacy_route.json,
+  data/legacy_events.json and data/legacy_feed.json are kept in the source checkout for comparison and are never
+  loaded by the app. They are not part of the release package.
 
 LICENCES
 - Program source code: MIT License (see LICENSE).
-- Research and route data in the data folder: Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0),
+- Generated route data and the reviewed decisions: MIT, to the extent the author can grant it. The short quest-log names,
+  objective strings and descriptions read from the game remain the property of CD PROJEKT S.A. and are used here for
+  identification and commentary. See LICENSE-DATA.md.
+- Legacy wiki-era research: Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0),
   https://creativecommons.org/licenses/by-sa/3.0/ (see LICENSE-DATA.md).
 - Third-party libraries bundled in the program are listed in THIRD-PARTY-LICENSES.txt.
 
 SOURCES AND ATTRIBUTION
-- The quest data contains information from the contributors of The Witcher Wiki (https://witcher.fandom.com), available under
-  CC BY-SA 3.0. Changes were made: the text was summarised and reorganised into structured data.
-- Facts were cross-checked against public walkthroughs (Gamer Guides, Fextralife, ConsolePulse, TheGamer, GameBanshee).
-  Those pages are not redistributed; they are linked per quest inside the tool (open a quest, then SOURCES).
+- The legacy research contains information from the contributors of The Witcher Wiki (https://witcher.fandom.com),
+  available under CC BY-SA 3.0. Changes were made: the text was summarised and reorganised into structured data.
+- Facts in that legacy research were cross-checked against public walkthroughs (Gamer Guides, Fextralife, ConsolePulse,
+  TheGamer, GameBanshee). Those pages are not redistributed and are no longer linked by the app.
+- The 0.2 route and its rules do not depend on that research. Where a claim is generated, the app names the game file,
+  fact or phase block behind it in the detail pane.
 
 USE OF AI
 - The program code was written with AI assistance (Anthropic Claude) under the direction of the author, who also tested it.
-- The research data was compiled with AI-assisted reading of the sources above. It has not been fully verified against the
-  game and may contain errors. The in-game quest log has the final word.
+- The legacy research was compiled with AI-assisted reading of the sources above; it is kept only for comparison.
+- The generated data is produced by the scripts in tools/ from the game's files. It has been tested against the saves in
+  the development corpus, but the in-game quest log has the final word.
 
 PRIVACY AND SAFETY
 - The tool only reads your save files. It never writes to your saves folder or the game folder.
 - It writes only its own settings (ticks, level, tags) and a cached quest index to %APPDATA%\Witcher3MissablesTracker.
-- The tool's own code makes no network connections and sends no data (it contains no HTTP client). Links in the tool open in
-  your browser only when you click them. The window is drawn by Microsoft Edge WebView2, a separate Windows component that is
-  not part of this tool.
+- The tool's own code makes no network connections and sends no data (it contains no HTTP client). Links in the tool open
+  in your browser only when you click them. The window is drawn by Microsoft Edge WebView2, a separate Windows component
+  that is not part of this tool.
 - The full source code is public so the program can be inspected and built independently.

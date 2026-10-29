@@ -1,0 +1,447 @@
+{
+ "note": "The 25 hand-written hold-off events as they stood in 0.1.9. Frozen: never loaded by the app or routegen. tools/questgraph.py maps each one to a game-file loss edge or records why it was dropped.",
+ "events": {
+  "E_VESEMIR": {
+   "name": "Talking to Vesemir at the inn after the griffin (ends the prologue)",
+   "fires": [
+    [
+     "q002bandits",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "wo_beast",
+    "wo_incident"
+   ],
+   "soft": false,
+   "src": "wiki: Lilac and Gooseberries, The Incident at White Orchard"
+  },
+  "E_LAMP": {
+   "name": "Leaving the elven ruins",
+   "fires": [],
+   "near": [
+    "ve_wander"
+   ],
+   "soft": false,
+   "src": "wiki: Magic Lamp"
+  },
+  "E_FAVOR": {
+   "name": "Starting A Favor for a Friend (the end of A Towerful of Mice)",
+   "fires": [
+    [
+     "sq101keira",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ve_tower"
+   ],
+   "soft": false,
+   "src": "wiki: Lynch Mob"
+  },
+  "E_BARON_ANNA": {
+   "name": "The final Family Matters conversation with the Baron",
+   "fires": [
+    [
+     "q103thirdreplacerciri",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ve_family"
+   ],
+   "soft": false,
+   "src": "wiki: Family Matters; fails A Mysterious Passenger if The Calm Before the Storm is not done"
+  },
+  "E_GHOSTS": {
+   "name": "Starting Ghosts of the Past",
+   "fires": [
+    [
+     "sq102letho",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ve_ghosts"
+   ],
+   "soft": false,
+   "src": "wiki: Hazardous Goods"
+  },
+  "E_REDANIAN": {
+   "name": "Meeting Roche's Redanian contact in Get Junior",
+   "fires": [
+    [
+     "q302favourforradovid",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_junior"
+   ],
+   "soft": false,
+   "src": "wiki: The Gangs of Novigrad"
+  },
+  "E_REUVEN": {
+   "name": "The witch-hunter outpost part of Count Reuven's Treasure",
+   "fires": [
+    [
+     "q303treasure#Follow Witch Hunter Leader",
+     [
+      "Active",
+      "Done"
+     ]
+    ],
+    [
+     "q303treasure",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_reuven"
+   ],
+   "soft": false,
+   "src": "wiki: A Walk on the Waterfront"
+  },
+  "E_MATTER_END": {
+   "name": "The Vegelbud party ends (A Matter of Life and Death finishes)",
+   "fires": [
+    [
+     "sq301triss",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_matter"
+   ],
+   "soft": false,
+   "src": "wiki: A Matter of Life and Death"
+  },
+  "E_NOW": {
+   "name": "Finishing Now or Never (Triss leaves Novigrad)",
+   "fires": [
+    [
+     "q309mages",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_now"
+   ],
+   "soft": true,
+   "src": "wiki: Now or Never"
+  },
+  "E_LODGE": {
+   "name": "The Lodge talk in Final Preparations",
+   "fires": [
+    [
+     "q310preparationsnovigrad",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_prep",
+    "ci_isle"
+   ],
+   "soft": false,
+   "src": "wiki: Final Preparations"
+  },
+  "E_FINALPREP": {
+   "name": "Starting Final Preparations (Dijkstra becomes unreachable)",
+   "fires": [
+    [
+     "q310preparationsnovigrad",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_isle",
+    "ci_bald"
+   ],
+   "soft": false,
+   "src": "wiki: Final Preparations"
+  },
+  "E_BIA_ZOLTAN": {
+   "name": "Asking Zoltan for help in Brothers In Arms: Novigrad",
+   "fires": [
+    [
+     "q402novigradallies",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_dangerous"
+   ],
+   "soft": false,
+   "src": "wiki: A Dangerous Game"
+  },
+  "E_LAMBERT": {
+   "name": "Talking to Lambert at the Seven Cats Inn (Following the Thread)",
+   "fires": [
+    [
+     "sq106killbill#Quest Start - met lambert",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "sk_thread"
+   ],
+   "soft": false,
+   "src": "wiki: Flesh for Sale"
+  },
+  "E_KG": {
+   "name": "Starting King's Gambit",
+   "fires": [
+    [
+     "q206berserkers",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "sk_possession",
+    "sk_undvik",
+    "sk_gambit"
+   ],
+   "soft": false,
+   "note": "Needs both Possession and Lord of Undvik: a save-file diff across ~10 checkpoints showed Lord of Undvik sitting Done by itself for a long stretch with no effect, then King's Gambit starting right as Possession's ending resolved. It fires mid-cutscene with no choice or prompt to decline.",
+   "src": "wiki: The Cave of Dreams; verified 2026-10-25 from the player's own save history (see w3tracker-kings-gambit-trigger memory)"
+  },
+  "E_UMA": {
+   "name": "Ugly Baby: retrieving Uma at Crow's Perch",
+   "fires": [
+    [
+     "q401_ugliest_man_alive",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "km_ugly",
+    "sk_gambit",
+    "sk_coronation"
+   ],
+   "soft": false,
+   "src": "wiki: The Last Wish, Following the Thread (fire detection approximate)"
+  },
+  "E_ISLE": {
+   "name": "The Isle of Mists (boat trip to Undvik and confirm)",
+   "fires": [
+    [
+     "q402ciri#Follow the Wisp",
+     [
+      "Active",
+      "Done"
+     ]
+    ],
+    [
+     "q402ciri#Check the house",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "km_ugly",
+    "km_keep",
+    "km_berengar",
+    "km_bia_v",
+    "km_bia_n",
+    "km_bia_s",
+    "km_bia_nil",
+    "sk_gambit",
+    "sk_coronation"
+   ],
+   "soft": false,
+   "src": "wiki: The Isle of Mists"
+  },
+  "E_COUNCIL": {
+   "name": "The council at the Battle of Kaer Morhen",
+   "fires": [
+    [
+     "q403battle",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_isle"
+   ],
+   "soft": false,
+   "src": "wiki: Berengar's Blade"
+  },
+  "E_BATTLEPREP": {
+   "name": "The ship sails in Battle Preparations",
+   "fires": [
+    [
+     "q210preparations",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_prep",
+    "ci_prep2"
+   ],
+   "soft": false,
+   "src": "wiki: Gwent: Skellige Style"
+  },
+  "E_THINICE": {
+   "name": "On Thin Ice: talking to Avallac'h by the boat",
+   "fires": [
+    [
+     "q501eredin",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_prep2",
+    "ci_reason"
+   ],
+   "soft": false,
+   "src": "wiki: On Thin Ice"
+  },
+  "E_WEDDING": {
+   "name": "Leaving the wedding (Dead Man's Party)",
+   "fires": [
+    [
+     "q602wedding",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "hos_dead"
+   ],
+   "soft": false,
+   "src": "wiki: A Midnight Clear"
+  },
+  "E_OPEN": {
+   "name": "Open Sesame! finishes (the auction ends)",
+   "fires": [
+    [
+     "q603bank",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "hos_open"
+   ],
+   "soft": false,
+   "src": "wiki: Open Sesame!"
+  },
+  "E_SOWETH": {
+   "name": "Whatsoever a Man Soweth... without meeting Shakeslock",
+   "fires": [
+    [
+     "q605finale",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "hos_scenes"
+   ],
+   "soft": false,
+   "src": "wiki: Whatsoever a Man Soweth..."
+  },
+  "E_WHERE": {
+   "name": "Where Children Toil, Toys Waste Away finishes",
+   "fires": [
+    [
+     "q702lairofbeast",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "bw_where"
+   ],
+   "soft": false,
+   "src": "wiki: Amidst the Mill's Grist"
+  },
+  "E_CAPTURE": {
+   "name": "Meeting Damien in Capture the Castle (side-content cutoff)",
+   "fires": [
+    [
+     "q703allforone",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "bw_cintra",
+    "bw_wine"
+   ],
+   "soft": false,
+   "src": "wiki: The Warble of a Smitten Knight"
+  },
+  "E_HILL_END": {
+   "name": "Beyond Hill and Dale finishes",
+   "fires": [
+    [
+     "q704bfairyland",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "bw_hill"
+   ],
+   "soft": false,
+   "src": "wiki: Duck, Duck, Goosed!"
+  }
+ }
+}

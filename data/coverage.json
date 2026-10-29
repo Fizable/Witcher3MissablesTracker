@@ -1,0 +1,56 @@
+{
+ "version": 1,
+ "note": "Generated from data/route.json, tools/quest_index.json, data/branches.json and data/cutoffs.json. with_cards is null until the card index measures it; a null is not zero. Manual steps follow their route section (the Gwent step is gwent, the rest base).",
+ "packs": {
+  "base": {
+   "quests": 281,
+   "manual": 8,
+   "steps": 289,
+   "with_phases": 225,
+   "with_scenes": 186,
+   "with_branches": 102,
+   "with_cards": 196,
+   "with_cutoffs": 6
+  },
+  "ep1": {
+   "quests": 26,
+   "manual": 0,
+   "steps": 26,
+   "with_phases": 18,
+   "with_scenes": 18,
+   "with_branches": 14,
+   "with_cards": 0,
+   "with_cutoffs": 0
+  },
+  "bob": {
+   "quests": 83,
+   "manual": 0,
+   "steps": 83,
+   "with_phases": 53,
+   "with_scenes": 31,
+   "with_branches": 25,
+   "with_cards": 28,
+   "with_cutoffs": 0
+  },
+  "other_dlc": {
+   "quests": 13,
+   "manual": 0,
+   "steps": 13,
+   "with_phases": 13,
+   "with_scenes": 0,
+   "with_branches": 0,
+   "with_cards": 0,
+   "with_cutoffs": 0
+  },
+  "gwent": {
+   "quests": 0,
+   "manual": 1,
+   "steps": 1,
+   "with_phases": 0,
+   "with_scenes": 0,
+   "with_branches": 0,
+   "with_cards": 0,
+   "with_cutoffs": 0
+  }
+ }
+}

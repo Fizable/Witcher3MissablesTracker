@@ -13,6 +13,7 @@
     <div class="hdr-row">
       <h1><span class="gold">WITCHER 3</span> <span class="dim">missables tracker</span></h1>
       <button class="gear" data-act="gear" title="Tell the tracker about your game (Letho, Keira, romances)">⚙ my game</button>
+      <button class="gear" data-act="more" title="Cards, progress, coverage, status and excluded content">⋯ more</button>
       <label class="pin" title="Keep this window on top of the game"><input type="checkbox" id="pin" checked> pin</label>
     </div>
     <div class="hdr-row sub">
@@ -21,7 +22,15 @@
       <label class="lvl dim">level <input type="number" id="level" min="0" max="100" step="1" value="0" title="Your level (0 = unknown)"></label>
     </div>
     <div id="saveError" class="save-error hidden" role="alert"></div>
-    <div id="flagsPanel" class="hidden"><p class="dim small">Things the save cannot show. Set what applies to you; quests that cannot exist in your game stop counting.</p><div id="flags"></div><h3 class="sechead">Folders</h3><p class="dim small">Found automatically. Only change these if something shows as not found. Leave a box empty and press Use to go back to automatic.</p><div id="folders"></div><div id="foldermsg" class="foldermsg hidden"></div></div>
+    <div id="flagsPanel" class="hidden">
+      <p class="dim small">Things the save cannot show. Set what applies to you; quests that cannot exist in your game stop counting.</p>
+      <div id="flags"></div>
+      <div id="goalRow" class="goalrow"></div>
+      <h3 class="sechead">Folders</h3>
+      <p class="dim small">Found automatically. Only change these if something shows as not found. Leave a box empty and press Use to go back to automatic.</p>
+      <div id="folders"></div>
+      <div id="foldermsg" class="foldermsg hidden"></div>
+    </div>
   </header>
 
   <!-- List view -->
@@ -32,30 +41,35 @@
       <ul id="hits" class="hits hidden"></ul>
     </div>
 
-    <section id="alertsSec" class="hidden"><div id="alerts" class="stack"></div></section>
-
-    <section id="feedSec" class="hidden">
-      <h2 class="gold">QUEST ORDER <span class="count" id="feedCount"></span></h2>
-      <div id="feed" class="stack"></div>
+    <section id="setupCard" class="setup-card hidden">
+      <h2 class="gold">OPTIONAL: CHOOSE AN ENDING GOAL</h2>
+      <p class="txt">If you want the tracker to guide you, it can ask which endings you are aiming for. This reveals ending names and, later, exact choice lines. You can skip this and stay spoiler-free.</p>
+      <div class="setup-actions">
+        <button class="btn" data-act="skip-setup">Skip - stay spoiler-free</button>
+        <button class="btn goldbtn" data-act="open-picker">Choose a goal (spoilers)</button>
+      </div>
     </section>
 
-    <section id="holdSec" class="hidden">
-      <h2 class="red">HOLD OFF <span class="count" id="holdCount"></span></h2>
-      <div id="hold" class="stack"></div>
+    <section id="topSec" class="hidden">
+      <div class="run-head">
+        <h2 class="red">NOW</h2>
+        <span id="topLater" class="top-later dim small"></span>
+      </div>
+      <div id="top" class="stack"></div>
     </section>
 
     <section id="todoSec">
-      <h2 class="gold">DO NEXT</h2>
+      <div class="run-head">
+        <h2 class="gold">UP NEXT</h2>
+        <span id="planNote" class="dim small"></span>
+      </div>
+      <p class="legend dim">Only what you can act on now: the quest you are tracking, quests already in your log, and the plan step you are actually on. Future goal steps wait under PLAN AHEAD. Exact lines appear on the tracked goal step only.</p>
+      <div id="planIssues" class="stack hidden"></div>
       <div id="todoCards" class="stack"></div>
       <div id="todoMore" class="collapsible closed"><div class="inner"><div id="todoRows" class="rows"></div></div></div>
       <button id="todoToggle" class="linkbtn hidden" data-act="toggle-all"></button>
-      <p id="todoEmpty" class="dim hidden">Nothing queued.</p>
-    </section>
-
-    <section id="progSec">
-      <h2 class="gold">PROGRESS</h2>
-      <p class="legend dim">✔ done · ◐ in progress · ○ not started · ✔? assumed from later progress (click to confirm) · ✎ you tick it</p>
-      <div id="sections" class="stack"></div>
+      <div id="planAhead" class="plan-ahead hidden"></div>
+      <p id="todoEmpty" class="dim hidden">Nothing queued right now.</p>
     </section>
   </main>
 
@@ -65,6 +79,90 @@
     <div id="detail"></div>
   </main>
 </div>
+
+<!-- Reference material: out of the play loop, one drawer with tabs -->
+<div id="morePanel" class="more hidden" role="dialog" aria-modal="true" aria-labelledby="moreTitle">
+  <div class="more-box">
+    <div class="more-head">
+      <h2 id="moreTitle" class="gold">MORE</h2>
+      <button class="x" data-act="close-more" aria-label="close">✕</button>
+    </div>
+    <div class="more-tabs" role="tablist">
+      <button class="more-tab on" data-act="more-tab" data-tab="cards">CARDS</button>
+      <button class="more-tab" data-act="more-tab" data-tab="progress">PROGRESS</button>
+      <button class="more-tab" data-act="more-tab" data-tab="coverage">COVERAGE</button>
+      <button class="more-tab" data-act="more-tab" data-tab="status">STATUS</button>
+    </div>
+    <div id="morePanes">
+      <section id="cardsSec" class="more-pane">
+        <div class="run-head">
+          <h2 class="gold">GWENT CARDS</h2>
+          <span id="cardsCount" class="dim small"></span>
+        </div>
+        <p id="cardsNote" class="legend dim"></p>
+        <div id="cardFilters" class="filterbar">
+          <button class="filter on" data-act="card-filter" data-filter="all">ALL</button>
+          <button class="filter" data-act="card-filter" data-filter="open">OPEN NOW</button>
+          <button class="filter" data-act="card-filter" data-filter="later">LATER</button>
+          <button class="filter" data-act="card-filter" data-filter="owned">OWNED</button>
+          <button class="filter" data-act="card-filter" data-filter="unknown">UNKNOWN</button>
+        </div>
+        <div id="cards" class="cards-list"></div>
+      </section>
+
+      <section id="progSec" class="more-pane hidden">
+        <h2 class="gold">PROGRESS</h2>
+        <p class="legend dim">✔ done · ◐ in progress · ○ not started · ✔? assumed from later progress (click to confirm) · ✎ manual reviewed (you tick it, not gamefile-proven)</p>
+        <div id="sections" class="stack"></div>
+      </section>
+
+      <section id="coverageSec" class="more-pane hidden">
+        <h2 class="gold">COVERAGE</h2>
+        <p class="legend dim">What the game files can answer. A zero or “not modelled” is not a clean bill of health.</p>
+        <div id="coverage"></div>
+      </section>
+
+      <section id="statusSec" class="more-pane hidden">
+        <section id="runSec" class="run">
+          <div class="run-head">
+            <h2 class="gold">RUN</h2>
+            <div id="runTargets" class="run-targets"></div>
+          </div>
+          <div id="runCounts" class="runcounts"></div>
+        </section>
+
+        <section id="impossibleSec" class="hidden">
+          <h2 class="dim">IMPOSSIBLE / EXCLUDED</h2>
+          <div id="impossible" class="stack"></div>
+        </section>
+
+        <section id="tradeoffsSec" class="hidden">
+          <h2 class="amber">TRADEOFFS</h2>
+          <div id="tradeoffs" class="stack"></div>
+        </section>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Target picker: no labels exist until this is opened after the spoiler opt-in -->
+<div id="targetPicker" class="picker hidden" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
+  <div class="picker-box">
+    <div class="picker-head">
+      <h2 id="pickerTitle" class="gold">ENDING GOALS</h2>
+      <button class="x" data-act="close-picker" aria-label="close">✕</button>
+    </div>
+    <p class="dim small">Choose one or more goals. This reveals ending names and, while guidance is on, exact scene lines.</p>
+    <div id="targetOptions" class="target-options"></div>
+    <div id="outcomeMatrix" class="outcome-matrix hidden"></div>
+    <div class="picker-foot">
+      <button class="btn" data-act="outcome-matrix">Show outcome matrix (spoilers)</button>
+      <button id="applyTargets" class="btn goldbtn" data-act="apply-targets" disabled>Apply goals</button>
+      <button class="btn" data-act="close-picker">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script src="api.js"></script>
 <script src="app.js"></script>
 </body>

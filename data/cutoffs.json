@@ -1,36 +1,722 @@
 {
-  "version": 1,
-  "note": "Reviewed cutoffs. tools/cutoffs.py generates every candidate the files can suggest (tools/cutoff_index.json: 6276 rows, 12 of them consistent with the saves). This file is the human pass over that pool: only what is listed here becomes a warning in the app, and each entry names the game-file mechanism that causes it. Add an entry only when the mechanism is named and the saves do not contradict it, and say which of the two you are relying on.",
-  "reviewed": "2026-10-27",
+  "version": 3,
+  "note": "Reviewed cutoffs. tools/cutoffs.py generates every pair the files can suggest (13238 rows on this install, base game and DLC); tools/review_cutoffs.py applies the review rule and writes this file. `items` are community cutoffs that survived the graph and journal-failure audit; `windows` are journal phases where a connected Failure input gated by the closer's own journal resolves the quest. Only what is here becomes a warning. `decisions` records every kept and excluded family, so the next pass can see why.",
+  "reviewed": "2026-10-28",
   "pending_review": [
     {
       "candidate": "q201traveltoskellige / q002healingwoman -> q205lofoten",
       "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm",
       "why_not_shipped": "Both 'closers' are early (the prologue follow-up and Destination: Skellige) while q205lofoten is a Skellige quest that comes later, and 2 saves do have it finished. The community is switched off somewhere else in the story too, so the pair very likely reflects a phase transition rather than Yennefer being gone for good. Left out until someone can say which phase switches her off for the last time.",
-      "saves": { "open_before": 171, "finished_after": 0 }
+      "saves": {
+        "open_before": 171,
+        "finished_after": 0
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "family": "brothers_in_arms",
+      "decision": "keep",
+      "why": "Brothers in Arms: Nilfgaard is played through the Kaer Morhen allies, whose communities the Isle of Mists switches off",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 2,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 2,
+        "verdict": "thin",
+        "with_from": 2
+      },
+      "resource": "quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm"
+    },
+    {
+      "family": "pirate -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 5,
+        "later_still_open": 295,
+        "open_before": 295,
+        "verdict": "refuted",
+        "with_from": 300
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "pirate -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 266,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 300
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q001beggining -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 315,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 543
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q001yennsearch -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 298,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 516
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q002bandits -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 298,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 516
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q002griffin -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 298,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 516
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q002healingwoman -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 17,
+        "later_still_open": 296,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 513
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q002vizimapalace -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 297,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 515
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q101agent -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 294,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 456
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q110postbattle -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q201traveltoskellige -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 3,
+        "later_still_open": 340,
+        "open_before": 340,
+        "verdict": "refuted",
+        "with_from": 343
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q201traveltoskellige -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 17,
+        "later_still_open": 285,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 343
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q203cataclysm -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 19,
+        "later_still_open": 185,
+        "open_before": 184,
+        "verdict": "refuted",
+        "with_from": 205
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q205cirireplacer -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 6
+      },
+      "resource": "quests\\part_1\\quest_files\\q205_frozen_coast\\spawnsets\\q205_priestess.w2comm"
+    },
+    {
+      "family": "q205herbarium -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 12
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q206berserkers -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 3,
+        "later_still_open": 67,
+        "open_before": 67,
+        "verdict": "refuted",
+        "with_from": 70
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q208heroesmead -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 3,
+        "later_still_open": 60,
+        "open_before": 60,
+        "verdict": "refuted",
+        "with_from": 63
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q210avallachlab -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q210avallachlab -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q210emhyr -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q210emhyr -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q210precanaris -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q210precanaris -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q210preparations -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q210preparations -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q210skjallgrave -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 0
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "q210skjallgrave -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 0
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q309mages -> q309novigradundercontrol",
+      "decision": "exclude",
+      "why": "the journal entry is a phase placeholder that stays active after the content is over",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 215,
+        "open_before": 215,
+        "verdict": "consistent",
+        "with_from": 225
+      },
+      "resource": "quests\\part_2\\quest_files\\q309_casablanca\\spawnsets\\q309_queue_harbour1.w2comm"
+    },
+    {
+      "family": "q309novigradundercontrol2 -> q309novigradundercontrol",
+      "decision": "exclude",
+      "why": "the journal entry is a phase placeholder that stays active after the content is over",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 0
+      },
+      "resource": "quests\\part_2\\quest_files\\q309_casablanca\\spawnsets\\q309_alone_woman_brothel_gate.w2comm"
+    },
+    {
+      "family": "q310bombing -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q310pregeels -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q310preparationsnovigrad -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q310prisonbreak -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q310romancefailure -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 0
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q311thespiral -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q403battle -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "q502avallach -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 2
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "searchforugly -> ch1quest",
+      "decision": "exclude",
+      "why": "an aggregate 'In Ciri's Footsteps' entry, not a playable quest",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 0
+      },
+      "resource": "quests\\secondary_npcs\\community_files\\donar_an_hindar.w2comm"
+    },
+    {
+      "family": "sq202yen -> q205lofoten",
+      "decision": "exclude",
+      "why": "the pending review in this file already found the Yennefer community is switched off elsewhere in the story, so the pair is a phase transition",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 0,
+        "verdict": "untested",
+        "with_from": 0
+      },
+      "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm"
+    },
+    {
+      "family": "sq301triss -> q309novigradundercontrol",
+      "decision": "exclude",
+      "why": "the journal entry is a phase placeholder that stays active after the content is over",
+      "saves": {
+        "ever_open": true,
+        "later_failed": 0,
+        "later_finished": 0,
+        "later_still_open": 218,
+        "open_before": 216,
+        "verdict": "consistent",
+        "with_from": 230
+      },
+      "resource": "quests\\sidequests\\novigrad\\quest_files\\sq301_triss\\spawnsets\\sq301_ungrateful_mage.w2comm"
+    },
+    {
+      "family": "window:triss_statuettes_window",
+      "decision": "keep",
+      "why": "the affected journal entry has a connected Failure input gated by q210preparations.journal, and q210preparations#Novigrad is a phase of that journal"
     }
   ],
   "items": [
     {
-      "id": "triss_statuettes",
+      "id": "brothers_in_arms",
+      "event_name": "The Isle of Mists",
       "level": "stop",
       "mechanism": "spawnset",
-      "resource": "quests\\main_npcs\\community_files\\triss.w2comm",
-      "affects": ["mq3012noblestatuette", "mq3012warriorstatuette"],
-      "closed_by": ["q301dreamer", "q301helpdreamer", "q303treasure", "q309mages", "sq301triss"],
-      "action": "Give the Soldier Statuette and the Nobleman Statuette to Triss",
-      "headline": "Hand both statuettes to Triss before {binding}",
-      "why": "Finishing {binding} switches off Triss's community - the game file triss.w2comm, which is what puts her in the world - and both statuette quests play their scenes with her. Once that file is switched off, they cannot be finished. Five different quests switch her off, so the one that matters is whichever of them you reach first: {binding} here.",
+      "resource": "quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm",
+      "affects": [
+        "q402nilfgaardianally",
+        "q402novigradallies",
+        "q402skelligeallies",
+        "q402velenallies"
+      ],
+      "closed_by": [
+        "q402ciri"
+      ],
+      "action": "Finish the Brothers in Arms quests",
+      "headline": "Finish Brothers in Arms before The Isle of Mists",
+      "why": "The Isle of Mists switches off the Kaer Morhen allies' communities in quests\\part_2\\q402_ciri.w2phase (CDeactivateSpawnset), and every Brothers in Arms quest is played through them: q402nilfgaardianally references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402novigradallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402skelligeallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402velenallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm. Sailing to the Isle closes them.",
       "files": [
-        "quests\\sidequests\\novigrad\\sq301_triss.w2phase switches off quests\\main_npcs\\community_files\\triss.w2comm (CQuestStoryPhaseSetterBlock -> CDeactivateSpawnset)",
-        "quests\\minor_quests\\novigrad\\quest_files\\mq3012_jade_statuettes\\scenes\\mq3012_04_triss_remove_curse.w2scene is played with Triss, and the quest's phase files reference triss.w2comm, triss.w2ent and triss_default.w2scene",
-        "quests\\minor_quests\\novigrad\\quest_files\\mq3012_jade_statuettes\\scenes\\mq3012_05_lifting_curse.w2scene tests the facts that decide which statuette has been handed over"
+        "quests\\part_2\\q402_ciri.w2phase switches off quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm (CQuestStoryPhaseSetterBlock -> CDeactivateSpawnset)",
+        "quests\\part_2\\q402_ciri.w2phase references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm",
+        "quests\\part_2\\q402_ciri.w2phase references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm",
+        "quests\\part_2\\q402_ciri.w2phase references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm",
+        "quests\\part_2\\q402_ciri.w2phase references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm"
       ],
       "evidence": "files+saves",
       "caveats": [
-        "No save in the corpus has ever finished either statuette quest, so the saves cannot confirm the cutoff on their own: they are consistent with it (198 saves where Now or Never is done with a statuette quest still under way, none finishing it later) but a quest nobody finishes looks the same as one that cannot be finished. The mechanism is what makes this a cutoff, not the save count.",
-        "The journal never marks them failed, so the tracker's own status still reads Active after Triss is gone."
-      ]
+        "Only two saves in the corpus had a Brothers in Arms quest still open when The Isle of Mists was done; none finished one later. The mechanism is what makes this a cutoff, not the save count."
+      ],
+      "saves": {
+        "ever_open": true,
+        "later_failed": 2,
+        "later_finished": 0,
+        "later_still_open": 0,
+        "open_before": 2,
+        "verdict": "thin",
+        "with_from": 2
+      }
+    }
+  ],
+  "windows": [
+    {
+      "id": "triss_statuettes_window",
+      "level": "stop",
+      "mechanism": "journal_failure",
+      "resource": "",
+      "affects": [
+        "mq3012noblestatuette",
+        "mq3012warriorstatuette"
+      ],
+      "affected_titles": [
+        "The Nobleman Statuette",
+        "The Soldier Statuette"
+      ],
+      "closed_by": [
+        "q210preparations"
+      ],
+      "closed_by_titles": [
+        "Battle Preparations"
+      ],
+      "closes_at": "q210preparations#Novigrad",
+      "closes_at_title": "the end of Final Preparations",
+      "binding": "q210preparations",
+      "binding_title": "Battle Preparations",
+      "action": "Give both statuettes to Triss during Final Preparations",
+      "headline": "Hand both statuettes to Triss before Final Preparations ends",
+      "why": "When Battle Preparations begins, the game's own fixup graph runs a branch for each statuette journal entry: the branch reads q210preparations.journal as Active or Success and sends the entry through a Success or Failure input. That is the game resolving the quests, not an NPC silently disappearing. Triss takes the statuettes during Final Preparations after the Philippa rescue (the statuette phase tests q310_philippa_rescued), so that quest is the last window.",
+      "files": [
+        "quests\\bugfixing_phase.w2phase: journal blocks 6832 (noble) and 6796 (soldier) have connected Failure inputs fed by conditions 6828/6800; their shared pause condition 6808 ('q210 preparation complete') tests q210preparations.journal as Active or Success",
+        "gameplay\\journal\\quests\\q210preparations.journal is Battle Preparations; its first phase is Novigrad ('Meet Avallac'h on the ship')",
+        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase is the turn-in; it tests q310_philippa_rescued and q310_keira_done, and its own phase activates triss.w2comm, so Now or Never's switch is a phase transition, not a cutoff"
+      ],
+      "caveats": [
+        "No save in the corpus has a statuette still open when Battle Preparations starts, so the save history cannot confirm the window; the game's own connected Failure branch is the evidence.",
+        "Before the window the journal can say Active for a long time: the quest is still winnable, not lost.",
+        "After the window, if the journal still says Active, the app says CHECK NOW rather than LOST; only a Failed journal entry may be called lost."
+      ],
+      "event_name": "the start of Battle Preparations",
+      "evidence": "files",
+      "saves": {},
+      "resources": []
     }
   ]
 }

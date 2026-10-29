@@ -1,97 +1,115 @@
 {
- "note": "The reviewed settlement of the route's disputed prerequisites - the ones the saves contradict. Each entry is a decision about a `hard` edge in route.json: `fact` keeps the edge but tests it on the game's own condition instead of the prerequisite's journal status; `drop` removes it, because the saves refute it and the files name no single condition to test it with. Written by hand from tools/prereqs.py's output (tools/prereq_relations.json) and re-checked by it on every run: a decision that the saves no longer support fails the run.",
+ "note": "The reviewed settlement of the route's disputed prerequisites - the ones the saves contradict. Each entry is a decision about a `hard` edge in route.json: `fact` keeps the edge but tests it on the game's own condition instead of the prerequisite's journal status; `drop` removes it, because the saves refute it and the files name no single condition to test it with. The 0.2 route is keyed on the journal file names the save uses, so the 0.1.9 step ids are kept in `legacy_step`/`legacy_requires` and the live ids are the journal names. Written by hand from tools/prereqs.py's output (tools/prereq_relations.json) and re-checked by it on every run: a decision that the saves no longer support fails the run.",
  "reviewed": "2026-10-27",
  "items": [
   {
-   "step": "no_eye",
-   "requires": "no_junior",
+   "step": "sq312vincentves",
+   "requires": "q302mafia",
    "decision": "fact",
    "facts": [
     "q302_whoreson_found"
    ],
    "saves": "7 of 219 saves have An Eye for an Eye under way while Get Junior reads unfinished, and all 7 have q302_whoreson_found set",
    "files": "quests\\sidequests\\novigrad\\quest_files\\sq312_ves\\phases\\sq312_quest.w2phase waits on q302_whoreson_found; quests\\part_1\\q302_mafia.w2phase sets it ('q302_whoreson_found')",
-   "why": "The prerequisite is real, the signal was wrong. An Eye for an Eye opens once Get Junior has reached the point where Whoreson Junior is found - not once Get Junior is finished."
+   "why": "The prerequisite is real, the signal was wrong. An Eye for an Eye opens once Get Junior has reached the point where Whoreson Junior is found - not once Get Junior is finished.",
+   "legacy_step": "no_eye",
+   "legacy_requires": "no_junior"
   },
   {
-   "step": "no_fencing",
-   "requires": "no_broken",
+   "step": "mq3036rosaromance",
+   "requires": "q304dandelion",
    "decision": "fact",
    "facts": [
     "q304_rosa_visited"
    ],
    "saves": "7 of 439 saves have Fencing Lessons under way while Broken Flowers reads unfinished, and all 7 have q304_rosa_visited set",
    "files": "quests\\minor_quests\\novigrad\\mq3036_rosa_romance.w2phase waits on q304_rosa_visited; quests\\part_1\\q304_dandelion.w2phase sets it ('Add q304_rosa_visited')",
-   "why": "Fencing Lessons opens when you have visited Rosa at the estate, which happens during Broken Flowers. The old note ('right after Broken Flowers') was right in spirit and wrong as a gate on Broken Flowers being over."
+   "why": "Fencing Lessons opens when you have visited Rosa at the estate, which happens during Broken Flowers. The old note ('right after Broken Flowers') was right in spirit and wrong as a gate on Broken Flowers being over.",
+   "legacy_step": "no_fencing",
+   "legacy_requires": "no_broken"
   },
   {
-   "step": "no_gangs",
-   "requires": "no_junior",
+   "step": "q302war",
+   "requires": "q302mafia",
    "decision": "fact",
    "facts": [
     "q302_whoreson"
    ],
    "saves": "218 of 430 saves have The Gangs of Novigrad under way while Get Junior reads unfinished; 7 saves have it Failed with Get Junior still open",
    "files": "quests\\part_1\\quest_files\\q302_mafia\\phases\\casino.w2phase waits on q302_whoreson; quests\\part_1\\q302_mafia.w2phase sets it. The quest's own journal entry is added from quests\\part_1\\quest_files\\q302_mafia\\phases\\cleaver.w2phase, the 'Asking Cleaver for help' segment",
-   "why": "It appears during Get Junior when you ask Cleaver for help, and the 7 Failed saves are the ones that did the arena and the casino themselves first - so the old note ('talk to Cleaver before you clear both the arena and the casino yourself') is what the game does, and Get Junior being over was never the rule."
+   "why": "It appears during Get Junior when you ask Cleaver for help, and the 7 Failed saves are the ones that did the arena and the casino themselves first - so the old note ('talk to Cleaver before you clear both the arena and the casino yourself') is what the game does, and Get Junior being over was never the rule.",
+   "legacy_step": "no_gangs",
+   "legacy_requires": "no_junior"
   },
   {
-   "step": "no_highstakes",
-   "requires": "no_pyres",
+   "step": "sq306maverick",
+   "requires": "q301dreamer",
    "decision": "fact",
    "facts": [
     "q301_burn_doppler"
    ],
    "saves": "11 of 466 saves have High Stakes under way while Pyres of Novigrad reads unfinished, and all 11 have q301_burn_doppler set",
    "files": "quests\\sidequests\\novigrad\\sq306_maverick.w2phase waits on q301_burn_doppler; quests\\part_1\\q301_dreamer.w2phase sets it, at the doppelganger",
-   "why": "The tournament opens once the doppelganger has been burned in Pyres of Novigrad, which is partway through that quest, not when it is over."
+   "why": "The tournament opens once the doppelganger has been burned in Pyres of Novigrad, which is partway through that quest, not when it is over.",
+   "legacy_step": "no_highstakes",
+   "legacy_requires": "no_pyres"
   },
   {
-   "step": "no_honor",
-   "requires": "no_junior",
+   "step": "q302debt",
+   "requires": "q302mafia",
    "decision": "fact",
    "facts": [
     "q302_freed_rico"
    ],
    "saves": "13 of 225 saves have Honor Among Thieves under way while Get Junior reads unfinished, and all 13 have q302_freed_rico set",
    "files": "quests\\part_1\\quest_files\\q302_mafia\\phases\\king_beggar_reward.w2phase waits on q302_freed_rico; quests\\part_1\\quest_files\\q302_mafia\\phases\\casino.w2phase sets it ('Add q302_freed_rico')",
-   "why": "It comes from Get Junior's own King of Beggars reward segment ('Tell King Beggar about Rico'), which runs when you free Rico in the casino - during Get Junior, not after it."
+   "why": "It comes from Get Junior's own King of Beggars reward segment ('Tell King Beggar about Rico'), which runs when you free Rico in the casino - during Get Junior, not after it.",
+   "legacy_step": "no_honor",
+   "legacy_requires": "no_junior"
   },
   {
-   "step": "no_favor",
-   "requires": "no_junior",
+   "step": "q302favourforradovid",
+   "requires": "q302mafia",
    "decision": "drop",
    "facts": [],
    "saves": "6 of 218 saves have A Favor for Radovid finished while Get Junior reads unfinished",
    "files": "its journal entry is added from quests\\part_1\\quest_files\\q302_mafia\\phases\\postmafia.w2phase, at the scene q302_39_radovid_about_favour (Radovid's soldiers, when you leave the compound)",
-   "why": "It is created by Get Junior's own chain, so Get Junior being over was never the rule, and the files name no condition to test instead. The step's note keeps the warning that matters: it never triggers if you leave the compound without talking to them."
+   "why": "It is created by Get Junior's own chain, so Get Junior being over was never the rule, and the files name no condition to test instead. The step's note keeps the warning that matters: it never triggers if you leave the compound without talking to them.",
+   "legacy_step": "no_favor",
+   "legacy_requires": "no_junior"
   },
   {
-   "step": "no_reuven",
-   "requires": "no_junior",
+   "step": "q303treasure",
+   "requires": "q302mafia",
    "decision": "drop",
    "facts": [],
    "saves": "222 of 434 saves have Count Reuven's Treasure under way while Get Junior reads unfinished, and none has it under way or finished after Get Junior is over",
    "files": "its entry is added from quests\\part_1\\quest_files\\q302_mafia\\phases\\q302_q303_common_journal_priscilla.w2phase (a file both quests own) and from its own quests\\part_1\\q303_treasure.w2phase",
-   "why": "The two run alongside each other and the story closes them together, so 'Get Junior first' is not a rule. The quest's own earlier note (ask Menge about Dijkstra's treasure) still stands."
+   "why": "The two run alongside each other and the story closes them together, so 'Get Junior first' is not a rule. The quest's own earlier note (ask Menge about Dijkstra's treasure) still stands.",
+   "legacy_step": "no_reuven",
+   "legacy_requires": "no_junior"
   },
   {
-   "step": "no_visiting",
-   "requires": "no_junior",
+   "step": "q302rescuingdudu",
+   "requires": "q302mafia",
    "decision": "drop",
    "facts": [],
    "saves": "6 of 218 saves have Ciri's Story: Visiting Junior finished while Get Junior reads unfinished",
    "files": "its journal entry is added from quests\\part_1\\q302_mafia.w2phase, under the script for the temple-house back door",
-   "why": "It is a Ciri flashback that Get Junior's own chain creates, so the prerequisite as written is not a rule. Ten facts link the two and the saves break none of them, so there is no single condition to keep the lock on either."
+   "why": "It is a Ciri flashback that Get Junior's own chain creates, so the prerequisite as written is not a rule. Ten facts link the two and the saves break none of them, so there is no single condition to keep the lock on either.",
+   "legacy_step": "no_visiting",
+   "legacy_requires": "no_junior"
   },
   {
-   "step": "sk_thread",
-   "requires": "sk_dest",
+   "step": "sq106killbill",
+   "requires": "q201traveltoskellige",
    "decision": "drop",
    "facts": [],
    "saves": "153 of 466 saves have Following the Thread under way while Destination: Skellige reads unfinished",
    "files": "its entry is added from its own quests\\sidequests\\no_mans_land\\sq106_killbill.w2phase and ...\\phases\\sq106_hammond.w2phase; the only fact linking it to Destination: Skellige is q201_landed_on_skellige, which its own file waits on for its later Skellige stage and which is unset in 150 of those 153 saves",
-   "why": "Following the Thread starts in Novigrad and Lambert's part of it does not need Destination: Skellige finished. The fact the files name is a condition inside each quest, not a gate between them."
+   "why": "Following the Thread starts in Novigrad and Lambert's part of it does not need Destination: Skellige finished. The fact the files name is a condition inside each quest, not a gate between them.",
+   "legacy_step": "sk_thread",
+   "legacy_requires": "sk_dest"
   }
  ]
 }

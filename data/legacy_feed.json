@@ -10,7 +10,7 @@
       "headline": "Do Possession before you finish The Lord of Undvik, or King's Gambit is not offered there.",
       "details": [
         "Game files: at the end of The Lord of Undvik the graph branches on the fact q203_cerys_saved, which is set at the end of Possession's 'helping with him' phase. The branch it takes adds King's Gambit's journal entry to your log; the other branch adds Echoes of the Past instead.",
-        "Your saves: 102 saves contain King's Gambit and every one has both The Lord of Undvik and Possession finished.",
+        "Corpus (the 517 saves this was worked out on, not your current save): 102 of them contain King's Gambit and every one has both The Lord of Undvik and Possession finished.",
         "Earlier note said it needed both quests complete; the game's own file shows why, and names the check it makes."
       ],
       "checks": [
@@ -32,10 +32,32 @@
       "quest": "Now or Never",
       "level": "stop",
       "evidence": "save+graph",
-      "headline": "Give the Soldier Statuette and the Nobleman Statuette to Triss BEFORE Now or Never.",
+      "headline": "Give the Soldier Statuette and the Nobleman Statuette to Triss before Triss leaves Novigrad.",
+      "affected": [
+        "mq3012noblestatuette",
+        "mq3012warriorstatuette"
+      ],
+      "affected_titles": [
+        "The Nobleman Statuette",
+        "The Soldier Statuette"
+      ],
+      "closed_by": [
+        "q301dreamer",
+        "q301helpdreamer",
+        "q303treasure",
+        "q309mages",
+        "sq301triss"
+      ],
+      "closed_by_titles": [
+        "Pyres of Novigrad",
+        "Novigrad Dreaming",
+        "Count Reuven's Treasure",
+        "Now or Never",
+        "A Matter of Life and Death"
+      ],
       "details": [
-        "Finishing Now or Never removes Triss's spawnset, and the statuette quests still need her.",
-        "Your saves: in 195 saves where Now or Never is done, the Nobleman Statuette is still Active in all 195 and the Soldier Statuette in 173 (Inactive in 22, never given). Neither statuette is finished in any save.",
+        "Five quests switch off Triss's spawnset partway through, and the statuette scenes are played with her, so the one that matters is whichever of them you reach first.",
+        "Corpus (the 517 saves this was worked out on, not your current save): in 195 saves where Now or Never is done, the Nobleman Statuette is still Active in all 195 and the Soldier Statuette in 173 (Inactive in 22, never given). Neither statuette is finished in any save.",
         "The journal does not mark them failed, so they still show as next. This is a cutoff."
       ],
       "checks": [

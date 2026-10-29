@@ -1,0 +1,3065 @@
+{
+ "sections": [
+  "White Orchard",
+  "Velen",
+  "Novigrad",
+  "Skellige",
+  "Kaer Morhen",
+  "Ciri / base game ending",
+  "Hearts of Stone",
+  "Blood and Wine"
+ ],
+ "nodes": [
+  {
+   "section": "White Orchard",
+   "id": "wo_prologue",
+   "title": "Lilac and Gooseberries (prologue: tutorial, loot the crystal skull, Gwent with Aldert, buy cards from Elsa)",
+   "lv": "1",
+   "files": [],
+   "conf": "",
+   "hard": [],
+   "by": [
+    "E_VESEMIR"
+   ],
+   "note": "Manual. Play Aldert (the scholar) and buy from Elsa on the way; Aldert is hanged later in Velen.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_beast",
+   "title": "The Beast of White Orchard (griffin)",
+   "lv": "3",
+   "files": [
+    "q002griffin"
+   ],
+   "conf": "high",
+   "hard": [
+    "wo_prologue"
+   ],
+   "by": [],
+   "note": "Reporting the griffin is safe. The point of no return is the later talk with Vesemir at the inn.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_deathbed",
+   "title": "On Death's Bed",
+   "lv": "2",
+   "files": [
+    "q002healingwoman"
+   ],
+   "conf": "high",
+   "hard": [
+    "wo_beast"
+   ],
+   "by": [
+    "E_VESEMIR"
+   ],
+   "note": "Fails when the prologue ends (talking to Vesemir).",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_missing",
+   "title": "Missing in Action",
+   "lv": "2",
+   "files": [
+    "mq0001battlefieldmother"
+   ],
+   "conf": "high",
+   "hard": [
+    "wo_prologue"
+   ],
+   "by": [
+    "E_VESEMIR"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_cargo",
+   "title": "Precious Cargo",
+   "lv": "2",
+   "files": [
+    "mq0002thefield"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_VESEMIR"
+   ],
+   "note": "Cutoff is presumed (the wiki is blank): do it before the Vesemir talk.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_frying",
+   "title": "A Frying Pan, Spick and Span",
+   "lv": "2",
+   "files": [
+    "mq0004lockedshed"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_VESEMIR"
+   ],
+   "note": "Cutoff is presumed (the wiki is blank): do it before the Vesemir talk.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_twisted",
+   "title": "Twisted Firestarter",
+   "lv": "2",
+   "files": [
+    "mq0005dwarfsmith"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_VESEMIR"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_viper",
+   "title": "Viper School gear: both sword diagrams (silver: Kolgrim crypt, steel: castle ruins chest)",
+   "lv": "6",
+   "files": [
+    "th1001viper"
+   ],
+   "conf": "med",
+   "hard": [],
+   "by": [],
+   "note": "No source says they are lost when you leave, but your route collects them here.",
+   "kind": "treasure",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_poi",
+   "title": "Places of Power and the rest of the White Orchard clean-up",
+   "lv": "1",
+   "files": [],
+   "conf": "",
+   "hard": [],
+   "by": [],
+   "note": "Unverified whether a Place of Power here is missable.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_incident",
+   "title": "The Incident at White Orchard (talk to Vesemir at the inn)",
+   "lv": "2",
+   "files": [
+    "q002bandits"
+   ],
+   "conf": "med",
+   "hard": [
+    "wo_beast"
+   ],
+   "by": [],
+   "note": "MAKE A MANUAL SAVE FIRST. This talk ends the prologue and fails the White Orchard side quests.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_audience",
+   "title": "Imperial Audience",
+   "lv": "2",
+   "files": [
+    "q002vizimapalace"
+   ],
+   "conf": "high",
+   "hard": [
+    "wo_incident"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "White Orchard",
+   "id": "wo_devil",
+   "title": "Contract: Devil by the Well",
+   "lv": "2",
+   "files": [
+    "mq0003freshwater"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_THINICE"
+   ],
+   "note": "NOT lost when White Orchard ends. It fails at On Thin Ice, so it can wait.",
+   "kind": "contract",
+   "opt": true,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_nilf",
+   "title": "The Nilfgaardian Connection (gate for all of Velen)",
+   "lv": "5",
+   "files": [
+    "q101agent"
+   ],
+   "conf": "med",
+   "hard": [
+    "wo_audience"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_hunting",
+   "title": "Hunting a Witch",
+   "lv": "5",
+   "files": [
+    "q104lookingforwitch"
+   ],
+   "conf": "low",
+   "hard": [
+    "ve_nilf"
+   ],
+   "by": [],
+   "note": "Journal file has no readable entries, so detection is weak: tick it if it looks wrong.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_wander",
+   "title": "Wandering in the Dark",
+   "lv": "6",
+   "files": [
+    "mine"
+   ],
+   "conf": "med",
+   "hard": [
+    "ve_hunting"
+   ],
+   "by": [
+    "E_LAMP"
+   ],
+   "note": "Accept and finish Magic Lamp INSIDE the elven ruins before you leave.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_lamp",
+   "title": "Magic Lamp",
+   "lv": "6",
+   "files": [
+    "q104postmine"
+   ],
+   "conf": "med",
+   "hard": [
+    "ve_wander"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Must be finished inside the ruins; skipping it also blocks the Place of Power there.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_baron",
+   "title": "Bloody Baron",
+   "lv": "6",
+   "files": [
+    "baron"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_nilf"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_wolves",
+   "title": "Ciri's Story: The King of the Wolves",
+   "lv": "5",
+   "files": [
+    "q103firstreplacerciri"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_baron"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_invite",
+   "title": "An Invitation from Keira Metz",
+   "lv": "6",
+   "files": [
+    "q106findkeira"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_wander"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Only needs Wandering in the Dark (Magic Lamp is recommended first).",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_lynch",
+   "title": "Lynch Mob (Hangman's Alley)",
+   "lv": "7",
+   "files": [
+    "mq1015lynch"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_FAVOR"
+   ],
+   "note": "Do it BEFORE A Favor for a Friend starts (the end of Towerful of Mice).",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_tower",
+   "title": "A Towerful of Mice",
+   "lv": "6",
+   "files": [
+    "q106tower"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_invite"
+   ],
+   "by": [
+    "E_ISLE",
+    "E_FAVOR"
+   ],
+   "note": "Fyke Isle. Finish Lynch Mob before you return to Keira.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_favor",
+   "title": "A Favor for a Friend",
+   "lv": "6",
+   "files": [
+    "sq101keira"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_tower"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Starts after the Towerful of Mice. Do not refuse to play along at dinner.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_advance",
+   "title": "For the Advancement of Learning (send Keira to Kaer Morhen)",
+   "lv": "8",
+   "files": [
+    "q109wrapup"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_favor"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "On Fyke Isle: 'What's with the notes?' > 'Radovid never forgets' > 'It's suicide' > the Kaer Morhen option. Do NOT demand the notes first.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_forefathers",
+   "title": "Forefathers' Eve",
+   "lv": "7",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "ve_tower"
+   ],
+   "by": [],
+   "note": "Optional; only after Towerful of Mice. No journal file found.",
+   "kind": "side",
+   "opt": true,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_family",
+   "title": "Family Matters (Bloody Baron line)",
+   "lv": "6",
+   "files": [
+    "family"
+   ],
+   "conf": "med",
+   "hard": [
+    "ve_wolves"
+   ],
+   "by": [],
+   "note": "Cannot be finished until Ladies of the Wood is done. The final Baron conversation is the last chance to play him at Gwent.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_ladies",
+   "title": "Ladies of the Wood",
+   "lv": "6",
+   "files": [
+    "q105witches"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_wander"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_hillock",
+   "title": "The Whispering Hillock",
+   "lv": "5",
+   "files": [
+    "q105evilspirit"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_ladies"
+   ],
+   "by": [],
+   "note": "A sub-quest of Ladies of the Wood. Consult the Downwarren ealdorman BEFORE freeing the spirit, or Return to Crookback Bog changes.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_fleeing",
+   "title": "Ciri's Story: Fleeing the Bog",
+   "lv": "5",
+   "files": [
+    "q105ciriescape"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_hillock"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_gwent_baron",
+   "title": "Beat the Baron at Gwent",
+   "lv": "",
+   "files": [
+    "cgnomansland#Win unique card from Baron"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_BARON_ANNA"
+   ],
+   "note": "Last chance is the final Family Matters conversation. After that the card is in his office.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_bog",
+   "title": "Return to Crookback Bog",
+   "lv": "9",
+   "files": [
+    "q107swamps"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_family",
+    "ve_ladies"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "If you freed the spirit: pick the doll with the violet hollyhock bloom or Anna dies.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_shadows",
+   "title": "Ciri's Story: Out of the Shadows",
+   "lv": "",
+   "files": [
+    "q103thirdreplacerciri"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_family"
+   ],
+   "by": [],
+   "note": "Triggered by the final Baron conversation.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_hazard",
+   "title": "Hazardous Goods",
+   "lv": "",
+   "files": [
+    "mq1003trailofdead"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_GHOSTS"
+   ],
+   "note": "Do it before Ghosts of the Past.",
+   "kind": "side",
+   "opt": true,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_reardon",
+   "title": "The Fall of the House of Reardon",
+   "lv": "6",
+   "files": [
+    "sq102dolores"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Always available.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Velen",
+   "id": "ve_ghosts",
+   "title": "Ghosts of the Past (only if Letho is alive in your world state)",
+   "lv": "6",
+   "files": [
+    "sq102letho"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Only exists if Letho is alive in your world state (set it under My game). Do not stray from Letho or he leaves.",
+   "kind": "side",
+   "opt": false,
+   "when": [
+    "letho=yes"
+   ]
+  },
+  {
+   "section": "Velen",
+   "id": "ve_keira_km",
+   "title": "Keira sent to Kaer Morhen (your choice at the end of her chain)",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "ve_advance"
+   ],
+   "by": [],
+   "note": "Needed for Brothers In Arms: Velen. Excludes the late quest A Final Kindness.",
+   "kind": "side",
+   "opt": true,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_pyres",
+   "title": "Pyres of Novigrad",
+   "lv": "10",
+   "files": [
+    "q301dreamer"
+   ],
+   "conf": "high",
+   "hard": [
+    "wo_audience"
+   ],
+   "by": [],
+   "note": "Entry quest: unlocks High Stakes and the Nobleman Statuette.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_dreaming",
+   "title": "Novigrad Dreaming (let the godling Sarah stay)",
+   "lv": "7",
+   "files": [
+    "q301helpdreamer"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_pyres"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_innk",
+   "title": "Gwent: Playing Innkeeps (Stjepan, crossroads innkeeper, Olivier)",
+   "lv": "",
+   "files": [
+    "cginnkeepers#Win unique card from Stjepan the innkeeper",
+    "cginnkeepers#Win unique card from crossroads innkeeper",
+    "cginnkeepers#Win unique card fro Olivier"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_NOW"
+   ],
+   "note": "Olivier can die in Now or Never.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_broken",
+   "title": "Broken Flowers (win BOTH Rosa duels; play Zoltan at Gwent)",
+   "lv": "11",
+   "files": [
+    "q304dandelion"
+   ],
+   "conf": "med",
+   "hard": [
+    "no_dreaming"
+   ],
+   "by": [],
+   "note": "Mapped by elimination (its journal file has no entries).",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_fencing",
+   "title": "Fencing Lessons",
+   "lv": "12",
+   "files": [
+    "mq3036rosaromance"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_broken"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Opens once you have visited Rosa at the estate, during Broken Flowers (its file waits on q304_rosa_visited, which Broken Flowers sets) - not after Broken Flowers is over.",
+   "kind": "side",
+   "opt": false,
+   "when": [],
+   "hard_facts": {
+    "no_broken": [
+     "q304_rosa_visited"
+    ]
+   }
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_junior",
+   "title": "Get Junior",
+   "lv": "12",
+   "files": [
+    "q302mafia"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_broken"
+   ],
+   "by": [],
+   "note": "Visit Cleaver first (The Gangs of Novigrad) before meeting the Redanian contact.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_gangs",
+   "title": "The Gangs of Novigrad",
+   "lv": "9",
+   "files": [
+    "q302war"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_junior"
+   ],
+   "by": [
+    "E_REDANIAN"
+   ],
+   "note": "Talk to Cleaver before you clear both the arena and the casino yourself. Opens from Get Junior's cleaver phase, when you ask him for help, once you have found Whoreson Junior (the quest's own file waits on q302_whoreson). 7 saves show it Failed with Get Junior still open: do the arena and the casino with his men, not yourself.",
+   "kind": "side",
+   "opt": false,
+   "when": [],
+   "hard_facts": {
+    "no_junior": [
+     "q302_whoreson"
+    ]
+   }
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_honor",
+   "title": "Honor Among Thieves",
+   "lv": "9",
+   "files": [
+    "q302debt"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_junior"
+   ],
+   "by": [],
+   "note": "Comes from Get Junior's own King of Beggars segment, once you have freed Rico in the casino: its file waits on q302_freed_rico, which Get Junior sets while you are still in there.",
+   "kind": "side",
+   "opt": false,
+   "when": [],
+   "hard_facts": {
+    "no_junior": [
+     "q302_freed_rico"
+    ]
+   }
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_visiting",
+   "title": "Ciri's Story: Visiting Junior",
+   "lv": "9",
+   "files": [
+    "q302rescuingdudu"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [],
+   "note": "A Ciri flashback created by Get Junior's own quest file, so it appears while you are doing Get Junior (6 saves have it finished with Get Junior still open).",
+   "kind": "main",
+   "opt": false,
+   "when": [],
+   "hard_facts": {}
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_favor",
+   "title": "A Favor for Radovid",
+   "lv": "9",
+   "files": [
+    "q302favourforradovid"
+   ],
+   "conf": "med",
+   "hard": [],
+   "by": [],
+   "note": "Never triggers if you leave Junior's compound without talking to Radovid's soldiers: its entry is added by the scene q302_39_radovid_about_favour in Get Junior's postmafia phase, while Get Junior is still in your log.",
+   "kind": "main",
+   "opt": false,
+   "when": [],
+   "hard_facts": {}
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_waterfront",
+   "title": "A Walk on the Waterfront",
+   "lv": "12",
+   "files": [
+    "mq3005badalley"
+   ],
+   "conf": "med",
+   "hard": [],
+   "by": [
+    "E_REUVEN"
+   ],
+   "note": "Do it before the witch-hunter outpost part of Count Reuven's Treasure. Your quest log calls it Shady Deal.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_reuven",
+   "title": "Count Reuven's Treasure",
+   "lv": "12",
+   "files": [
+    "q303treasure"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [],
+   "note": "Ask Menge about Dijkstra's treasure. Runs alongside Get Junior: its journal entry comes from Get Junior's own shared phase and from its own, and 222 saves hold both at once - there is no need to finish Get Junior first.",
+   "kind": "main",
+   "opt": false,
+   "when": [],
+   "hard_facts": {}
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_play",
+   "title": "The Play's the Thing",
+   "lv": "11",
+   "files": [
+    "q305theplay"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_junior",
+    "no_reuven"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_poet",
+   "title": "A Poet Under Pressure",
+   "lv": "13",
+   "files": [
+    "q305lookingfordandelion"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_play"
+   ],
+   "by": [],
+   "note": "Starts Cabaret and A Dangerous Game. Also unlocks Blood and Wine.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_breakneck",
+   "title": "Ciri's Story: Breakneck Speed",
+   "lv": "11",
+   "files": [
+    "q305cirichasetothetemple"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_poet"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_matter",
+   "title": "A Matter of Life and Death (Triss)",
+   "lv": "12",
+   "files": [
+    "sq301triss"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_reuven"
+   ],
+   "by": [
+    "E_NOW",
+    "E_ISLE"
+   ],
+   "note": "Win all 3 Vegelbud Gwent matches before the party ends.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_vegelbud",
+   "title": "Win the 3 Vegelbud Gwent matches (3 unique cards)",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "no_matter"
+   ],
+   "by": [
+    "E_MATTER_END"
+   ],
+   "note": "Temporary opponents: only chance, inside A Matter of Life and Death.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_cabaret",
+   "title": "Cabaret",
+   "lv": "14",
+   "files": [
+    "sq303brothel"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_poet"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_carnal",
+   "title": "Carnal Sins",
+   "lv": "16",
+   "files": [
+    "q308psycho"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_cabaret"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Pauses the Vegelbud race and postpones the ball; do the Vegelbud party first.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_dangerous",
+   "title": "A Dangerous Game (take the three cards; loot the jade figurine)",
+   "lv": "12",
+   "files": [
+    "sq310dangerousgame"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_poet"
+   ],
+   "by": [
+    "E_ISLE",
+    "E_BIA_ZOLTAN"
+   ],
+   "note": "Loot the jade figurine in Caesar's cupboard (the only chance for The Soldier Statuette).",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_redania",
+   "title": "Redania's Most Wanted (at least get the polished crystal in Philippa's hideout)",
+   "lv": "12",
+   "files": [
+    "sq302philippa"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_favor"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Do it before Now or Never so Triss can examine the crystal.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_eye",
+   "title": "An Eye for an Eye (keep Ves alive)",
+   "lv": "12",
+   "files": [
+    "sq312vincentves"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_junior"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Ves is needed to recruit Roche. Opens once you have found Whoreson Junior during Get Junior (its file waits on q302_whoreson_found), not once Get Junior is finished.",
+   "kind": "side",
+   "opt": false,
+   "when": [],
+   "hard_facts": {
+    "no_junior": [
+     "q302_whoreson_found"
+    ]
+   }
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_noble",
+   "title": "The Nobleman Statuette",
+   "lv": "14",
+   "files": [
+    "mq3012noblestatuette"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_pyres"
+   ],
+   "by": [
+    "E_LODGE"
+   ],
+   "note": "Give it to Triss BEFORE Now or Never.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_soldier",
+   "title": "The Soldier Statuette",
+   "lv": "14",
+   "files": [
+    "mq3012warriorstatuette"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_dangerous"
+   ],
+   "by": [
+    "E_LODGE"
+   ],
+   "note": "Give it to Triss BEFORE Now or Never.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_now",
+   "title": "Now or Never (Triss: rescue/romance)",
+   "lv": "14",
+   "files": [
+    "q309mages"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_favor",
+    "no_matter"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Triss leaves Novigrad afterwards. Do the statuettes, the crystal and Olivier's Gwent first.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_deadly",
+   "title": "A Deadly Plot",
+   "lv": "14",
+   "files": [
+    "sq315talar"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_now",
+    "no_junior"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Starts when Now or Never ends.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_gwent_dij",
+   "title": "Gwent: beat Dijkstra",
+   "lv": "",
+   "files": [
+    "cgnovigrad#Win unique card from Dijkstra"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_junior"
+   ],
+   "by": [
+    "E_FINALPREP"
+   ],
+   "note": "Unreachable from the start of Final Preparations.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_gwent_thaler",
+   "title": "Gwent: beat Thaler at the Seven Cats Inn",
+   "lv": "",
+   "files": [
+    "cgtalar#Win unique card from Talar"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_deadly"
+   ],
+   "by": [
+    "E_THINICE"
+   ],
+   "note": "Deadline is Reason of State / On Thin Ice.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Novigrad",
+   "id": "no_highstakes",
+   "title": "High Stakes (win every match; you get the leader cards and 4,500 crowns)",
+   "lv": "26",
+   "files": [
+    "sq306maverick"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_pyres"
+   ],
+   "by": [],
+   "note": "Scaled to level 26. No cards-or-coins choice. Opens once the doppelganger has been burned in Pyres of Novigrad (its file waits on q301_burn_doppler), partway through that quest.",
+   "kind": "gwent",
+   "opt": false,
+   "when": [],
+   "hard_facts": {
+    "no_pyres": [
+     "q301_burn_doppler"
+    ]
+   }
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_dest",
+   "title": "Destination: Skellige",
+   "lv": "16",
+   "files": [
+    "q201traveltoskellige"
+   ],
+   "conf": "high",
+   "hard": [
+    "wo_audience"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_king",
+   "title": "The King is Dead - Long Live the King",
+   "lv": "16",
+   "files": [
+    "pirate"
+   ],
+   "conf": "med",
+   "hard": [
+    "sk_dest"
+   ],
+   "by": [],
+   "note": "Unlocks Possession, Lord of Undvik, Cave of Dreams, Phantom of Eldberg.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_echoes",
+   "title": "Echoes of the Past",
+   "lv": "17",
+   "files": [
+    "q203cataclysm"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_king"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_nameless",
+   "title": "Missing Persons and Nameless",
+   "lv": "15",
+   "files": [
+    "q205lofoten",
+    "q205herbarium"
+   ],
+   "conf": "low",
+   "hard": [
+    "sk_echoes"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_calm",
+   "title": "The Calm Before the Storm",
+   "lv": "14",
+   "files": [
+    "q205cirireplacer"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_nameless"
+   ],
+   "by": [],
+   "note": "Do it before the final Baron conversation in Velen (it fails A Mysterious Passenger).",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_lastwish",
+   "title": "The Last Wish",
+   "lv": "15",
+   "files": [
+    "sq202yen"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_calm"
+   ],
+   "by": [
+    "E_UMA"
+   ],
+   "note": "Do it as soon as it is offered. Fails when you retrieve Uma in Ugly Baby.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_flesh",
+   "title": "Flesh for Sale (Trottheim)",
+   "lv": "12",
+   "files": [
+    "mq2020fleshforcash"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_dest"
+   ],
+   "by": [
+    "E_LAMBERT"
+   ],
+   "note": "Locks when you talk to Lambert at the Seven Cats Inn in Following the Thread.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_thread",
+   "title": "Following the Thread",
+   "lv": "11",
+   "files": [
+    "sq106killbill"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [
+    "E_UMA"
+   ],
+   "note": "Can start in Novigrad at L11; pause before the Seven Cats Inn talk until Flesh for Sale is done. It does not need Destination: Skellige finished: 153 saves run both at once, and the only fact linking them (q201_landed_on_skellige) gates its later Skellige stage, not its start.",
+   "kind": "side",
+   "opt": false,
+   "when": [],
+   "hard_facts": {}
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_phantom",
+   "title": "Contract: The Phantom of Eldberg",
+   "lv": "14",
+   "files": [
+    "mh207wraith"
+   ],
+   "conf": "med",
+   "hard": [
+    "sk_king"
+   ],
+   "by": [
+    "E_KG"
+   ],
+   "note": "Gate for Stranger in a Strange Land. Not lost when King's Gambit starts: your saves show it finished after King's Gambit in 101 of 102 saves.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_stranger",
+   "title": "Stranger in a Strange Land",
+   "lv": "14",
+   "files": [
+    "sq209weregild"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_phantom"
+   ],
+   "by": [
+    "E_KG"
+   ],
+   "note": "Not lost when King's Gambit starts: your saves show it done afterwards. Needs Contract: The Phantom of Eldberg.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_cave",
+   "title": "The Cave of Dreams",
+   "lv": "14",
+   "files": [
+    "sq209weregildb"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_stranger"
+   ],
+   "by": [
+    "E_KG"
+   ],
+   "note": "Starts from Stranger in a Strange Land (one quest phase runs both). Not lost when King's Gambit starts: finished after King's Gambit in 101 of 102 saves.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_unpaid",
+   "title": "An Unpaid Debt",
+   "lv": "15",
+   "files": [
+    "mq2051unfinishedbusiness"
+   ],
+   "conf": "med",
+   "hard": [
+    "sk_cave",
+    "sk_stranger"
+   ],
+   "by": [],
+   "note": "Your quest log calls it Unfinished Business (meet Simun at the lake house).",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_possession",
+   "title": "Possession",
+   "lv": "17",
+   "files": [
+    "q203him"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_king"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Finish after the Cave of Dreams and Stranger in a Strange Land.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_undvik",
+   "title": "The Lord of Undvik",
+   "lv": "17",
+   "files": [
+    "giant"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_king"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_gambit",
+   "title": "King's Gambit",
+   "lv": "18",
+   "files": [
+    "q206berserkers"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_possession",
+    "sk_undvik"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "Added at the end of The Lord of Undvik, and only if Possession's 'helping with him' outcome happened (the game checks the fact q203_cerys_saved). The other branch of the same block adds Echoes of the Past instead.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_coronation",
+   "title": "Coronation",
+   "lv": "18",
+   "files": [
+    "q208heroesmead"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_gambit"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Skellige",
+   "id": "sk_gwent",
+   "title": "Gwent: Skellige Style (Mousesack, Crach, Dagobert, Sjusta, Madman Lugos)",
+   "lv": "",
+   "files": [
+    "cgskellige#Win unique card from Mousesack",
+    "cgskellige#Win unique card from Crach",
+    "cgskellige#Win unique card from Dagobert",
+    "cgskellige#Win unique card from Sjusta the Tailor",
+    "cgskellige#Win unique card from Lugos the Mad"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_echoes"
+   ],
+   "by": [
+    "E_BATTLEPREP",
+    "E_THINICE"
+   ],
+   "note": "Lugos is lost when the ship sails in Battle Preparations, Crach at the On Thin Ice battle.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_ugly",
+   "title": "Ugly Baby (collecting Uma at Crow's Perch fails The Last Wish and Following the Thread)",
+   "lv": "19",
+   "files": [
+    "q401_konsylium",
+    "q401_ugliest_man_alive"
+   ],
+   "conf": "med",
+   "hard": [
+    "ve_family"
+   ],
+   "by": [],
+   "note": "Start it only when Velen, Novigrad and Skellige are in order. Mapped at medium confidence.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_keep",
+   "title": "Keep quests: Disturbance, To Bait a Forktail, The Final Trial, No Place Like Home, Va Fail Elaine",
+   "lv": "19",
+   "files": [
+    "q401_megascope",
+    "q401_hunt_with_eskel",
+    "q401_phylactery",
+    "q401_reunion",
+    "q401_the_curse"
+   ],
+   "conf": "high",
+   "hard": [
+    "km_ugly"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_berengar",
+   "title": "Berengar's Blade (talk to Vesemir first)",
+   "lv": "27",
+   "files": [
+    "mq4005sword"
+   ],
+   "conf": "med",
+   "hard": [
+    "km_ugly"
+   ],
+   "by": [
+    "E_COUNCIL"
+   ],
+   "note": "Fails at the council in the Battle of Kaer Morhen.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_bia_v",
+   "title": "Brothers In Arms: Velen (needs Keira sent to Kaer Morhen)",
+   "lv": "22",
+   "files": [
+    "q402velenallies"
+   ],
+   "conf": "high",
+   "hard": [
+    "ve_advance"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": [
+    "keira_sent=yes"
+   ]
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_bia_n",
+   "title": "Brothers In Arms: Novigrad (ask Zoltan only after A Dangerous Game)",
+   "lv": "22",
+   "files": [
+    "q402novigradallies"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_dangerous",
+    "no_eye",
+    "no_now"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_bia_s",
+   "title": "Brothers In Arms: Skellige",
+   "lv": "22",
+   "files": [
+    "q402skelligeallies"
+   ],
+   "conf": "high",
+   "hard": [
+    "sk_possession",
+    "sk_undvik",
+    "sk_gambit",
+    "sk_coronation"
+   ],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_bia_nil",
+   "title": "Brothers In Arms: Nilfgaard",
+   "lv": "22",
+   "files": [
+    "q402nilfgaardianally"
+   ],
+   "conf": "med",
+   "hard": [],
+   "by": [
+    "E_ISLE"
+   ],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_gwent",
+   "title": "Gwent: Old Pals (Roche, Lambert; Zoltan)",
+   "lv": "",
+   "files": [
+    "cgoldfriends#Win unique card from Roche",
+    "cgoldfriends#Win unique card from Lambert|cgoldfriends#When occasion presents itself win unique card from Lambert"
+   ],
+   "conf": "med",
+   "hard": [],
+   "by": [
+    "E_THINICE"
+   ],
+   "note": "Roche and Thaler are Novigrad players; Eskel has no card of his own.",
+   "kind": "gwent",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Kaer Morhen",
+   "id": "km_save",
+   "title": "PRE-ISLE CHECK and named save",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "km_keep"
+   ],
+   "by": [],
+   "note": "Everything with the Isle of Mists as its cutoff must be done. Check Keira, Baron, Triss, Dandelion, Zoltan, Roche/Dijkstra, succession, Letho, Gwent.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_isle",
+   "title": "The Isle of Mists (boat trip to Undvik + final confirm)",
+   "lv": "22",
+   "files": [
+    "q402ciri"
+   ],
+   "conf": "high",
+   "hard": [
+    "km_keep"
+   ],
+   "by": [],
+   "note": "Point of no return for 20+ quests. q402ciri starts earlier, when Uma's curse lifts.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_battle",
+   "title": "The Battle of Kaer Morhen",
+   "lv": "24",
+   "files": [
+    "q403battle"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_isle"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_blood",
+   "title": "Blood on the Battlefield",
+   "lv": "20",
+   "files": [
+    "q110postbattle"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_battle"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_c1",
+   "title": "Blood on the Battlefield: choose the snowball fight ('Think I know what might lift your spirits')",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "ci_blood"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_c2",
+   "title": "Same quest: do NOT go to the emperor first. Choose Velen",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "ci_blood"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_bald",
+   "title": "Bald Mountain",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "ci_blood"
+   ],
+   "by": [],
+   "note": "No journal file identified.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_prep",
+   "title": "Final Preparations (Ciri meets the Lodge alone)",
+   "lv": "26",
+   "files": [
+    "q310preparationsnovigrad"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_bald"
+   ],
+   "by": [
+    "E_FINALPREP"
+   ],
+   "note": "Do Payback, Blindingly Obvious, The Great Escape. The statuettes fail at the Lodge talk.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_c3",
+   "title": "Final Preparations: let Ciri meet the Lodge alone ('You'll do fine on your own')",
+   "lv": "",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_blinding",
+   "title": "Blindingly Obvious (diplomatic option: 'I need her', then 'Tell you what the emperor's after...')",
+   "lv": "28",
+   "files": [
+    "q310pregeels"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [],
+   "note": "Creates Reason of State.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_payback",
+   "title": "Payback",
+   "lv": "28",
+   "files": [
+    "q310bombing"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_escape",
+   "title": "The Great Escape",
+   "lv": "28",
+   "files": [
+    "q310prisonbreak"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_time",
+   "title": "Through Time and Space",
+   "lv": "26",
+   "files": [
+    "q311thespiral"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_tango",
+   "title": "It Takes Three to Tango (only if both Triss and Yennefer are romanced)",
+   "lv": "28",
+   "files": [
+    "q310romancefailure"
+   ],
+   "conf": "high",
+   "hard": [
+    "no_now",
+    "sk_lastwish"
+   ],
+   "by": [],
+   "note": "Tick to skip if it does not apply.",
+   "kind": "side",
+   "opt": false,
+   "when": [
+    "triss_romance=yes",
+    "yen_romance=yes"
+   ]
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_kindness",
+   "title": "A Final Kindness (only if Keira was NOT sent to Kaer Morhen)",
+   "lv": "26",
+   "files": [
+    "q310keira"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [],
+   "note": "Does not exist if you sent Keira to Kaer Morhen. Tick to skip.",
+   "kind": "main",
+   "opt": false,
+   "when": [
+    "keira_sent=no"
+   ]
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_reason",
+   "title": "Reason of State (before telling Avallac'h you are ready)",
+   "lv": "30",
+   "files": [
+    "mq3035_emhyr"
+   ],
+   "conf": "med",
+   "hard": [
+    "no_deadly",
+    "ci_blinding"
+   ],
+   "by": [
+    "E_THINICE"
+   ],
+   "note": "Also finish Warehouse of Woe and Thaler Gwent. Save here.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_prep2",
+   "title": "Battle Preparations",
+   "lv": "28",
+   "files": [
+    "q210preparations"
+   ],
+   "conf": "high",
+   "hard": [
+    "ci_prep"
+   ],
+   "by": [
+    "E_THINICE"
+   ],
+   "note": "",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_c4",
+   "title": "Child of the Elder Blood: let her wreck Avallac'h's lab ('Go for it')",
+   "lv": "",
+   "files": [
+    "q210avallachlab"
+   ],
+   "conf": "med",
+   "hard": [
+    "ci_prep2"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_c5",
+   "title": "Skjall's Grave: go with her ('Yeah. I'll go with you')",
+   "lv": "",
+   "files": [
+    "q210skjallgrave"
+   ],
+   "conf": "med",
+   "hard": [
+    "ci_prep2"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Ciri / base game ending",
+   "id": "ci_thin",
+   "title": "On Thin Ice (point of no return: fails Reason of State, Thaler, Crach, Devil by the Well)",
+   "lv": "30",
+   "files": [
+    "q501eredin"
+   ],
+   "conf": "low",
+   "hard": [
+    "ci_prep2"
+   ],
+   "by": [],
+   "note": "Do not talk to Avallac'h by the boat until these are done.",
+   "kind": "main",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_eviles",
+   "title": "Evil's Soft First Touches (loot Garin manor first; accept Rose on a Red Field)",
+   "lv": "32",
+   "files": [
+    "q601intro"
+   ],
+   "conf": "med",
+   "hard": [],
+   "by": [],
+   "note": "Seven Cats Inn notice board.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_dead",
+   "title": "Dead Man's Party (do the wedding activities)",
+   "lv": "33",
+   "files": [
+    "q602wedding"
+   ],
+   "conf": "high",
+   "hard": [
+    "hos_eviles"
+   ],
+   "by": [
+    "E_WEDDING"
+   ],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_midnight",
+   "title": "A Midnight Clear (before leaving the wedding)",
+   "lv": "33",
+   "files": [
+    "q602romance"
+   ],
+   "conf": "high",
+   "hard": [
+    "hos_dead"
+   ],
+   "by": [
+    "E_WEDDING"
+   ],
+   "note": "Fails if you leave the wedding area without doing it.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_open",
+   "title": "Open Sesame! (buy all four Viper armor diagrams from Countess Mignole; Hilbert Gwent)",
+   "lv": "34",
+   "files": [
+    "q603bank"
+   ],
+   "conf": "high",
+   "hard": [
+    "hos_eviles"
+   ],
+   "by": [],
+   "note": "One-time chance for the diagrams. Do the three sub-quests.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_open_subs",
+   "title": "Open Sesame sub-quests: Witcher Seasonings, Breaking and Entering, The Safecracker",
+   "lv": "34",
+   "files": [
+    "q603diversion",
+    "q603getinman",
+    "q603vaultspecialist"
+   ],
+   "conf": "high",
+   "hard": [
+    "hos_open"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_avid",
+   "title": "Avid Collector",
+   "lv": "34",
+   "files": [
+    "q603painting"
+   ],
+   "conf": "high",
+   "hard": [
+    "hos_open"
+   ],
+   "by": [
+    "E_OPEN"
+   ],
+   "note": "Lost when Open Sesame! ends.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_scenes",
+   "title": "Scenes From a Marriage",
+   "lv": "35",
+   "files": [
+    "q604mansion"
+   ],
+   "conf": "med",
+   "hard": [
+    "hos_dead",
+    "hos_open"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_shakes",
+   "title": "Visit Shani, then Professor Shakeslock (Oxenfurt) before the Temple of Lilvani",
+   "lv": "36",
+   "files": [],
+   "conf": "",
+   "hard": [
+    "hos_scenes"
+   ],
+   "by": [
+    "E_SOWETH"
+   ],
+   "note": "Skip Shakeslock and O'Dimm just takes Olgierd. Shani's Gwent card: win it or find it in her clinic upstairs.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Hearts of Stone",
+   "id": "hos_whatsoever",
+   "title": "Whatsoever a Man Soweth... (SAVE first; help Olgierd, solve the riddle)",
+   "lv": "36",
+   "files": [
+    "q605finale"
+   ],
+   "conf": "high",
+   "hard": [
+    "hos_scenes"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_envoys",
+   "title": "Envoys, Wineboys (needs A Poet Under Pressure from Novigrad)",
+   "lv": "34",
+   "files": [
+    "q701ahook"
+   ],
+   "conf": "med",
+   "hard": [
+    "no_poet"
+   ],
+   "by": [],
+   "note": "Delay accepting until you are ready.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_beast",
+   "title": "The Beast of Toussaint",
+   "lv": "35",
+   "files": [
+    "q701festival"
+   ],
+   "conf": "med",
+   "hard": [
+    "bw_envoys"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_blood",
+   "title": "Blood Run",
+   "lv": "36",
+   "files": [
+    "q702defflaff"
+   ],
+   "conf": "med",
+   "hard": [
+    "bw_beast"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_warble",
+   "title": "The Warble of a Smitten Knight (win the tournament; finish BEFORE Capture the Castle)",
+   "lv": "35",
+   "files": [
+    "mq7002knight",
+    "sq701tournament"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_beast"
+   ],
+   "by": [
+    "E_CAPTURE"
+   ],
+   "note": "Fails when you meet Damien in Capture the Castle.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_cage",
+   "title": "La Cage au Fou",
+   "lv": "39",
+   "files": [
+    "q702hunt",
+    "q702wightdecision"
+   ],
+   "conf": "med",
+   "hard": [
+    "bw_blood"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_mill",
+   "title": "Amidst the Mill's Grist",
+   "lv": "",
+   "files": [
+    "q702mill"
+   ],
+   "conf": "med",
+   "hard": [
+    "bw_cage"
+   ],
+   "by": [
+    "E_WHERE"
+   ],
+   "note": "Closes once Where Children Toil finishes.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_where",
+   "title": "Where Children Toil, Toys Waste Away",
+   "lv": "42",
+   "files": [
+    "q702lairofbeast"
+   ],
+   "conf": "med",
+   "hard": [
+    "bw_cage"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_wine",
+   "title": "Wine is Sacred",
+   "lv": "42",
+   "files": [
+    "q703wine"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_where"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_cintra",
+   "title": "The Man from Cintra",
+   "lv": "43",
+   "files": [
+    "q703art"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_wine"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_capture",
+   "title": "Capture the Castle (point of no return for side quests; finish Warble and open side quests first)",
+   "lv": "47",
+   "files": [
+    "q703allforone"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_cintra"
+   ],
+   "by": [],
+   "note": "No manual saves from its start.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_fangs",
+   "title": "The Night of Long Fangs (SAVE before the wardrobe book: take Syanna to Dettlaff, not the Unseen Elder)",
+   "lv": "47",
+   "files": [
+    "q704starting"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_capture"
+   ],
+   "by": [],
+   "note": "The path choice is final once you interact with the book.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_hill",
+   "title": "Beyond Hill and Dale (get Syanna's ribbon; read the first 2 playroom journal entries; listen to her story; investigate the 5th victim)",
+   "lv": "47",
+   "files": [
+    "q704bfairyland"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_fangs"
+   ],
+   "by": [
+    "E_HILL_END"
+   ],
+   "note": "Ribbon: Little Flint Girl, 500 crowns or beat her at Gwent. Without it Syanna dies at Tesham Mutna.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_goose",
+   "title": "Duck, Duck, Goosed!",
+   "lv": "47",
+   "files": [
+    "q704ftgoose"
+   ],
+   "conf": "med",
+   "hard": [
+    "bw_hill"
+   ],
+   "by": [
+    "E_HILL_END"
+   ],
+   "note": "Fails when Beyond Hill and Dale finishes.",
+   "kind": "side",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_tesham",
+   "title": "Tesham Mutna",
+   "lv": "49",
+   "files": [
+    "q704adettlaff"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_hill"
+   ],
+   "by": [],
+   "note": "SAVE before the Dettlaff fight.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_pomp",
+   "title": "Pomp and Strange Circumstance (visit Syanna first; \"Cause she turned her back on you, forgot about you\" then \"Ever thought to forgive her?\")",
+   "lv": "49",
+   "files": [
+    "q705ceremony"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_tesham"
+   ],
+   "by": [],
+   "note": "",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_humble",
+   "title": "Be It Ever So Humble...",
+   "lv": "49",
+   "files": [
+    "q705home"
+   ],
+   "conf": "high",
+   "hard": [
+    "bw_pomp"
+   ],
+   "by": [],
+   "note": "Also needs Something Ends, Something Begins.",
+   "kind": "dlc",
+   "opt": false,
+   "when": []
+  },
+  {
+   "section": "Blood and Wine",
+   "id": "bw_unseen",
+   "title": "ALT SAVE: What Lies Unseen / Burlap is the New Stripe / The Perks of Being a Jailbird (excludes the both-sisters-live path)",
+   "lv": "49",
+   "files": [
+    "q704vampires",
+    "q705prison",
+    "q705prisonstash"
+   ],
+   "conf": "high",
+   "hard": [],
+   "by": [],
+   "note": "Needs a separate save.",
+   "kind": "side",
+   "opt": true,
+   "when": []
+  }
+ ],
+ "events": {
+  "E_VESEMIR": {
+   "name": "Talking to Vesemir at the inn after the griffin (ends the prologue)",
+   "fires": [
+    [
+     "q002bandits",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "wo_beast",
+    "wo_incident"
+   ],
+   "soft": false,
+   "src": "wiki: Lilac and Gooseberries, The Incident at White Orchard"
+  },
+  "E_LAMP": {
+   "name": "Leaving the elven ruins",
+   "fires": [],
+   "near": [
+    "ve_wander"
+   ],
+   "soft": false,
+   "src": "wiki: Magic Lamp"
+  },
+  "E_FAVOR": {
+   "name": "Starting A Favor for a Friend (the end of A Towerful of Mice)",
+   "fires": [
+    [
+     "sq101keira",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ve_tower"
+   ],
+   "soft": false,
+   "src": "wiki: Lynch Mob"
+  },
+  "E_BARON_ANNA": {
+   "name": "The final Family Matters conversation with the Baron",
+   "fires": [
+    [
+     "q103thirdreplacerciri",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ve_family"
+   ],
+   "soft": false,
+   "src": "wiki: Family Matters; fails A Mysterious Passenger if The Calm Before the Storm is not done"
+  },
+  "E_GHOSTS": {
+   "name": "Starting Ghosts of the Past",
+   "fires": [
+    [
+     "sq102letho",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ve_ghosts"
+   ],
+   "soft": false,
+   "src": "wiki: Hazardous Goods"
+  },
+  "E_REDANIAN": {
+   "name": "Meeting Roche's Redanian contact in Get Junior",
+   "fires": [
+    [
+     "q302favourforradovid",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_junior"
+   ],
+   "soft": false,
+   "src": "wiki: The Gangs of Novigrad"
+  },
+  "E_REUVEN": {
+   "name": "The witch-hunter outpost part of Count Reuven's Treasure",
+   "fires": [
+    [
+     "q303treasure#Follow Witch Hunter Leader",
+     [
+      "Active",
+      "Done"
+     ]
+    ],
+    [
+     "q303treasure",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_reuven"
+   ],
+   "soft": false,
+   "src": "wiki: A Walk on the Waterfront"
+  },
+  "E_MATTER_END": {
+   "name": "The Vegelbud party ends (A Matter of Life and Death finishes)",
+   "fires": [
+    [
+     "sq301triss",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_matter"
+   ],
+   "soft": false,
+   "src": "wiki: A Matter of Life and Death"
+  },
+  "E_NOW": {
+   "name": "Finishing Now or Never (Triss leaves Novigrad)",
+   "fires": [
+    [
+     "q309mages",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_now"
+   ],
+   "soft": true,
+   "src": "wiki: Now or Never"
+  },
+  "E_LODGE": {
+   "name": "The Lodge talk in Final Preparations",
+   "fires": [
+    [
+     "q310preparationsnovigrad",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_prep",
+    "ci_isle"
+   ],
+   "soft": false,
+   "src": "wiki: Final Preparations"
+  },
+  "E_FINALPREP": {
+   "name": "Starting Final Preparations (Dijkstra becomes unreachable)",
+   "fires": [
+    [
+     "q310preparationsnovigrad",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_isle",
+    "ci_bald"
+   ],
+   "soft": false,
+   "src": "wiki: Final Preparations"
+  },
+  "E_BIA_ZOLTAN": {
+   "name": "Asking Zoltan for help in Brothers In Arms: Novigrad",
+   "fires": [
+    [
+     "q402novigradallies",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "no_dangerous"
+   ],
+   "soft": false,
+   "src": "wiki: A Dangerous Game"
+  },
+  "E_LAMBERT": {
+   "name": "Talking to Lambert at the Seven Cats Inn (Following the Thread)",
+   "fires": [
+    [
+     "sq106killbill#Quest Start - met lambert",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "sk_thread"
+   ],
+   "soft": false,
+   "src": "wiki: Flesh for Sale"
+  },
+  "E_KG": {
+   "name": "Starting King's Gambit",
+   "fires": [
+    [
+     "q206berserkers",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "sk_possession",
+    "sk_undvik",
+    "sk_gambit"
+   ],
+   "soft": false,
+   "note": "Needs both Possession and Lord of Undvik: a save-file diff across ~10 checkpoints showed Lord of Undvik sitting Done by itself for a long stretch with no effect, then King's Gambit starting right as Possession's ending resolved. It fires mid-cutscene with no choice or prompt to decline.",
+   "src": "wiki: The Cave of Dreams; verified 2026-10-25 from the player's own save history (see w3tracker-kings-gambit-trigger memory)"
+  },
+  "E_UMA": {
+   "name": "Ugly Baby: retrieving Uma at Crow's Perch",
+   "fires": [
+    [
+     "q401_ugliest_man_alive",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "km_ugly",
+    "sk_gambit",
+    "sk_coronation"
+   ],
+   "soft": false,
+   "src": "wiki: The Last Wish, Following the Thread (fire detection approximate)"
+  },
+  "E_ISLE": {
+   "name": "The Isle of Mists (boat trip to Undvik and confirm)",
+   "fires": [
+    [
+     "q402ciri#Follow the Wisp",
+     [
+      "Active",
+      "Done"
+     ]
+    ],
+    [
+     "q402ciri#Check the house",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "km_ugly",
+    "km_keep",
+    "km_berengar",
+    "km_bia_v",
+    "km_bia_n",
+    "km_bia_s",
+    "km_bia_nil",
+    "sk_gambit",
+    "sk_coronation"
+   ],
+   "soft": false,
+   "src": "wiki: The Isle of Mists"
+  },
+  "E_COUNCIL": {
+   "name": "The council at the Battle of Kaer Morhen",
+   "fires": [
+    [
+     "q403battle",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_isle"
+   ],
+   "soft": false,
+   "src": "wiki: Berengar's Blade"
+  },
+  "E_BATTLEPREP": {
+   "name": "The ship sails in Battle Preparations",
+   "fires": [
+    [
+     "q210preparations",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_prep",
+    "ci_prep2"
+   ],
+   "soft": false,
+   "src": "wiki: Gwent: Skellige Style"
+  },
+  "E_THINICE": {
+   "name": "On Thin Ice: talking to Avallac'h by the boat",
+   "fires": [
+    [
+     "q501eredin",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "ci_prep2",
+    "ci_reason"
+   ],
+   "soft": false,
+   "src": "wiki: On Thin Ice"
+  },
+  "E_WEDDING": {
+   "name": "Leaving the wedding (Dead Man's Party)",
+   "fires": [
+    [
+     "q602wedding",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "hos_dead"
+   ],
+   "soft": false,
+   "src": "wiki: A Midnight Clear"
+  },
+  "E_OPEN": {
+   "name": "Open Sesame! finishes (the auction ends)",
+   "fires": [
+    [
+     "q603bank",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "hos_open"
+   ],
+   "soft": false,
+   "src": "wiki: Open Sesame!"
+  },
+  "E_SOWETH": {
+   "name": "Whatsoever a Man Soweth... without meeting Shakeslock",
+   "fires": [
+    [
+     "q605finale",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "hos_scenes"
+   ],
+   "soft": false,
+   "src": "wiki: Whatsoever a Man Soweth..."
+  },
+  "E_WHERE": {
+   "name": "Where Children Toil, Toys Waste Away finishes",
+   "fires": [
+    [
+     "q702lairofbeast",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "bw_where"
+   ],
+   "soft": false,
+   "src": "wiki: Amidst the Mill's Grist"
+  },
+  "E_CAPTURE": {
+   "name": "Meeting Damien in Capture the Castle (side-content cutoff)",
+   "fires": [
+    [
+     "q703allforone",
+     [
+      "Active",
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "bw_cintra",
+    "bw_wine"
+   ],
+   "soft": false,
+   "src": "wiki: The Warble of a Smitten Knight"
+  },
+  "E_HILL_END": {
+   "name": "Beyond Hill and Dale finishes",
+   "fires": [
+    [
+     "q704bfairyland",
+     [
+      "Done"
+     ]
+    ]
+   ],
+   "near": [
+    "bw_hill"
+   ],
+   "soft": false,
+   "src": "wiki: Duck, Duck, Goosed!"
+  }
+ },
+ "prefs": [
+  {
+   "step": "no_now",
+   "needs": [
+    "no_noble",
+    "no_soldier",
+    "no_redania",
+    "no_innk",
+    "no_vegelbud"
+   ],
+   "why": "Recommended (wiki): Triss leaves Novigrad after Now or Never, so do the statuettes, the crystal, Olivier's Gwent and the Vegelbud matches first."
+  }
+ ],
+ "conditional": [
+  "ci_kindness",
+  "ci_tango",
+  "ve_ghosts"
+ ],
+ "flags": [
+  {
+   "id": "letho",
+   "label": "Letho is alive in my world state",
+   "note": "Needed for Ghosts of the Past. It comes from your Witcher 2 import or the default world state. Answer No and that quest stops counting."
+  },
+  {
+   "id": "keira_sent",
+   "label": "I sent Keira to Kaer Morhen",
+   "note": "Decides between Brothers In Arms: Velen (sent) and A Final Kindness (not sent)."
+  },
+  {
+   "id": "triss_romance",
+   "label": "I am romancing Triss",
+   "note": "It Takes Three to Tango only exists if you romance both Triss and Yennefer."
+  },
+  {
+   "id": "yen_romance",
+   "label": "I am romancing Yennefer",
+   "note": "It Takes Three to Tango only exists if you romance both Triss and Yennefer."
+  }
+ ]
+}

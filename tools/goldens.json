@@ -1,12 +1,16 @@
 {
  "hashes": {
-  "contradiction_report.md": "09e5e609367524ed",
-  "cutoff_index.json": "13d95727370a3d0b",
-  "derived.json": "72d5d0b162094d6b",
-  "feed.json": "4c11aef7ba1586f3",
-  "prereq_relations.json": "33c419c7f7da9d7c",
-  "quest_index.json": "282461fb78442fdb",
-  "route_disputes.json": "50fc694e8122ef83"
+  "branches.json": "1041f46e028d6bf9",
+  "contradiction_report.md": "df95ee19f6f6dabf",
+  "coverage.json": "6f47ac6d62694573",
+  "cutoff_index.json": "5526659623a2d4fb",
+  "cutoffs.json": "4c8e86fe1796ac49",
+  "derived.json": "4345b82ab8aa4a8e",
+  "prereq_relations.json": "e38234eb7f4dd282",
+  "quest_graph.json": "2d0a790bfb4ddeff",
+  "quest_index.json": "4549c944cbce5cd9",
+  "route.json": "e0059e15843b1fcc",
+  "route_disputes.json": "092ef45ba3ce0132"
  },
  "note": "sha256 (first 16) of the pipeline outputs; py regen.py compares against these"
 }

@@ -344,6 +344,9 @@ const NOISE: [&str; 8] = ["mappin", "map pin", "desc", "objectives", "test ", "b
 
 pub struct SaveState {
     pub state: HashMap<String, String>,
+    // active objective GUIDs, keyed by journal short name: the app maps them to the game's text
+    pub objective_guids: HashMap<String, Vec<String>>,
+    // the save's own objective labels, kept for the debug dump only
     pub objectives: HashMap<String, Vec<String>>,
     pub tracked: Option<String>,      // guid of the quest the player is tracking in the game
     pub tracked_file: Option<String>, // journal file (short) of that guid, from the save's own journal entry
@@ -360,6 +363,88 @@ fn journal_short(resource: &str) -> String {
 }
 
 /// quest file (short) -> Done/Active/Failed/Inactive/Not started, plus 'file#objective' keys and readable active objectives.
+/// The save's Gwent ledger, keyed by the game's own card index. A missing block is an error, not
+/// an empty collection: the caller must report every card as `unknown` rather than `not owned`.
+#[derive(Default)]
+pub struct CardCollection {
+    pub normal: HashMap<i64, i64>,
+    pub leaders: HashMap<i64, i64>,
+}
+
+fn card_array(
+    raw: &[u8],
+    names: &[String],
+    index: &HashMap<&str, u16>,
+    size_name: &str,
+    card_name: &str,
+    start: usize,
+) -> Result<(HashMap<i64, i64>, usize), String> {
+    let size_idx = *index.get(size_name).ok_or_else(|| format!("save has no {size_name}"))?;
+    let card_idx = *index.get(card_name).ok_or_else(|| format!("save has no {card_name}"))?;
+    let card_index_idx = *index.get("cardIndex").ok_or("save has no cardIndex")?;
+    let copies_idx = *index.get("numCopies").ok_or("save has no numCopies")?;
+    let size_type_idx = *index.get("Size").ok_or("save has no Size")?;
+
+    let mut pattern = b"BS".to_vec();
+    pattern.extend_from_slice(&size_idx.to_le_bytes());
+    let pos = find(raw, &pattern, start).ok_or_else(|| format!("{size_name} block not found"))?;
+    let mut q = pos + 4;
+    if raw.get(q..q + 2) != Some(&b"VL"[..])
+        || u16le(raw, q + 2)? != size_type_idx
+        || names.get(u16le(raw, q + 4)? as usize - 1).map(|s| s.as_str()) != Some("Uint32")
+    {
+        return Err(format!("{size_name} has no Uint32 Size"));
+    }
+    let count = u32le(raw, q + 6)? as usize;
+    q += 10;
+    if count > 5000 {
+        return Err(format!("{size_name} count {count} is not plausible"));
+    }
+    let mut out = HashMap::new();
+    for k in 0..count {
+        if raw.get(q..q + 2) != Some(&b"BS"[..]) || u16le(raw, q + 2)? != card_idx {
+            return Err(format!("{size_name} card {k} starts with the wrong block"));
+        }
+        q += 4;
+        if raw.get(q..q + 2) != Some(&b"VL"[..]) || u16le(raw, q + 2)? != card_index_idx
+            || names.get(u16le(raw, q + 4)? as usize - 1).map(|s| s.as_str()) != Some("Int32")
+        {
+            return Err(format!("{size_name} card {k} has no cardIndex"));
+        }
+        let card_index = u32le(raw, q + 6)? as i32 as i64;
+        q += 10;
+        if raw.get(q..q + 2) != Some(&b"VL"[..]) || u16le(raw, q + 2)? != copies_idx
+            || names.get(u16le(raw, q + 4)? as usize - 1).map(|s| s.as_str()) != Some("Int32")
+        {
+            return Err(format!("{size_name} card {k} has no numCopies"));
+        }
+        let copies = u32le(raw, q + 6)? as i32 as i64;
+        q += 10;
+        if copies > 0 {
+            out.insert(card_index, copies);
+        }
+    }
+    Ok((out, q))
+}
+
+pub fn card_collection(path: &Path) -> Result<CardCollection, String> {
+    let raw = load_raw(path)?;
+    let names = name_table(&raw)?;
+    let mut index: HashMap<&str, u16> = HashMap::new();
+    for (i, name) in names.iter().enumerate() {
+        index.insert(name.as_str(), (i + 1) as u16);
+    }
+    for needed in ["CR4GwintManager", "SBCollectionCardSize", "SBCollectionCard",
+                   "SBLeaderCollectionCardSize", "SBLeaderCollectionCard", "cardIndex", "numCopies"] {
+        if !index.contains_key(needed) {
+            return Err(format!("save has no Gwent collection block: missing {needed}"));
+        }
+    }
+    let (normal, end) = card_array(&raw, &names, &index, "SBCollectionCardSize", "SBCollectionCard", 0)?;
+    let (leaders, _) = card_array(&raw, &names, &index, "SBLeaderCollectionCardSize", "SBLeaderCollectionCard", end)?;
+    Ok(CardCollection { normal, leaders })
+}
+
 pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
     let raw = load_raw(path)?;
     let names = name_table(&raw)?;
@@ -376,6 +461,7 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
         }
     }
     let mut state: HashMap<String, String> = HashMap::new();
+    let mut objective_guids: HashMap<String, Vec<String>> = HashMap::new();
     let mut objectives: HashMap<String, Vec<String>> = HashMap::new();
     for (short, ids) in &db.quests {
         let own = ids.first().and_then(|(_, g)| by_guid.get(g)).copied().unwrap_or("Not started");
@@ -405,6 +491,12 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
                 if !o.contains(&t) {
                     o.push(t);
                 }
+                // the name above is often an internal label ("SQ202 At Larvik"); the GUID is what
+                // lets the UI show the game's own objective sentence instead
+                let q = objective_guids.entry(short.clone()).or_default();
+                if !q.contains(g) {
+                    q.push(g.clone());
+                }
             }
         }
         for (name, g) in ids.iter().skip(1) {
@@ -428,5 +520,5 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
         .filter(|(_name, vals)| vals.iter().any(|v| *v > 0))
         .map(|(name, _vals)| name)
         .collect();
-    Ok(SaveState { state, objectives, tracked, tracked_file, facts })
+    Ok(SaveState { state, objective_guids, objectives, tracked, tracked_file, facts })
 }

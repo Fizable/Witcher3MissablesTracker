@@ -1,0 +1,148 @@
+{
+ "note": "The reviewed fallback for the game's own CJournalQuest.type. Every untyped entry the route keeps is listed here with the reason it is Main; the two debug containers are excluded. `minor_pois` marks treasure hunts that are map markers rather than quests: they stay in the Treasure Hunts section and never enter DO NEXT on their own.",
+ "sections": [
+  "Main",
+  "Secondary",
+  "Contracts",
+  "Treasure Hunts",
+  "Gwent"
+ ],
+ "untyped": {
+  "ch1quest": {
+   "section": "Main",
+   "reason": "base-game chapter entry (parent group STORY - Chapter 1); the journal has no type"
+  },
+  "q001beggining": {
+   "section": "Main",
+   "reason": "base-game main story: the prologue dream sequence; its journal carries no type"
+  },
+  "q001yennsearch": {
+   "section": "Main",
+   "reason": "base-game main story: the prologue follow-up; its journal carries no type"
+  },
+  "q002vizimapalace": {
+   "section": "Main",
+   "reason": "base-game main story: the Vizima audience; its journal carries no type"
+  },
+  "q110postbattle": {
+   "section": "Main",
+   "reason": "base-game main story: the Ciri sequence after the battle; its journal carries no type"
+  },
+  "q111imlerith": {
+   "section": "Main",
+   "reason": "base-game main story: Bald Mountain; its journal carries no type"
+  },
+  "q210preparations": {
+   "section": "Main",
+   "reason": "base-game main story: the act 3 preparations quest; its journal carries no type"
+  },
+  "q310preparationsnovigrad": {
+   "section": "Main",
+   "reason": "base-game main story: the Novigrad preparations quest (parent group STORY - Chapter 3); its journal carries no type"
+  },
+  "q401_konsylium": {
+   "section": "Main",
+   "reason": "base-game main story: Ugly Baby; its journal carries no type"
+  },
+  "q402ciri": {
+   "section": "Main",
+   "reason": "base-game main story: The Isle of Mists; its journal carries no type"
+  },
+  "q403battle": {
+   "section": "Main",
+   "reason": "base-game main story: the Battle of Kaer Morhen; its journal carries no type"
+  },
+  "q501eredin": {
+   "section": "Main",
+   "reason": "base-game main story: the final act; its journal carries no type"
+  },
+  "q502avallach": {
+   "section": "Main",
+   "reason": "base-game main story: the final act; its journal carries no type"
+  },
+  "q503newquest": {
+   "section": "Main",
+   "reason": "base-game ending variant; its journal carries no type"
+  },
+  "q504ciriempress": {
+   "section": "Main",
+   "reason": "base-game ending variant; its journal carries no type"
+  },
+  "q505cirifree": {
+   "section": "Main",
+   "reason": "base-game ending variant; its journal carries no type"
+  },
+  "q601intro": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q602wedding": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q603bank": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q603diversion": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q603getinman": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q603vaultspecialist": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q604mansion": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q605finale": {
+   "section": "Main",
+   "reason": "Hearts of Stone main line (content type EJCT_EP1); the journal has no type"
+  },
+  "q701ahook": {
+   "section": "Main",
+   "reason": "Blood and Wine main line (content type EJCT_EP2); the journal has no type"
+  },
+  "q701festival": {
+   "section": "Main",
+   "reason": "Blood and Wine main line (content type EJCT_EP2); the journal has no type"
+  },
+  "q702defflaff": {
+   "section": "Main",
+   "reason": "Blood and Wine main line (content type EJCT_EP2); the journal has no type"
+  },
+  "q702hunt": {
+   "section": "Main",
+   "reason": "Blood and Wine main line (content type EJCT_EP2); the journal has no type"
+  },
+  "q702lairofbeast": {
+   "section": "Main",
+   "reason": "Blood and Wine main line (content type EJCT_EP2); the journal has no type"
+  },
+  "q705ceremony": {
+   "section": "Main",
+   "reason": "Blood and Wine main line (content type EJCT_EP2); the journal has no type"
+  }
+ },
+ "excluded": {
+  "biddebugquest": "debug entry shipped with the game; it has no title and no journal GUID, and is not a playable quest",
+  "biddebugquest2": "debug entry shipped with the game; it has no title and no journal GUID, and is not a playable quest"
+ },
+ "minor_pois": [
+  "bara10",
+  "lw_gr_poi_042_ponds",
+  "lw_sk30_mushroom_farms",
+  "lw_sk_poi_005",
+  "lw_sk_poi_042",
+  "lw_sk_poi_050",
+  "lw_sk_poi_056",
+  "lw_sk_poi_057",
+  "poi_bar_a_05",
+  "poigord20"
+ ]
+}

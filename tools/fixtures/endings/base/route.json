@@ -1,0 +1,49 @@
+{
+  "sections": ["Main"],
+  "nodes": [
+    {
+      "section": "Main",
+      "id": "test_step_heirs",
+      "title": "Test Heirs",
+      "lv": "1",
+      "files": ["test_heirs"],
+      "hard": [],
+      "hard_facts": {},
+      "by": [],
+      "note": "",
+      "kind": "main",
+      "opt": false,
+      "when": [],
+      "order": 0,
+      "desc": "",
+      "branch": true,
+      "dialogue_choice": false,
+      "ending_relevant": true,
+      "start_known": true
+    },
+    {
+      "section": "Main",
+      "id": "test_step_guard",
+      "title": "Test Guard",
+      "lv": "1",
+      "files": ["test_guard"],
+      "hard": [],
+      "hard_facts": {},
+      "by": [],
+      "note": "",
+      "kind": "main",
+      "opt": false,
+      "when": [],
+      "order": 1,
+      "desc": "",
+      "branch": true,
+      "dialogue_choice": false,
+      "ending_relevant": true,
+      "start_known": true
+    }
+  ],
+  "events": {},
+  "prefs": [],
+  "conditional": [],
+  "flags": []
+}

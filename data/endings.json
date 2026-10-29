@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "note": "Reviewed targets; the game files decide the facts, the reviewer decides which goal is wanted. Outcome-backed targets point at data/outcomes.json instead of duplicating its rows.",
+  "targets": {
+    "baron_wife_cured": {
+      "label": "Baron: his wife is cured",
+      "pack": "base",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "The mission's chosen outcome. The game's own q107 journal says her mind was lost and the baron takes her away to find help; the target keeps the mission's wording, the outcome data states the terminal fact.",
+      "outcome": "baron_wife_cured",
+      "requires": [],
+      "guidance_status": "guided",
+      "guidance": []
+    },
+    "bw_both_sisters": {
+      "label": "Blood and Wine: both sisters live",
+      "pack": "bob",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Buy the ribbon from the Little Match Girl so Syanna survives, then choose reconciliation at the ceremony so Henrietta lives. Both exact lines are in data/outcomes.json.",
+      "outcome": "bw_both_sisters",
+      "requires": [],
+      "guidance_status": "guided",
+      "guidance": []
+    },
+    "ciri_witcher": {
+      "label": "Ciri lives: witcher ending",
+      "pack": "base",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Choose Velen at q110 so Ciri does not visit Emhyr, then finish q502 with Ciri alive. The q505 free-Ciri journal is the terminal evidence.",
+      "outcome": "ciri_witcher",
+      "requires": [],
+      "guidance_status": "guided",
+      "guidance": []
+    },
+    "olgierd_saved": {
+      "label": "Hearts of Stone: Olgierd is saved",
+      "pack": "ep1",
+      "spoiler": true,
+      "reviewed": "2026-10-28",
+      "review_note": "Help Olgierd at the temple and defeat Gaunter; q605_finale sets q605_mirror_banished and the q605 journal says the pact was dissolved.",
+      "outcome": "olgierd_saved",
+      "requires": [],
+      "guidance_status": "guided",
+      "guidance": []
+    }
+  },
+  "presets": {
+    "recommended": {
+      "label": "Recommended endings",
+      "targets": [
+        "baron_wife_cured",
+        "ciri_witcher",
+        "olgierd_saved",
+        "bw_both_sisters"
+      ],
+      "reviewed": "2026-10-28",
+      "note": "The mission's one-run target set: Ciri lives with the witcher ending, the baron's wife is saved, Olgierd is saved, and both Blood and Wine sisters live. A reviewed preference, not a game ranking."
+    }
+  }
+}
