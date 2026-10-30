@@ -93,6 +93,29 @@ URL, review date and evidence entries. A `window_live` state reads the route sta
 three. The card row keeps the individual names. A missing collection block makes every card
 `unknown`, never `not owned`.
 
+## Source availability (1.3)
+
+A card's **source**, its **availability** and its **missability** are three different claims. A
+deck list in `def_gwint_decks.xml` is evidence that a card can appear in a deck; it is not evidence
+that the player owns it, and it is not a collection grant. The reviewed layer separates:
+
+- `collection_grant` - a native grant such as `OnGwintSetupNewgame` or `UnlockSkelligeGwentDeck`;
+- `phase_grant` / `reward` / `loot` - a scripted grant with a route step;
+- `vendor` - usable only while that vendor exists;
+- `deck_definition` / `opponent_deck` - not ownership and not a reward.
+
+A `none` classification that rests only on a deck definition is unsafe. The first case found is
+**Sigismund Dijkstra**: `cg100_no_mans_land.w2phase` contains an `AddItemQuestExt` grant for
+`gwint_card_dijkstra`, so the Baron is a real source even though the card also appears in the
+Northern Kingdoms deck list. The reviewed window for this card is still `none` in 1.3; the
+generator and the reviewed input need the availability row before the app may claim a closing
+window. Recording the finding is deliberate: the old row said the source stays available after
+every route step, which the Baron's own phase does not prove.
+
+The same audit is open for any card whose only "persistent" evidence is a deck definition or an
+opponent deck. Until that row exists, the ledger shows the card and its `unknown source` or
+`NO WINDOW` badge; the NOW band does not warn about it.
+
 ## Checks
 
 ```

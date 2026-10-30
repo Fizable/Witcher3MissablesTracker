@@ -24,3 +24,6 @@ __pycache__/
 
 # the per-edge evidence dump tools/prereqs.py regenerates from the game files and the saves
 /data/prereq_relations.json
+
+# temporary verification profiles and the DOM harness
+.next-phase/

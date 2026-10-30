@@ -306,7 +306,10 @@ pub fn top_items(report: &Value) -> Vec<Value> {
         }
         let live = card.get("window_live").cloned().unwrap_or(Value::Null);
         let state = text(&live, "state");
-        if !matches!(state, "active" | "ahead" | "check" | "lost") {
+        // A window whose closing quest has not started is ledger-only: it belongs to
+        // MORE > CARDS > LATER, never to NOW. Only a card the player can act on now, or one whose
+        // window has already closed, is a warning.
+        if !matches!(state, "active" | "check" | "lost") {
             continue;
         }
         let step = text(&live, "step");
@@ -322,8 +325,6 @@ pub fn top_items(report: &Value) -> Vec<Value> {
             .collect();
         let state = if states.iter().any(|s| *s == "active") {
             "active"
-        } else if states.iter().any(|s| *s == "ahead") {
-            "ahead"
         } else if states.iter().any(|s| *s == "check") {
             "check"
         } else {
@@ -348,7 +349,6 @@ pub fn top_items(report: &Value) -> Vec<Value> {
         };
         let (level, tag, rank) = match state {
             "active" => ("stop", "CARD WINDOW OPEN", 0u8),
-            "ahead" => ("warn", "MISSABLE CARD", 1u8),
             "check" => ("lost", "CARD WINDOW PASSED - CHECK NOW", 2u8),
             _ => ("lost", "CARD LOST IN THIS SAVE", 2u8),
         };
@@ -356,7 +356,6 @@ pub fn top_items(report: &Value) -> Vec<Value> {
         let action = format!("{place}. {mechanism}");
         let live_note = match state {
             "active" => "Not owned, and the closing step is active in your save.",
-            "ahead" => "Not owned, and the closing step has not started yet.",
             "check" => "Not owned; the closing step is done or failed. Check whether a fallback still exists.",
             _ => "Not owned; the file-backed window is past.",
         };
@@ -516,10 +515,7 @@ mod tests {
             ]
         });
         let items = top_items(&report);
-        assert_eq!(items.len(), 1);
-        assert_eq!(items[0]["headline"], "2 Gwent cards: Card A, Card B");
-        assert_eq!(items[0]["tag"], "MISSABLE CARD");
-        assert_eq!(items[0]["ids"], json!(["sq301triss"]));
+        assert!(items.is_empty(), "a window that has not opened is a ledger row, not a NOW warning");
     }
 
     #[test]

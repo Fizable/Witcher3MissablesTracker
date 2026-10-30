@@ -523,15 +523,14 @@ pub fn guidance_for_step(
     }
 }
 
+/// Steps whose exact line is still ahead for a selected target. This is a goal marker, not
+/// guidance: it has no `guidance_on` switch, so turning exact lines off cannot delete the plan,
+/// the PLAN AHEAD line or the goal chips. Only `instructions` are gated.
 pub fn goal_steps(
     selected: &[String],
     evals: &HashMap<String, TargetEval>,
-    guidance_on: bool,
 ) -> HashSet<String> {
     let mut out = HashSet::new();
-    if !guidance_on {
-        return out;
-    }
     for id in selected {
         let Some(e) = evals.get(id) else { continue };
         if e.state != "reachable" {

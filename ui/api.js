@@ -56,6 +56,8 @@ const Api = (() => {
       return clone(view);
     },
     async get_cards() {
+      // mock/cards.json is a real --cards dump when one was generated; otherwise stay empty.
+      try { return await load('cards'); } catch { /* no dump present */ }
       return { cards: [], counts: { owned: 0, not_owned: 0, unknown: 0, total: 0 }, block_ok: false, reason: 'mock backend has no card data', missable_windows: { proven: false } };
     },
     async set_card() { return this.get_cards(); },

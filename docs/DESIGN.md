@@ -102,7 +102,103 @@ Ask one question: **does this make the top band more accurate about what is at r
 data may grow, but it must not move into the band. Scope that adds no warning accuracy is what this
 page exists to refuse.
 
-## 9. How an audit uses this page
+## 9. State model (1.3)
+
+### 9.1 One step, four answers
+
+A route step has four separate answers and the payload must not let one impersonate another:
+
+| answer | field | decided by |
+|---|---|---|
+| the journal's state | `step.journal` | the save's own journal entry, ticks excluded |
+| what the card shows | `step.status` | the journal; a manual row may use its tick |
+| the six-state matrix | `step.classification.state` | the journal plus a live reviewed warning |
+| whether a note disagrees | `step.tick_disagrees` | a tick present while the journal is open |
+
+A tick on a file-derived step is a note. It never changes `status`, `journal` or the matrix, and
+it never clears a live warning. A tick on a manual row is the answer, because the save cannot show
+that row at all.
+
+### 9.2 Tick truth table
+
+| journal | tick | card | matrix | watch | note chip |
+|---|---|---|---|---|---|
+| Not started | off | Not started | obtainable (or at risk if a cutoff passed) | present | no |
+| Not started | on | Not started | unchanged | present | yes |
+| Active | off | Active | at risk / obtainable | present | no |
+| Active | on | Active | unchanged | present | yes |
+| Done | off | Done | done | cleared | no |
+| Done | on | Done | done | cleared | no |
+| Failed | off | Failed | lost | cleared | no |
+| Failed | on | Failed | lost | cleared | no |
+
+### 9.3 Card-window lifecycle
+
+`not_yet` (no source usable yet; ledger only) -> `ahead` (the closing step has not started;
+MORE > CARDS > LATER only) -> `active` (the closing step is open; the only card state in NOW) ->
+`check` (the step is done or failed; a check, never a proved loss) -> `lost` only when the save
+owns the failure. `owned` and `unknown` are ownership states, not window states. A window that is
+`ahead` is never a TopItem. A deck definition is not ownership and not a source.
+
+### 9.4 Warning lifecycle and search
+
+A reviewed warning is rebuilt against the loaded save on every refresh. `settled` and `unknown`
+are not warnings. A search answer and the quest's own detail page call the same save-aware verdict
+function, so the same quest cannot be `safe` on its page and `at risk` in search. The default
+payload carries no target label, ending name or instruction; only `get_plan` and `get_detail`
+after the opt-in may carry an exact line.
+
+### 9.5 The PROGRESS bar
+
+The per-section bar is `done / total` for that section. It is not a whole-game completion
+percentage: one save cannot realize every branch, so a single number would lie. The six states and
+the section totals are the honest report.
+
+### 9.6 Where a warning may come from
+
+The save has no player-position signal. The app may not claim "you are at the Baron"; it may only
+say what the journal, the game files and the reviewed windows prove. Literal location is refused.
+
+## 10. Acceptance record (1.3)
+
+Verified 2026-10-30 against `route.json` (412 nodes), three copied real saves (earliest, median,
+newest) and a clean profile with an empty saves folder, all under a temporary `APPDATA`.
+
+| surface | payload | positive test | negative test | last verified |
+|---|---|---|---|---|
+| NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card; no instruction key | 2026-10-30 |
+| UP NEXT | `view.todo` | tracked + in-log + next plan step only | clean: 0 ids; no available quest; no done/failed id | 2026-10-30 |
+| PLAN AHEAD | `view.target`, `get_plan` | plan survives guidance off; instructions gone | no plan with an empty target | 2026-10-30 |
+| quest detail | `get_detail` | statuette detail carries the live warning | clean: `guidance == null` | 2026-10-30 |
+| search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label | 2026-10-30 |
+| STATUS / PROGRESS | `view.completion` | 412 = 403 + 9; sections 96/183/35/87/11 | no sixth section; no single percentage | 2026-10-30 |
+| CARDS | `get_cards`, `set_card` | 224 cards, 15 Tier B, 129/94/1 owned | ahead row is not a NOW item | 2026-10-30 |
+| COVERAGE | `view.coverage` | measured counts per pack | `with_cards == 0` reads `not modelled` | 2026-10-30 |
+| goal picker | `get_targets`, `set_target` | only after opt-in | absent from the clean payload | 2026-10-30 |
+| outcomes / tradeoffs | `get_outcomes`, `view.tradeoffs` | engine conflict test | clean tradeoffs empty | 2026-10-30 |
+| guidance toggle | `set_guidance` | plan and chips remain | instructions absent | 2026-10-30 |
+| my game | `set_flag` | a flag excludes an unstarted quest | a flag never overrules `Active` | 2026-10-30 |
+| header / setup / pin | `view.save`, `view.setup`, `set_pin` | read error named with file and next step | setup card below NOW | 2026-10-30 |
+
+Invariants 1, 3, 4, 5, 6 and 7 each have a named test that fails when the guarantee is broken; the
+mutation runs are recorded in `NEXT-PHASE-PLAN.md` section 11. Invariant 2 is the tick truth table
+above, tested for every journal state. Invariant 8 is stated in the README and `NOTICE.txt`.
+
+### 10.1 Six first-run scenarios at 480x820
+
+1. **No save.** The band is hidden; UP NEXT says "Load a save to see what is next."; the folder
+   panel opens once with the saves path and a Browse action.
+2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest and in-log
+   quests only. MORE > CARDS > LATER lists the ahead windows.
+3. **Cutoff passed.** NOW shows `CUTOFF PASSED - CHECK NOW` with the protected quest and the
+   closing quest; the same warning is on the quest page and in search.
+4. **Tick a not-started step.** The card keeps Not started, PROGRESS shows a pencil note rather
+   than a green check, and the warning stays.
+5. **Goal selected, guidance off.** PLAN AHEAD and the goal chips remain; no quoted line appears.
+6. **Corrupt save.** The header names the file and says the tracker retries; the folder panel can
+   be reopened; no stale band from the previous save is presented as current.
+
+## 11. How an audit uses this page
 
 - **Completeness:** every row of section 5 delivers its question, and every invariant in section 6
   holds. A row with no command, no visible element or no test behind it is an unfinished feature.

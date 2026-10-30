@@ -166,21 +166,7 @@ pub fn classify(s: &Step, watch: &[Value], ticked: bool) -> Classification {
     if s.status == "Failed" {
         return c("lost", "The save's own journal marks this quest Failed.".into(), "journal");
     }
-    if s.tick_disagrees {
-        return c(
-            "at_risk",
-            "You marked it done, but the journal still has it open; the journal wins.".into(),
-            "save",
-        );
-    }
     if matches!(s.status.as_str(), "Done" | "Assumed") {
-        if !s.manual && ticked && s.journal != "Done" {
-            return c(
-                "unknown",
-                "You marked it done, but the journal has no completed entry; the tick does not overrule the journal.".into(),
-                "save",
-            );
-        }
         if s.manual {
             return c(
                 "done",
@@ -301,11 +287,10 @@ fn node_status(n: &Node, state: &HashMap<String, String>, ticks: &HashSet<String
     } else {
         "Active"
     };
-    if ticks.contains(&n.id) && st != "Failed" {
-        "Done".into()
-    } else {
-        st.into()
-    }
+    // A tick is a note, never a status: the journal decides the card, the matrix and the warning.
+    // Only a manual step (no journal file at all) is finished by its tick, in the branch above.
+    let _ = ticks;
+    st.into()
 }
 
 fn is_ok(s: &str) -> bool {
@@ -346,10 +331,17 @@ pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet
         .iter()
         .map(|n| {
             let journal = if n.files.is_empty() { "Not started".to_string() } else { node_status(n, state, &HashSet::new()) };
-            let status = if is_na(n, flags) { "N/A".into() } else { node_status(n, state, ticks) };
-            let tick_disagrees = ticks.contains(&n.id) && journal == "Active";
+            // a `when` flag may exclude a quest the save has not reached; it may never overrule a
+            // journal that proves the quest exists in this playthrough
+            let status = if journal == "Not started" && is_na(n, flags) { "N/A".into() } else { node_status(n, state, ticks) };
+            // Ticking a file-derived step records a note. The card, the matrix and the warning keep
+            // the journal's answer; the disagreement is stated instead of being resolved either way.
+            let tick_disagrees = !n.files.is_empty()
+                && ticks.contains(&n.id)
+                && !matches!(journal.as_str(), "Done" | "Failed");
+            let cond_unknown = journal == "Not started" && cond_unknown(n, flags);
             Step { n: n.clone(), status, journal, manual: n.files.is_empty(), locked: vec![], held: None,
-                   lost: false, evs: vec![], cond_unknown: cond_unknown(n, flags), tick_disagrees,
+                   lost: false, evs: vec![], cond_unknown, tick_disagrees,
                    frontier: "available" }
         })
         .collect();
@@ -526,7 +518,7 @@ pub fn check_quest(rd: &RouteData, ev: &Eval, short_name: &str, state: &HashMap<
 /// appear. Inside a group: nearest deadline (a live cutoff), then lowest suggested level, then the
 /// journal's own `order` as a tie-break. Gwent and treasure steps are section-only unless they are
 /// tracked or carry a cutoff.
-pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>, caution: &HashSet<usize>) -> Vec<usize> {
+pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>, caution: &HashSet<usize>, next_plan: Option<&str>) -> Vec<usize> {
     let mut out: Vec<usize> = ev
         .todo
         .iter()
@@ -534,8 +526,10 @@ pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>,
         .filter(|&i| !unsafe_ids.contains(&i))
         .filter(|&i| {
             let s = &ev.steps[i];
-            let special = matches!(s.n.kind.as_str(), "gwent" | "treasure");
-            !special || tracked.map(|t| tracks(&s.n, t)).unwrap_or(false) || caution.contains(&i)
+            let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
+            // UP NEXT is the play queue: what the save says is live, plus the one plan step that
+            // is next. A merely unlocked quest lives in MORE > PROGRESS.
+            is_tracked || s.frontier == "in_log" || next_plan == Some(s.n.id.as_str())
         })
         .collect();
     out.sort_by_key(|&i| {
@@ -543,10 +537,8 @@ pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>,
         let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
         let group = if is_tracked {
             0
-        } else if s.status == "Active" || s.frontier == "in_log" {
+        } else if s.frontier == "in_log" {
             1
-        } else if caution.contains(&i) {
-            3
         } else {
             2
         };
@@ -1036,6 +1028,67 @@ mod tests {
         load_route(&v).unwrap()
     }
 
+    #[test]
+    fn the_default_step_payload_carries_no_instruction_or_ending_label() {
+        let rd = route_file();
+        let ev = evaluate(&rd, &HashMap::new(), &HashSet::new(), &HashMap::new(), &HashSet::new());
+        let endings: Value = serde_json::from_str(
+            &std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/data/endings.json")).unwrap(),
+        ).unwrap();
+        let labels: Vec<String> = endings
+            .get("targets")
+            .and_then(|x| x.as_object())
+            .into_iter()
+            .flatten()
+            .filter_map(|(_, t)| t.get("label").and_then(|x| x.as_str()).map(String::from))
+            .collect();
+        assert!(!labels.is_empty(), "the shipped labels are what the scan must catch");
+        for i in 0..ev.steps.len() {
+            let body = step_json(&rd, &ev, i).to_string();
+            assert!(!body.contains("\"instruction\""), "{} carries an instruction", ev.steps[i].n.id);
+            for l in &labels {
+                assert!(!body.contains(l.as_str()), "{} carries the ending label {l}", ev.steps[i].n.id);
+            }
+        }
+    }
+
+    #[test]
+    fn a_flag_never_overrules_a_live_journal() {
+        let mut n = node("flagged", "10", &["flagged"], "side", 0, true);
+        n.when = vec!["keira_sent=yes".into()];
+        let rd = route(vec![n]);
+        let flags = HashMap::from([("keira_sent".to_string(), "no".to_string())]);
+        // the save proves the quest exists: the flag cannot mark it N/A or unknown
+        let ev = evaluate(&rd, &state(&[("flagged", "Active")]), &HashSet::new(), &flags, &HashSet::new());
+        assert_eq!(ev.steps[0].status, "Active");
+        assert!(!ev.steps[0].cond_unknown);
+        // on a quest the save has not reached, the flag still excludes it
+        let ev = evaluate(&rd, &HashMap::new(), &HashSet::new(), &flags, &HashSet::new());
+        assert_eq!(ev.steps[0].status, "N/A");
+    }
+
+    #[test]
+    fn the_tick_truth_table_holds_for_every_journal_state() {
+        for (status, ticked, want, note) in [
+            ("Not started", false, "Not started", false),
+            ("Not started", true, "Not started", true),
+            ("Active", false, "Active", false),
+            ("Active", true, "Active", true),
+            ("Done", false, "Done", false),
+            ("Done", true, "Done", false),
+            ("Failed", false, "Failed", false),
+            ("Failed", true, "Failed", false),
+        ] {
+            let n = node("t", "10", &["t"], "side", 0, true);
+            let rd = route(vec![n]);
+            let st = state(&[("t", status)]);
+            let ticks = if ticked { HashSet::from(["t".to_string()]) } else { HashSet::new() };
+            let ev = evaluate(&rd, &st, &ticks, &HashMap::new(), &HashSet::new());
+            assert_eq!(ev.steps[0].status, want, "{status} ticked={ticked}");
+            assert_eq!(ev.steps[0].tick_disagrees, note, "{status} ticked={ticked}");
+        }
+    }
+
     fn state(pairs: &[(&str, &str)]) -> HashMap<String, String> {
         pairs.iter().map(|(k, v)| (k.to_string(), v.to_string())).collect()
     }
@@ -1099,11 +1152,17 @@ mod tests {
 
     #[test]
     fn a_tick_never_overrules_the_journal_in_the_matrix() {
-        let open = classified("Done", "Active", false, true, true, false, false, &[], json!([]));
-        assert_eq!(open.state, "at_risk");
-        assert!(open.reason.contains("journal"));
-        let absent = classified("Done", "Not started", false, true, false, false, false, &[], json!([]));
-        assert_eq!(absent.state, "unknown");
+        // Active + tick: the matrix is unchanged by the note; the card still says Active.
+        let open = classified("Active", "Active", false, true, true, false, false, &[], json!([]));
+        assert_eq!(open.state, "obtainable");
+        // Not started + tick: the journal has no completed entry, so the step stays obtainable -
+        // not unknown, never done. The note is reported beside the card, not as a status.
+        let absent = classified("Not started", "Not started", false, true, true, false, false, &[], json!([]));
+        assert_eq!(absent.state, "obtainable");
+        // A live warning still outranks the note.
+        let warned = classified("Not started", "Not started", false, true, true, false, false, &[],
+                                json!([{"live": "check", "headline": "cutoff passed", "mechanism": "journal_failure"}]));
+        assert_eq!(warned.state, "at_risk");
         let manual = classified("Done", "Not started", true, true, false, false, false, &[], json!([]));
         assert_eq!(manual.state, "done");
         assert_eq!(manual.source, "manual_reviewed");
@@ -1188,24 +1247,24 @@ mod tests {
         let st = state(&[("tracked", "Active"), ("active_low", "Active")]);
         let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
         let caution_ids: HashSet<usize> = HashSet::from([at(&ev, "caution")]);
-        let ord = todo_order(&ev, Some("tracked"), &HashSet::new(), &caution_ids);
+        let ord = todo_order(&ev, Some("tracked"), &HashSet::new(), &caution_ids, None);
         let pos = |id: &str| ord.iter().position(|&i| ev.steps[i].n.id == id)
             .unwrap_or_else(|| panic!("{id} is not in DO NEXT: {:?}", ord.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>()));
         assert_eq!(pos("tracked"), 0, "the tracked quest comes first");
-        assert!(pos("active_low") < pos("avail_l3"), "in-log quests before available ones");
-        assert!(pos("avail_l3") < pos("avail_l5"), "lower level first inside a group");
-        assert!(pos("avail_l5") < pos("avail_nolevel"), "unlevelled after levelled");
-        assert!(pos("avail_nolevel") < pos("caution"), "safe before caution");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gwent"), "Gwent is section-only");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "treasure"), "treasure is section-only");
+        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "avail_l3"), "a merely unlocked quest is not in UP NEXT");
+        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "caution"), "caution alone does not enter UP NEXT");
+        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gwent"), "an unopened Gwent quest is not in UP NEXT");
+        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "treasure"), "an unopened treasure hunt is not in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gated"), "gated is never in DO NEXT");
-        // the tracked quest is the exception, and a missable Gwent/treasure step may enter
-        let tracked_gwent = todo_order(&ev, Some("gwent"), &HashSet::new(), &HashSet::from([at(&ev, "treasure")]));
+        // the tracked quest enters even when its journal has not opened, and the single next plan
+        // step enters by name; nothing else does
+        let tracked_gwent = todo_order(&ev, Some("gwent"), &HashSet::new(), &HashSet::new(), Some("treasure"));
         assert_eq!(ev.steps[tracked_gwent[0]].n.id, "gwent");
         assert!(tracked_gwent.iter().any(|&i| ev.steps[i].n.id == "treasure"));
+        assert!(!tracked_gwent.iter().any(|&i| ev.steps[i].n.id == "avail_l5"), "one plan step, not all available ones");
         // a fired cutoff takes its step out of DO NEXT; the top section names it instead
         let unsafe_ids = HashSet::from([at(&ev, "avail_l3")]);
-        let without = todo_order(&ev, Some("tracked"), &unsafe_ids, &caution_ids);
+        let without = todo_order(&ev, Some("tracked"), &unsafe_ids, &caution_ids, None);
         assert!(!without.iter().any(|&i| ev.steps[i].n.id == "avail_l3"));
     }
 
@@ -1217,11 +1276,22 @@ mod tests {
         let ticks = HashSet::from(["mq3012noblestatuette".to_string()]);
         let ev = evaluate(&rd, &st, &ticks, &HashMap::new(), &HashSet::new());
         let i = at(&ev, "mq3012noblestatuette");
-        assert_eq!(ev.steps[i].status, "Done", "the tick is bookkeeping");
+        assert_eq!(ev.steps[i].status, "Active", "a tick is a note; it never becomes the status");
         assert_eq!(ev.steps[i].journal, "Active", "the journal still has it open");
         assert!(ev.steps[i].tick_disagrees);
         let tags = step_json(&rd, &ev, i)["tags"].to_string();
         assert!(tags.contains("tick disagrees"), "tags: {tags}");
+
+        // The same note on a quest the journal has not started must not become Done either: the
+        // truth table keeps the card Not started, the matrix obtainable, and the note visible.
+        let untouched = state(&[("mq3012noblestatuette", "Not started")]);
+        let fresh = evaluate(&rd, &untouched, &ticks, &HashMap::new(), &HashSet::new());
+        let j = at(&fresh, "mq3012noblestatuette");
+        assert_eq!(fresh.steps[j].status, "Not started");
+        assert_eq!(fresh.steps[j].journal, "Not started");
+        assert!(fresh.steps[j].tick_disagrees);
+        let nc = classify(&fresh.steps[j], &[], true);
+        assert_eq!(nc.state, "obtainable");
 
         let mut item = json!({
             "id": "triss_statuettes", "level": "stop",

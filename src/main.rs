@@ -409,7 +409,7 @@ impl Inner {
     fn plan_report(&self, requested: Option<Vec<String>>) -> Value {
         let ev = self.eval();
         let ids = requested.unwrap_or_else(|| self.selected.clone());
-        plan::build(
+        let mut plan = plan::build(
             &self.endings,
             &self.outcomes,
             &ids,
@@ -417,7 +417,12 @@ impl Inner {
             &self.facts,
             self.ok_mtime.is_some(),
             &self.exclusive,
-        )
+        );
+        // Guidance off gates the exact lines, not the plan. The plan, its step titles and its goal
+        // chips survive; only `instructions` are removed, and they are removed here so no caller
+        // can leak a line.
+        gate_instructions(&mut plan, self.guidance_on);
+        plan
     }
 
     fn cards_report(&self) -> Value {
@@ -517,8 +522,12 @@ impl Inner {
                 self.error.clear();
             }
             Err(e) => {
-                // the game may still be writing the file: keep the old state and retry on the next poll
-                self.error = format!("reading save... ({e})");
+                // The game may still be writing the file: keep the old state and retry on the next
+                // poll, but name the file and the next step so the header is not a placeholder.
+                let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("the newest save");
+                self.error = format!(
+                    "Could not read {name}: {e}. If the game is running, the tracker retries automatically; otherwise pick another save or check the saves folder under 'my game'."
+                );
             }
         }
         true
@@ -551,6 +560,14 @@ impl Inner {
     /// the route plus a card for the quest tracked in the game, when no route step covers that quest
     fn effective_route(&self) -> RouteData {
         let mut rt = self.route.clone();
+        // A reviewed ending target names a fact a scene branch sets. Mark the step at runtime so the
+        // card, the detail pane and the NOW band read one answer; route.json stays generated data.
+        let ending = self.ending_branch_steps();
+        for n in rt.nodes.iter_mut() {
+            if ending.contains(&n.id) {
+                n.ending_relevant = true;
+            }
+        }
         let Some(short) = self.tracked_short() else { return rt };
         if rt.nodes.iter().any(|n| model::tracks(n, &short)) {
             return rt;
@@ -560,9 +577,6 @@ impl Inner {
         // the save's own display list; do not invent a section, a level or a note for it.
         let title = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
         let lv = "".to_string();
-        if !rt.sections.iter().any(|s| s == "Tracked") {
-            rt.sections.insert(0, "Tracked".into());
-        }
         rt.nodes.push(model::Node {
             section: "Tracked".into(),
             id: format!("tracked_{short}"),
@@ -588,6 +602,18 @@ impl Inner {
             reviewed: String::new(),
         });
         rt
+    }
+
+    /// Steps whose own scene sections set a fact a reviewed ending target needs. This is the
+    /// spoiler-free existence proof behind the NOW choice warning: the step is named, the choice
+    /// text and the recommended option are never part of it.
+    fn ending_branch_steps(&self) -> HashSet<String> {
+        self.branches
+            .by_step
+            .iter()
+            .filter(|(_, rows)| rows.iter().any(|b| self.ending_branch_ids.contains(&b.id)))
+            .map(|(step, _)| step.clone())
+            .collect()
     }
 
     fn eval(&self) -> Eval {
@@ -631,7 +657,7 @@ impl Inner {
     /// top section. A step that is the closing quest of a live cutoff is unsafe too: doing it costs
     /// another open quest, and the top section names it. The protected quest is `caution` - it keeps
     /// its place in DO NEXT, with the warning above it.
-    fn todo_order(&self, ev: &Eval, steps: &[Value]) -> Vec<usize> {
+    fn todo_order(&self, ev: &Eval, steps: &[Value], next_plan: Option<&str>) -> Vec<usize> {
         let mut unsafe_ids: HashSet<usize> = HashSet::new();
         let mut caution: HashSet<usize> = HashSet::new();
         for (i, v) in steps.iter().enumerate() {
@@ -660,7 +686,7 @@ impl Inner {
                 caution.insert(i);
             }
         }
-        model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution)
+        model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution, next_plan)
     }
 
     /// the quest tracked in the game for the UI (null when the save has none)
@@ -731,20 +757,54 @@ impl Inner {
         }
     }
 
-    /// The first reviewed cutoff that applies to this journal quest file, if any.
-    fn derived_watch_for(&self, short_name: &str) -> Option<Value> {
-        let steps = self.derived.get("steps")?.as_object()?;
-        for (_id, d) in steps {
-            let hit = d.get("quests")?.as_array()?.iter().any(|q| q.as_str().map(|x| x.eq_ignore_ascii_case(short_name)).unwrap_or(false));
-            if !hit {
-                continue;
-            }
-            let items = d.get("watch")?.as_array()?;
-            if let Some(first) = items.first() {
-                return Some(first.clone());
-            }
+    /// The live reviewed warning for a journal quest, read against this save exactly as the step
+    /// card reads it. Both the search box and the detail pane answer from here, so one quest cannot
+    /// be `safe` on its own page and `at risk` in search.
+    fn live_watch_for(&self, ev: &Eval, short_name: &str) -> Option<Value> {
+        let i = model::step_for_short(ev, short_name)?;
+        let d = self.derived.get("steps")?.get(&ev.steps[i].n.id)?;
+        let mut list = d.get("watch")?.as_array()?.clone();
+        let done_q = self.done_quests(ev);
+        list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
+        list.into_iter().next()
+    }
+
+    /// One save-aware verdict. The route model answers first; a reviewed warning that is still
+    /// live in this save outranks it, because it names what is lost and what to do instead.
+    fn verdict_for(&self, rt: &RouteData, ev: &Eval, short_name: &str) -> Value {
+        let display = self
+            .display
+            .iter()
+            .find(|(k, _)| k == short_name)
+            .map(|(_, d)| d.clone())
+            .unwrap_or_else(|| short_name.to_string());
+        let mut out = model::verdict_json(&model::check_quest(rt, ev, short_name, &self.state), &display);
+        let Some(w) = self.live_watch_for(ev, short_name) else { return out };
+        let Some(live) = w.get("live").and_then(|x| x.as_str()) else { return out };
+        let (verdict, headline) = match live {
+            "lost" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
+            "inside" | "check" | "passed" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
+            "ahead" => ("warn", w.get("headline").cloned().unwrap_or(Value::Null)),
+            // settled, missed, unknown: the journal has answered the question, so the route
+            // model's own verdict stands and the warning is not repeated as advice
+            _ => return out,
+        };
+        let mut details: Vec<Value> = Vec::new();
+        if let Some(x) = w.get("why").filter(|v| !v.is_null()) {
+            details.push(x.clone());
         }
-        None
+        if let Some(x) = w.get("action").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
+            details.push(json!(format!("Do this first: {x}.")));
+        }
+        if let Some(x) = w.get("live_note").filter(|v| !v.is_null()) {
+            details.push(x.clone());
+        }
+        out["verdict"] = json!(verdict);
+        out["headline"] = headline;
+        out["details"] = json!(details);
+        out["from_game_files"] = json!(true);
+        out["evidence"] = w.get("evidence").cloned().unwrap_or_else(|| json!("files+saves"));
+        out
     }
 
     /// Completion is not a single percentage. The audited matrix has 412 route nodes (403 quests +
@@ -900,7 +960,30 @@ impl Inner {
         let rt = self.effective_route();
         let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags, &self.facts);
         let target_evals = self.target_evals(&ev);
-        let goal_steps = targets::goal_steps(&self.selected, &target_evals, self.guidance_on);
+        // Goal chips and PLAN AHEAD survive guidance being off; only exact instructions are gated.
+        let goal_steps = targets::goal_steps(&self.selected, &target_evals);
+        // The one plan step UP NEXT may add: the first ahead step in plan order that the save has
+        // not locked. Everything else ahead stays in the collapsed PLAN AHEAD line.
+        let next_plan = if self.selected.is_empty() {
+            None
+        } else {
+            self.plan_report(None)
+                .get("steps")
+                .and_then(|x| x.as_array())
+                .and_then(|a| {
+                    a.iter().find(|s| {
+                        s.get("state").and_then(|x| x.as_str()) == Some("ahead")
+                            && s.get("step")
+                                .and_then(|x| x.as_str())
+                                .and_then(|id| ev.byid.get(id))
+                                .map(|&i| ev.steps[i].locked.is_empty())
+                                .unwrap_or(false)
+                    })
+                })
+                .and_then(|s| s.get("step"))
+                .and_then(|x| x.as_str())
+                .map(String::from)
+        };
         let age = self.save_mtime.and_then(|m| SystemTime::now().duration_since(m).ok()).map(|d| d.as_secs()).unwrap_or(0);
         let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("");
         let mut steps: Vec<Value> = (0..ev.steps.len())
@@ -935,10 +1018,7 @@ impl Inner {
         }
         let error = if !self.db_error.is_empty() { self.db_error.clone() } else { self.error.clone() };
         let card_report = self.cards_report();
-        let mut top = top_items(&ev, &steps);
-        if let Some(list) = top.as_array_mut() {
-            list.extend(cards::top_items(&card_report));
-        }
+        let top = self.top_section(&ev, &steps, &card_report);
         let completion = self.completion(&ev, &steps, &card_report);
         let target = targets::target_json(&self.endings, &self.selected, &target_evals, self.guidance_on);
         // Tradeoffs are spoilers: they name endings the player did not select. Keep the whole list
@@ -984,6 +1064,21 @@ impl Inner {
                 .collect();
             json!(rows)
         };
+        // A measured zero is not a clean bill. Say which pack has no Gwent card model at all, so
+        // the COVERAGE row cannot read as six real zeroes.
+        let mut coverage_packs = self.coverage.get("packs").cloned().unwrap_or_else(|| json!({}));
+        if let Some(packs) = coverage_packs.as_object_mut() {
+            for (name, p) in packs.iter_mut() {
+                if p.get("with_cards").and_then(|x| x.as_i64()).unwrap_or(0) == 0 {
+                    p["not_modelled"] = json!(true);
+                    p["note"] = json!(if name == "gwent" {
+                        "Gwent is a route section, not a Gwent card pack; no cards are measured for it."
+                    } else {
+                        "No Gwent card pack is measured for this pack; Hearts of Stone has none."
+                    });
+                }
+            }
+        }
         let setup = json!({
             "needed": !self.setup_v1 && self.selected.is_empty(),
             "has_targets": !targets::all_ids(&self.endings).is_empty(),
@@ -999,7 +1094,7 @@ impl Inner {
             },
             "sections": rt.sections,
             "steps": steps,
-            "todo": self.todo_order(&ev, &steps).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": self.todo_order(&ev, &steps, next_plan.as_deref()).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": self.tracked_json(&ev),
             "top": top,
             "objectives": Value::Object(objs),
@@ -1007,9 +1102,24 @@ impl Inner {
             "target": target,
             "setup": setup,
             "completion": completion,
-            "coverage": {"packs": self.coverage.get("packs").cloned().unwrap_or_else(|| json!({}))},
+            "coverage": {"packs": coverage_packs},
             "tradeoffs": tradeoffs,
         })
+    }
+
+    /// The NOW band, built once. `--dump` and the window must not disagree about it.
+    fn top_section(&self, ev: &Eval, steps: &[Value], card_report: &Value) -> Value {
+        let mut top = top_items(ev, steps);
+        let Some(list) = top.as_array_mut() else { return top };
+        list.extend(cards::top_items(card_report));
+        let covered: HashSet<String> = list
+            .iter()
+            .flat_map(|i| i.get("ids").and_then(|x| x.as_array()).into_iter().flatten())
+            .filter_map(|x| x.as_str().map(String::from))
+            .collect();
+        list.extend(choice_items(ev, &covered));
+        sort_top(list);
+        top
     }
 
     fn save_progress(&self) {
@@ -1018,6 +1128,39 @@ impl Inner {
         ticks.sort();
         let cur = json!({"ticks": ticks, "level": self.level, "flags": self.flags, "cards": self.card_manual});
         let _ = std::fs::write(&p, serde_json::to_string(&cur).unwrap_or_default()); // only ever written in the tracker's own app folder
+    }
+}
+
+/// The fourth warning: a choice that matters to the endings in play. It names the quest and
+/// nothing about the choice; only a quest the journal already has open is in play.
+fn choice_items(ev: &Eval, covered: &HashSet<String>) -> Vec<Value> {
+    let mut out = Vec::new();
+    for s in &ev.steps {
+        if s.status != "Active" || !s.n.ending_relevant || covered.contains(&s.n.id) {
+            continue;
+        }
+        let title = model::short(&s.n.title);
+        out.push(json!({
+            "kind": "choice", "level": "warn", "tag": "ENDING CHOICE AHEAD",
+            "headline": format!("{title} contains a choice that matters to the endings in play."),
+            "detail": "A scene section of this quest sets a fact a reviewed ending target needs.",
+            "action": Value::Null, "live_note": Value::Null, "mechanism": "scene choice rows",
+            "file": "", "quests": [title], "ids": [s.n.id],
+        }));
+    }
+    out
+}
+
+/// Guidance off removes the exact lines and nothing else: the plan, its steps and its goal chips
+/// are still the answer to "what is coming". The gate lives in the payload so no UI can leak a line.
+fn gate_instructions(plan: &mut Value, guidance_on: bool) {
+    if guidance_on {
+        return;
+    }
+    if let Some(steps) = plan.get_mut("steps").and_then(|x| x.as_array_mut()) {
+        for s in steps {
+            s["instructions"] = json!([]);
+        }
     }
 }
 
@@ -1093,13 +1236,27 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
             }));
         }
     }
-    out.sort_by_key(|item| match item.get("kind").and_then(|x| x.as_str()) {
-        Some("risk") => 0,
-        Some("lost") => 1,
-        Some("failed") => 2,
-        _ => 3,
-    });
+    sort_top(&mut out);
     Value::Array(out)
+}
+
+/// One ordering for the whole band, whichever producer added the item.
+fn sort_top(list: &mut [Value]) {
+    let rank = |kind: &str| match kind {
+        "risk" => 0u8,
+        "lost" => 1,
+        "failed" => 2,
+        "choice" => 3,
+        "card" => 4,
+        _ => 5,
+    };
+    list.sort_by_cached_key(|item| {
+        let kind = item.get("kind").and_then(|x| x.as_str()).unwrap_or("");
+        (
+            rank(kind),
+            item.get("headline").and_then(|x| x.as_str()).unwrap_or("").to_string(),
+        )
+    });
 }
 
 fn short_title(t: &str) -> &str {
@@ -1178,8 +1335,7 @@ fn detail_json(g: &Inner, id: &str) -> Value {
         "overridden": g.ticks.contains(&n.id) && !ev.steps[i].manual,
         "verdict": n.files.first().map(|f| {
             let sh = f.split('|').next().unwrap_or(f).split('#').next().unwrap_or(f).to_string();
-            let v = model::check_quest(&rt, &ev, &sh, &g.state);
-            model::verdict_json(&v, short_title(&n.title))
+            g.verdict_for(&rt, &ev, &sh)
         }).unwrap_or(Value::Null),
     })
 }
@@ -1267,24 +1423,7 @@ fn check_quest(short: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
     let rt = g.effective_route();
     let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags, &g.facts);
-    let v = model::check_quest(&rt, &ev, &short, &g.state);
-    let display = g.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
-    let mut out = model::verdict_json(&v, &display);
-    // a cutoff this tracker has worked out from the game's own files outranks a general answer:
-    // it names the mechanism, so it can say why and what to do instead of saying "probably fine"
-    if let Some(w) = g.derived_watch_for(&short) {
-        let level = w["level"].as_str().unwrap_or("warn");
-        let mut details: Vec<Value> = vec![w["why"].clone(), json!(format!("Do this first: {}.", w["action"].as_str().unwrap_or("")))];
-        if let Some(cs) = w["caveats"].as_array() {
-            details.extend(cs.iter().cloned());
-        }
-        out["verdict"] = json!(if level == "stop" { "stop" } else { "warn" });
-        out["headline"] = w["headline"].clone();
-        out["details"] = json!(details);
-        out["from_game_files"] = json!(true);
-        out["evidence"] = w["evidence"].clone();
-    }
-    out
+    g.verdict_for(&rt, &ev, &short)
 }
 
 #[tauri::command]
@@ -1497,14 +1636,15 @@ fn main() {
         for (i, s) in steps.iter_mut().enumerate() {
             inner.attach_derived(s, &ev.steps[i], &done_q);
         }
-        let top = top_items(&ev, &steps);
+        let card_report = inner.cards_report();
+        let top = inner.top_section(&ev, &steps, &card_report);
         let dump = json!({
             "save": inner.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or(""),
             "game_dir": inner.game_dir.as_ref().map(|p| p.display().to_string()),
             "quest_files": inner.db.quests.len(),
             "states": inner.state,
             "status": status,
-            "todo": inner.todo_order(&ev, &steps).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": inner.todo_order(&ev, &steps, None).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": inner.tracked_json(&ev),
             "objectives": inner.objectives,
             // the route's fact-gated prerequisites, and whether this save has the game's own condition
@@ -1662,6 +1802,66 @@ mod top_tests {
         let top = top_items(&ev, &[step("sq301triss", json!([]))]);
         assert_eq!(top[0]["kind"], "failed");
         assert!(top[0]["headline"].as_str().unwrap().contains("failed"));
+    }
+
+    #[test]
+    fn guidance_off_gates_only_the_lines() {
+        let mut plan = json!({"steps": [{"step": "a", "state": "ahead",
+                                         "instructions": [{"instruction": "Say this."}]}]});
+        gate_instructions(&mut plan, false);
+        assert!(plan["steps"][0]["instructions"].as_array().unwrap().is_empty());
+        assert_eq!(plan["steps"][0]["state"], "ahead", "the plan step survives");
+        let mut on = json!({"steps": [{"instructions": [{"instruction": "Say this."}]}]});
+        gate_instructions(&mut on, true);
+        assert_eq!(on["steps"][0]["instructions"].as_array().unwrap().len(), 1);
+    }
+
+    #[test]
+    fn a_live_choice_is_a_now_item_with_no_choice_text() {
+        let mut n = node("endingstep", &["endingstep"]);
+        n.ending_relevant = true;
+        n.title = "The Choice Quest".into();
+        let rd = RouteData { sections: vec!["Main".into()], nodes: vec![n], events: vec![],
+                             prefs: vec![], conditional: HashSet::new(), flags: vec![], manual_audit: Value::Null };
+        let st = HashMap::from([("endingstep".to_string(), "Active".to_string())]);
+        let ev = model::evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
+        let items = choice_items(&ev, &HashSet::new());
+        assert_eq!(items.len(), 1, "an open quest with an ending branch is one NOW item");
+        assert_eq!(items[0]["kind"], "choice");
+        assert!(items[0]["headline"].as_str().unwrap().contains("The Choice Quest"));
+        assert!(items[0].get("instruction").is_none(), "the band never carries choice text");
+        // a choice on a quest the journal has not reached is ledger-only, not a warning
+        let ev = model::evaluate(&rd, &HashMap::new(), &HashSet::new(), &HashMap::new(), &HashSet::new());
+        assert!(choice_items(&ev, &HashSet::new()).is_empty());
+    }
+
+    #[test]
+    fn the_app_has_no_network_client_and_never_writes_a_save() {
+        let manifest = include_str!("../Cargo.toml").to_lowercase();
+        for c in ["reqwest", "hyper", "ureq", "isahc", "attohttpc", "curl"] {
+            assert!(!manifest.contains(c), "network crate {c} in Cargo.toml");
+        }
+        let src = concat!(env!("CARGO_MANIFEST_DIR"), "/src");
+        // Build the needles at run time so this test's own source cannot match them.
+        let needles = [
+            format!("{}{}", "Tcp", "Stream"),
+            format!("{}{}", "req", "west::"),
+            format!("{}{}", "ur", "eq::"),
+            format!("{}{}", "hy", "per::client"),
+            format!("{}{}", "std::", "net"),
+        ];
+        for e in std::fs::read_dir(src).unwrap() {
+            let p = e.unwrap().path();
+            if p.extension().map(|x| x == "rs").unwrap_or(false) {
+                let body = std::fs::read_to_string(&p).unwrap();
+                for c in &needles {
+                    assert!(!body.contains(c.as_str()), "{} contains {c}", p.display());
+                }
+            }
+        }
+        let save = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/src/save.rs")).unwrap();
+        assert!(!save.contains("fs::write") && !save.contains("File::create"),
+                "save.rs must stay read-only: no write and no create");
     }
 
     #[test]

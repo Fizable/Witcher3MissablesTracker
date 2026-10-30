@@ -12,8 +12,8 @@
   <header id="hdr">
     <div class="hdr-row">
       <h1><span class="gold">WITCHER 3</span> <span class="dim">missables tracker</span></h1>
-      <button class="gear" data-act="gear" title="Tell the tracker about your game (Letho, Keira, romances)">⚙ my game</button>
-      <button class="gear" data-act="more" title="Cards, progress, coverage, status and excluded content">⋯ more</button>
+      <button class="gear" data-act="gear" title="Your game and ending goals (Letho, Keira, romances)">⚙ my game · goals</button>
+      <button class="gear" data-act="more" aria-label="More: cards, progress, coverage, status" title="Cards, progress, coverage, status and excluded content">⋯ more</button>
       <label class="pin" title="Keep this window on top of the game"><input type="checkbox" id="pin" checked> pin</label>
     </div>
     <div class="hdr-row sub">
@@ -38,17 +38,8 @@
     <div class="searchbar">
       <input type="search" id="q" placeholder="can I do this now? (contract, quest name)" autocomplete="off" spellcheck="false">
       <div id="verdict" class="hidden"></div>
-      <ul id="hits" class="hits hidden"></ul>
+      <ul id="hits" class="hits hidden" role="listbox" aria-label="search results"></ul>
     </div>
-
-    <section id="setupCard" class="setup-card hidden">
-      <h2 class="gold">OPTIONAL: CHOOSE AN ENDING GOAL</h2>
-      <p class="txt">If you want the tracker to guide you, it can ask which endings you are aiming for. This reveals ending names and, later, exact choice lines. You can skip this and stay spoiler-free.</p>
-      <div class="setup-actions">
-        <button class="btn" data-act="skip-setup">Skip - stay spoiler-free</button>
-        <button class="btn goldbtn" data-act="open-picker">Choose a goal (spoilers)</button>
-      </div>
-    </section>
 
     <section id="topSec" class="hidden">
       <div class="run-head">
@@ -56,6 +47,16 @@
         <span id="topLater" class="top-later dim small"></span>
       </div>
       <div id="top" class="stack"></div>
+    </section>
+
+    <!-- The optional goal invitation sits below the warning: the band is the product. -->
+    <section id="setupCard" class="setup-card hidden">
+      <h2 class="gold">OPTIONAL: CHOOSE AN ENDING GOAL</h2>
+      <p class="txt">If you want the tracker to guide you, it can ask which endings you are aiming for. This reveals ending names and, later, exact choice lines. You can skip this and stay spoiler-free.</p>
+      <div class="setup-actions">
+        <button class="btn" data-act="skip-setup">Skip - stay spoiler-free</button>
+        <button class="btn goldbtn" data-act="open-picker">Choose a goal (spoilers)</button>
+      </div>
     </section>
 
     <section id="todoSec">

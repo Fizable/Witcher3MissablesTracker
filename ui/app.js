@@ -84,6 +84,7 @@ function openMore(tab) {
   if (!MORE_TABS.includes(tab)) tab = 'cards';
   showMoreTab(tab);
   ui.morePanel.classList.remove('hidden');
+  focusInto(ui.morePanel);
   // Reference panes are not rendered while hidden, so opening one refreshes it from the current view.
   if (tab === 'cards') { if (cardsData) renderCards(cardsData); else loadCards(); }
   else if (tab === 'progress' && view) renderProgress(view, true);
@@ -92,11 +93,28 @@ function openMore(tab) {
 }
 function closeMore() {
   ui.morePanel.classList.add('hidden');
+  restoreFocus();
 }
 function openCards(filter) {
   cardFilter = filter || 'all';
   syncCardFilters();
   openMore('cards');
+}
+
+// ---------- keyboard: focus moves into an overlay and is handed back on close ----------
+let focusReturn = null;
+function focusInto(panel) {
+  const active = document.activeElement;
+  // Remember the control that opened the overlay, so Escape returns to it and not to nowhere.
+  if (active instanceof HTMLElement && !panel.contains(active)) focusReturn = active;
+  const box = panel.querySelector('.more-box, .picker-box') || panel;
+  box.setAttribute('tabindex', '-1');
+  box.focus({ preventScroll: true });
+}
+function restoreFocus() {
+  const back = focusReturn;
+  focusReturn = null;
+  if (back && back.isConnected) back.focus({ preventScroll: true });
 }
 
 function fmtAge(secs) {
@@ -121,6 +139,9 @@ function renderHeader(v) {
   const err = save.error || '';
   el.saveError.classList.toggle('hidden', !err);
   if (el.saveError.textContent !== err) el.saveError.textContent = err;
+  // A new read error may need the folder panel again; a one-shot auto-open is not enough.
+  if (err && !lastSaveError) panelAutoOpened = false;
+  lastSaveError = err;
   // never clobber the level input while the user is typing in it
   if (document.activeElement !== el.level && el.level.value !== String(v.level)) el.level.value = v.level;
   tickAge();
@@ -150,6 +171,7 @@ function renderFlags(v) {
 const foldersEl = $('#folders');
 const folderRows = new Map();
 let panelAutoOpened = false;
+let lastSaveError = '';
 function renderFolders(v) {
   const f = v.folders;
   if (!f) return;
@@ -320,7 +342,8 @@ function targetLabel(id) {
 }
 function planMatchesView(p) {
   const t = view && view.target;
-  if (!p || !t || t.guidance !== 'on') return false;
+  // The plan is what is still coming; only exact instructions are guidance-gated upstream.
+  if (!p || !t) return false;
   if (p.state === 'empty') return false;
   const selected = (p.selected || []).slice().sort().join(',');
   const wanted = (t.ids || []).slice().sort().join(',');
@@ -336,11 +359,11 @@ function clearPlan() {
 }
 async function loadPlan() {
   const t = view && view.target;
-  if (!t || t.guidance !== 'on' || !t.ids || !t.ids.length) { clearPlan(); return; }
+  if (!t || !t.ids || !t.ids.length) { clearPlan(); return; }
   const seq = ++planSeq;
   let p;
   try { p = await Api.get_plan(t.ids); } catch (e) { console.error(e); return; }
-  if (seq !== planSeq || !view || !view.target || view.target.guidance !== 'on') return;
+  if (seq !== planSeq || !view || !view.target) return;
   planData = p;
   renderPlanIssues(p);
   renderTodo(view);
@@ -438,12 +461,17 @@ function renderCoverage(v, force) {
     const tr = h('tr');
     add(tr, h('td', '', PACK_LABEL[n] || n));
     ['quests', 'with_phases', 'with_scenes', 'with_branches', 'with_cards', 'with_cutoffs'].forEach((k) => {
-      add(tr, h('td', 'num', p[k] == null ? 'not measured' : String(p[k])));
+      const unmodelled = k === 'with_cards' && p.not_modelled;
+      add(tr, h('td', 'num', unmodelled ? 'not modelled' : p[k] == null ? 'not measured' : String(p[k])));
     });
     body.append(tr);
   });
   table.append(body);
   ui.coverage.append(table);
+  // A zero in the card column is not a clean bill. Name the packs that have no card model.
+  const notes = names.filter((n) => packs[n] && packs[n].not_modelled)
+    .map((n) => (PACK_LABEL[n] || n) + ': ' + packs[n].note);
+  if (notes.length) ui.coverage.append(h('p', 'dim small covnote', notes.join(' ')));
 }
 
 // ---------- Gwent cards ----------
@@ -661,6 +689,7 @@ async function openPicker() {
   ui.outcomeMatrix.replaceChildren();
   renderPicker();
   ui.picker.classList.remove('hidden');
+  focusInto(ui.picker);
 }
 
 async function closePicker() {
@@ -671,6 +700,7 @@ async function closePicker() {
   ui.outcomeMatrix.classList.add('hidden');
   ui.outcomeMatrix.replaceChildren();
   pickerData = null;
+  restoreFocus();
   if (firstRunPicker) {
     firstRunPicker = false;
     try { render(await Api.set_target([])); } catch (e) { console.error(e); }
@@ -688,6 +718,7 @@ async function applyPicker() {
     ui.outcomeMatrix.replaceChildren();
     pickerData = null;
     firstRunPicker = false;
+    restoreFocus();
     render(v);
   } catch (e) { console.error(e); }
 }
@@ -704,21 +735,13 @@ const topList = keyedList($('#top'));
  * save-status transcript stay on the quest's detail page, behind "Technical details".
  */
 function renderTop(v) {
-  const all = v.top || [];
-  // A card whose closing step is only ahead is reference data, not a warning. Keep it out of NOW;
-  // the card ledger's LATER filter still carries it with its OPEN LATER badge.
-  const later = all.filter((x) => x.kind === 'card' && (x.tag || '') === 'MISSABLE CARD');
-  const items = all.filter((x) => !(x.kind === 'card' && (x.tag || '') === 'MISSABLE CARD'));
+  // The payload is the whole truth: a loss, a live cutoff, a failed quest, a choice that matters
+  // now, or a card window the player can act on. An ahead card window is a count in
+  // MORE > CARDS > LATER, never a band entry.
+  const items = v.top || [];
   ui.topLater.replaceChildren();
-  if (items.length && later.length) {
-    // These are reviewed deadlines, not the one-time sources that also appear under CARDS > LATER.
-    add(ui.topLater, h('button', 'linkbtn small', '+ ' + later.length + ' later card warning' + (later.length === 1 ? '' : 's'),
-      { 'data-act': 'open-cards', 'data-filter': 'later', title: 'Card deadlines that have not opened yet' }));
-  }
-  // NOW is the play loop: when nothing can still be changed by acting, the band disappears instead
-  // of holding space. Later card windows stay reachable in MORE > CARDS > LATER.
+  // Silence is the correct answer: an empty band is hidden, not filled.
   $('#topSec').classList.toggle('hidden', !items.length);
-  if (!items.length) ui.topLater.replaceChildren();
   topList(items, (x) => x.kind + x.headline, (x) => x, (x) => {
     const col = x.level === 'stop' ? 'red' : x.level === 'lost' ? 'lost' : x.level === 'warn' ? 'amber' : 'blue';
     const first = (x.ids || [])[0];
@@ -895,10 +918,10 @@ function renderTodo(v) {
   const aheadIds = new Set(planAhead.map((s) => s.step));
   // "Unlocked" is not "actionable": most of the route is available and not in the log, so it would
   // fill this queue with things the player has not found yet. Only the log can prove a live quest.
-  const base = (v.todo || []).filter((id) => {
-    const s = stepsById.get(id);
-    return s && !aheadIds.has(id) && (trackedSteps.has(id) || s.frontier === 'in_log');
-  });
+  // The backend already decided the queue: tracked + in-log + the one plan step that is next.
+  // Future goal steps belong to PLAN AHEAD, so they are removed here rather than re-filtered by a
+  // second rule the payload could disagree with.
+  const base = (v.todo || []).filter((id) => stepsById.has(id) && !aheadIds.has(id));
   const planById = new Map(planSteps.map((s) => [s.step, s]));
   // Tracked first, then the plan step you are actually on, then the ordinary route order. One id appears once.
   const ids = [];
@@ -909,6 +932,8 @@ function renderTodo(v) {
   const trackedOf = (id) => (trackedSteps.has(id) ? tr : null);
   renderPlanAhead(planAhead);
   $('#todoEmpty').classList.toggle('hidden', ids.length > 0);
+  const emptyText = (v.save && v.save.error) ? 'Load a save to see what is next.' : 'Nothing queued right now.';
+  if ($('#todoEmpty').textContent !== emptyText) $('#todoEmpty').textContent = emptyText;
   cardList(first, (id) => id, (id) => [stepsById.get(id), v.objectives[id] || [], v.level, trackedOf(id), planById.get(id)],
     (id) => buildCard(stepsById.get(id), v.objectives[id] || [], trackedOf(id), planById.get(id)));
   const rank = new Map(ids.map((id, i) => [id, i + 1]));
@@ -935,14 +960,21 @@ function buildRow2(s) {
 }
 function patchRow(r, s) {
   const [icon, title] = r.children;
-  const clickable = s.manual || s.status === 'Assumed';
-  r.className = 'prow st-' + s.status.split(' ').join('-').split('/').join('-');
-  const ic = ICON[s.status] || '○';
+  // A tick is a note. Only a manual row is finished by it; a file-derived row keeps the journal's
+  // answer and shows the note as a note, never as a green done check.
+  const clickable = (s.manual || s.tick_disagrees || s.status === 'Not started' || s.status === 'Active' || s.status === 'Assumed')
+    && s.status !== 'N/A' && s.status !== 'Done' && s.status !== 'Failed';
+  r.className = 'prow st-' + s.status.split(' ').join('-').split('/').join('-') + (s.tick_disagrees ? ' noted' : '');
+  const ic = s.tick_disagrees ? '✎' : (ICON[s.status] || '○');
   if (icon.textContent !== ic) icon.textContent = ic;
   icon.disabled = !clickable;
   icon.tabIndex = clickable ? 0 : -1;
-  icon.title = s.status === 'N/A' ? 'does not apply to your game (see My game)' : s.status === 'Assumed' ? 'assumed from later progress: click to confirm' : s.manual ? 'click to toggle' : s.status;
-  const t = s.title + (s.manual ? (s.provenance === 'manual_reviewed' ? ' ✎ [manual reviewed]' : ' ✎') : '');
+  icon.title = s.tick_disagrees
+    ? 'you noted this; the save still says ' + s.status + '. Click to remove the note.'
+    : s.status === 'N/A' ? 'does not apply to your game (see My game)'
+      : s.status === 'Assumed' ? 'assumed from later progress: click to confirm'
+        : s.manual ? 'click to toggle' : clickable ? 'click to add a note (the save still decides)' : s.status;
+  const t = s.title + (s.manual ? (s.provenance === 'manual_reviewed' ? ' ✎ [manual reviewed]' : ' ✎') : s.tick_disagrees ? ' ✎ noted, not confirmed' : '');
   if (title.textContent !== t) title.textContent = t;
   title.title = s.classification ? stateText(s.classification.state) + ': ' + (s.classification.reason || '') : '';
 }
@@ -964,7 +996,10 @@ function buildSection(name) {
 
 function renderProgress(v, force) {
   if (!force && $('#progSec').classList.contains('hidden')) return;
-  const names = v.sections || [];
+  // The matrix owns the section list: a save-only "Tracked" row must never invent a sixth
+  // header that has no counts. Fall back to the route's sections only when the matrix is absent.
+  const matrixSections = v.completion && v.completion.matrix && v.completion.matrix.sections;
+  const names = matrixSections ? Object.keys(matrixSections) : (v.sections || []);
   names.forEach((name, i) => {
     let rec = sectionRecs.get(name);
     if (!rec) { rec = buildSection(name); sectionRecs.set(name, rec); }
@@ -1017,26 +1052,48 @@ function render(v) {
 }
 
 // ---------- search ----------
-let searchSeq = 0, searchTimer = 0, selectedShort = '';
+let searchSeq = 0, searchTimer = 0, selectedShort = '', hitIdx = -1;
 function clearVerdict() { el.verdict.classList.add('hidden'); el.verdict.replaceChildren(); selectedShort = ''; markSelected(); }
-function markSelected() { for (const b of el.hits.querySelectorAll('button')) b.classList.toggle('sel', b.dataset.short === selectedShort); }
+function markSelected() { for (const b of el.hits.querySelectorAll('button.hit')) b.classList.toggle('sel', b.dataset.short === selectedShort); }
+const hitButtons = () => [...el.hits.querySelectorAll('button.hit')];
+function markHit() {
+  const bs = hitButtons();
+  bs.forEach((b, i) => { const on = i === hitIdx; b.classList.toggle('kbdsel', on); b.setAttribute('aria-selected', String(on)); });
+  const cur = bs[hitIdx];
+  if (cur) el.q.setAttribute('aria-activedescendant', cur.id);
+  else el.q.removeAttribute('aria-activedescendant');
+}
+function hideHits() { el.hits.classList.add('hidden'); hitIdx = -1; markHit(); }
 
 async function runSearch() {
   const q = el.q.value.trim();
   const seq = ++searchSeq;
+  hitIdx = -1;
   if (q.length < 2) { el.hits.classList.add('hidden'); el.hits.replaceChildren(); clearVerdict(); return; }
   let res = [];
   try { res = await Api.search(q); } catch (e) { console.error(e); }
   if (seq !== searchSeq) return; // stale
   el.hits.replaceChildren();
   if (!res.length) add(el.hits, add(h('li', 'nohit dim small', 'No matches.')));
-  res.slice(0, 40).forEach((x) => {
-    const b = h('button', 'hit', null, { 'data-act': 'hit', 'data-short': x.short, 'data-step': x.step || '' });
+  res.slice(0, 40).forEach((x, i) => {
+    const b = h('button', 'hit', null, {
+      'data-act': 'hit', 'data-short': x.short, 'data-step': x.step || '',
+      id: 'hit-' + i, role: 'option', 'aria-selected': 'false',
+    });
     add(b, h('span', 'hname', x.display), h('span', 'dim small', x.status));
-    add(el.hits, add(h('li'), b));
+    add(el.hits, add(h('li', '', null, { role: 'presentation' }), b));
   });
   el.hits.classList.remove('hidden');
   markSelected();
+  markHit();
+}
+
+function activateHit(i) {
+  const b = hitButtons()[i];
+  if (!b) return;
+  if (b.dataset.step) { el.q.value = ''; runSearch(); openDetail(b.dataset.step); }
+  else showVerdict(b.dataset.short);
+  hideHits();
 }
 
 async function showVerdict(sh) {
@@ -1057,6 +1114,22 @@ async function showVerdict(sh) {
 }
 
 el.q.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 120); });
+// Up/down walk the hits, Enter opens the highlighted one. A single match needs no pick at all.
+el.q.addEventListener('keydown', (e) => {
+  const n = hitButtons().length;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    if (!n) return;
+    e.preventDefault();
+    el.hits.classList.remove('hidden');
+    hitIdx = e.key === 'ArrowDown' ? Math.min(n - 1, hitIdx + 1) : Math.max(0, hitIdx - 1);
+    markHit();
+    const b = hitButtons()[hitIdx];
+    if (b) b.scrollIntoView({ block: 'nearest' });
+  } else if (e.key === 'Enter') {
+    if (hitIdx >= 0) { e.preventDefault(); activateHit(hitIdx); }
+    else if (n === 1) { e.preventDefault(); activateHit(0); }
+  }
+});
 
 // ---------- detail ----------
 function block(parent, title, cls) {
@@ -1216,11 +1289,18 @@ function renderDetail(d) {
   }
 
   if (!s.manual) {
+    // Ticking a file-derived step is a note, not a status. Put it on the page as a plain button
+    // and say what it does; the save still decides the card, the matrix and the warning.
+    const b = block(root, 'NOTE');
+    add(b, h('div', 'why', s.tick_disagrees
+      ? 'You noted this as done, but the save still says ' + s.status + '. The journal wins; remove the note if it was a mistake.'
+      : 'The tracker reads this step from your save. A note records what the save cannot show; it never overrides the journal.'));
+    add(b, h('button', 'btn sm', s.tick_disagrees ? 'remove my note' : 'note this as done', { 'data-act': 'tick', 'data-id': s.id }));
     const fix = h('details', 'evidence');
-    add(fix, h('summary', '', d.overridden ? 'Undo my correction' : 'Mark this done anyway'));
+    add(fix, h('summary', '', 'Something wrong with this reading?'));
     const fb = h('div', 'evbody');
-    add(fb, h('div', 'evline', 'The tracker reads this step from your save. If that reading is wrong, you can mark it done yourself.'));
-    add(fb, h('button', 'linkbtn small', d.overridden ? 'undo my correction' : 'mark it done anyway', { 'data-act': 'tick', 'data-id': s.id }));
+    add(fb, h('div', 'evline', 'A note is kept beside the save state: the card keeps saying ' + s.status + ' until the journal itself changes.'));
+    add(fb, h('button', 'linkbtn small', s.tick_disagrees ? 'remove my note' : 'add a note', { 'data-act': 'tick', 'data-id': s.id }));
     add(fix, fb);
     add(root, fix);
   }
@@ -1278,7 +1358,15 @@ document.addEventListener('click', (e) => {
   }
   else if (act === 'card') toggleCard(id);
   else if (act === 'flag') { Api.set_flag(t.dataset.flag, t.dataset.val).then(render).catch(console.error); }
-  else if (act === 'browse') { t.disabled = true; Api.pick_folder(t.dataset.kind).then(render).catch(console.error).finally(() => { t.disabled = false; }); }
+  else if (act === 'browse') {
+    t.disabled = true;
+    Api.pick_folder(t.dataset.kind).then(render).catch((e) => {
+      // A picker that will not open is not silence: say so where the folder controls are.
+      const m = $('#foldermsg');
+      m.classList.remove('hidden');
+      m.textContent = 'Could not open the folder picker: ' + (e && e.message ? e.message : e) + '. You can paste the path instead.';
+    }).finally(() => { t.disabled = false; });
+  }
   else if (act === 'usefolder') useFolder(t.dataset.kind);
   else if (act === 'gear') { $('#flagsPanel').classList.toggle('hidden'); t.classList.toggle('on'); }
   else if (act === 'tick') tick(id);
@@ -1305,13 +1393,35 @@ document.addEventListener('click', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
+  const overlayOpen = !ui.picker.classList.contains('hidden') || !ui.morePanel.classList.contains('hidden');
+  // "/" jumps to the search box, the way it does in most reference tools.
+  if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const a = document.activeElement;
+    const typing = !!a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+    if (!typing && !overlayOpen) { e.preventDefault(); el.q.focus(); el.q.select(); return; }
+  }
+  if (e.key === 'Tab' && overlayOpen) { trapTab(e); return; }
   if (e.key !== 'Escape') return;
   if (!ui.picker.classList.contains('hidden')) { closePicker(); return; }
   if (!ui.morePanel.classList.contains('hidden')) { closeMore(); return; }
   if (detailId) { closeDetail(); return; }
+  // An open hit list is the innermost thing Escape can dismiss.
+  if (!el.hits.classList.contains('hidden')) { hideHits(); return; }
   if (!el.verdict.classList.contains('hidden')) { clearVerdict(); return; }
   if (el.q.value) { el.q.value = ''; runSearch(); }
 });
+
+/** Tab stays inside the open overlay instead of walking into the page behind it. */
+function trapTab(e) {
+  const dialog = !ui.picker.classList.contains('hidden') ? ui.picker : ui.morePanel;
+  const focusable = [...dialog.querySelectorAll('button:not(:disabled), input:not(:disabled), [href], summary, [tabindex]:not([tabindex="-1"])')]
+    .filter((n) => n.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length - 1], active = document.activeElement;
+  if (!dialog.contains(active)) { e.preventDefault(); first.focus(); return; }
+  if (e.shiftKey && active === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus(); }
+}
 
 let levelTimer = 0;
 el.level.addEventListener('input', () => {

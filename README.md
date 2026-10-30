@@ -4,14 +4,15 @@ A small always-on-top Windows tool that reads your newest Witcher 3 save (read-o
 question: **what do I do next in this save, and what can I still lose?**
 
 - **NOW**: a sticky band that appears only while an action can still change the outcome - a loss
-  that already happened, a story event that would fail a quest you still have open, or a missable
-  quest or card window that is open now. A card window that is still ahead is not a warning; it
-  shows as a small later-warning count and in **MORE > CARDS > LATER**. When nothing is at stake the
-  band disappears.
+  that already happened, a story event that would fail a quest you still have open, a choice that
+  matters to the endings in play, or a missable quest or card window you can act on now. A card
+  window that is still ahead is not a warning and never enters the band; it is a row in
+  **MORE > CARDS > LATER**. When nothing is at stake the band disappears.
 - **UP NEXT**: only what you can act on now - the quest you are tracking, quests already in your
-  log, and the plan step you are actually on. Future goal steps sit under one collapsed **PLAN
+  log, and the one plan step that is next. Future goal steps sit under one collapsed **PLAN
   AHEAD** line; unlocked route steps that are not in your log stay in PROGRESS. A plan step and a
-  quest are one card, never two. The exact line appears only on the tracked goal step.
+  quest are one card, never two. The exact line appears only on the tracked goal step, and turning
+  guidance off removes the line without removing the plan.
 - **MORE**: the reference drawer, with tabs.
   - **STATUS**: quest and card completion, split into done/owned, still possible, at risk, lost and
     unknown - never one misleading percentage.
@@ -90,10 +91,11 @@ Unofficial fan tool. Not affiliated with CD PROJEKT RED. See `NOTICE.txt`.
   when the journal marks the quest `Failed`), `CUTOFF PASSED - CHECK NOW` (the event has happened
   but the journal still has it open), `DO THIS NOW`, `MISSABLE`, or nothing at all once the save has
   settled it. A warning about something already done is never shown.
-- **Your ticks fill gaps, they do not overrule the journal.** A step you tick counts when the save
-  says nothing about its quest (a visit, a tutorial, a Gwent match). Where the journal still has that
-  quest open, the tick is set aside, the card keeps the real state, and it carries a `tick disagrees`
-  chip. Otherwise a tick could hide a loss that has already happened.
+- **Your ticks fill gaps, they do not overrule the journal.** A tick is a note beside the save
+  state, not a status. On a manual step it is the answer, because the save cannot show that step at
+  all. On a file-derived step the card, the matrix and the warning keep the journal's answer, and a
+  tick that disagrees is shown as `noted, not confirmed` rather than as a green done check.
+  Otherwise a tick could hide a loss that has already happened.
 - **No spoilers.** The app says that a choice changes the outcome, never which choice or what
   follows. Choice text is not shipped in the route, the view or the detail pane. Quest names, the
   closing quest of a cutoff, and the fact that a loss occurred are shown because they are the thing

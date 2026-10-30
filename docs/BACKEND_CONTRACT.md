@@ -40,7 +40,9 @@ UI calls `window.__TAURI__.core.invoke(cmd, args)` and listens with
   },
   "sections": ["Main", "Secondary", "Contracts", "Treasure Hunts", "Gwent"],
   "steps": [ Step, ... ],                       // all 412 route nodes, section then level then order
-  "todo": ["q205lofoten", ...],                 // ordered ids for DO NEXT: tracked, in-log, safe available; unsafe never appears
+  "todo": ["q205lofoten", ...],                 // ordered ids for UP NEXT: the tracked quest, quests already in the
+                                                // log, and the one next unblocked plan step. A merely unlocked
+                                                // quest is not here; it lives in MORE > PROGRESS.
   "tracked": null | {
     "short": "q301dreamer", "display": "Pyres of Novigrad", "status": "Active",
     "steps": ["q301dreamer"],
@@ -201,7 +203,7 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 
 ```
 {
-  "kind": "lost"|"failed"|"risk"|"missable",
+  "kind": "lost"|"failed"|"risk"|"missable"|"choice"|"card",
   "level": "lost"|"stop"|"warn",
   "tag": "LOST IN THIS SAVE"|"FAILED IN YOUR QUEST LOG"|"CUTOFF PASSED - CHECK NOW"|"DO THIS NOW"|"MISSABLE",
   "headline": "One player-facing sentence naming the quest and why it is lost or at risk.",
@@ -215,7 +217,10 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 }
 ```
 
-`settled` and `unknown` never become a TopItem. `kind` ordering is risk, lost, failed, missable.
+`settled` and `unknown` never become a TopItem. `kind` ordering is risk, lost, failed, choice,
+card, missable. `card` is only a window the player can act on now or one that has closed; an
+`ahead` window is never a TopItem. `choice` names the quest and says a choice matters to the
+endings in play; it never carries the choice text or a recommended option.
 A cutoff that has fired while the journal still has the quest open is `risk` with the tag
 `CUTOFF PASSED - CHECK NOW`, not `lost`: only a `Failed` journal entry produces `lost`.
 The UI shows only `tag` and `headline` on the top card; `detail`, `mechanism`, `file`, `action` and
