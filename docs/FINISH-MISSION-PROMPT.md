@@ -45,13 +45,16 @@ You are finishing the Witcher 3 Missables Tracker at
 Read first, in this order:
 
 - `README.md`
-- `docs/HANDOFF-1.1.md`
-- `docs/PLAN-1.2-card-deadlines.md`
-- `docs/PLAN-1.0-completion.md`
 - `docs/TARGET-SCHEMA.md`
 - `docs/RELEASE-1.0.0.md`
 - `docs/BACKEND_CONTRACT.md`
 - `tools/README.md`
+
+The three milestone files that used to be listed above (HANDOFF-1.1, PLAN-1.2-card-deadlines and
+PLAN-1.0-completion) were retired on 2026-10-30, after their milestones shipped. This file is kept
+as the record of the finish decisions the mission was built from, not as a live reading list; what
+those milestones actually produced is recorded in `docs/RELEASE-1.0.0.md` through
+`docs/RELEASE-1.2.2.md`.
 
 Then verify every count in those documents against the current tree. The documents are evidence, not
 authority. Several counts are stale, and `data/coverage.json` already disagrees with the prose about
