@@ -124977,6 +124977,85 @@
    ],
    "watch": [
     {
+     "action": "Talk to Triss in Novigrad before Now or Never",
+     "affected": [
+      "mq3012noblestatuette",
+      "mq3012warriorstatuette"
+     ],
+     "affected_titles": [
+      "The Nobleman Statuette",
+      "The Soldier Statuette"
+     ],
+     "binding": "q309mages",
+     "binding_title": "Now or Never",
+     "caveats": [
+      "Missing this window does not fail the quests and the app never calls them lost for it; it only says Triss has left.",
+      "The corpus has 195 saves with Now or Never done where the Nobleman Statuette is still Active (the Soldier in 173); no save in it finishes a statuette afterwards, so the second window rests on the turn-in phase's q310_philippa_rescued test."
+     ],
+     "closed_by": [
+      "q309mages"
+     ],
+     "closed_by_titles": [
+      "Now or Never"
+     ],
+     "closes_at": "q309mages#To Triss",
+     "closes_at_title": "Now or Never",
+     "evidence": "files+saves",
+     "files": [
+      "gameplay\\journal\\quests\\q309mages.journal is Now or Never; its first phase is 'To Triss', and Triss's community is quests\\main_npcs\\community_files\\triss.w2comm",
+      "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase activates triss.w2comm for the turn-in scene, so the journal stays Active when she leaves - an availability window, not a Failure branch",
+      "the same phase tests q310_philippa_rescued, which Final Preparations sets, and that is why the next window opens there"
+     ],
+     "gap_action": "Talk to Triss in Novigrad during Final Preparations",
+     "gap_headline": "Triss has left Novigrad - the next chance is Final Preparations",
+     "headline": "Hand both statuettes to Triss before she leaves Novigrad",
+     "id": "triss_statuettes_before_now_or_never",
+     "level": "stop",
+     "mechanism": "availability",
+     "pending_review": [
+      {
+       "candidate": "q201traveltoskellige / q002healingwoman -> q205lofoten",
+       "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm",
+       "saves": {
+        "finished_after": 0,
+        "open_before": 171
+       },
+       "why_not_shipped": "Both 'closers' are early (the prologue follow-up and Destination: Skellige) while q205lofoten is a Skellige quest that comes later, and 2 saves do have it finished. The community is switched off somewhere else in the story too, so the pair very likely reflects a phase transition rather than Yennefer being gone for good. Left out until someone can say which phase switches her off for the last time."
+      }
+     ],
+     "resource": "",
+     "resources": [],
+     "saves": {
+      "finished_after": 0,
+      "open_before": 0
+     },
+     "turn_in": {
+      "both": {
+       "action": "Talk to Triss in Novigrad before Now or Never",
+       "headline": "Both statuettes in hand - talk to Triss now"
+      },
+      "missing": {
+       "mq3012_noble_statuette": {
+        "action": "Find the nobleman statuette, then talk to Triss",
+        "headline": "You still need the nobleman statuette"
+       },
+       "mq3012_soldier_statuette": {
+        "action": "Find the soldier statuette, then talk to Triss",
+        "headline": "You still need the soldier statuette"
+       }
+      },
+      "neither": {
+       "action": "Find both statuettes before Triss leaves Novigrad",
+       "headline": "Find both statuettes, then talk to Triss"
+      },
+      "requires": [
+       "mq3012_noble_statuette",
+       "mq3012_soldier_statuette"
+      ]
+     },
+     "why": "Triss is the turn-in for both statuettes, and she is in Novigrad until Now or Never. The statuette phase switches her community back on for its own scene, so the journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back for Final Preparations. The app says the window closed, not that the quest is lost."
+    },
+    {
      "action": "Give both statuettes to Triss during Final Preparations",
      "affected": [
       "mq3012noblestatuette",
@@ -125172,6 +125251,85 @@
     "mq3012warriorstatuette"
    ],
    "watch": [
+    {
+     "action": "Talk to Triss in Novigrad before Now or Never",
+     "affected": [
+      "mq3012noblestatuette",
+      "mq3012warriorstatuette"
+     ],
+     "affected_titles": [
+      "The Nobleman Statuette",
+      "The Soldier Statuette"
+     ],
+     "binding": "q309mages",
+     "binding_title": "Now or Never",
+     "caveats": [
+      "Missing this window does not fail the quests and the app never calls them lost for it; it only says Triss has left.",
+      "The corpus has 195 saves with Now or Never done where the Nobleman Statuette is still Active (the Soldier in 173); no save in it finishes a statuette afterwards, so the second window rests on the turn-in phase's q310_philippa_rescued test."
+     ],
+     "closed_by": [
+      "q309mages"
+     ],
+     "closed_by_titles": [
+      "Now or Never"
+     ],
+     "closes_at": "q309mages#To Triss",
+     "closes_at_title": "Now or Never",
+     "evidence": "files+saves",
+     "files": [
+      "gameplay\\journal\\quests\\q309mages.journal is Now or Never; its first phase is 'To Triss', and Triss's community is quests\\main_npcs\\community_files\\triss.w2comm",
+      "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase activates triss.w2comm for the turn-in scene, so the journal stays Active when she leaves - an availability window, not a Failure branch",
+      "the same phase tests q310_philippa_rescued, which Final Preparations sets, and that is why the next window opens there"
+     ],
+     "gap_action": "Talk to Triss in Novigrad during Final Preparations",
+     "gap_headline": "Triss has left Novigrad - the next chance is Final Preparations",
+     "headline": "Hand both statuettes to Triss before she leaves Novigrad",
+     "id": "triss_statuettes_before_now_or_never",
+     "level": "stop",
+     "mechanism": "availability",
+     "pending_review": [
+      {
+       "candidate": "q201traveltoskellige / q002healingwoman -> q205lofoten",
+       "resource": "quests\\main_npcs\\community_files\\yennefer.w2comm",
+       "saves": {
+        "finished_after": 0,
+        "open_before": 171
+       },
+       "why_not_shipped": "Both 'closers' are early (the prologue follow-up and Destination: Skellige) while q205lofoten is a Skellige quest that comes later, and 2 saves do have it finished. The community is switched off somewhere else in the story too, so the pair very likely reflects a phase transition rather than Yennefer being gone for good. Left out until someone can say which phase switches her off for the last time."
+      }
+     ],
+     "resource": "",
+     "resources": [],
+     "saves": {
+      "finished_after": 0,
+      "open_before": 0
+     },
+     "turn_in": {
+      "both": {
+       "action": "Talk to Triss in Novigrad before Now or Never",
+       "headline": "Both statuettes in hand - talk to Triss now"
+      },
+      "missing": {
+       "mq3012_noble_statuette": {
+        "action": "Find the nobleman statuette, then talk to Triss",
+        "headline": "You still need the nobleman statuette"
+       },
+       "mq3012_soldier_statuette": {
+        "action": "Find the soldier statuette, then talk to Triss",
+        "headline": "You still need the soldier statuette"
+       }
+      },
+      "neither": {
+       "action": "Find both statuettes before Triss leaves Novigrad",
+       "headline": "Find both statuettes, then talk to Triss"
+      },
+      "requires": [
+       "mq3012_noble_statuette",
+       "mq3012_soldier_statuette"
+      ]
+     },
+     "why": "Triss is the turn-in for both statuettes, and she is in Novigrad until Now or Never. The statuette phase switches her community back on for its own scene, so the journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back for Final Preparations. The app says the window closed, not that the quest is lost."
+    },
     {
      "action": "Give both statuettes to Triss during Final Preparations",
      "affected": [

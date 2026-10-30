@@ -270,6 +270,32 @@ was empty and its classification `obtainable`; `--detail mq3012noblestatuette` r
 `cargo test --locked` reports 57 passed, and the band test now asserts that an `ahead` window on an
 Active quest yields an empty top.
 
+### 10.4 1.3.3 verification record
+
+1.3.2 stopped an ahead quest window from padding the band, which removed a false warning and also
+silenced the real first chance. Triss is the statuette turn-in and she leaves Novigrad on Now or
+Never; the statuette phase switches her community back on for its own scene, so the journal does not
+fail the quests when she goes. Missing her is an availability gap, not a loss.
+
+1.3.3 adds a reviewed window with `mechanism: "availability"` that closes at `q309mages#To Triss`,
+the first phase of Now or Never. `tools/review_cutoffs.py` accepts it without a Failure branch
+because none exists, after checking the phase against the journal and requiring named file evidence.
+`model::live_cutoff` evaluates it separately: closer not started gives `live: "open"` and a
+`DO THIS NOW` band row with the save's turn-in wording; closer started or done gives `live: "later"`,
+level info, and the sentence naming Final Preparations, which is never a band item and never a loss.
+The existing `q210preparations#Novigrad` window still covers the second chance, and `live_watch_for`
+ranks `inside` above `later` so the quest page shows the actionable window when both apply.
+
+Verified 2026-10-30 on four saves copied into temporary profiles: the earliest
+(`ManualSave_53db8_7e221800_4f13d1b.sav`, both quests not started) answered `warn` with "Find both
+statuettes, then talk to Triss"; the median (`ManualSave_5258a_7e224000_39e1473.sav`, quests Active,
+Now or Never not started) put `DO THIS NOW` "Hand both statuettes to Triss before she leaves
+Novigrad" in the band; the newest (`AutoSave_10d9e0_7ea4f000_581b307.sav`) and the reported
+`QuickSave_10aa70_7ea4f400_4141f72.sav` (both after Now or Never) returned `info` "Triss has left
+Novigrad - the next chance is Final Preparations" with only the Iorveth card in the band.
+`cargo test --locked` reports 59 passed; the two new tests cover the open window and the closed one.
+`py tools/regen.py --check` reports all 11 outputs matching.
+
 ## 11. How an audit uses this page
 
 - **Completeness:** every row of section 5 delivers its question, and every invariant in section 6

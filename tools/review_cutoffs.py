@@ -191,6 +191,22 @@ def window_error(idx, w):
     at = w.get("closes_at", "")
     if not affects or closer not in idx["quests"]:
         return "the window names no affected quest or no closer"
+    if w.get("mechanism") == "availability":
+        # An availability window is not a journal failure: the NPC leaves and the chance to act
+        # closes, while the quest stays Active. It still has to name a real phase of a real quest.
+        if "#" not in at:
+            return "an availability window must name the journal phase where it closes"
+        stem, phase = at.split("#", 1)
+        if stem != closer:
+            return f"closes_at {at} is not a phase of {closer}"
+        names = {p.get("name") for p in (idx["journals"].get(closer) or {}).get("phases", [])}
+        if phase not in names:
+            return f"{phase} is not a phase in {closer}.journal"
+        if not w.get("files"):
+            return "the availability window names no file evidence"
+        if not w.get("gap_headline"):
+            return "the availability window does not say what to do when it closes"
+        return ""
     for a in affects:
         q = idx["quests"].get(a)
         if not q:
@@ -232,6 +248,9 @@ def resolve_window(idx, name, w):
     }
     if w.get("turn_in") is not None:
         out["turn_in"] = w["turn_in"]
+    for k in ("gap_headline", "gap_action"):
+        if w.get(k):
+            out[k] = w[k]
     return out
 
 
@@ -338,10 +357,15 @@ def build():
                 continue
             resolved = resolve_window(idx, name, w)
             windows.append(resolved)
-            decisions.append({"family": "window:" + resolved["id"], "decision": "keep",
-                              "why": ("the affected journal entry has a connected Failure input gated "
-                                      f"by {resolved['closed_by'][0]}.journal, and {resolved['closes_at']} "
-                                      "is a phase of that journal")})
+            if resolved.get("mechanism") == "availability":
+                keep_why = (f"an availability window: {resolved['closes_at']} is a phase of "
+                            f"{resolved['closed_by'][0]}.journal where the NPC leaves; the affected quest "
+                            "is not failed, so this window never reports a loss")
+            else:
+                keep_why = ("the affected journal entry has a connected Failure input gated "
+                            f"by {resolved['closed_by'][0]}.journal, and {resolved['closes_at']} "
+                            "is a phase of that journal")
+            decisions.append({"family": "window:" + resolved["id"], "decision": "keep", "why": keep_why})
 
     out = {
         "version": 3,

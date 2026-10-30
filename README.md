@@ -158,7 +158,7 @@ To see what the app itself computed, run the exe with `--dump out.json` (state, 
 section), `--view out.json` (exactly what the window is handed), `--detail <quest id> out.json`
 (one mission, including any goal line), `--cards out.json`, `--targets out.json`, `--outcomes
 out.json` or `--plan out.json [id,id]`; all exit without opening a window. `--outcomes` and `--plan`
-are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.2.md` records what was
+are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.3.md` records what was
 verified for this release and what is still open; `docs/RELEASE-1.0.0.md` is the historical 1.0
 record.
 

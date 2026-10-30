@@ -151,6 +151,10 @@ def build(verbose=True):
         }
         if item.get("turn_in") is not None:
             out["turn_in"] = item["turn_in"]
+        # an availability window carries what to say once the NPC has left
+        for k in ("gap_headline", "gap_action"):
+            if item.get(k):
+                out[k] = item[k]
         return out
 
     resolved = [resolve(i) for i in (review.get("items", []) + review.get("windows", []))]

@@ -794,7 +794,16 @@ impl Inner {
         let mut list = d.get("watch")?.as_array()?.clone();
         let done_q = self.done_quests(ev);
         list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
-        let mut first = list.into_iter().next()?;
+        // the page shows the strongest live row: a loss beats an open window, which beats the
+        // note that the window has closed
+        let rank = |w: &Value| match w.get("live").and_then(|x| x.as_str()) {
+            Some("lost") => 0,
+            Some("inside") | Some("check") | Some("passed") => 1,
+            Some("open") => 2,
+            Some("later") | Some("ahead") => 4,
+            _ => 5,
+        };
+        let mut first = list.into_iter().min_by_key(rank)?;
         model::turn_in_text(&mut first, &self.facts);
         Some(first)
     }
@@ -817,6 +826,10 @@ impl Inner {
         let (verdict, headline) = match live {
             "lost" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
             "inside" | "check" | "passed" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
+            // the NPC is here now: act before they leave. It is a warning, not a loss.
+            "open" => ("warn", w.get("headline").cloned().unwrap_or(Value::Null)),
+            // the window closed and the journal is still open: say where the next chance is
+            "later" => ("info", w.get("headline").cloned().unwrap_or(Value::Null)),
             // an ahead window is not a verdict: the route model's answer stands until the closing
             // quest is in the log and the turn-in is possible
             // settled, missed, unknown: the journal has answered the question, so the route
@@ -824,14 +837,20 @@ impl Inner {
             _ => return out,
         };
         let mut details: Vec<Value> = Vec::new();
-        if let Some(x) = w.get("why").filter(|v| !v.is_null()) {
-            details.push(x.clone());
-        }
-        if let Some(x) = w.get("action").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
-            details.push(json!(format!("Do this first: {x}.")));
-        }
-        if let Some(x) = w.get("live_note").filter(|v| !v.is_null()) {
-            details.push(x.clone());
+        if live == "later" {
+            if let Some(x) = w.get("live_note").filter(|v| !v.is_null()) {
+                details.push(x.clone());
+            }
+        } else {
+            if let Some(x) = w.get("why").filter(|v| !v.is_null()) {
+                details.push(x.clone());
+            }
+            if let Some(x) = w.get("action").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
+                details.push(json!(format!("Do this first: {x}.")));
+            }
+            if let Some(x) = w.get("live_note").filter(|v| !v.is_null()) {
+                details.push(x.clone());
+            }
         }
         out["verdict"] = json!(verdict);
         out["headline"] = headline;
@@ -1211,7 +1230,9 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
                 "lost" => ("lost", "lost", "LOST IN THIS SAVE"),
                 // the cutoff fired but the journal still has the quest open: say what the save says
                 "passed" | "check" => ("risk", "stop", "CUTOFF PASSED - CHECK NOW"),
-                "inside" => ("risk", "stop", "DO THIS NOW"),
+                // an open availability window is actionable now: the NPC is here and the
+                // deadline is when they leave
+                "inside" | "open" => ("risk", "stop", "DO THIS NOW"),
                 // a window whose closing quest has not started is ledger-only: it is not
                 // something the player can act on, so it never enters the band
                 "ahead" => continue,
@@ -1227,7 +1248,8 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
                 .filter(|(_, s)| {
                     let reachable = match live {
                         "inside" => matches!(s.journal.as_str(), "Active" | "Not started" | "Failed"),
-                        "ahead" => matches!(s.journal.as_str(), "Active" | "Failed"),
+                        // an availability window nags only about a quest already accepted
+                        "open" | "ahead" => matches!(s.journal.as_str(), "Active" | "Failed"),
                         _ => matches!(s.journal.as_str(), "Active" | "Failed"),
                     };
                     affected.iter().any(|a| model::tracks(&s.n, a)) && (reachable || s.tick_disagrees)
@@ -1824,6 +1846,57 @@ mod top_tests {
         // an ahead window is not actionable: it must never pad the band, even on an Active quest
         let ahead = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
         assert_eq!(ahead, json!([]), "an ahead window is a ledger row, not a NOW item");
+    }
+
+    #[test]
+    fn an_availability_window_is_urgent_while_open_and_quiet_once_it_closes() {
+        let ev = eval("mq3012noblestatuette", "Active");
+        let row = |live: &str, level: &str, tag: &str| json!([{
+            "id": "triss_before_now", "live": live, "level": level, "tag": tag,
+            "affected": ["mq3012noblestatuette"], "affected_titles": ["The Quest"],
+            "closed_by": ["q309mages"], "closed_by_titles": ["Now or Never"],
+            "headline": "Hand both statuettes to Triss before she leaves Novigrad",
+            "gap_headline": "Triss has left Novigrad - the next chance is Final Preparations",
+            "action": "Talk to Triss in Novigrad before Now or Never",
+            "mechanism": "availability", "live_note": "In this save: ...",
+            "files": ["quests/q309_mages.w2phase"]
+        }]);
+        let open = top_items(&ev, &[step("mq3012noblestatuette", row("open", "stop", "DO THIS NOW"))]);
+        assert_eq!(open[0]["tag"], "DO THIS NOW");
+        assert_eq!(open[0]["mechanism"], "availability");
+        assert!(open[0]["headline"].as_str().unwrap().contains("Triss"));
+        // once Triss has left, the row is a note for the quest page, never a NOW item
+        let later = top_items(&ev, &[step("mq3012noblestatuette", row("later", "info", "WINDOW CLOSED"))]);
+        assert_eq!(later, json!([]), "a closed availability window waits for the next one");
+    }
+
+    #[test]
+    fn an_availability_window_closes_without_calling_the_quest_lost() {
+        let make = || json!({
+            "id": "triss_before_now", "mechanism": "availability", "level": "stop",
+            "affected": ["mq3012noblestatuette"], "affected_titles": ["The Quest"],
+            "closed_by": ["q309mages"], "closed_by_titles": ["Now or Never"],
+            "closes_at": "q309mages#To Triss", "closes_at_title": "Now or Never",
+            "headline": "Hand both statuettes to Triss before she leaves Novigrad",
+            "gap_headline": "Triss has left Novigrad - the next chance is Final Preparations",
+            "gap_action": "Talk to Triss during Final Preparations"
+        });
+        let done = HashSet::new();
+        let ticked = HashSet::new();
+        let mut open = make();
+        let mut state = HashMap::from([
+            ("mq3012noblestatuette".to_string(), "Active".to_string()),
+            ("q309mages#To Triss".to_string(), "Not started".to_string()),
+        ]);
+        assert!(model::live_cutoff(&mut open, &state, &done, &ticked));
+        assert_eq!(open["live"], json!("open"));
+        assert_eq!(open["tag"], json!("DO THIS NOW"));
+        state.insert("q309mages#To Triss".to_string(), "Active".to_string());
+        let mut later = make();
+        assert!(model::live_cutoff(&mut later, &state, &done, &ticked));
+        assert_eq!(later["live"], json!("later"));
+        assert_eq!(later["level"], json!("info"));
+        assert!(later["headline"].as_str().unwrap().contains("Final Preparations"));
     }
 
     #[test]

@@ -188,7 +188,7 @@ pub fn classify(s: &Step, watch: &[Value], ticked: bool) -> Classification {
             return c("lost", format!("{line} ({mech})"), "cutoff");
         }
     }
-    for wanted in ["inside", "check", "passed", "ahead"] {
+    for wanted in ["inside", "check", "passed", "open", "ahead"] {
         if let Some(w) = watch.iter().find(|w| w.get("live").and_then(|x| x.as_str()) == Some(wanted)) {
             let line = w.get("headline").or_else(|| w.get("why")).and_then(|x| x.as_str()).unwrap_or("A reviewed cutoff is still open.");
             let mech = w.get("mechanism").and_then(|x| x.as_str()).unwrap_or("cutoff");
@@ -793,6 +793,38 @@ pub fn live_cutoff(item: &mut Value, state: &HashMap<String, String>, done_q: &H
         saved.push(' ');
         saved.push_str(&n);
     }
+    // An availability window is not a journal failure: when it closes the chance to act is gone
+    // until the next window, and the quest stays Active. Triss leaving Novigrad is that shape.
+    if item.get("mechanism").and_then(|x| x.as_str()) == Some("availability") {
+        if !lost.is_empty() {
+            return false;
+        }
+        if done.iter().chain(running.iter()).next().is_some() {
+            let gap = item
+                .get("gap_headline")
+                .and_then(|x| x.as_str())
+                .unwrap_or("The next chance to hand them in comes later in the story.")
+                .to_string();
+            let gap_action = item
+                .get("gap_action")
+                .and_then(|x| x.as_str())
+                .map(String::from);
+            put(item, "live", json!("later"));
+            put(item, "level", json!("info"));
+            put(item, "tag", json!("WINDOW CLOSED - NEXT CHANCE LATER"));
+            put(item, "headline", json!(gap));
+            if let Some(a) = gap_action {
+                put(item, "action", json!(a));
+            }
+            put(item, "live_note", json!(saved));
+            return true;
+        }
+        put(item, "live", json!("open"));
+        put(item, "level", json!("stop"));
+        put(item, "tag", json!("DO THIS NOW"));
+        put(item, "live_note", json!(saved));
+        return true;
+    }
     if !lost.is_empty() {
         put(item, "live", json!("lost"));
         put(item, "level", json!("lost"));
@@ -979,7 +1011,7 @@ pub fn verdict_json(v: &Verdict, display: &str) -> Value {
 pub fn turn_in_text(item: &mut Value, facts: &HashSet<String>) -> bool {
     let Some(turn) = item.get("turn_in").cloned() else { return false };
     let live = item.get("live").and_then(|x| x.as_str()).unwrap_or("");
-    if !matches!(live, "ahead" | "inside" | "check") {
+    if !matches!(live, "ahead" | "inside" | "check" | "open") {
         return false;
     }
     let requires: Vec<String> = turn

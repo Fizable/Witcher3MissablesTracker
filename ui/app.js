@@ -757,7 +757,8 @@ function renderTop(v) {
 }
 
 function warnCol(x) {
-  if (x.live === 'inside' || x.live === 'check') return 'red';
+  if (x.live === 'inside' || x.live === 'check' || x.live === 'open') return 'red';
+  if (x.live === 'later') return 'blue';
   if (x.live === 'ahead') return 'amber';
   if (x.live === 'passed' || x.live === 'lost' || x.live === 'missed') return 'lost';
   if (x.live === 'settled') return 'blue';
@@ -767,7 +768,8 @@ function warnCol(x) {
 function warnTag(x) {
   if (x.live === 'lost') return 'LOST IN THIS SAVE';
   if (x.live === 'check' || x.live === 'passed') return 'CUTOFF PASSED - CHECK NOW';
-  if (x.live === 'inside') return 'DO THIS NOW';
+  if (x.live === 'inside' || x.live === 'open') return 'DO THIS NOW';
+  if (x.live === 'later') return 'WINDOW CLOSED - NEXT CHANCE LATER';
   if (x.live === 'ahead') return 'MISSABLE';
   if (x.live === 'missed') return 'MISSED IN THIS SAVE';
   if (x.live === 'settled') return 'SETTLED IN THIS SAVE';
