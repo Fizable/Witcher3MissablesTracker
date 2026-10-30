@@ -201,7 +201,29 @@ fn clean_name(s: &str) -> String {
     t.to_string()
 }
 
+/// A save is usable only when one was found and the last read did not fail. A missing folder and a
+/// save the game is still writing both leave the journal state absent, so they must not be read as
+/// "every quest is open".
+fn save_is_ready(save_path: Option<&PathBuf>, error: &str) -> bool {
+    save_path.is_some() && error.is_empty()
+}
+
+/// The detail pane and search box are available before a save is loaded. They answer with the
+/// quest's name and ask for a save; they never guess a live warning or call the quest safe.
+fn no_save_verdict(display: &str) -> Value {
+    json!({
+        "verdict": "info",
+        "headline": "Load a save to see this quest in your game",
+        "details": [],
+        "display": display,
+    })
+}
+
 impl Inner {
+    fn save_ready(&self) -> bool {
+        save_is_ready(self.save_path.as_ref(), &self.error)
+    }
+
     fn load(data_dir: PathBuf) -> Result<Inner, String> {
         let app_dir = find_app_dir(&data_dir);
         let route = model::load_route(&read_json(&data_dir.join("route.json"))?)?;
@@ -761,6 +783,9 @@ impl Inner {
     /// card reads it. Both the search box and the detail pane answer from here, so one quest cannot
     /// be `safe` on its own page and `at risk` in search.
     fn live_watch_for(&self, ev: &Eval, short_name: &str) -> Option<Value> {
+        if !self.save_ready() {
+            return None;
+        }
         let i = model::step_for_short(ev, short_name)?;
         let d = self.derived.get("steps")?.get(&ev.steps[i].n.id)?;
         let mut list = d.get("watch")?.as_array()?.clone();
@@ -780,6 +805,9 @@ impl Inner {
             .find(|(k, _)| k == short_name)
             .map(|(_, d)| d.clone())
             .unwrap_or_else(|| short_name.to_string());
+        if !self.save_ready() {
+            return no_save_verdict(&display);
+        }
         let mut out = model::verdict_json(&model::check_quest(rt, ev, short_name, &self.state), &display);
         let Some(w) = self.live_watch_for(ev, short_name) else { return out };
         let Some(live) = w.get("live").and_then(|x| x.as_str()) else { return out };
@@ -1321,10 +1349,19 @@ fn detail_json(g: &Inner, id: &str) -> Value {
     // the fallback for a quest that has not started (or a save with no active objective for it).
     let mut current = g.current_objectives(&n.id, &n.files);
     current.truncate(4);
+    // The detail pane falls back to `derived.watch` when the NOW band has no item for this step.
+    // With no usable save that would render a static cutoff as a live warning, so withhold the
+    // watch row; the rest of the game-file evidence still explains what the step is.
+    let mut derived = g.derived.get("steps").and_then(|s| s.get(id)).cloned().unwrap_or(Value::Null);
+    if !g.save_ready() {
+        if let Some(obj) = derived.as_object_mut() {
+            obj.insert("watch".into(), json!([]));
+        }
+    }
     json!({
         "step": model::step_json(&rt, &ev, i),
         "current_objectives": current,
-        "derived": g.derived.get("steps").and_then(|s| s.get(id)).cloned().unwrap_or(Value::Null),
+        "derived": derived,
         "derived_source": g.derived.get("note").cloned().unwrap_or(Value::Null),
         "graph": {"starts": starts, "requires": requires, "lost_when": lost},
         "branches": branches,
@@ -1879,5 +1916,19 @@ mod top_tests {
         assert_eq!(top[0]["kind"], "risk", "a tick must not hide the passed cutoff");
         assert!(top[0]["tag"].as_str().unwrap().contains("CHECK NOW"));
         assert!(top[0]["live_note"].as_str().unwrap().contains("You ticked"));
+    }
+
+    #[test]
+    fn a_missing_or_unreadable_save_is_not_a_live_state() {
+        assert!(!save_is_ready(None, ""), "no save found");
+        assert!(!save_is_ready(Some(&PathBuf::from("newest.sav")), "Could not read newest.sav"),
+                "a failed read must not fall through to an empty journal");
+        assert!(save_is_ready(Some(&PathBuf::from("newest.sav")), ""));
+        let v = no_save_verdict("The Nobleman Statuette");
+        assert_eq!(v["verdict"], "info");
+        assert_eq!(v["display"], "The Nobleman Statuette");
+        assert_eq!(v["headline"], "Load a save to see this quest in your game");
+        assert!(v["details"].as_array().unwrap().is_empty());
+        assert!(v.get("from_game_files").is_none(), "no game-file claim without a save");
     }
 }

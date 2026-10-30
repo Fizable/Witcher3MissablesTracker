@@ -1,6 +1,6 @@
 # Next Phase Plan — Witcher 3 Missables Tracker
 
-Status: complete; 1.3.0 built and verified 2026-10-30.
+Status: complete; 1.3.1 built and verified 2026-10-30.
 Owner: the next coding agent.
 Workspace: `C:\Steam\steamapps\common\The Witcher 3\w3tracker` (Rust + Tauri 2, version in `Cargo.toml`).
 Scope: the `w3tracker/` project only. The game install and the saves are read-only. This plan is the source of truth; the mission prompt in chat is the entry point.
@@ -437,7 +437,7 @@ Update this table after each phase. Include the command, the key counts, and the
 | 2 — Availability | Complete | 224 cards = 15 missable (15 Tier B) + 17 one-time + 192 no-window; 200 sourced / 24 explicit unknown. `starter_deck` split into `deck_definition` (weak) and `collection_grant`; Dijkstra reclassified from `none` to one-time at `cgnomansland`, opened by `cg_baron_discovered`, with the Baron's office fallback. All 15 reviewed windows carry `opens`; 17 one-time rows carry an open gate. `cardwindows.py check` green; `test_cardwindows.py` 13/13; `cards.py check` green; 56 Rust tests. | 8c83a24 |
 | 3 — Remaining completeness | Complete (product conflict documented) | Choice warning is a NOW item from runtime ending branches, live only on an Active quest. Sixth `Tracked` section is gone: the matrix owns the section list and `effective_route` no longer inserts a section. Flag vs Active is guarded and tested. Gwent/HoS coverage reads `not modelled`. Tests added for the default payload, the tick table, flags, choice items, offline/read-only. Mutation checks 1,3,4,5,6,7 pass. Conflicts: engine test passes; the four shipped targets are one per outcome group, so a selectable conflict is impossible in 1.3 and is recorded as such rather than given fake targets. | b6ad822 |
 | 4 — UX | Complete | Tick is a plain NOTE button on the detail page, disclosure renamed "Something wrong with this reading?"; PROGRESS shows a pencil note, never a green check, for a note-only tick. Auto-open resets on a new read error; a corrupt save names the file and the retry; a failed Browse reports in the folder panel. Setup card moved below NOW; gear renamed `my game · goals`; MORE carries an aria label. Six first-run scenarios at 480x820 recorded in `DESIGN.md` 10.1; DOM checks run against the real `ui/` with a stubbed bridge. | b6ad822 |
-| 5 — Verification and release | Complete | `cargo test --locked` 56/56; `py tools/cardwindows.py check`; `py tools/test_cardwindows.py` 13/13; `py tools/cards.py check`; three copied saves + clean; statuette turn-in both (newest) / soldier missing (median) / neither (earliest); Dijkstra owned (newest, median) and not_yet (earliest), active/check/fallback in Rust fixtures; `--dump` top equals `--view` top on all; `package.ps1 -Bump minor` built 1.3.0; packaged exe verified; artifact hashes in `docs/RELEASE-1.3.0.md`. | 8c83a24 |
+| 5 — Verification and release | Complete | `cargo test --locked` 57/57; `py tools/cardwindows.py check`; `py tools/test_cardwindows.py` 13/13; `py tools/cards.py check`; three copied saves + clean; statuette turn-in both (newest) / soldier missing (median) / neither (earliest); Dijkstra owned (newest, median) and not_yet (earliest), active/check/fallback in Rust fixtures; `--dump` top equals `--view` top on all; `package.ps1 -Bump minor` built 1.3.0; packaged exe verified; artifact hashes in `docs/RELEASE-1.3.0.md`. Post-release audit found the no-save verdict/detail leak; 1.3.1 adds `save_is_ready` and clears `derived.watch` without a save, 57 tests, clean and three saves re-run, hashes in `docs/RELEASE-1.3.1.md`. | 8c83a24 (1.3.0); pending (1.3.1) |
 
 ---
 
@@ -459,6 +459,7 @@ Record new decisions here. Do not silently change a locked decision.
 | 2026-10-30 | A deck definition is not ownership; 16 starter-deck basics are explicit unknown-source rows. | The `north` deck list is not a collection grant; the save's collection still decides owned. |
 | 2026-10-30 | Dijkstra is one-time, not missable. | The office is a fallback, so a closed step cannot be called lost; one-time rows stay out of NOW. |
 | 2026-10-30 | Turn-in wording is data-driven from `cutoffs.json` facts. | The watch names both/one/neither statuettes without hardcoding a step id in Rust. |
+| 2026-10-30 | A missing or unreadable save returns `info` and no detail watch, never a live warning or a `safe` verdict. | An empty journal is not "every quest Not started"; the detail and search panes must not invent state. |
 
 ---
 

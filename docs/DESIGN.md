@@ -169,8 +169,8 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 | NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card; no instruction key | 2026-10-30 |
 | UP NEXT | `view.todo` | tracked + in-log + next plan step only | clean: 0 ids; no available quest; no done/failed id | 2026-10-30 |
 | PLAN AHEAD | `view.target`, `get_plan` | plan survives guidance off; instructions gone | no plan with an empty target | 2026-10-30 |
-| quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`; a lost window keeps its journal verdict | 2026-10-30 |
-| search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label | 2026-10-30 |
+| quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`, `info` verdict, no live watch; a lost window keeps its journal verdict | 2026-10-30 |
+| search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label; no save returns `info`, not `safe` | 2026-10-30 |
 | STATUS / PROGRESS | `view.completion` | 412 = 403 + 9; sections 96/183/35/87/11 | no sixth section; no single percentage | 2026-10-30 |
 | CARDS | `get_cards`, `set_card` | 224 cards, 15 Tier B + 17 one-time, 200 sourced / 24 explicit unknown, Dijkstra's Baron source and office fallback | ahead row is not a NOW item; a deck definition is not ownership; no `not_yet` in `top` | 2026-10-30 |
 | COVERAGE | `view.coverage` | measured counts per pack | `with_cards == 0` reads `not modelled` | 2026-10-30 |
@@ -204,6 +204,53 @@ rule and 13 mutation tests prove the checker fails when the rule is removed.
 5. **Goal selected, guidance off.** PLAN AHEAD and the goal chips remain; no quoted line appears.
 6. **Corrupt save.** The header names the file and says the tracker retries; the folder panel can
    be reopened; no stale band from the previous save is presented as current.
+
+### 10.2 1.3.1 verification record
+
+The 1.3.0 post-release audit found a no-save defect in two layers. `verdict_for` treated an empty
+journal as every quest being `Not started`, so `--detail mq3012noblestatuette` returned `warn` and
+"Find both statuettes..." when no save had been read. The detail pane also falls back to
+`derived.watch` when the NOW band has no item for the step, so the static statuette row would still
+paint a red warning after the verdict was corrected.
+
+1.3.1 adds `save_is_ready`: a save path exists and the last read did not fail. `live_watch_for`
+returns no warning without it, `verdict_for` returns `info` "Load a save to see this quest in your
+game" with no details or game-file claim, and `detail_json` clears `derived.watch`; the rest of the
+game-file evidence remains. The guard test is
+`top_tests::a_missing_or_unreadable_save_is_not_a_live_state`.
+
+Verified 2026-10-30 against the 1.3.1 package (`cargo test --locked`: 57 passed), with the three
+real saves copied into isolated profiles and a clean profile with an empty saves folder. All four
+ran under a temporary `APPDATA`; the originals were not written and the game was not launched.
+
+| profile | save | top | todo | cards (owned/not/unknown) | detail |
+|---|---|---|---|---|---|
+| clean | none | 0 | 0 | 0/0/224 | `info` "Load a save..."; `derived.watch=[]`; 0 "Find both" |
+| newest | `AutoSave_10d9e0_7ea4f000_581b307.sav` | 2 (`card`, `missable`) | 65 | 129/94/1 | `warn` "Both statuettes in hand - talk to Triss now" |
+| median | `ManualSave_5258a_7e224000_39e1473.sav` | 3 (`failed`, `card`, `missable`) | 52 | 114/109/1 | `warn` "You still need the soldier statuette" |
+| earliest | `ManualSave_53db8_7e221800_4f13d1b.sav` | 0 | 2 | 27/196/1 | `warn` "Find both statuettes, then talk to Triss" |
+
+The earliest row is the control for the fix: its save is loaded and neither fact is set, so it must
+keep the full "Find both" warning. The clean row has no save, so it must not. `--dump` top equals
+`--view` top on all three saves. Cards remain 224 = 15 missable (15 Tier B) + 17 one-time + 192
+no-window; 200 sourced / 24 explicit unknown. The clean view has `target=null` and `tradeoffs=[]`.
+
+The band's 52vh cue is the container's own thin scrollbar (`#topSec` is `max-height:52vh;
+overflow-y:auto`); no extra control was added. The five warning tags are fixed strings: `LOST IN
+THIS SAVE`, `CUTOFF PASSED - CHECK NOW`, `DO THIS NOW`, `MISSABLE`, and `ENDING CHOICE AHEAD`, with
+`WATCH OUT` as the fallback; no legend is needed because each tag is its own label.
+
+Binary scan: `cargo tree -i reqwest` and `cargo tree -i hyper` print nothing. In the 12,826,112-byte
+1.3.1 exe, `reqwest`, `ureq`, `winhttp` and `httpclient` are 0; the seven `hyper` hits are the
+keyboard key name `Hyper` in the Windows key-name tables; the 65 `http://` and 14 `https://`
+literals are embedded WebView/dictionary text. There is no HTTP client library and no application
+call site. This is inspection, not proof about every syscall.
+
+Logs from the last game session (2026-10-29 22:01): W3LoadFix 1.0.8 completed its load stages;
+ReShade finished its exit and uninstalled 45 hooks; RenoDX detached and logged process-exit;
+NativeBridge registered its functions OK; Beardmos logged its rain timer alive and its water list
+grown; OptiScaler's log is older (2026-09-29 14:42) and ends in a normal DLL detach; `scskiller.log`
+ends normally. These logs are from the user's session, not from a launch by this work.
 
 ## 11. How an audit uses this page
 
