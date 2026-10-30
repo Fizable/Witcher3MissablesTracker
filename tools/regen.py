@@ -58,8 +58,11 @@ STEPS = [
 
 
 def digest(p):
-    return hashlib.sha256(p.read_bytes()).hexdigest()[:16] if p.exists() else "missing"
-
+    if not p.exists():
+        return "missing"
+    # Git may check text files out with CRLF on Windows; hash the canonical LF content so the
+    # check stays about what the pipeline wrote, not the local checkout format.
+    return hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:16]
 
 def run(steps):
     for label, cmd in steps:
@@ -78,7 +81,7 @@ def main():
         run(STEPS)
     now = {p.name: digest(p) for p in OUTPUTS}
     if update:
-        GOLDENS.write_text(json.dumps({"note": "sha256 (first 16) of the pipeline outputs; "
+        GOLDENS.write_text(json.dumps({"note": "sha256 (first 16) of the LF-normalized pipeline outputs; "
                                                "py regen.py compares against these", "hashes": now},
                                       indent=1, sort_keys=True), encoding="utf-8")
         print(f"recorded {len(now)} hashes in {GOLDENS.name}")

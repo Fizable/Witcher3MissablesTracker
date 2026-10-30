@@ -217,7 +217,7 @@ def window_error(idx, w):
 
 def resolve_window(idx, name, w):
     closer = w["closer"]
-    return {
+    out = {
         "id": w["id"], "level": w.get("level", "stop"), "mechanism": w.get("mechanism", "journal_failure"),
         "resource": w.get("resource", ""),
         "affects": [a.lower() for a in w["affects"]],
@@ -230,6 +230,9 @@ def resolve_window(idx, name, w):
         "event_name": w.get("event_name"), "evidence": w.get("evidence", "files"),
         "saves": {}, "resources": [w["resource"]] if w.get("resource") else [],
     }
+    if w.get("turn_in") is not None:
+        out["turn_in"] = w["turn_in"]
+    return out
 
 
 def item_saves(pool, item):

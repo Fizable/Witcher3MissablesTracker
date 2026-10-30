@@ -15,6 +15,30 @@
       "closer": "q210preparations",
       "closes_at": "q210preparations#Novigrad",
       "closes_at_title": "the end of Final Preparations",
+      "turn_in": {
+        "requires": [
+          "mq3012_noble_statuette",
+          "mq3012_soldier_statuette"
+        ],
+        "both": {
+          "headline": "Both statuettes in hand - talk to Triss now",
+          "action": "Talk to Triss during Final Preparations"
+        },
+        "neither": {
+          "headline": "Find both statuettes, then talk to Triss",
+          "action": "Find both statuettes before Final Preparations ends"
+        },
+        "missing": {
+          "mq3012_noble_statuette": {
+            "headline": "You still need the nobleman statuette",
+            "action": "Find the nobleman statuette, then talk to Triss"
+          },
+          "mq3012_soldier_statuette": {
+            "headline": "You still need the soldier statuette",
+            "action": "Find the soldier statuette, then talk to Triss"
+          }
+        }
+      },
       "action": "Give both statuettes to Triss during Final Preparations",
       "headline": "Hand both statuettes to Triss before Final Preparations ends",
       "why": "When Battle Preparations begins, the game's own fixup graph runs a branch for each statuette journal entry: the branch reads q210preparations.journal as Active or Success and sends the entry through a Success or Failure input. That is the game resolving the quests, not an NPC silently disappearing. Triss takes the statuettes during Final Preparations after the Philippa rescue (the statuette phase tests q310_philippa_rescued), so that quest is the last window.",

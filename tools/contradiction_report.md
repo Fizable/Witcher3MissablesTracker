@@ -25,7 +25,7 @@ Not "the other quest is finished" but "its story reached the point that opens th
 | app_dump | the built app reports what the data files say | 424 | 0 |
 | route_coverage | every route step has derived evidence, and every evidence row has a step | 412 | 0 |
 | settlement | every settled decision is in the route, and no route lock is refuted | 9 | 0 |
-| reader | the save reader attaches statuses to the right entries | 26925 | 0 |
+| reader | the save reader attaches statuses to the right entries | 24189 | 0 |
 
 ## Parser coverage
 
