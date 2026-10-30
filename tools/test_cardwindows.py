@@ -84,6 +84,57 @@ class CardWindowCheckerTests(unittest.TestCase):
         errors = self.validate(self.doc, report)
         self.assertTrue(any("ownership.in_artifact" in error for error in errors), errors)
 
+    def test_a_no_window_row_that_hides_a_one_time_source_fails(self):
+        doc = copy.deepcopy(self.doc)
+        card = next(card for card in doc["cards"] if card["id"] == "card_dijkstra")
+        card["window"] = {
+            "kind": "none", "tier": "gamefile", "tier_rank": "A",
+            "reason": "Checked the phase grant; no deadline exists.",
+            "sources_checked": [{"kind": "phase_grant", "text": "Scripted quest grant",
+                                  "step": "cgnomansland", "file": "cg100_no_mans_land.w2phase"}],
+            "evidence": [{"kind": "file", "value": "cg100_no_mans_land.w2phase"}],
+        }
+        errors = self.validate(doc, self.report)
+        self.assertTrue(any("hides a one-time source" in error for error in errors), errors)
+
+    def test_a_window_without_an_open_gate_fails(self):
+        doc = copy.deepcopy(self.doc)
+        card = next(card for card in doc["cards"] if card["id"] == "card_dandelion")
+        card["window"].pop("opens")
+        errors = self.validate(doc, self.report)
+        self.assertTrue(any("needs opens" in error for error in errors), errors)
+
+    def test_a_fake_fact_gate_fails(self):
+        doc = copy.deepcopy(self.doc)
+        card = next(card for card in doc["cards"] if card["id"] == "card_dandelion")
+        card["window"]["opens"]["requires"] = [
+            {"kind": "fact", "value": "definitely_not_a_real_fact"}
+        ]
+        errors = self.validate(doc, self.report)
+        self.assertTrue(any("not a real fact" in error for error in errors), errors)
+
+    def test_every_card_has_a_source_a_window_and_evidence(self):
+        self.assertEqual(len(self.doc["cards"]), 224)
+        for card in self.doc["cards"]:
+            self.assertTrue(card.get("sources"), card["id"])
+            self.assertIn(card["window"]["kind"], ("missable", "one_time", "none"), card["id"])
+            self.assertTrue(card["window"].get("evidence"), card["id"])
+            if card["window"]["kind"] in ("missable", "one_time"):
+                self.assertIn("opens", card["window"], card["id"])
+        expected = sum(1 for card in self.doc["cards"]
+                       if (card.get("source") or {}).get("kind") == "unknown")
+        self.assertEqual(self.doc["counts"]["unknown_source"], expected)
+
+    def test_dijkstra_is_a_one_time_source_with_a_fallback(self):
+        card = next(card for card in self.doc["cards"] if card["id"] == "card_dijkstra")
+        window = card["window"]
+        self.assertEqual(window["kind"], "one_time")
+        self.assertEqual(window["step"], "cgnomansland")
+        self.assertEqual(window["opens"]["step"], "cgnomansland")
+        self.assertTrue(window["fallback"])
+        self.assertTrue(any(row["kind"] == "phase_grant" for row in card["sources"]))
+        self.assertFalse(any(row["kind"] == "starter_deck" for row in card["sources"]))
+
 
 if __name__ == "__main__":
     unittest.main()

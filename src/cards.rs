@@ -112,7 +112,7 @@ impl CardIndex {
                 } else {
                     ("unknown".to_string(), Some(save_reason.to_string()))
                 };
-                let live = window_live(&c.window, &owned, save_ok, statuses);
+                let live = window_live(&c.window, &owned, save_ok, facts, statuses);
                 json!({
                     "id": c.id,
                     "name": c.name,
@@ -231,42 +231,86 @@ fn tier_label(kind: &str, tier: &str) -> String {
 /// The save-relative state of one reviewed window. It never changes ownership and never turns a
 /// Tier B community row into a hard loss: that needs save ownership plus a file-backed step.
 /// This is the only producer of the card row label; the UI renders `label` and `tone` directly.
-fn window_live(window: &Value, owned: &str, save_ok: bool, statuses: &HashMap<String, String>) -> Value {
+fn window_live(
+    window: &Value,
+    owned: &str,
+    save_ok: bool,
+    facts: &HashSet<String>,
+    statuses: &HashMap<String, String>,
+) -> Value {
     if window.is_null() {
         return json!({"state": "none", "tone": "dim", "label": "NO WINDOW"});
     }
     let kind = window.get("kind").and_then(|x| x.as_str()).unwrap_or("none");
     let tier = window.get("tier").and_then(|x| x.as_str()).unwrap_or("unknown");
     let base = tier_label(kind, tier);
+    // A window opens on its own step, not necessarily on the step that closes it (Thaler opens
+    // before Reason of State). A fact gate is the save's own answer to "is the source here yet?".
+    let opens = window.get("opens").filter(|x| x.is_object());
+    let gate_step = opens
+        .and_then(|x| x.get("step"))
+        .and_then(|x| x.as_str())
+        .or_else(|| window.get("step").and_then(|x| x.as_str()))
+        .unwrap_or("");
+    let gate_status = statuses.get(gate_step).map(String::as_str).unwrap_or("Not started");
+    let requires_met = opens
+        .and_then(|x| x.get("requires"))
+        .and_then(|x| x.as_array())
+        .map(|rows| {
+            rows.iter().all(|r| {
+                if r.get("kind").and_then(|x| x.as_str()) != Some("fact") {
+                    return true;
+                }
+                r.get("value")
+                    .and_then(|x| x.as_str())
+                    .map(|f| facts.contains(f))
+                    .unwrap_or(true)
+            })
+        })
+        .unwrap_or(true);
+    let has_fallback = window
+        .get("fallback")
+        .and_then(|x| x.as_array())
+        .map(|a| !a.is_empty())
+        .unwrap_or(false);
     let (state, tone, label) = if owned == "owned" {
-        ("owned", "green", base)
+        ("owned", "green", base.clone())
     } else if !save_ok || owned == "unknown" {
-        ("unknown", "dim", base)
+        ("unknown", "dim", base.clone())
     } else if kind == "none" {
         (
             if tier == "unknown" { "unknown_source" } else { "none" },
             "dim",
-            base,
+            base.clone(),
         )
+    } else if !requires_met {
+        ("not_yet", "dim", format!("SOURCE NOT YET · {base}"))
+    } else if gate_status == "Not started" || gate_status.is_empty() {
+        (
+            "ahead",
+            if kind == "missable" { "amber" } else { "blue" },
+            format!("OPEN LATER · {base}"),
+        )
+    } else if gate_status == "Active" {
+        (
+            "active",
+            if kind == "missable" { "red" } else { "blue" },
+            if kind == "missable" { format!("OPEN NOW · {base}") } else { base.clone() },
+        )
+    } else if has_fallback {
+        ("check", "amber", format!("PASSED - CHECK FALLBACK · {base}"))
     } else {
-        let step = window.get("step").and_then(|x| x.as_str()).unwrap_or("");
-        let status = statuses.get(step).map(String::as_str).unwrap_or("Not started");
-        let closed = matches!(status, "Done" | "Failed" | "N/A");
-        match (kind, status) {
-            ("missable", "Active") => ("active", "red", format!("OPEN NOW · {base}")),
-            ("missable", "Not started") => ("ahead", "amber", format!("OPEN LATER · {base}")),
-            ("missable", s) if (closed || s.is_empty()) && tier == "gamefile" => {
+        match (kind, gate_status) {
+            ("missable", s) if matches!(s, "Done" | "Failed" | "N/A") && tier == "gamefile" => {
                 ("lost", "lost", format!("LOST · {base}"))
             }
-            ("missable", s) if closed || s.is_empty() => {
+            ("missable", s) if matches!(s, "Done" | "Failed" | "N/A") || s.is_empty() => {
                 ("check", "lost", format!("PASSED - CHECK · {base}"))
             }
-            ("one_time", "Active") => ("active", "blue", base),
-            ("one_time", "Not started") => ("ahead", "blue", base),
-            ("one_time", s) if closed || s.is_empty() => {
+            ("one_time", s) if matches!(s, "Done" | "Failed" | "N/A") || s.is_empty() => {
                 ("passed", "dim", "ONE-TIME · PASSED · TIER A".to_string())
             }
-            _ => ("unknown", "dim", base),
+            _ => ("unknown", "dim", base.clone()),
         }
     };
     if kind == "none" {
@@ -285,6 +329,8 @@ fn window_live(window: &Value, owned: &str, save_ok: bool, statuses: &HashMap<St
         "step_title": window.get("step_title").cloned().unwrap_or(Value::Null),
         "event": window.get("event").cloned().unwrap_or(Value::Null),
         "mechanism": window.get("mechanism").cloned().unwrap_or(Value::Null),
+        "opens": window.get("opens").cloned().unwrap_or(Value::Null),
+        "fallback": window.get("fallback").cloned().unwrap_or(Value::Null),
     })
 }
 
@@ -529,5 +575,51 @@ mod tests {
         assert_eq!(card(&out)["window_live"]["state"], "passed");
         assert_eq!(out["counts"]["one_time"], 1);
         assert_eq!(out["counts"]["lost"], 0);
+    }
+
+    #[test]
+    fn a_window_opens_on_its_gate_and_checks_a_fallback() {
+        let window = json!({
+            "kind": "one_time", "tier": "gamefile", "tier_rank": "A",
+            "step": "sq301triss", "step_title": "A Matter of Life and Death",
+            "event": "The source passes", "mechanism": "Grant.",
+            "opens": {"step": "gate"},
+            "fallback": [{"kind": "container", "value": "The office"}]
+        });
+        let mut statuses = HashMap::from([
+            ("sq301triss".to_string(), "Active".to_string()),
+            ("gate".to_string(), "Not started".to_string()),
+        ]);
+        let ahead = window_live(&window, "not_owned", true, &HashSet::new(), &statuses);
+        assert_eq!(ahead["state"], "ahead", "the closing step is active but the gate is not open");
+        statuses.insert("gate".to_string(), "Active".to_string());
+        let active = window_live(&window, "not_owned", true, &HashSet::new(), &statuses);
+        assert_eq!(active["state"], "active");
+        statuses.insert("gate".to_string(), "Done".to_string());
+        let check = window_live(&window, "not_owned", true, &HashSet::new(), &statuses);
+        assert_eq!(check["state"], "check", "a fallback keeps a passed source soft");
+        assert!(check["label"].as_str().unwrap().contains("FALLBACK"));
+        let mut no_fallback = window.clone();
+        no_fallback.as_object_mut().unwrap().remove("fallback");
+        let passed = window_live(&no_fallback, "not_owned", true, &HashSet::new(), &statuses);
+        assert_eq!(passed["state"], "passed");
+    }
+
+    #[test]
+    fn a_fact_gate_keeps_a_source_not_yet_until_the_save_has_it() {
+        let window = json!({
+            "kind": "one_time", "tier": "gamefile", "tier_rank": "A",
+            "step": "cgnomansland", "step_title": "Gwent: Velen Players",
+            "event": "The Baron's game ends", "mechanism": "Win the card.",
+            "opens": {"step": "cgnomansland",
+                      "requires": [{"kind": "fact", "value": "cg_baron_discovered"}]}
+        });
+        let statuses = HashMap::from([("cgnomansland".to_string(), "Active".to_string())]);
+        let early = window_live(&window, "not_owned", true, &HashSet::new(), &statuses);
+        assert_eq!(early["state"], "not_yet");
+        assert!(early["label"].as_str().unwrap().contains("SOURCE NOT YET"));
+        let facts = HashSet::from(["cg_baron_discovered".to_string()]);
+        let open = window_live(&window, "not_owned", true, &facts, &statuses);
+        assert_eq!(open["state"], "active");
     }
 }

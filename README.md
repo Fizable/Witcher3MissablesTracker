@@ -17,8 +17,10 @@ question: **what do I do next in this save, and what can I still lose?**
   - **STATUS**: quest and card completion, split into done/owned, still possible, at risk, lost and
     unknown - never one misleading percentage.
   - **CARDS**: every card with source, owned/not-owned/unknown and one reviewed window: 15 Tier B
-    community windows, 15 Tier A one-time sources, or a documented no-window reason. Filters are
-    open now, later, owned and unknown. Tier B rows show their source and review date.
+    community windows, 17 Tier A one-time sources, or a documented no-window reason. A deck list
+    is not ownership, so 24 cards carry an explicit unknown-source row rather than a false
+    no-window claim. Filters are open now, later, owned and unknown. Tier B rows show their source
+    and review date.
   - **COVERAGE**: measured counts per pack, so an empty section is not mistaken for a clean one.
   - **PROGRESS**: every quest in the game, including Hearts of Stone and Blood & Wine, in the game's
     own five sections: Main, Secondary, Contracts, Treasure Hunts, Gwent.

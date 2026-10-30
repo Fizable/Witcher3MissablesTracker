@@ -766,7 +766,9 @@ impl Inner {
         let mut list = d.get("watch")?.as_array()?.clone();
         let done_q = self.done_quests(ev);
         list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
-        list.into_iter().next()
+        let mut first = list.into_iter().next()?;
+        model::turn_in_text(&mut first, &self.facts);
+        Some(first)
     }
 
     /// One save-aware verdict. The route model answers first; a reviewed warning that is still

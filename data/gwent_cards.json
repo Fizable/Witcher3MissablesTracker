@@ -10,8 +10,8 @@
     "total_definitions": 228,
     "excluded_summon_only": 4,
     "total": 224,
-    "with_source": 216,
-    "unknown_source": 8,
+    "with_source": 200,
+    "unknown_source": 24,
     "missable": 15,
     "packs": {
       "base": 196,
@@ -25,23 +25,23 @@
       "missable": 15,
       "missable_tier_a": 0,
       "missable_tier_b": 15,
-      "one_time": 15,
-      "none": 194,
-      "tier_a": 202,
+      "one_time": 17,
+      "none": 192,
+      "tier_a": 186,
       "tier_b": 15,
-      "tier_c": 7,
+      "tier_c": 23,
       "community": 15
     }
   },
   "missable_windows": {
     "proven": false,
     "reviewed": true,
-    "tier_a": 202,
+    "tier_a": 186,
     "tier_b": 15,
-    "tier_c": 7,
+    "tier_c": 23,
     "missable": 15,
-    "one_time": 15,
-    "none": 194,
+    "one_time": 17,
+    "none": 192,
     "note": "No Tier A card-level deadline is proven. 15 Tier B community-reviewed windows are labelled in the UI; every other card has a one-time or documented no-window reason."
   },
   "excluded": [
@@ -423,11 +423,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -461,10 +461,6 @@
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
-          },
-          {
-            "kind": "file",
             "value": "gameplay/items/def_loot_shops.xml"
           }
         ],
@@ -491,10 +487,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -535,11 +531,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -574,10 +570,6 @@
           {
             "kind": "file",
             "value": "content/content0/scripts/game/quests/quest_function.ws"
-          },
-          {
-            "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
           }
         ],
         "sources_checked": [
@@ -589,10 +581,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -633,11 +625,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -672,10 +664,6 @@
           {
             "kind": "file",
             "value": "content/content0/scripts/game/quests/quest_function.ws"
-          },
-          {
-            "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
           }
         ],
         "sources_checked": [
@@ -687,10 +675,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -731,11 +719,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -770,10 +758,6 @@
           {
             "kind": "file",
             "value": "content/content0/scripts/game/quests/quest_function.ws"
-          },
-          {
-            "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
           }
         ],
         "sources_checked": [
@@ -785,10 +769,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -829,11 +813,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -868,10 +852,6 @@
           {
             "kind": "file",
             "value": "content/content0/scripts/game/quests/quest_function.ws"
-          },
-          {
-            "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
           }
         ],
         "sources_checked": [
@@ -883,10 +863,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -952,7 +932,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "cgtalar",
         "step_title": "Gwent: Playing Thaler",
         "event": "Reason of State closes",
@@ -971,7 +951,11 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgtalar",
+          "note": "Only while Thaler is still available; Reason of State closes the source."
+        }
       }
     },
     {
@@ -1043,7 +1027,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnovigrad"
+        }
       }
     },
     {
@@ -1186,7 +1173,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnovigrad"
+        }
       }
     },
     {
@@ -1255,7 +1245,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "cgoldfriends",
         "step_title": "Gwent: Old Pals",
         "event": "The Battle of Kaer Morhen begins",
@@ -1274,7 +1264,11 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgoldfriends",
+          "note": "Only at the Kaer Morhen reunion, before the battle begins."
+        }
       }
     },
     {
@@ -1306,11 +1300,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -1340,7 +1334,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq301triss",
         "step_title": "A Matter of Life and Death",
         "event": "The Vegelbud party ends",
@@ -1359,7 +1353,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq301triss"
+        }
       }
     },
     {
@@ -1699,7 +1696,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgskellige"
+        }
       }
     },
     {
@@ -1804,7 +1804,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "q603bank",
         "step_title": "Open Sesame!",
         "event": "Open Sesame ends",
@@ -1823,7 +1823,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "q603bank"
+        }
       }
     },
     {
@@ -1990,29 +1993,30 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "merchant_card",
-        "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
-        "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+        "kind": "collection_grant",
+        "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+        "file": "content/content0/scripts/game/quests/quest_function.ws",
+        "function": "UnlockSkelligeGwentDeck",
+        "line": 6636,
         "pack": "bob",
-        "function": "GiveSpecificGwentCardViaMerchantQuest",
         "confidence": "strong"
       },
       "sources": [
+        {
+          "kind": "collection_grant",
+          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+          "file": "content/content0/scripts/game/quests/quest_function.ws",
+          "function": "UnlockSkelligeGwentDeck",
+          "line": 6636,
+          "pack": "bob",
+          "confidence": "strong"
+        },
         {
           "kind": "merchant_card",
           "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
           "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
           "pack": "bob",
           "function": "GiveSpecificGwentCardViaMerchantQuest",
-          "confidence": "strong"
-        },
-        {
-          "kind": "native_script",
-          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-          "file": "content/content0/scripts/game/quests/quest_function.ws",
-          "function": "UnlockSkelligeGwentDeck",
-          "line": 6636,
-          "pack": "bob",
           "confidence": "strong"
         }
       ],
@@ -2035,30 +2039,26 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest) (dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 2 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "cg700_gwent_players.w2phase"
-          },
-          {
-            "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
+          {
+            "kind": "collection_grant",
+            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+            "file": "content/content0/scripts/game/quests/quest_function.ws",
+            "function": "UnlockSkelligeGwentDeck",
+            "confidence": "strong"
+          },
           {
             "kind": "merchant_card",
             "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
             "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
             "function": "GiveSpecificGwentCardViaMerchantQuest",
-            "confidence": "strong"
-          },
-          {
-            "kind": "native_script",
-            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-            "file": "content/content0/scripts/game/quests/quest_function.ws",
-            "function": "UnlockSkelligeGwentDeck",
             "confidence": "strong"
           }
         ]
@@ -2144,7 +2144,10 @@
             "kind": "function",
             "value": "AddItemQuest"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq701tournament"
+        }
       }
     },
     {
@@ -2453,7 +2456,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnomansland"
+        }
       }
     },
     {
@@ -2492,11 +2498,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -2530,7 +2536,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq310dangerousgame",
         "step_title": "A Dangerous Game",
         "event": "A Dangerous Game ends",
@@ -2549,7 +2555,10 @@
             "kind": "community",
             "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq310dangerousgame"
+        }
       }
     },
     {
@@ -2581,11 +2590,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -2612,39 +2621,26 @@
       ],
       "name_key": "gwint_name_esterad",
       "window": {
-        "kind": "none",
+        "kind": "one_time",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 3 source row(s), including Scripted quest grant in cg300_novigrad (AddItemQuestExt) (quests/generic_quests/novigrad/cg300_novigrad.w2phase); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "step": "cgnovigrad",
+        "step_title": "Gwent: Big City Players",
+        "event": "The one-time source passes",
+        "mechanism": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "quests/generic_quests/novigrad/cg300_novigrad.w2phase"
+          },
+          {
+            "kind": "function",
+            "value": "AddItemQuestExt"
           }
         ],
-        "sources_checked": [
-          {
-            "kind": "phase_grant",
-            "text": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)",
-            "file": "quests/generic_quests/novigrad/cg300_novigrad.w2phase",
-            "function": "AddItemQuestExt",
-            "step": "cgnovigrad",
-            "confidence": "strong"
-          },
-          {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
-            "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
-          },
-          {
-            "kind": "opponent_deck",
-            "text": "Appears in the CardProdigy, Halflings opponent deck; opponent evidence, not a proven reward",
-            "file": "gameplay/items/def_gwint_decks.xml",
-            "container": "CardProdigy, Halflings",
-            "confidence": "weak"
-          }
-        ]
+        "opens": {
+          "step": "cgnovigrad"
+        }
       }
     },
     {
@@ -2676,11 +2672,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -2715,10 +2711,6 @@
           {
             "kind": "file",
             "value": "content/content0/scripts/game/quests/quest_function.ws"
-          },
-          {
-            "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
           }
         ],
         "sources_checked": [
@@ -2730,10 +2722,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -2834,19 +2826,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -2860,6 +2861,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -2870,21 +2875,28 @@
       "name_key": "gwint_name_ves",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -2906,19 +2918,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -2932,6 +2953,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -2942,21 +2967,28 @@
       "name_key": "gwint_name_siegfried",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -2978,7 +3010,7 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158",
         "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
         "function": "OnGwintSetupNewgame",
@@ -2988,7 +3020,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158",
           "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
           "function": "OnGwintSetupNewgame",
@@ -3024,20 +3056,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158 (content/content0/scripts/game/gui/menus/gwintManager.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 2 source row(s), including Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158 (content/content0/scripts/game/gui/menus/gwintManager.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gwintManager.ws"
-          },
-          {
-            "kind": "file",
-            "value": "def_gwint_decks.xml"
+            "value": "content/content0/scripts/game/gui/menus/gwintManager.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158",
             "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
             "function": "OnGwintSetupNewgame",
@@ -3082,11 +3110,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3113,37 +3141,44 @@
       ],
       "name_key": "gwint_name_dijkstra",
       "window": {
-        "kind": "none",
+        "kind": "one_time",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 3 source row(s), including Scripted quest grant in cg100_no_mans_land (AddItemQuestExt) (quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "reviewed": "2026-10-30",
+        "step": "cgnomansland",
+        "step_title": "Gwent: Velen Players",
+        "event": "The Baron's Gwent game ends",
+        "mechanism": "Win the unique card from the Baron during Gwent: Velen Players; the Baron's office is the fallback source.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase"
+          },
+          {
+            "kind": "function",
+            "value": "AddItemQuestExt"
+          },
+          {
+            "kind": "container",
+            "value": "CQuestScriptBlock 551"
           }
         ],
-        "sources_checked": [
+        "opens": {
+          "step": "cgnomansland",
+          "requires": [
+            {
+              "kind": "fact",
+              "value": "cg_baron_discovered",
+              "cmp": ">= 1"
+            }
+          ],
+          "note": "Only while the Baron is available in Gwent: Velen Players."
+        },
+        "fallback": [
           {
-            "kind": "phase_grant",
-            "text": "Scripted quest grant in cg100_no_mans_land (AddItemQuestExt)",
-            "file": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase",
-            "function": "AddItemQuestExt",
-            "step": "cgnomansland",
-            "confidence": "strong"
-          },
-          {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
-            "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
-          },
-          {
-            "kind": "opponent_deck",
-            "text": "Appears in the CardProdigy, Dijkstra, Halflings, Sjusta opponent deck; opponent evidence, not a proven reward",
-            "file": "gameplay/items/def_gwint_decks.xml",
-            "container": "CardProdigy, Dijkstra, Halflings, Sjusta",
-            "confidence": "weak"
+            "kind": "container",
+            "value": "The Baron's office",
+            "note": "Check the office before the Baron line ends; it is the second source."
           }
         ]
       }
@@ -3158,19 +3193,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3184,6 +3228,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3194,21 +3242,28 @@
       "name_key": "gwint_name_keira",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -3230,19 +3285,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3256,6 +3320,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3266,21 +3334,28 @@
       "name_key": "gwint_name_sile",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -3302,19 +3377,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3328,6 +3412,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3338,21 +3426,28 @@
       "name_key": "gwint_name_sabrina",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -3374,22 +3469,35 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         }
       ],
       "evidence": [
+        {
+          "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
         {
           "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
@@ -3402,21 +3510,28 @@
       "name_key": "gwint_name_sheldon",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 2 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           }
         ]
       }
@@ -3431,22 +3546,35 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         }
       ],
       "evidence": [
+        {
+          "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
         {
           "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
@@ -3459,21 +3587,28 @@
       "name_key": "gwint_name_dethmold",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 2 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           }
         ]
       }
@@ -3488,19 +3623,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3514,6 +3658,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3524,21 +3672,28 @@
       "name_key": "gwint_name_stennis",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -3560,19 +3715,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3586,6 +3750,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3596,21 +3764,28 @@
       "name_key": "gwint_name_trebuchet",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -3632,19 +3807,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3658,6 +3842,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3668,21 +3856,28 @@
       "name_key": "gwint_name_trebuchet",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -3704,19 +3899,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -3730,6 +3934,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -3740,21 +3948,28 @@
       "name_key": "gwint_name_poor_infantry",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -4186,19 +4401,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -4212,6 +4436,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -4222,21 +4450,28 @@
       "name_key": "gwint_name_redanian",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -4258,7 +4493,7 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158",
         "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
         "function": "OnGwintSetupNewgame",
@@ -4268,7 +4503,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158",
           "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
           "function": "OnGwintSetupNewgame",
@@ -4304,20 +4539,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158 (content/content0/scripts/game/gui/menus/gwintManager.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 2 source row(s), including Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158 (content/content0/scripts/game/gui/menus/gwintManager.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gwintManager.ws"
-          },
-          {
-            "kind": "file",
-            "value": "def_gwint_decks.xml"
+            "value": "content/content0/scripts/game/gui/menus/gwintManager.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158",
             "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
             "function": "OnGwintSetupNewgame",
@@ -4539,19 +4770,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -4565,6 +4805,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -4575,21 +4819,28 @@
       "name_key": "gwint_name_ballista",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -4611,19 +4862,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -4637,6 +4897,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -4647,21 +4911,28 @@
       "name_key": "gwint_name_ballista",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -4683,19 +4954,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -4709,6 +4989,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -4719,21 +5003,28 @@
       "name_key": "gwint_name_kaedweni_siege",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -4954,11 +5245,11 @@
           "confidence": "strong"
         },
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -4990,10 +5281,6 @@
         "tier_rank": "A",
         "reason": "Checked 6 source row(s), including Sold by Barons Quartermaster (gameplay/items/def_loot_shops.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
-          {
-            "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
-          },
           {
             "kind": "file",
             "value": "gameplay/items/def_loot_shops.xml"
@@ -5029,10 +5316,10 @@
             "confidence": "strong"
           },
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -5135,19 +5422,28 @@
       "faction": "F_NORTHERN_KINGDOM",
       "pack": "base",
       "source": {
-        "kind": "starter_deck",
-        "text": "Northern Kingdoms starter deck card",
-        "file": "gameplay/items/def_gwint_decks.xml",
+        "kind": "unknown",
+        "text": "unknown source",
+        "file": "gameplay/items/def_gwint_cards_final.xml",
         "pack": "base",
-        "confidence": "strong"
+        "container": "no concrete grant or vendor row",
+        "confidence": "unknown"
       },
       "sources": [
         {
-          "kind": "starter_deck",
-          "text": "Northern Kingdoms starter deck card",
+          "kind": "unknown",
+          "text": "unknown source",
+          "file": "gameplay/items/def_gwint_cards_final.xml",
+          "pack": "base",
+          "container": "no concrete grant or vendor row",
+          "confidence": "unknown"
+        },
+        {
+          "kind": "deck_definition",
+          "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
           "file": "gameplay/items/def_gwint_decks.xml",
           "pack": "base",
-          "confidence": "strong"
+          "confidence": "weak"
         },
         {
           "kind": "opponent_deck",
@@ -5161,6 +5457,10 @@
       "evidence": [
         {
           "kind": "file",
+          "value": "gameplay/items/def_gwint_cards_final.xml"
+        },
+        {
+          "kind": "file",
           "value": "gameplay/items/def_gwint_decks.xml"
         },
         {
@@ -5171,21 +5471,28 @@
       "name_key": "gwint_name_dun_banner_medic",
       "window": {
         "kind": "none",
-        "tier": "gamefile",
-        "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Northern Kingdoms starter deck card (gameplay/items/def_gwint_decks.xml); the source remains available after every route step, and no phase grant or journal failure closes this card.",
+        "tier": "unknown",
+        "tier_rank": "C",
+        "reason": "Checked 3 source row(s), including unknown source (gameplay/items/def_gwint_cards_final.xml); no concrete source row exists, so no journal phase or failure can be attached.",
         "evidence": [
           {
             "kind": "file",
-            "value": "gameplay/items/def_gwint_decks.xml"
+            "value": "gameplay/items/def_gwint_cards_final.xml"
           }
         ],
         "sources_checked": [
           {
-            "kind": "starter_deck",
-            "text": "Northern Kingdoms starter deck card",
+            "kind": "unknown",
+            "text": "unknown source",
+            "file": "gameplay/items/def_gwint_cards_final.xml",
+            "container": "no concrete grant or vendor row",
+            "confidence": "unknown"
+          },
+          {
+            "kind": "deck_definition",
+            "text": "Northern Kingdoms deck definition; a deck list is not a collection grant",
             "file": "gameplay/items/def_gwint_decks.xml",
-            "confidence": "strong"
+            "confidence": "weak"
           },
           {
             "kind": "opponent_deck",
@@ -5266,7 +5573,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnomansland"
+        }
       }
     },
     {
@@ -5421,7 +5731,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnovigrad"
+        }
       }
     },
     {
@@ -5881,7 +6194,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq310dangerousgame",
         "step_title": "A Dangerous Game",
         "event": "A Dangerous Game ends",
@@ -5900,7 +6213,10 @@
             "kind": "community",
             "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq310dangerousgame"
+        }
       }
     },
     {
@@ -8907,7 +9223,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq310dangerousgame",
         "step_title": "A Dangerous Game",
         "event": "A Dangerous Game ends",
@@ -8926,7 +9242,10 @@
             "kind": "community",
             "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq310dangerousgame"
+        }
       }
     },
     {
@@ -8983,7 +9302,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "mq2039vowofsilence",
         "step_title": "Shock Therapy",
         "event": "Shock Therapy ends",
@@ -8998,7 +9317,10 @@
             "kind": "community",
             "value": "https://witcher.fandom.com/wiki/Shock_Therapy"
           }
-        ]
+        ],
+        "opens": {
+          "step": "mq2039vowofsilence"
+        }
       }
     },
     {
@@ -9138,7 +9460,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq301triss",
         "step_title": "A Matter of Life and Death",
         "event": "The Vegelbud party ends",
@@ -9157,7 +9479,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq301triss"
+        }
       }
     },
     {
@@ -9391,7 +9716,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgskellige"
+        }
       }
     },
     {
@@ -12311,7 +12639,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgskellige"
+        }
       }
     },
     {
@@ -12526,7 +12857,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgskellige"
+        }
       }
     },
     {
@@ -15085,7 +15419,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq301triss",
         "step_title": "A Matter of Life and Death",
         "event": "The Vegelbud party ends",
@@ -15104,7 +15438,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq301triss"
+        }
       }
     },
     {
@@ -15187,7 +15524,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgskellige"
+        }
       }
     },
     {
@@ -15623,7 +15963,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnomansland"
+        }
       }
     },
     {
@@ -15798,7 +16141,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -15808,7 +16151,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -15832,16 +16175,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16040,7 +16383,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16050,7 +16393,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16074,16 +16417,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16102,7 +16445,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16112,7 +16455,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16136,16 +16479,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16164,7 +16507,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16174,7 +16517,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16198,16 +16541,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16226,7 +16569,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16236,7 +16579,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16260,16 +16603,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16288,7 +16631,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16298,7 +16641,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16322,16 +16665,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16350,7 +16693,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16360,7 +16703,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16384,16 +16727,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16412,7 +16755,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16422,7 +16765,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16446,16 +16789,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16534,7 +16877,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16544,7 +16887,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16568,16 +16911,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16596,14 +16939,24 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "quest",
-        "text": "Quest loot: mq7002 card container",
-        "container": "mq7002_card_container",
-        "file": "dlc/bob/data/gameplay/items/def_loot_quest.xml",
+        "kind": "collection_grant",
+        "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+        "file": "content/content0/scripts/game/quests/quest_function.ws",
+        "function": "UnlockSkelligeGwentDeck",
+        "line": 6636,
         "pack": "bob",
         "confidence": "strong"
       },
       "sources": [
+        {
+          "kind": "collection_grant",
+          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+          "file": "content/content0/scripts/game/quests/quest_function.ws",
+          "function": "UnlockSkelligeGwentDeck",
+          "line": 6636,
+          "pack": "bob",
+          "confidence": "strong"
+        },
         {
           "kind": "quest",
           "text": "Quest loot: mq7002 card container",
@@ -16626,15 +16979,6 @@
           "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
           "pack": "bob",
           "function": "GiveSpecificGwentCardViaMerchantQuest",
-          "confidence": "strong"
-        },
-        {
-          "kind": "native_script",
-          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-          "file": "content/content0/scripts/game/quests/quest_function.ws",
-          "function": "UnlockSkelligeGwentDeck",
-          "line": 6636,
-          "pack": "bob",
           "confidence": "strong"
         }
       ],
@@ -16665,26 +17009,21 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 4 source row(s), including Quest loot: mq7002 card container (dlc/bob/data/gameplay/items/def_loot_quest.xml); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 4 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "def_loot_quest.xml"
-          },
-          {
-            "kind": "file",
-            "value": "bob_shops_and_craftsmen.w2phase"
-          },
-          {
-            "kind": "file",
-            "value": "cg700_gwent_players.w2phase"
-          },
-          {
-            "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
+          {
+            "kind": "collection_grant",
+            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+            "file": "content/content0/scripts/game/quests/quest_function.ws",
+            "function": "UnlockSkelligeGwentDeck",
+            "confidence": "strong"
+          },
           {
             "kind": "quest",
             "text": "Quest loot: mq7002 card container",
@@ -16705,13 +17044,6 @@
             "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
             "function": "GiveSpecificGwentCardViaMerchantQuest",
             "confidence": "strong"
-          },
-          {
-            "kind": "native_script",
-            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-            "file": "content/content0/scripts/game/quests/quest_function.ws",
-            "function": "UnlockSkelligeGwentDeck",
-            "confidence": "strong"
           }
         ]
       }
@@ -16726,7 +17058,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16736,7 +17068,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16760,16 +17092,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16788,7 +17120,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16798,7 +17130,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16822,16 +17154,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16850,7 +17182,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -16860,7 +17192,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -16884,16 +17216,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -16912,29 +17244,30 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "merchant_card",
-        "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
-        "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+        "kind": "collection_grant",
+        "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+        "file": "content/content0/scripts/game/quests/quest_function.ws",
+        "function": "UnlockSkelligeGwentDeck",
+        "line": 6636,
         "pack": "bob",
-        "function": "GiveSpecificGwentCardViaMerchantQuest",
         "confidence": "strong"
       },
       "sources": [
+        {
+          "kind": "collection_grant",
+          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+          "file": "content/content0/scripts/game/quests/quest_function.ws",
+          "function": "UnlockSkelligeGwentDeck",
+          "line": 6636,
+          "pack": "bob",
+          "confidence": "strong"
+        },
         {
           "kind": "merchant_card",
           "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
           "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
           "pack": "bob",
           "function": "GiveSpecificGwentCardViaMerchantQuest",
-          "confidence": "strong"
-        },
-        {
-          "kind": "native_script",
-          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-          "file": "content/content0/scripts/game/quests/quest_function.ws",
-          "function": "UnlockSkelligeGwentDeck",
-          "line": 6636,
-          "pack": "bob",
           "confidence": "strong"
         }
       ],
@@ -16957,30 +17290,26 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest) (dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 2 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "cg700_gwent_players.w2phase"
-          },
-          {
-            "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
+          {
+            "kind": "collection_grant",
+            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+            "file": "content/content0/scripts/game/quests/quest_function.ws",
+            "function": "UnlockSkelligeGwentDeck",
+            "confidence": "strong"
+          },
           {
             "kind": "merchant_card",
             "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
             "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
             "function": "GiveSpecificGwentCardViaMerchantQuest",
-            "confidence": "strong"
-          },
-          {
-            "kind": "native_script",
-            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-            "file": "content/content0/scripts/game/quests/quest_function.ws",
-            "function": "UnlockSkelligeGwentDeck",
             "confidence": "strong"
           }
         ]
@@ -16996,29 +17325,30 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "merchant_card",
-        "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
-        "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+        "kind": "collection_grant",
+        "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+        "file": "content/content0/scripts/game/quests/quest_function.ws",
+        "function": "UnlockSkelligeGwentDeck",
+        "line": 6636,
         "pack": "bob",
-        "function": "GiveSpecificGwentCardViaMerchantQuest",
         "confidence": "strong"
       },
       "sources": [
+        {
+          "kind": "collection_grant",
+          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+          "file": "content/content0/scripts/game/quests/quest_function.ws",
+          "function": "UnlockSkelligeGwentDeck",
+          "line": 6636,
+          "pack": "bob",
+          "confidence": "strong"
+        },
         {
           "kind": "merchant_card",
           "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
           "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
           "pack": "bob",
           "function": "GiveSpecificGwentCardViaMerchantQuest",
-          "confidence": "strong"
-        },
-        {
-          "kind": "native_script",
-          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-          "file": "content/content0/scripts/game/quests/quest_function.ws",
-          "function": "UnlockSkelligeGwentDeck",
-          "line": 6636,
-          "pack": "bob",
           "confidence": "strong"
         }
       ],
@@ -17041,30 +17371,26 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest) (dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 2 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "cg700_gwent_players.w2phase"
-          },
-          {
-            "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
+          {
+            "kind": "collection_grant",
+            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+            "file": "content/content0/scripts/game/quests/quest_function.ws",
+            "function": "UnlockSkelligeGwentDeck",
+            "confidence": "strong"
+          },
           {
             "kind": "merchant_card",
             "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
             "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
             "function": "GiveSpecificGwentCardViaMerchantQuest",
-            "confidence": "strong"
-          },
-          {
-            "kind": "native_script",
-            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-            "file": "content/content0/scripts/game/quests/quest_function.ws",
-            "function": "UnlockSkelligeGwentDeck",
             "confidence": "strong"
           }
         ]
@@ -17080,29 +17406,30 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "merchant_card",
-        "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
-        "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+        "kind": "collection_grant",
+        "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+        "file": "content/content0/scripts/game/quests/quest_function.ws",
+        "function": "UnlockSkelligeGwentDeck",
+        "line": 6636,
         "pack": "bob",
-        "function": "GiveSpecificGwentCardViaMerchantQuest",
         "confidence": "strong"
       },
       "sources": [
+        {
+          "kind": "collection_grant",
+          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+          "file": "content/content0/scripts/game/quests/quest_function.ws",
+          "function": "UnlockSkelligeGwentDeck",
+          "line": 6636,
+          "pack": "bob",
+          "confidence": "strong"
+        },
         {
           "kind": "merchant_card",
           "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
           "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
           "pack": "bob",
           "function": "GiveSpecificGwentCardViaMerchantQuest",
-          "confidence": "strong"
-        },
-        {
-          "kind": "native_script",
-          "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-          "file": "content/content0/scripts/game/quests/quest_function.ws",
-          "function": "UnlockSkelligeGwentDeck",
-          "line": 6636,
-          "pack": "bob",
           "confidence": "strong"
         }
       ],
@@ -17125,30 +17452,26 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 2 source row(s), including Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest) (dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 2 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "cg700_gwent_players.w2phase"
-          },
-          {
-            "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
+          {
+            "kind": "collection_grant",
+            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
+            "file": "content/content0/scripts/game/quests/quest_function.ws",
+            "function": "UnlockSkelligeGwentDeck",
+            "confidence": "strong"
+          },
           {
             "kind": "merchant_card",
             "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)",
             "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
             "function": "GiveSpecificGwentCardViaMerchantQuest",
-            "confidence": "strong"
-          },
-          {
-            "kind": "native_script",
-            "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
-            "file": "content/content0/scripts/game/quests/quest_function.ws",
-            "function": "UnlockSkelligeGwentDeck",
             "confidence": "strong"
           }
         ]
@@ -17164,7 +17487,7 @@
       "faction": "F_SKELLIGE",
       "pack": "bob",
       "source": {
-        "kind": "native_script",
+        "kind": "collection_grant",
         "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
         "file": "content/content0/scripts/game/quests/quest_function.ws",
         "function": "UnlockSkelligeGwentDeck",
@@ -17174,7 +17497,7 @@
       },
       "sources": [
         {
-          "kind": "native_script",
+          "kind": "collection_grant",
           "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
           "file": "content/content0/scripts/game/quests/quest_function.ws",
           "function": "UnlockSkelligeGwentDeck",
@@ -17198,16 +17521,16 @@
         "kind": "none",
         "tier": "gamefile",
         "tier_rank": "A",
-        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the collection is filled automatically when the deck is unlocked, so no journal phase or failure closes it.",
+        "reason": "Checked 1 source row(s), including Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636 (content/content0/scripts/game/quests/quest_function.ws); the source remains available after every route step, and no phase grant or journal failure closes this card.",
         "evidence": [
           {
             "kind": "file",
-            "value": "quest_function.ws"
+            "value": "content/content0/scripts/game/quests/quest_function.ws"
           }
         ],
         "sources_checked": [
           {
-            "kind": "native_script",
+            "kind": "collection_grant",
             "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636",
             "file": "content/content0/scripts/game/quests/quest_function.ws",
             "function": "UnlockSkelligeGwentDeck",
@@ -17690,7 +18013,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq306maverick",
         "step_title": "High Stakes",
         "event": "The High Stakes final ends",
@@ -17709,7 +18032,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/quests/high-stakes"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq306maverick"
+        }
       }
     },
     {
@@ -17969,7 +18295,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgskellige"
+        }
       }
     },
     {
@@ -18014,7 +18343,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq306maverick",
         "step_title": "High Stakes",
         "event": "The High Stakes final ends",
@@ -18033,7 +18362,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/quests/high-stakes"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq306maverick"
+        }
       }
     },
     {
@@ -18304,7 +18636,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnovigrad"
+        }
       }
     },
     {
@@ -18349,7 +18684,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq306maverick",
         "step_title": "High Stakes",
         "event": "The High Stakes final ends",
@@ -18368,7 +18703,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/quests/high-stakes"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq306maverick"
+        }
       }
     },
     {
@@ -18613,7 +18951,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "sq306maverick",
         "step_title": "High Stakes",
         "event": "The High Stakes final ends",
@@ -18632,7 +18970,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/quests/high-stakes"
           }
-        ]
+        ],
+        "opens": {
+          "step": "sq306maverick"
+        }
       }
     },
     {
@@ -18692,7 +19033,10 @@
             "kind": "function",
             "value": "AddItemQuestExt"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cgnomansland"
+        }
       }
     },
     {
@@ -18809,7 +19153,7 @@
         "kind": "missable",
         "tier": "community",
         "tier_rank": "B",
-        "reviewed": "2026-10-29",
+        "reviewed": "2026-10-30",
         "step": "cg700mainquest",
         "step_title": "Gwent: To Everything - Turn, Turn, Tournament!",
         "event": "The Beauclair Gwent tournament ends",
@@ -18828,7 +19172,10 @@
             "kind": "community",
             "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
           }
-        ]
+        ],
+        "opens": {
+          "step": "cg700mainquest"
+        }
       }
     },
     {

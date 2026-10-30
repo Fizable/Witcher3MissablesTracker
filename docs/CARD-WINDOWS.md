@@ -1,6 +1,6 @@
 # Card windows
 
-**Status:** 4.4 reviewed layer, 2026-10-29. The generator is
+**Status:** 1.3 reviewed layer, 2026-10-30. The generator is
 [`tools/cardwindows.py`](../tools/cardwindows.py); the reviewed decisions are
 [`data/card_window_review.json`](../data/card_window_review.json); the generated report is
 [`data/card_windows.json`](../data/card_windows.json). No generated file is hand-edited.
@@ -17,14 +17,18 @@ Every one of the **224** shipped cards (202 collectible main + 22 leaders) has e
 | classification | count | meaning |
 |---|---:|---|
 | `missable` | **15** | A reviewed closing step. All 15 are **Tier B / community**; every row names a source, URL and review date and is labelled in the UI. |
-| `one_time` | **15** | A gamefile one-time source with a route step, but no reviewed failure branch. It is a window, not a hard `LOST` claim. |
-| `none` | **194** | A documented no-window reason: 187 persistent/automatic/merchant sources (Tier A) and 7 explicit unknown-source rows (Tier C). |
+| `one_time` | **17** | A gamefile one-time source with a route step, but no reviewed failure branch. It is a window, not a hard `LOST` claim. |
+| `none` | **192** | A documented no-window reason: 169 persistent/automatic/merchant sources (Tier A) and 23 explicit unknown-source rows (Tier C). |
 | **total** | **224** | No card is absent from the report. |
 
-Tier totals: **202 Tier A** (15 one-time + 187 no-window), **15 Tier B** (all the missable rows),
-**7 Tier C** (unknown source). The audited source count remains **216 sourced / 8 unknown source**:
-Iorveth is one of the 8 unknown-source cards and has a Tier B window; the other 7 are Tier C and
-have no asserted window.
+Tier totals: **186 Tier A** (17 one-time + 169 no-window), **15 Tier B** (all the missable rows),
+**23 Tier C** (unknown-source rows). The audited source count is **200 sourced / 24 explicit
+unknown source**. The 16 extra unknown rows are the basic Northern Kingdoms cards whose only
+evidence was the `north` deck list: a deck definition is not ownership, and
+`OnGwintSetupNewgame()` grants only `yarpen` and `redanian2` by name. Iorveth is one of the 24
+unknown-source cards and keeps its Tier B Shock Therapy window; the other 23 are Tier C and have
+no asserted window. Ownership is still read from the save, so an owned starter card is never
+shown as unknown ownership.
 
 Coverage reconciles with the contract: **196 base**, **28 Blood and Wine**, **0 Hearts of Stone**,
 **22 leaders**.
@@ -53,8 +57,9 @@ because the closing event is community-reviewed.
 
 ## Why the other cards are not missable
 
-- **Persistent sources.** A vendor row, random-merchant pool, starter deck or deck default remains a
-  source independent of the journal. The files name no phase or journal deadline for those cards.
+- **Persistent sources.** A vendor row, random-merchant pool, native collection grant or deck
+  default remains a source independent of the journal. A deck list is not a persistent source; it
+  says only where a card can appear, not that the player owns it.
 - **Automatic grants.** `UnlockSkelligeGwentDeck()` and `OnGwintSetupNewgame()` fill the collection
   when the deck is unlocked; no quest failure closes them.
 - **One-time with a step.** A phase grant or quest reward with one route step is shown as
@@ -62,9 +67,9 @@ because the closing event is community-reviewed.
   card was lost; a passed one-time row reads `ONE-TIME · PASSED · TIER A`.
 - **Shared or unlinked phases.** A grant in a shared card-minigame phase or a container that maps to
   no single journal step has no deadline asserted. That is a documented no-window row, not a guess.
-- **Unknown source.** The 8 cards with no concrete source row stay explicit `unknown source`. Seven
-  have a Tier C no-window row; Iorveth has the reviewed Shock Therapy window above. Ownership is
-  still tracked separately and is never inferred from a quest.
+- **Unknown source.** The 24 cards with no concrete source row stay explicit `unknown source`.
+  Twenty-three have a Tier C no-window row; Iorveth has the reviewed Shock Therapy window above.
+  Ownership is still tracked separately and is never inferred from a quest.
 
 Every `none` row also carries `sources_checked`: the concrete source rows (kind, text, file,
 function, container and step where present) the decision was based on. Its `reason` must name at
@@ -81,9 +86,11 @@ owned Tier B row even though the deadline sentence is suppressed. Every `missabl
 row also has a collapsed **Technical details** block with its tier, step, event, mechanism, source
 URL, review date and evidence entries. A `window_live` state reads the route status:
 
-- `active` - the closing step is active and the card is not owned;
-- `ahead` - the step is not started and the card is not owned;
-- `check` - a Tier B step is done or failed; this is **not** a hard lost claim;
+- `not_yet` - an `opens` fact gate is not met in this save; it is ledger-only;
+- `active` - the opening step is active and the card is not owned;
+- `ahead` - the opening step is not started and the card is not owned;
+- `check` - a Tier B step is done or failed, or a one-time source with a fallback is past; this is
+  **not** a hard lost claim;
 - `passed` - a Tier A one-time source is done or failed;
 - `owned` - the save (or a manual tick) owns the card, so the deadline sentence is silent; the
   classification badge and Tier B source/date remain visible;
@@ -104,17 +111,29 @@ that the player owns it, and it is not a collection grant. The reviewed layer se
 - `vendor` - usable only while that vendor exists;
 - `deck_definition` / `opponent_deck` - not ownership and not a reward.
 
-A `none` classification that rests only on a deck definition is unsafe. The first case found is
-**Sigismund Dijkstra**: `cg100_no_mans_land.w2phase` contains an `AddItemQuestExt` grant for
-`gwint_card_dijkstra`, so the Baron is a real source even though the card also appears in the
-Northern Kingdoms deck list. The reviewed window for this card is still `none` in 1.3; the
-generator and the reviewed input need the availability row before the app may claim a closing
-window. Recording the finding is deliberate: the old row said the source stays available after
-every route step, which the Baron's own phase does not prove.
+A `none` classification that rests only on a deck definition is unsafe. The first case found was
+**Sigismund Dijkstra**: `cg100_no_mans_land.w2phase` block 551 contains an `AddItemQuestExt` grant
+for `gwint_card_dijkstra`, so the Baron is a real source even though the card also appears in the
+Northern Kingdoms deck list. The row is now reviewed as **one_time**, with the bookkeeping in
+`data/card_window_review.json`:
 
-The same audit is open for any card whose only "persistent" evidence is a deck definition or an
-opponent deck. Until that row exists, the ledger shows the card and its `unknown source` or
-`NO WINDOW` badge; the NOW band does not warn about it.
+| save state | `window_live` |
+|---|---|
+| `cg_baron_discovered` not set | `not_yet` - the source is not open yet |
+| `cgnomansland` not started, fact set | `ahead` - ledger only |
+| `cgnomansland` active, fact set, not owned | `active` - the one-time window is open |
+| `cgnomansland` done, not owned | `check` - the office fallback may still exist |
+| owned | `owned` - the row is silent |
+
+The row names `The Baron's office` as the fallback and never becomes a Tier B missable claim. It
+is a one-time source, so it stays out of the NOW band; MORE > CARDS shows the exact source. The
+newest and median saves own the card; the earliest save is `not_yet` because the Baron has not
+been discovered. The active/check rows are Rust fixtures because no corpus save is after the
+Baron line with the card still unowned.
+
+The same rule now covers every card whose only "persistent" evidence was a deck definition or an
+opponent deck: the generator emits the explicit unknown-source row instead of a false no-window
+claim. The 16 basic Northern Kingdoms cards in that position are the audit's visible result.
 
 ## Checks
 
@@ -127,5 +146,7 @@ py tools/cards.py check
 `cardwindows.py check` fails if any card is missing, a Tier B row lacks a source/URL/review date, a
 window step is not a route node, the two generated files disagree, the denominator is not 224, the
 pack/leader split is wrong, the missable count is a bare zero, the report does not declare itself the
-static half, a no-window row has no `sources_checked`, or a no-window reason names only a category.
-The test file mutates the real payload to prove those failures actually fire.
+static half, a no-window row has no `sources_checked`, a no-window reason names only a category, a
+`missable` or `one_time` row has no `opens` step, an `opens` fact is not in the game's fact index,
+a `none` row hides a one-time source, or a no-window row rests only on a deck definition. The test
+file mutates the real payload to prove those failures actually fire (13 tests).

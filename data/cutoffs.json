@@ -716,7 +716,31 @@
       "event_name": "the start of Battle Preparations",
       "evidence": "files",
       "saves": {},
-      "resources": []
+      "resources": [],
+      "turn_in": {
+        "requires": [
+          "mq3012_noble_statuette",
+          "mq3012_soldier_statuette"
+        ],
+        "both": {
+          "headline": "Both statuettes in hand - talk to Triss now",
+          "action": "Talk to Triss during Final Preparations"
+        },
+        "neither": {
+          "headline": "Find both statuettes, then talk to Triss",
+          "action": "Find both statuettes before Final Preparations ends"
+        },
+        "missing": {
+          "mq3012_noble_statuette": {
+            "headline": "You still need the nobleman statuette",
+            "action": "Find the nobleman statuette, then talk to Triss"
+          },
+          "mq3012_soldier_statuette": {
+            "headline": "You still need the soldier statuette",
+            "action": "Find the soldier statuette, then talk to Triss"
+          }
+        }
+      }
     }
   ]
 }

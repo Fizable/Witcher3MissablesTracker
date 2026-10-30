@@ -524,8 +524,10 @@ function cardEvidence(card) {
   const tier = w.tier_rank ? 'Tier ' + w.tier_rank + ' - ' + stateText(w.tier) : 'no tier';
   line('Classification: ' + (w.kind === 'missable' ? 'missable' : 'one-time source') + ' · ' + tier + '.');
   if (w.step_title || w.step) line('Closing step: ' + (w.step_title || w.step) + ' (' + (w.step || 'no step') + ').');
+  if (w.opens) line('Opens at: ' + (w.opens.step || 'unknown') + (w.opens.note ? ' - ' + w.opens.note : '') + '.');
   if (w.event) line('Event: ' + w.event + '.');
   if (w.mechanism) line('Mechanism: ' + w.mechanism);
+  (w.fallback || []).forEach((f) => line('Fallback: ' + (f.value || f.kind) + (f.note ? ' - ' + f.note : '') + '.'));
   if (w.source) {
     const s = w.source;
     line('Community source: ' + s.name + (s.url ? ' - ' + s.url : '') + ' · reviewed ' + s.reviewed + '.');

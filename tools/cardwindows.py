@@ -34,7 +34,10 @@ REVIEW = TRACKER / "data" / "card_window_review.json"
 OUT = TRACKER / "data" / "card_windows.json"
 ROUTE = TRACKER / "data" / "route.json"
 
-PERSISTENT = {"vendor", "random_merchant", "starter_deck", "deck_default"}
+PERSISTENT = {"vendor", "random_merchant", "deck_default", "collection_grant"}
+# A deck list says a card can appear in a deck; it does not say the player owns it. These rows
+# are evidence, never a persistent source, and a no-window row may not rest on them alone.
+DECK_ONLY = {"deck_definition", "opponent_deck"}
 ONE_TIME = {"phase_grant", "quest", "unique", "reward", "merchant_card", "native_script"}
 SOURCE_PRIORITY = {
     "phase_grant": 0,
@@ -47,6 +50,18 @@ SOURCE_PRIORITY = {
 TIER_RANK = {"gamefile": "A", "community": "B", "unknown": "C"}
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 PLACEHOLDERS = ("<", ">", "TODO", "TBD", "FIXTURE")
+
+_FACTS = None
+
+
+def _known_facts():
+    """Every fact the game's own script index names, so reviewed gates cannot invent one."""
+    global _FACTS
+    if _FACTS is None:
+        path = HERE / "fact_index.json"
+        _FACTS = ({row.get("fact") for row in load_json(path) if isinstance(row, dict) and row.get("fact")}
+                  if path.exists() else set())
+    return _FACTS
 
 
 class DuplicateKey(ValueError):
@@ -181,6 +196,10 @@ def _no_window_reason(card):
     if "unknown" in kinds:
         return (f"Checked {count} source row(s), including {sample}; no concrete source row "
                 "exists, so no journal phase or failure can be attached.")
+    if set(kinds) <= DECK_ONLY:
+        return (f"Checked {count} source row(s), including {sample}; a deck definition or opponent "
+                "deck is not ownership, and no collection grant, phase grant or journal failure "
+                "closes this card.")
     if set(kinds) & PERSISTENT:
         return (f"Checked {count} source row(s), including {sample}; the source remains "
                 "available after every route step, and no phase grant or journal failure "
@@ -249,6 +268,13 @@ def _reviewed_window(card_id, row, review, titles):
         if not isinstance(item, dict) or not item.get("kind") or item.get("value") in (None, ""):
             raise SystemExit(f"{card_id}: evidence rows need kind and value")
     window["evidence"] = evidence
+    if kind in ("missable", "one_time"):
+        # Every window names the step that opens it. Without one it is ledger-only; the checker
+        # refuses a band claim that cannot say when the player can act on it.
+        opens = row.get("opens")
+        window["opens"] = dict(opens) if isinstance(opens, dict) else {"step": row["step"]}
+        if row.get("fallback") is not None:
+            window["fallback"] = row["fallback"]
     return window
 
 
@@ -284,6 +310,7 @@ def _auto_window(card, titles):
             "event": "The one-time source passes",
             "mechanism": row.get("text", "One-time gamefile source."),
             "evidence": _evidence(row),
+            "opens": {"step": row["step"]},
         }
     return {
         "kind": "none",
@@ -429,6 +456,36 @@ def _validate_window(card, window, route_ids, errors):
                 errors.append(f"{cid}: window needs {key}")
         if not isinstance(window.get("evidence"), list) or not window["evidence"]:
             errors.append(f"{cid}: window needs evidence")
+        opens = window.get("opens")
+        if not isinstance(opens, dict):
+            errors.append(f"{cid}: a window needs opens (a step that opens it)")
+        else:
+            gate = opens.get("step")
+            if not isinstance(gate, str) or gate not in route_ids:
+                errors.append(f"{cid}: opens.step {gate!r} is not a route node")
+            requires = opens.get("requires", [])
+            if not isinstance(requires, list):
+                errors.append(f"{cid}: opens.requires must be a list")
+            else:
+                for cond in requires:
+                    if not isinstance(cond, dict) or cond.get("kind") not in ("fact", "item", "step"):
+                        errors.append(f"{cid}: an opens condition needs kind fact, item or step")
+                        continue
+                    value = cond.get("value")
+                    if not isinstance(value, str) or not value.strip():
+                        errors.append(f"{cid}: an opens condition needs a value")
+                    elif cond["kind"] == "fact" and value not in _known_facts():
+                        errors.append(f"{cid}: opens condition {value!r} is not a real fact")
+                    elif cond["kind"] == "step" and value not in route_ids:
+                        errors.append(f"{cid}: opens condition step {value!r} is not a route node")
+        fallback = window.get("fallback")
+        if fallback is not None:
+            if not isinstance(fallback, list) or not fallback:
+                errors.append(f"{cid}: fallback must be a non-empty list when present")
+            else:
+                for row in fallback:
+                    if not isinstance(row, dict) or not row.get("kind") or row.get("value") in (None, ""):
+                        errors.append(f"{cid}: fallback rows need kind and value")
     if kind == "missable" and tier == "community":
         source = window.get("source")
         if not isinstance(source, dict):
@@ -442,6 +499,18 @@ def _validate_window(card, window, route_ids, errors):
             if not DATE.fullmatch(str(source.get("reviewed", ""))):
                 errors.append(f"{cid}: community source review date is not YYYY-MM-DD")
     if kind == "none":
+        # A phase or quest grant with a route step is a one-time source. Hiding it under a
+        # no-window row is the Dijkstra bug: the ledger would say the card never closes while a
+        # real quest phase hands it out.
+        step_sources = [row for row in card.get("sources") or []
+                        if isinstance(row, dict) and row.get("kind") in ONE_TIME and row.get("step")]
+        if step_sources:
+            errors.append(f"{cid}: a no-window row hides a one-time source "
+                          f"({step_sources[0].get('kind')} in {step_sources[0].get('step')})")
+        kinds = _source_kinds(card)
+        if tier != "unknown" and kinds and kinds <= DECK_ONLY:
+            errors.append(f"{cid}: a deck definition is not a persistent source; use the "
+                          "unknown-source row unless a collection grant exists")
         reason = window.get("reason")
         if not isinstance(reason, str) or not reason.strip():
             errors.append(f"{cid}: a no-window row needs a reason")
@@ -546,8 +615,11 @@ def validate(doc, report, review, route_ids):
         errors.append("gwent_cards.json missable_windows.reviewed is not true")
     if reviewed.get("tier_b") != expected["tier_b"]:
         errors.append("gwent_cards.json missable_windows.tier_b does not match the window rows")
-    if doc.get("counts", {}).get("unknown_source") != 8:
-        errors.append("gwent_cards.json unknown_source count is not the audited 8")
+    expected_unknown = sum(1 for card in cards
+                           if isinstance(card, dict)
+                           and (card.get("source") or {}).get("kind") == "unknown")
+    if doc.get("counts", {}).get("unknown_source") != expected_unknown:
+        errors.append("gwent_cards.json unknown_source count does not match its source rows")
     if doc.get("counts", {}).get("missable") != expected["missable"]:
         errors.append("gwent_cards.json counts.missable does not match the window rows")
     return errors, warnings

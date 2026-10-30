@@ -1,6 +1,6 @@
 # Next Phase Plan — Witcher 3 Missables Tracker
 
-Status: ready for autonomous execution.
+Status: complete; 1.3.0 built and verified 2026-10-30.
 Owner: the next coding agent.
 Workspace: `C:\Steam\steamapps\common\The Witcher 3\w3tracker` (Rust + Tauri 2, version in `Cargo.toml`).
 Scope: the `w3tracker/` project only. The game install and the saves are read-only. This plan is the source of truth; the mission prompt in chat is the entry point.
@@ -434,10 +434,10 @@ Update this table after each phase. Include the command, the key counts, and the
 |---|---|---|---|
 | 0 — Definitions | Complete | `DESIGN.md` sections 9-10 (state model, acceptance table, six scenarios); `BACKEND_CONTRACT.md` todo/TopItem/card states; `README.md` tick and card wording; `CARD-WINDOWS.md` source model. Docs only, no code behaviour change. | b6ad822 |
 | 1 — Payload truth | Complete | `cargo test --locked`: 53 passed. Four isolated profiles: clean `top=[]`, `todo=0`; earliest `top=[]`, `todo=2`; median `todo=52`; newest `todo=65`, cards 129/94/1. `--dump` top equals `--view` top on all four. Tick table run on real saves: Not started + note stays Not started; Active + note stays Active; Done and Failed keep their state and clear the watch. Detail/search share `verdict_for`. | b6ad822 |
-| 2 — Availability | Partial | `CARD-WINDOWS.md` records the source model and the Dijkstra finding: `cg100_no_mans_land.w2phase` is a real `AddItemQuestExt` grant, so the current `none` row is unsafe. Reclassification, the extractor walk, `opens` gates for the 15 reviewed windows and the 224-card audit are **not done**; no card data was changed. No `not_yet` card enters `top`. | b6ad822 |
+| 2 — Availability | Complete | 224 cards = 15 missable (15 Tier B) + 17 one-time + 192 no-window; 200 sourced / 24 explicit unknown. `starter_deck` split into `deck_definition` (weak) and `collection_grant`; Dijkstra reclassified from `none` to one-time at `cgnomansland`, opened by `cg_baron_discovered`, with the Baron's office fallback. All 15 reviewed windows carry `opens`; 17 one-time rows carry an open gate. `cardwindows.py check` green; `test_cardwindows.py` 13/13; `cards.py check` green; 56 Rust tests. | see below |
 | 3 — Remaining completeness | Complete (product conflict documented) | Choice warning is a NOW item from runtime ending branches, live only on an Active quest. Sixth `Tracked` section is gone: the matrix owns the section list and `effective_route` no longer inserts a section. Flag vs Active is guarded and tested. Gwent/HoS coverage reads `not modelled`. Tests added for the default payload, the tick table, flags, choice items, offline/read-only. Mutation checks 1,3,4,5,6,7 pass. Conflicts: engine test passes; the four shipped targets are one per outcome group, so a selectable conflict is impossible in 1.3 and is recorded as such rather than given fake targets. | b6ad822 |
 | 4 — UX | Complete | Tick is a plain NOTE button on the detail page, disclosure renamed "Something wrong with this reading?"; PROGRESS shows a pencil note, never a green check, for a note-only tick. Auto-open resets on a new read error; a corrupt save names the file and the retry; a failed Browse reports in the folder panel. Setup card moved below NOW; gear renamed `my game · goals`; MORE carries an aria label. Six first-run scenarios at 480x820 recorded in `DESIGN.md` 10.1; DOM checks run against the real `ui/` with a stubbed bridge. | b6ad822 |
-| 5 — Verification and release | Complete (release withheld) | `cargo test --locked` 53/53; `cargo build --release`; 83 JSON checks green across four profiles; mutation checks green; logs read. **Release withheld**: Phase 2 is incomplete, and section 9 forbids a version bump while any phase is incomplete. The tree stays a green, runnable build. Remaining step: finish the Phase 2 card audit, then bump 1.2.2 to 1.3.0 and run `package.ps1 -Bump minor`. | b6ad822 |
+| 5 — Verification and release | Complete | `cargo test --locked` 56/56; `py tools/cardwindows.py check`; `py tools/test_cardwindows.py` 13/13; `py tools/cards.py check`; three copied saves + clean; statuette turn-in both (newest) / soldier missing (median) / neither (earliest); Dijkstra owned (newest, median) and not_yet (earliest), active/check/fallback in Rust fixtures; `--dump` top equals `--view` top on all; `package.ps1 -Bump minor` built 1.3.0; packaged exe verified; artifact hashes in `docs/RELEASE-1.3.0.md`. | see below |
 
 ---
 
@@ -455,7 +455,10 @@ Record new decisions here. Do not silently change a locked decision.
 | 2026-10-30 | The fourth warning is built at runtime from `branches.json` facts named by reviewed targets, not by hand-editing generated `route.json`. | Payload-first and regenerable; the band names the quest and never the choice. |
 | 2026-10-30 | The choice warning only fires on an `Active` quest. | A future choice is ledger data, not a decision the player can make now. |
 | 2026-10-30 | Coverage marks any pack with `with_cards == 0` as `not modelled` with a reason. | A measured zero and an unmodelled pack are not the same claim. |
-| 2026-10-30 | No 1.3.0 release in this run. | Phase 2 is incomplete; the release protocol forbids a bump while a phase is incomplete. |
+| 2026-10-30 | Release 1.3.0 after Phase 2 completed. | All phases green; 56 Rust tests, 13 checker mutation tests, three real saves, clean profile, packaged artifact. |
+| 2026-10-30 | A deck definition is not ownership; 16 starter-deck basics are explicit unknown-source rows. | The `north` deck list is not a collection grant; the save's collection still decides owned. |
+| 2026-10-30 | Dijkstra is one-time, not missable. | The office is a fallback, so a closed step cannot be called lost; one-time rows stay out of NOW. |
+| 2026-10-30 | Turn-in wording is data-driven from `cutoffs.json` facts. | The watch names both/one/neither statuettes without hardcoding a step id in Rust. |
 
 ---
 

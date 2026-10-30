@@ -134,7 +134,7 @@ def build(verbose=True):
         open_before = max([n.get("open_before", 0) for n in numbers] or [0])
         later = max([n.get("later_finished", 0) for n in numbers] or [0])
         why = item["why"].replace("{binding}", game_name(binding)).replace("{binding_name}", binding)
-        return {
+        out = {
             "id": item["id"], "level": item.get("level", "stop"), "mechanism": item["mechanism"],
             "resource": item["resource"], "binding": binding, "binding_title": game_name(binding),
             "affected": affected, "affected_titles": [game_name(a) for a in affected],
@@ -149,6 +149,9 @@ def build(verbose=True):
             "saves": {"open_before": open_before, "finished_after": later},
             "resources": sorted(resources),
         }
+        if item.get("turn_in") is not None:
+            out["turn_in"] = item["turn_in"]
+        return out
 
     resolved = [resolve(i) for i in (review.get("items", []) + review.get("windows", []))]
     for r in resolved:

@@ -974,6 +974,48 @@ pub fn verdict_json(v: &Verdict, display: &str) -> Value {
     json!({"verdict": v.verdict, "headline": v.headline, "details": v.details, "display": display})
 }
 
+/// A reviewed turn-in whose wording depends on the save's facts. It never changes whether the
+/// window is live; it only names what is still missing, or that both items are in hand.
+pub fn turn_in_text(item: &mut Value, facts: &HashSet<String>) -> bool {
+    let Some(turn) = item.get("turn_in").cloned() else { return false };
+    let live = item.get("live").and_then(|x| x.as_str()).unwrap_or("");
+    if !matches!(live, "ahead" | "inside" | "check") {
+        return false;
+    }
+    let requires: Vec<String> = turn
+        .get("requires")
+        .and_then(|x| x.as_array())
+        .map(|a| a.iter().filter_map(|x| x.as_str().map(String::from)).collect())
+        .unwrap_or_default();
+    if requires.is_empty() {
+        return false;
+    }
+    let missing: Vec<&String> = requires.iter().filter(|f| !facts.contains(*f)).collect();
+    let row = if missing.is_empty() {
+        turn.get("both")
+    } else if missing.len() == requires.len() {
+        turn.get("neither")
+    } else {
+        turn.get("missing").and_then(|m| m.get(missing[0].as_str()))
+    };
+    let Some(row) = row else { return false };
+    if let Some(h) = row.get("headline").and_then(|x| x.as_str()) {
+        item["headline"] = json!(h);
+    }
+    if let Some(a) = row.get("action").and_then(|x| x.as_str()) {
+        item["action"] = json!(a);
+    }
+    let note = if missing.is_empty() {
+        "Both items are in the save's facts."
+    } else if missing.len() == requires.len() {
+        "The save has neither item."
+    } else {
+        "One of the two items is still missing."
+    };
+    item["live_note"] = json!(note);
+    true
+}
+
 /// true when the route step reads this journal quest file (or one of its objectives / alternatives)
 pub fn tracks(n: &Node, short_name: &str) -> bool {
     n.files.iter().any(|f| f.split('#').next() == Some(short_name) || f.split('|').any(|x| x == short_name))
@@ -1167,6 +1209,39 @@ mod tests {
         assert_eq!(manual.state, "done");
         assert_eq!(manual.source, "manual_reviewed");
         assert!(!manual.reason.contains("gamefile claim") || manual.reason.contains("not a gamefile"));
+    }
+
+    #[test]
+    fn a_reviewed_turn_in_names_what_is_still_missing() {
+        let turn = json!({
+            "requires": ["noble", "soldier"],
+            "both": {"headline": "Both in hand - talk now", "action": "Talk to Triss"},
+            "neither": {"headline": "Find both", "action": "Find both statuettes"},
+            "missing": {
+                "noble": {"headline": "Need the noble statuette", "action": "Find the noble statuette"},
+                "soldier": {"headline": "Need the soldier statuette", "action": "Find the soldier statuette"}
+            }
+        });
+        let both = HashSet::from(["noble".to_string(), "soldier".to_string()]);
+        let mut item = json!({"live": "inside", "turn_in": turn.clone()});
+        assert!(turn_in_text(&mut item, &both));
+        assert_eq!(item["headline"], "Both in hand - talk now");
+        assert_eq!(item["action"], "Talk to Triss");
+        assert!(item["live_note"].as_str().unwrap().contains("Both items"));
+
+        let noble = HashSet::from(["noble".to_string()]);
+        let mut item = json!({"live": "inside", "turn_in": turn.clone()});
+        assert!(turn_in_text(&mut item, &noble));
+        assert_eq!(item["headline"], "Need the soldier statuette");
+        assert!(item["live_note"].as_str().unwrap().contains("still missing"));
+
+        let none = HashSet::new();
+        let mut item = json!({"live": "ahead", "turn_in": turn.clone()});
+        assert!(turn_in_text(&mut item, &none));
+        assert_eq!(item["headline"], "Find both");
+
+        let mut lost = json!({"live": "lost", "turn_in": turn});
+        assert!(!turn_in_text(&mut lost, &both), "a lost window keeps its journal verdict");
     }
 
     #[test]

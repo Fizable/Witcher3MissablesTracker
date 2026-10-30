@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "reviewed": "2026-10-29",
-  "note": "Reviewed card-window decisions. Each entry below is a Tier B community-reviewed closing window; the generator adds a documented no-window or one-time classification to every other card from its gamefile source rows. The source is named, dated and shown in the UI. A Tier B row never becomes a hard LOST claim without save ownership and a file-backed step.",
+  "reviewed": "2026-10-30",
+  "note": "Reviewed card-window decisions. Every window names the step that opens it; a missable row also names its closing event, and a one-time row names the source window it came from. The generator adds a documented no-window or one-time classification to every other card from its gamefile source rows. The source is named, dated and shown in the UI. A Tier B row never becomes a hard LOST claim without save ownership and a file-backed step.",
   "sources": {
     "gwentchecklist_missable": {
       "name": "Gwent Checklist - All 15 Missable Gwent Cards",
@@ -33,9 +33,18 @@
       "mechanism": "Win all three Gwent rounds at the party; the Dandelion card is a one-time phase grant in sq301_dawn_estate.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
-      ]
+        {
+          "kind": "file",
+          "value": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "sq301triss"
+      }
     },
     "card_milva": {
       "kind": "missable",
@@ -45,9 +54,18 @@
       "mechanism": "Win all three Gwent rounds at the party; the Milva card is a one-time phase grant in sq301_dawn_estate.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
-      ]
+        {
+          "kind": "file",
+          "value": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "sq301triss"
+      }
     },
     "card_bruxa": {
       "kind": "missable",
@@ -57,9 +75,18 @@
       "mechanism": "Win all three Gwent rounds at the party; the Vampire: Bruxa card is a one-time phase grant in sq301_dawn_estate.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
-      ]
+        {
+          "kind": "file",
+          "value": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "sq301triss"
+      }
     },
     "card_fringilla": {
       "kind": "missable",
@@ -69,9 +96,18 @@
       "mechanism": "At the final choice keep the three cards instead of the coin; the alternative reward is gold.",
       "source": "fextralife_dangerous_game",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"
+        }
+      ],
+      "opens": {
+        "step": "sq310dangerousgame"
+      }
     },
     "card_isengrim": {
       "kind": "missable",
@@ -81,9 +117,18 @@
       "mechanism": "At the final choice keep the three cards instead of the coin; the alternative reward is gold.",
       "source": "fextralife_dangerous_game",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"
+        }
+      ],
+      "opens": {
+        "step": "sq310dangerousgame"
+      }
     },
     "card_natalis": {
       "kind": "missable",
@@ -93,9 +138,18 @@
       "mechanism": "At the final choice keep the three cards instead of the coin; the alternative reward is gold.",
       "source": "fextralife_dangerous_game",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://thewitcher3.wiki.fextralife.com/A_Dangerous_Game"
+        }
+      ],
+      "opens": {
+        "step": "sq310dangerousgame"
+      }
     },
     "leader_foltest_gold": {
       "kind": "missable",
@@ -105,9 +159,18 @@
       "mechanism": "Win every tournament round at the Passiflora; one loss closes all four leader rewards.",
       "source": "gwentchecklist_high_stakes",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/quests/high-stakes"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/quests/high-stakes"
+        }
+      ],
+      "opens": {
+        "step": "sq306maverick"
+      }
     },
     "leader_emhyr_gold": {
       "kind": "missable",
@@ -117,9 +180,18 @@
       "mechanism": "Win every tournament round at the Passiflora; one loss closes all four leader rewards.",
       "source": "gwentchecklist_high_stakes",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/quests/high-stakes"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/quests/high-stakes"
+        }
+      ],
+      "opens": {
+        "step": "sq306maverick"
+      }
     },
     "leader_francesca_gold": {
       "kind": "missable",
@@ -129,9 +201,18 @@
       "mechanism": "Win every tournament round at the Passiflora; one loss closes all four leader rewards.",
       "source": "gwentchecklist_high_stakes",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/quests/high-stakes"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/quests/high-stakes"
+        }
+      ],
+      "opens": {
+        "step": "sq306maverick"
+      }
     },
     "leader_eredin_gold": {
       "kind": "missable",
@@ -141,9 +222,18 @@
       "mechanism": "Win every tournament round at the Passiflora; one loss closes all four leader rewards.",
       "source": "gwentchecklist_high_stakes",
       "evidence": [
-        {"kind": "file", "value": "gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/quests/high-stakes"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/quests/high-stakes"
+        }
+      ],
+      "opens": {
+        "step": "sq306maverick"
+      }
     },
     "card_iorveth": {
       "kind": "missable",
@@ -153,8 +243,14 @@
       "mechanism": "Complete Shock Therapy; skipping or failing the quest closes the Iorveth card.",
       "source": "fandom_shock_therapy",
       "evidence": [
-        {"kind": "community", "value": "https://witcher.fandom.com/wiki/Shock_Therapy"}
-      ]
+        {
+          "kind": "community",
+          "value": "https://witcher.fandom.com/wiki/Shock_Therapy"
+        }
+      ],
+      "opens": {
+        "step": "mq2039vowofsilence"
+      }
     },
     "card_geralt": {
       "kind": "missable",
@@ -164,9 +260,19 @@
       "mechanism": "Play Thaler before Reason of State; if he dies in that quest the card is gone.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "gameplay/items/def_loot_quests.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/items/def_loot_quests.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "cgtalar",
+        "note": "Only while Thaler is still available; Reason of State closes the source."
+      }
     },
     "card_triss": {
       "kind": "missable",
@@ -176,9 +282,19 @@
       "mechanism": "Play Lambert at the Kaer Morhen reunion before the battle; the Triss card is his Old Pals reward.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "gameplay/items/def_loot_quests.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
-      ]
+        {
+          "kind": "file",
+          "value": "gameplay/items/def_loot_quests.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "cgoldfriends",
+        "note": "Only at the Kaer Morhen reunion, before the battle begins."
+      }
     },
     "leader_king_bran": {
       "kind": "missable",
@@ -188,9 +304,18 @@
       "mechanism": "Win the Turn, Turn, Tournament final; the King Bran leader is the tournament reward.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "dlc/bob/data/gameplay/rewards/rewards.xml"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
-      ]
+        {
+          "kind": "file",
+          "value": "dlc/bob/data/gameplay/rewards/rewards.xml"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "cg700mainquest"
+      }
     },
     "card_mrmirror": {
       "kind": "missable",
@@ -200,8 +325,56 @@
       "mechanism": "Complete the heist and take the auction route; the fallback merchant is only in Carsten during the quest.",
       "source": "gwentchecklist_missable",
       "evidence": [
-        {"kind": "file", "value": "dlc/ep1/data/quests/q603_bank.w2phase"},
-        {"kind": "community", "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"}
+        {
+          "kind": "file",
+          "value": "dlc/ep1/data/quests/q603_bank.w2phase"
+        },
+        {
+          "kind": "community",
+          "value": "https://gwentchecklist.com/guides/most-missable-gwent-cards"
+        }
+      ],
+      "opens": {
+        "step": "q603bank"
+      }
+    },
+    "card_dijkstra": {
+      "kind": "one_time",
+      "tier": "gamefile",
+      "step": "cgnomansland",
+      "event": "The Baron's Gwent game ends",
+      "mechanism": "Win the unique card from the Baron during Gwent: Velen Players; the Baron's office is the fallback source.",
+      "opens": {
+        "step": "cgnomansland",
+        "requires": [
+          {
+            "kind": "fact",
+            "value": "cg_baron_discovered",
+            "cmp": ">= 1"
+          }
+        ],
+        "note": "Only while the Baron is available in Gwent: Velen Players."
+      },
+      "fallback": [
+        {
+          "kind": "container",
+          "value": "The Baron's office",
+          "note": "Check the office before the Baron line ends; it is the second source."
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "file",
+          "value": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase"
+        },
+        {
+          "kind": "function",
+          "value": "AddItemQuestExt"
+        },
+        {
+          "kind": "container",
+          "value": "CQuestScriptBlock 551"
+        }
       ]
     }
   }

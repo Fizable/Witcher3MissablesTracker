@@ -65,11 +65,11 @@ DECK_NAMES = {
     "F_NORTHERN_KINGDOM": "Northern Kingdoms",
     "F_SKELLIGE": "Skellige",
 }
-SOURCE_KINDS = ("reward", "quest", "unique", "vendor", "phase_grant", "merchant_card",
-                "native_script", "random_merchant", "starter_deck", "deck_default",
-                "opponent_deck", "unknown")
-STRONG_KINDS = {"reward", "quest", "unique", "vendor", "phase_grant", "merchant_card",
-                "native_script", "random_merchant", "starter_deck", "deck_default"}
+SOURCE_KINDS = ("collection_grant", "reward", "quest", "unique", "vendor", "phase_grant",
+                "merchant_card", "native_script", "random_merchant", "deck_definition",
+                "deck_default", "opponent_deck", "unknown")
+STRONG_KINDS = {"collection_grant", "reward", "quest", "unique", "vendor", "phase_grant",
+                "merchant_card", "native_script", "random_merchant", "deck_default"}
 SOURCE_PRIORITY = {kind: i for i, kind in enumerate(SOURCE_KINDS)}
 PACKS = ("base", "ep1", "bob", "other_dlc", "gwent")
 ID = re.compile(r"^[a-z][a-z0-9_]{2,63}$")
@@ -215,7 +215,7 @@ def source_row(kind, text, **fields):
     for key, value in fields.items():
         if value not in (None, "", [], {}):
             row[key] = value
-    row["confidence"] = "weak" if kind == "opponent_deck" else (
+    row["confidence"] = "weak" if kind in ("opponent_deck", "deck_definition") else (
         "unknown" if kind == "unknown" else "strong")
     return row
 
@@ -346,11 +346,15 @@ def build_doc():
         pack = script_pack(path, row["function"])
         text = ("Collection grant by %s() in %s:%s"
                 % (row["function"], Path(path).name, row["line"]))
+        # A native collection grant is the one source that outranks a phase grant: the card is in
+        # the collection from the moment the game sets the deck up, not only from a quest phase.
+        kind = ("collection_grant" if row["function"] in
+                ("OnGwintSetupNewgame", "UnlockSkelligeGwentDeck") else "native_script")
         for name in row["names"]:
             for collection, index in card_refs(name, cards_by_name, card_items,
                                                leaders_by_name, leader_items_by_index):
                 add(collection, index, source_row(
-                    "native_script", text, file=path, function=row["function"],
+                    kind, text, file=path, function=row["function"],
                     line=row["line"], pack=pack))
     for row in native["random_pools"]:
         path, _root_pack = script_path(row["file"])
@@ -377,7 +381,9 @@ def build_doc():
                 opponent[index].add(deck["name"])
     for index in sorted(starter):
         add("main", index, source_row(
-            "starter_deck", "Northern Kingdoms starter deck card", file=DECK_FILE, pack="base"))
+            "deck_definition",
+            "Northern Kingdoms deck definition; a deck list is not a collection grant",
+            file=DECK_FILE, pack="base"))
     for index, names in sorted(opponent.items()):
         label = ", ".join(sorted(names))
         add("main", index, source_row(

@@ -169,10 +169,10 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 | NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card; no instruction key | 2026-10-30 |
 | UP NEXT | `view.todo` | tracked + in-log + next plan step only | clean: 0 ids; no available quest; no done/failed id | 2026-10-30 |
 | PLAN AHEAD | `view.target`, `get_plan` | plan survives guidance off; instructions gone | no plan with an empty target | 2026-10-30 |
-| quest detail | `get_detail` | statuette detail carries the live warning | clean: `guidance == null` | 2026-10-30 |
+| quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`; a lost window keeps its journal verdict | 2026-10-30 |
 | search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label | 2026-10-30 |
 | STATUS / PROGRESS | `view.completion` | 412 = 403 + 9; sections 96/183/35/87/11 | no sixth section; no single percentage | 2026-10-30 |
-| CARDS | `get_cards`, `set_card` | 224 cards, 15 Tier B, 129/94/1 owned | ahead row is not a NOW item | 2026-10-30 |
+| CARDS | `get_cards`, `set_card` | 224 cards, 15 Tier B + 17 one-time, 200 sourced / 24 explicit unknown, Dijkstra's Baron source and office fallback | ahead row is not a NOW item; a deck definition is not ownership; no `not_yet` in `top` | 2026-10-30 |
 | COVERAGE | `view.coverage` | measured counts per pack | `with_cards == 0` reads `not modelled` | 2026-10-30 |
 | goal picker | `get_targets`, `set_target` | only after opt-in | absent from the clean payload | 2026-10-30 |
 | outcomes / tradeoffs | `get_outcomes`, `view.tradeoffs` | engine conflict test | clean tradeoffs empty | 2026-10-30 |
@@ -183,6 +183,13 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 Invariants 1, 3, 4, 5, 6 and 7 each have a named test that fails when the guarantee is broken; the
 mutation runs are recorded in `NEXT-PHASE-PLAN.md` section 11. Invariant 2 is the tick truth table
 above, tested for every journal state. Invariant 8 is stated in the README and `NOTICE.txt`.
+
+Phase 2 adds the card-source audit: 224 rows = 15 reviewed missable windows (15 Tier B) +
+17 one-time sources + 192 documented no-window rows, with 200 sourced and 24 explicit unknown
+rows. A deck definition is no longer a persistent source. Dijkstra is a one-time Baron source
+(opened by `cgnomansland` and `cg_baron_discovered`, with the office as fallback); the statuette
+turn-in reads both/one/neither on the three real saves. `cardwindows.py check` enforces every
+rule and 13 mutation tests prove the checker fails when the rule is removed.
 
 ### 10.1 Six first-run scenarios at 480x820
 
