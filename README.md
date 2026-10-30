@@ -200,6 +200,7 @@ read.
 | `data/route_overrides.json` | The 9 kept manual steps and the 2 replacements, optional/conditional flags, the four user flags, and the Gwent file exceptions. |
 | `data/audit_*.json`, `data/guide_*.json` | Frozen wiki-era research. Kept for comparison; never loaded. |
 | `docs/BACKEND_CONTRACT.md` | Interface between the backend and the UI. |
+| `docs/DESIGN.md` | What the tracker is for, and the one question every change has to pass. |
 | `tools/` | The scripts that generate and check the route (read-only). |
 
 ## Contributing corrections
