@@ -64,6 +64,10 @@ struct Inner {
     save_mtime: Option<SystemTime>,
     ok_mtime: Option<SystemTime>,
     error: String,
+    // The save's Gwent ledger, decompressed once per save file version. The poll runs every two
+    // seconds and the collection block never changes while the path and mtime stay put, so the
+    // card report no longer re-opens the save on every tick.
+    card_cache: Option<(PathBuf, SystemTime, Result<save::CardCollection, String>)>,
     // user progress
     ticks: HashSet<String>,
     level: i64,
@@ -302,6 +306,7 @@ impl Inner {
             save_mtime: None,
             ok_mtime: None,
             error: String::new(),
+            card_cache: None,
             ticks,
             level,
             flags,
@@ -430,12 +435,18 @@ impl Inner {
 
     fn plan_report(&self, requested: Option<Vec<String>>) -> Value {
         let ev = self.eval();
+        self.plan_report_with(&ev, requested)
+    }
+
+    /// The plan for an eval the caller already computed. `view()` and `--dump` share this so the
+    /// route is evaluated once per payload instead of once per surface.
+    fn plan_report_with(&self, ev: &Eval, requested: Option<Vec<String>>) -> Value {
         let ids = requested.unwrap_or_else(|| self.selected.clone());
         let mut plan = plan::build(
             &self.endings,
             &self.outcomes,
             &ids,
-            &ev,
+            ev,
             &self.facts,
             self.ok_mtime.is_some(),
             &self.exclusive,
@@ -447,21 +458,30 @@ impl Inner {
         plan
     }
 
-    fn cards_report(&self) -> Value {
+    fn cards_report(&mut self, ev: &Eval) -> Value {
         // A card window reads the same route statuses the quest matrix reads; ownership is still
         // only the save or a manual tick, never the quest status.
-        let ev = self.eval();
         let statuses: HashMap<String, String> = ev
             .steps
             .iter()
             .map(|s| (s.n.id.clone(), s.status.clone()))
             .collect();
-        let Some(path) = self.save_path.as_ref() else {
+        let Some(path) = self.save_path.clone() else {
             return self.cards.report(None, false, "No save loaded.", &self.facts, &self.card_manual, &statuses);
         };
-        match save::card_collection(path) {
-            Ok(col) => self.cards.report(Some(&col), true, "", &self.facts, &self.card_manual, &statuses),
-            Err(e) => self.cards.report(None, false, &e, &self.facts, &self.card_manual, &statuses),
+        // One decompression per save version: the file's own path and mtime are the cache key. A
+        // failed read is cached too, so a save the game is still writing is not re-read twice per
+        // poll; the next write changes the mtime and retries.
+        let mtime = self.save_mtime.unwrap_or(SystemTime::UNIX_EPOCH);
+        let fresh = self.card_cache.as_ref().map(|(p, m, _)| p == &path && *m == mtime).unwrap_or(false);
+        if !fresh {
+            let col = save::card_collection(&path);
+            self.card_cache = Some((path, mtime, col));
+        }
+        let Some((_, _, col)) = self.card_cache.as_ref() else { unreachable!("the cache was just filled") };
+        match col {
+            Ok(c) => self.cards.report(Some(c), true, "", &self.facts, &self.card_manual, &statuses),
+            Err(e) => self.cards.report(None, false, e, &self.facts, &self.card_manual, &statuses),
         }
     }
 
@@ -1016,36 +1036,40 @@ impl Inner {
     /// one whose closer is still ahead is missable. `settled`/`unknown`/done never reach here. A
     /// Failed quest is its own entry. The list is empty when nothing is at stake - no heading, no
     /// reassuring placeholder.
-    fn view(&self) -> Value {
+    /// The one plan step UP NEXT may add: the first ahead step in plan order that the save has not
+    /// locked. Everything else ahead stays in the collapsed PLAN AHEAD line. `view()` and `--dump`
+    /// both call this so a selected goal cannot make their `todo` disagree.
+    fn next_plan(&self, ev: &Eval) -> Option<String> {
+        if self.selected.is_empty() {
+            return None;
+        }
+        self.plan_report_with(ev, None)
+            .get("steps")
+            .and_then(|x| x.as_array())
+            .and_then(|a| {
+                a.iter().find(|s| {
+                    s.get("state").and_then(|x| x.as_str()) == Some("ahead")
+                        && s.get("step")
+                            .and_then(|x| x.as_str())
+                            .and_then(|id| ev.byid.get(id))
+                            .map(|&i| ev.steps[i].locked.is_empty())
+                            .unwrap_or(false)
+                })
+            })
+            .and_then(|s| s.get("step"))
+            .and_then(|x| x.as_str())
+            .map(String::from)
+    }
+
+    fn view(&mut self) -> Value {
         let rt = self.effective_route();
         let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags, &self.facts);
         let target_evals = self.target_evals(&ev);
         // Goal chips and PLAN AHEAD survive guidance being off; only exact instructions are gated.
         let goal_steps = targets::goal_steps(&self.selected, &target_evals);
-        // The one plan step UP NEXT may add: the first ahead step in plan order that the save has
-        // not locked. Everything else ahead stays in the collapsed PLAN AHEAD line.
-        let next_plan = if self.selected.is_empty() {
-            None
-        } else {
-            self.plan_report(None)
-                .get("steps")
-                .and_then(|x| x.as_array())
-                .and_then(|a| {
-                    a.iter().find(|s| {
-                        s.get("state").and_then(|x| x.as_str()) == Some("ahead")
-                            && s.get("step")
-                                .and_then(|x| x.as_str())
-                                .and_then(|id| ev.byid.get(id))
-                                .map(|&i| ev.steps[i].locked.is_empty())
-                                .unwrap_or(false)
-                    })
-                })
-                .and_then(|s| s.get("step"))
-                .and_then(|x| x.as_str())
-                .map(String::from)
-        };
+        let next_plan = self.next_plan(&ev);
         let age = self.save_mtime.and_then(|m| SystemTime::now().duration_since(m).ok()).map(|d| d.as_secs()).unwrap_or(0);
-        let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("");
+        let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("").to_string();
         let mut steps: Vec<Value> = (0..ev.steps.len())
             .map(|i| model::step_json_goal(&rt, &ev, i, goal_steps.contains(&ev.steps[i].n.id)))
             .collect();
@@ -1077,7 +1101,7 @@ impl Inner {
             objs.insert(s.n.id.clone(), json!(v));
         }
         let error = if !self.db_error.is_empty() { self.db_error.clone() } else { self.error.clone() };
-        let card_report = self.cards_report();
+        let card_report = self.cards_report(&ev);
         let top = self.top_section(&ev, &steps, &card_report);
         let completion = self.completion(&ev, &steps, &card_report);
         let target = targets::target_json(&self.endings, &self.selected, &target_evals, self.guidance_on);
@@ -1414,12 +1438,18 @@ fn detail_json(g: &Inner, id: &str) -> Value {
     // With no usable save that would render a static cutoff as a live warning, so withhold the
     // watch row; the rest of the game-file evidence still explains what the step is.
     let step = model::step_json(&rt, &ev, i);
+    // `model::step_json` has no `watch`: the key is added by `attach_derived`, which is also what
+    // reads every cutoff against this save. Build the attached copy the step card uses and take its
+    // watch, or the fallback below is always empty and the two Triss statuette windows lose their
+    // warning and their Technical-details evidence.
+    let mut attached = model::step_json(&rt, &ev, i);
+    g.attach_derived(&mut attached, &ev.steps[i], &g.done_quests(&ev));
+    let attached_watch = attached.get("watch").cloned().unwrap_or(json!([]));
     let mut derived = g.derived.get("steps").and_then(|s| s.get(id)).cloned().unwrap_or(Value::Null);
     if let Some(obj) = derived.as_object_mut() {
         // The quest page reads the same watch the step card does: an ahead window is not a warning
         // there either, and with no usable save none of it is live.
-        let watch = if g.save_ready() { step.get("watch").cloned().unwrap_or(json!([])) } else { json!([]) };
-        obj.insert("watch".into(), watch);
+        obj.insert("watch".into(), if g.save_ready() { attached_watch } else { json!([]) });
     }
     json!({
         "step": step,
@@ -1483,7 +1513,9 @@ fn set_guidance(on: bool, app: tauri::AppHandle, st: State<Shared>) -> Value {
 
 #[tauri::command]
 fn get_cards(st: State<Shared>) -> Value {
-    st.0.lock().unwrap().cards_report()
+    let mut g = st.0.lock().unwrap();
+    let ev = g.eval();
+    g.cards_report(&ev)
 }
 
 #[tauri::command]
@@ -1491,7 +1523,8 @@ fn set_card(id: String, owned: bool, app: tauri::AppHandle, st: State<Shared>) -
     let (report, view) = {
         let mut g = st.0.lock().unwrap();
         g.set_card(id, owned)?;
-        (g.cards_report(), g.view())
+        let ev = g.eval();
+        (g.cards_report(&ev), g.view())
     };
     let _ = app.emit("view", view);
     Ok(report)
@@ -1694,7 +1727,8 @@ fn main() {
     // so a packaged build can be checked without opening a window.
     if let Some(i) = args.iter().position(|a| a == "--cards") {
         let out = args.get(i + 1).cloned().unwrap_or_else(|| "cards.json".into());
-        let _ = std::fs::write(out, serde_json::to_string_pretty(&inner.cards_report()).unwrap_or_default());
+        let ev = inner.eval();
+        let _ = std::fs::write(out, serde_json::to_string_pretty(&inner.cards_report(&ev)).unwrap_or_default());
         return;
     }
     if let Some(i) = args.iter().position(|a| a == "--targets") {
@@ -1734,7 +1768,8 @@ fn main() {
         for (i, s) in steps.iter_mut().enumerate() {
             inner.attach_derived(s, &ev.steps[i], &done_q);
         }
-        let card_report = inner.cards_report();
+        let card_report = inner.cards_report(&ev);
+        let next_plan = inner.next_plan(&ev);
         let top = inner.top_section(&ev, &steps, &card_report);
         let dump = json!({
             "save": inner.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or(""),
@@ -1742,7 +1777,7 @@ fn main() {
             "quest_files": inner.db.quests.len(),
             "states": inner.state,
             "status": status,
-            "todo": inner.todo_order(&ev, &steps, None).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "todo": inner.todo_order(&ev, &steps, next_plan.as_deref()).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": inner.tracked_json(&ev),
             "objectives": inner.objectives,
             // the route's fact-gated prerequisites, and whether this save has the game's own condition
