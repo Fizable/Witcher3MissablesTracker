@@ -1259,10 +1259,6 @@ fn sort_top(list: &mut [Value]) {
     });
 }
 
-fn short_title(t: &str) -> &str {
-    model::short(t)
-}
-
 /// A tradeoff edge names either a target id or an outcome id; the card should show the game's own
 /// reviewed label, never the internal id.
 fn edge_label(endings: &Value, outcomes_doc: &Value, value: &str) -> String {
