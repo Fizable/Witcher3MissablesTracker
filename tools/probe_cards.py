@@ -1,6 +1,6 @@
 """Read-only probe of the game's Gwent card data, before any card index is generated.
 
-Answers the step-6 questions of docs/PLAN-1.0-completion.md without changing the pipeline:
+Answers the step-6 (Gwent card source) questions of the retired 1.0 completion plan, without changing the pipeline:
 
   * where the card, item, leader and deck definitions live (shipping bundles + REDkit copies),
   * how many cards exist and whether their display names resolve through the string database,

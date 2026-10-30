@@ -1,6 +1,6 @@
 """Read-only probe of the game's DLC bundles, before any resource provider is written.
 
-Answers the step-2 questions of docs/PLAN-1.0-completion.md without changing the pipeline:
+Answers the step-2 (DLC extraction) questions of the retired 1.0 completion plan, without changing the pipeline:
 
   * how many .w2phase/.w2scene/.journal resources the DLC bundles contain,
   * whether those payloads parse with the same CR2W reader the toolchain uses,
