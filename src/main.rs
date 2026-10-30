@@ -775,6 +775,9 @@ impl Inner {
                 list.clear();
             } else {
                 list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
+                // An ahead window is reference data, not a warning on the quest card: it stays out
+                // of the payload until the closing quest is in the log and the turn-in is possible.
+                list.retain(|w| w.get("live").and_then(|x| x.as_str()) != Some("ahead"));
             }
         }
     }
@@ -814,7 +817,8 @@ impl Inner {
         let (verdict, headline) = match live {
             "lost" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
             "inside" | "check" | "passed" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
-            "ahead" => ("warn", w.get("headline").cloned().unwrap_or(Value::Null)),
+            // an ahead window is not a verdict: the route model's answer stands until the closing
+            // quest is in the log and the turn-in is possible
             // settled, missed, unknown: the journal has answered the question, so the route
             // model's own verdict stands and the warning is not repeated as advice
             _ => return out,
@@ -1208,7 +1212,9 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
                 // the cutoff fired but the journal still has the quest open: say what the save says
                 "passed" | "check" => ("risk", "stop", "CUTOFF PASSED - CHECK NOW"),
                 "inside" => ("risk", "stop", "DO THIS NOW"),
-                "ahead" => ("missable", "warn", "MISSABLE"),
+                // a window whose closing quest has not started is ledger-only: it is not
+                // something the player can act on, so it never enters the band
+                "ahead" => continue,
                 _ => continue,
             };
             let affected: Vec<String> = w.get("affected").and_then(|x| x.as_array()).into_iter().flatten()
@@ -1352,14 +1358,16 @@ fn detail_json(g: &Inner, id: &str) -> Value {
     // The detail pane falls back to `derived.watch` when the NOW band has no item for this step.
     // With no usable save that would render a static cutoff as a live warning, so withhold the
     // watch row; the rest of the game-file evidence still explains what the step is.
+    let step = model::step_json(&rt, &ev, i);
     let mut derived = g.derived.get("steps").and_then(|s| s.get(id)).cloned().unwrap_or(Value::Null);
-    if !g.save_ready() {
-        if let Some(obj) = derived.as_object_mut() {
-            obj.insert("watch".into(), json!([]));
-        }
+    if let Some(obj) = derived.as_object_mut() {
+        // The quest page reads the same watch the step card does: an ahead window is not a warning
+        // there either, and with no usable save none of it is live.
+        let watch = if g.save_ready() { step.get("watch").cloned().unwrap_or(json!([])) } else { json!([]) };
+        obj.insert("watch".into(), watch);
     }
     json!({
-        "step": model::step_json(&rt, &ev, i),
+        "step": step,
         "current_objectives": current,
         "derived": derived,
         "derived_source": g.derived.get("note").cloned().unwrap_or(Value::Null),
@@ -1813,9 +1821,9 @@ mod top_tests {
         assert_eq!(risk[0]["kind"], "risk");
         assert!(risk[0]["tag"].as_str().unwrap().contains("DO THIS NOW"));
         assert_eq!(risk[0]["action"], "Finish The Quest");
-        let miss = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
-        assert_eq!(miss[0]["kind"], "missable");
-        assert!(miss[0]["tag"].as_str().unwrap().contains("MISSABLE"));
+        // an ahead window is not actionable: it must never pad the band, even on an Active quest
+        let ahead = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
+        assert_eq!(ahead, json!([]), "an ahead window is a ledger row, not a NOW item");
     }
 
     #[test]

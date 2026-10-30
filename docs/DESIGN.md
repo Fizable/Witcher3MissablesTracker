@@ -166,7 +166,7 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 
 | surface | payload | positive test | negative test | last verified |
 |---|---|---|---|---|
-| NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card; no instruction key | 2026-10-30 |
+| NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card or quest window; no instruction key | 2026-10-30 |
 | UP NEXT | `view.todo` | tracked + in-log + next plan step only | clean: 0 ids; no available quest; no done/failed id | 2026-10-30 |
 | PLAN AHEAD | `view.target`, `get_plan` | plan survives guidance off; instructions gone | no plan with an empty target | 2026-10-30 |
 | quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`, `info` verdict, no live watch; a lost window keeps its journal verdict | 2026-10-30 |
@@ -251,6 +251,24 @@ ReShade finished its exit and uninstalled 45 hooks; RenoDX detached and logged p
 NativeBridge registered its functions OK; Beardmos logged its rain timer alive and its water list
 grown; OptiScaler's log is older (2026-09-29 14:42) and ends in a normal DLL detach; `scskiller.log`
 ends normally. These logs are from the user's session, not from a launch by this work.
+
+
+### 10.3 1.3.2 verification record
+
+1.3.0 and 1.3.1 put a quest cutoff whose closing quest had not started into the NOW band and turned
+it into a `warn` verdict on the quest page. The statuettes were the visible case: the band told the
+player to hand them in before Final Preparations while that quest was not in the log. 1.3.2 keeps
+`ahead` out of the band (as card windows already were), stops `verdict_for` overriding the route
+answer for it, and removes the row from the step payload and the detail pane. A quest with only a
+future window is `obtainable`, not `at_risk`. The gate is unchanged - the closing quest's journal -
+so the row returns as `DO THIS NOW` when Final Preparations is Active.
+
+Verified 2026-10-30 on `QuickSave_10aa70_7ea4f400_4141f72.sav` in a temporary profile: `--view` top
+held the Iorveth card alone where 1.3.1 also carried the statuette row; the statuette step's watch
+was empty and its classification `obtainable`; `--detail mq3012noblestatuette` returned `safe` with
+`derived.watch=[]` where 1.3.1 returned `warn` and "Both statuettes in hand - talk to Triss now".
+`cargo test --locked` reports 57 passed, and the band test now asserts that an `ahead` window on an
+Active quest yields an empty top.
 
 ## 11. How an audit uses this page
 
