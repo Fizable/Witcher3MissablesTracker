@@ -151,8 +151,10 @@ def build(verbose=True):
         }
         if item.get("turn_in") is not None:
             out["turn_in"] = item["turn_in"]
-        # an availability window carries what to say once the NPC has left
-        for k in ("gap_headline", "gap_action"):
+        # an availability window carries what to say once the NPC has left, and a window whose
+        # dialogue option opens later carries the fact that opens it (and what to do until then)
+        for k in ("gap_headline", "gap_action", "opens_at", "not_yet_headline", "not_yet_action",
+                  "dialogue", "close_gate"):
             if item.get(k):
                 out[k] = item[k]
         return out

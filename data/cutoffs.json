@@ -687,6 +687,8 @@
       "level": "stop",
       "mechanism": "journal_failure",
       "resource": "",
+      "community": "",
+      "community_phases": [],
       "affects": [
         "mq3012noblestatuette",
         "mq3012warriorstatuette"
@@ -711,7 +713,9 @@
       "files": [
         "quests\\bugfixing_phase.w2phase: journal blocks 6832 (noble) and 6796 (soldier) have connected Failure inputs fed by conditions 6828/6800; their shared pause condition 6808 ('q210 preparation complete') tests q210preparations.journal as Active or Success",
         "gameplay\\journal\\quests\\q210preparations.journal is Battle Preparations; its first phase is Novigrad ('Meet Avallac'h on the ship')",
-        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase is the turn-in; it tests q310_philippa_rescued and q310_keira_done, and its own phase activates triss.w2comm, so Now or Never's switch is a phase transition, not a cutoff"
+        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase is the turn-in; it tests q310_philippa_rescued and q310_keira_done, and its own phase activates triss.w2comm, so Now or Never's switch is a phase transition, not a cutoff",
+        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase blocks 526, 630 and 714 activate triss.w2comm phase q310_ap_triss_dandelions, the same window Final Preparations provides for the turn-in",
+        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase #161 CQuestContextDialogBlock 'default normal' hangs the turn-in on triss_default.w2scene and its branches test q310_philippa_rescued as set; py tools/dialog_windows.py dialogue --stem mq3012noblestatuette prints the branches"
       ],
       "caveats": [
         "No save in the corpus has a statuette still open when Battle Preparations starts, so the save history cannot confirm the window; the game's own connected Failure branch is the evidence.",
@@ -745,6 +749,16 @@
             "action": "Find the soldier statuette, then talk to Triss"
           }
         }
+      },
+      "opens_at": [
+        "q310_philippa_rescued"
+      ],
+      "not_yet_headline": "Triss will not take the statuettes yet",
+      "not_yet_action": "Rescue Philippa during Final Preparations, then talk to Triss at Dandelion's place",
+      "dialogue": {
+        "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+        "block": 161,
+        "class": "CQuestContextDialogBlock"
       }
     },
     {
@@ -752,6 +766,11 @@
       "level": "stop",
       "mechanism": "availability",
       "resource": "",
+      "community": "quests\\main_npcs\\community_files\\triss.w2comm",
+      "community_phases": [
+        "triss_default",
+        "q310_ap_triss_dandelions"
+      ],
       "affects": [
         "mq3012noblestatuette",
         "mq3012warriorstatuette"
@@ -772,15 +791,18 @@
       "binding_title": "Now or Never",
       "action": "Talk to Triss in Novigrad before Now or Never",
       "headline": "Hand both statuettes to Triss before she leaves Novigrad",
-      "why": "Triss is the turn-in for both statuettes, and she is in Novigrad until Now or Never. The statuette phase switches her community back on for its own scene, so the journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back for Final Preparations. The app says the window closed, not that the quest is lost.",
+      "why": "mq3012_jade_statuettes.w2phase activates exactly two Triss community phases: triss_default, her usual Novigrad spot, and q310_ap_triss_dandelions, her place at Dandelion's during Final Preparations (blocks 523/526, 627/630 and 710/714). The option itself is the quest's own context-dialogue block #161, hung on triss_default.w2scene, and its branches test q309_completed on the False output: the chat exists while Now or Never is not completed. q309_casablanca.w2phase moves her through a list of q309_triss_* phases for Now or Never, so triss_default is off and she has nothing to say about the statuettes while that quest runs; the app closes the window there, which is earlier than the fact gate and therefore safe. The statuette phase tests q310_philippa_rescued, which Final Preparations sets, and that is why q310_ap_triss_dandelions is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back.",
       "files": [
-        "gameplay\\journal\\quests\\q309mages.journal is Now or Never; its first phase is 'To Triss', and Triss's community is quests\\main_npcs\\community_files\\triss.w2comm",
-        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase activates triss.w2comm for the turn-in scene, so the journal stays Active when she leaves - an availability window, not a Failure branch",
-        "the same phase tests q310_philippa_rescued, which Final Preparations sets, and that is why the next window opens there"
+        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase blocks 523, 627 and 710 are CActivateStoryPhase on quests\\main_npcs\\community_files\\triss.w2comm with phase triss_default; blocks 526, 630 and 714 are the same class on the same community with phase q310_ap_triss_dandelions; blocks 532, 636 and 682 are CDeactivateSpawnset on the same file",
+        "quests\\part_2\\q309_casablanca.w2phase moves Triss through q309_triss_* phases (q309_triss_waits_hideout, q309_triss_harbour_wait, q309_triss_to_hideout and the rest), so triss_default is not her active phase while Now or Never runs",
+        "gameplay\\journal\\quests\\q309mages.journal is Now or Never; its first phase is 'To Triss'",
+        "the turn-in phase tests q310_philippa_rescued, which Final Preparations sets, and that is why q310_ap_triss_dandelions is the next window",
+        "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase #161 CQuestContextDialogBlock 'default normal' is the option on triss_default.w2scene; py tools/dialog_windows.py dialogue --stem mq3012noblestatuette prints its branches, including q309_completed on the False output"
       ],
       "caveats": [
         "Missing this window does not fail the quests and the app never calls them lost for it; it only says Triss has left.",
-        "The corpus has 195 saves with Now or Never done where the Nobleman Statuette is still Active (the Soldier in 173); no save in it finishes a statuette afterwards, so the second window rests on the turn-in phase's q310_philippa_rescued test."
+        "The swap proves she is not in her Novigrad phase while Now or Never runs; the app closes the window at that quest's first phase, which is conservative by a scene or two.",
+        "225 saves in the corpus have Now or Never done with the Nobleman Statuette still Active (the Soldier in 203), and none finishes a statuette afterwards; the two windows come from the phase activations, not from those saves."
       ],
       "event_name": "Triss leaving Novigrad on Now or Never",
       "evidence": "files+saves",
@@ -811,7 +833,75 @@
         }
       },
       "gap_headline": "Triss has left Novigrad - the next chance is Final Preparations",
-      "gap_action": "Talk to Triss in Novigrad during Final Preparations"
+      "gap_action": "Talk to Triss in Novigrad during Final Preparations",
+      "dialogue": {
+        "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+        "block": 161,
+        "class": "CQuestContextDialogBlock"
+      },
+      "close_gate": "q309_completed",
+      "phases": [
+        {
+          "phase": "triss_default",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 523
+        },
+        {
+          "phase": "triss_default",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 627
+        },
+        {
+          "phase": "triss_default",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 710
+        },
+        {
+          "phase": "triss_default",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 523
+        },
+        {
+          "phase": "triss_default",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 627
+        },
+        {
+          "phase": "triss_default",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 710
+        },
+        {
+          "phase": "q310_ap_triss_dandelions",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 526
+        },
+        {
+          "phase": "q310_ap_triss_dandelions",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 630
+        },
+        {
+          "phase": "q310_ap_triss_dandelions",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 714
+        },
+        {
+          "phase": "q310_ap_triss_dandelions",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 526
+        },
+        {
+          "phase": "q310_ap_triss_dandelions",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 630
+        },
+        {
+          "phase": "q310_ap_triss_dandelions",
+          "file": "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase",
+          "block": 714
+        }
+      ]
     }
   ]
 }

@@ -9,7 +9,9 @@ question: **what do I do next in this save, and what can I still lose?**
   window that is still ahead is not a warning and never enters the band; it is a row in
   **MORE > CARDS > LATER**. When nothing is at stake the band disappears.
 - **UP NEXT**: only what you can act on now - the quest you are tracking, quests already in your
-  log, and the one plan step that is next. Future goal steps sit under one collapsed **PLAN
+  log, and the one plan step that is next. A quest whose turn-in window is open right now is not
+  repeated here: the NOW band already carries it with the NPC and the deadline (the statuettes in
+  Final Preparations are the case this was written for). Future goal steps sit under one collapsed **PLAN
   AHEAD** line; unlocked route steps that are not in your log stay in PROGRESS. A plan step and a
   quest are one card, never two. The exact line appears only on the tracked goal step, and turning
   guidance off removes the line without removing the plan.
@@ -81,7 +83,14 @@ Unofficial fan tool. Not affiliated with CD PROJEKT RED. See `NOTICE.txt`.
   community cutoff ships (Brothers in Arms before The Isle of Mists, where two saves actually mark an
   ally quest `Failed` after the Isle) and one reviewed journal window (the statuettes, resolved when
   `q210preparations.journal` - Battle Preparations - starts, because the game's own failure branch
-  is gated by that journal). The 25 hand-written 0.1.9 events are frozen in `data/legacy_events.json`:
+  is gated by that journal). The dialogue side of that window is read from the option itself, not
+  from the journal: `mq3012_jade_statuettes.w2phase` block 161 is a context-dialogue block on Triss's
+  default conversation, and its branches test `q309_completed` on the False output (the chat exists
+  while Now or Never is not completed) and `q310_philippa_rescued` as set (it returns only after the
+  Philippa rescue in Final Preparations). `py tools/dialog_windows.py dialogue --stem
+  mq3012noblestatuette` prints those gates, `scan` finds the same shape on other quests, and the
+  second window carries that fact as `opens_at`: until your save has it, the card says the window is
+  not open yet instead of telling you to talk to her. The 25 hand-written 0.1.9 events are frozen in `data/legacy_events.json`:
   one is replaced by a file edge, 24 are dropped with their reason recorded. The count is reported
   honestly in the release notes, not promised.
 - **Route prerequisites are settled, not asserted.** Five reviewed edges keep the lock but test the

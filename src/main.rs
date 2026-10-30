@@ -680,6 +680,7 @@ impl Inner {
     /// another open quest, and the top section names it. The protected quest is `caution` - it keeps
     /// its place in DO NEXT, with the warning above it.
     fn todo_order(&self, ev: &Eval, steps: &[Value], next_plan: Option<&str>) -> Vec<usize> {
+        let open = open_window_ids(ev, steps);
         let mut unsafe_ids: HashSet<usize> = HashSet::new();
         let mut caution: HashSet<usize> = HashSet::new();
         for (i, v) in steps.iter().enumerate() {
@@ -708,7 +709,11 @@ impl Inner {
                 caution.insert(i);
             }
         }
-        model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution, next_plan)
+        let mut order = model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution, next_plan);
+        // A quest whose window is open is already the NOW band's instruction: the band says "do
+        // this now" with the NPC and the deadline, so the queue must not repeat it as well.
+        order.retain(|&i| !open.iter().any(|a| model::tracks(&ev.steps[i].n, a)));
+        order
     }
 
     /// the quest tracked in the game for the UI (null when the save has none)
@@ -774,7 +779,7 @@ impl Inner {
             if over {
                 list.clear();
             } else {
-                list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
+                list.retain_mut(|w| model::live_warning_facts(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked, &self.facts));
                 // An ahead window is reference data, not a warning on the quest card: it stays out
                 // of the payload until the closing quest is in the log and the turn-in is possible.
                 list.retain(|w| w.get("live").and_then(|x| x.as_str()) != Some("ahead"));
@@ -793,7 +798,7 @@ impl Inner {
         let d = self.derived.get("steps")?.get(&ev.steps[i].n.id)?;
         let mut list = d.get("watch")?.as_array()?.clone();
         let done_q = self.done_quests(ev);
-        list.retain_mut(|w| model::live_warning(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked));
+        list.retain_mut(|w| model::live_warning_facts(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked, &self.facts));
         // the page shows the strongest live row: a loss beats an open window, which beats the
         // note that the window has closed
         let rank = |w: &Value| match w.get("live").and_then(|x| x.as_str()) {
@@ -828,6 +833,8 @@ impl Inner {
             "inside" | "check" | "passed" => ("stop", w.get("headline").cloned().unwrap_or(Value::Null)),
             // the NPC is here now: act before they leave. It is a warning, not a loss.
             "open" => ("warn", w.get("headline").cloned().unwrap_or(Value::Null)),
+            // the dialogue option is not offered yet: name what opens it instead of nagging
+            "not_yet" => ("info", w.get("headline").cloned().unwrap_or(Value::Null)),
             // the window closed and the journal is still open: say where the next chance is
             "later" => ("info", w.get("headline").cloned().unwrap_or(Value::Null)),
             // an ahead window is not a verdict: the route model's answer stands until the closing
@@ -1215,6 +1222,32 @@ fn gate_instructions(plan: &mut Value, guidance_on: bool) {
             s["instructions"] = json!([]);
         }
     }
+}
+
+/// Journal quests whose window is open right now, read from the band's own rows. The NOW band
+/// already says "do this now" for them, with the NPC and the deadline, so UP NEXT must not list the
+/// same quest a second time as something still queued.
+fn open_window_ids(ev: &Eval, steps: &[Value]) -> HashSet<String> {
+    let mut out = HashSet::new();
+    for (i, v) in steps.iter().enumerate() {
+        let Some(list) = v.get("watch").and_then(|x| x.as_array()) else { continue };
+        let s = &ev.steps[i];
+        // The band only shows a step whose journal is open. A quest that was never accepted is
+        // still ahead of the player, not something to act on, so it keeps its place in the queue.
+        if !matches!(s.journal.as_str(), "Active" | "Failed") && !s.tick_disagrees {
+            continue;
+        }
+        for w in list {
+            if !matches!(w.get("live").and_then(|x| x.as_str()), Some("inside") | Some("open")) {
+                continue;
+            }
+            for id in w.get("affected").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str()) {
+                out.insert(id.to_string());
+            }
+        }
+    }
+    out
 }
 
 fn top_items(ev: &Eval, steps: &[Value]) -> Value {
@@ -1910,6 +1943,26 @@ mod top_tests {
         // the same unstarted quest is not reported as a loss: a fired cutoff did not catch it open
         let lost = top_items(&ev, &[step("mq3012noblestatuette", watch("passed", "mq3012noblestatuette"))]);
         assert_eq!(lost, json!([]));
+    }
+
+    #[test]
+    fn an_open_window_belongs_to_the_band_and_leaves_the_queue() {
+        let ev = eval("mq3012noblestatuette", "Active");
+        for live in ["open", "inside"] {
+            let row = step("mq3012noblestatuette", watch(live, "mq3012noblestatuette"));
+            assert!(open_window_ids(&ev, &[row]).contains("mq3012noblestatuette"),
+                    "{live} is an open window: the band carries it");
+        }
+        // everything that is not an open window leaves the quest in the queue: a window still
+        // ahead, one that closed, one whose NPC is not ready, and a passed or lost cutoff
+        for live in ["ahead", "later", "not_yet", "check", "passed", "lost", "settled"] {
+            let row = step("mq3012noblestatuette", watch(live, "mq3012noblestatuette"));
+            assert!(open_window_ids(&ev, &[row]).is_empty(), "{live} is not an open window");
+        }
+        // the same row on a quest the journal never accepted is not an instruction to act
+        let fresh = eval("mq3012noblestatuette", "Not started");
+        let row = step("mq3012noblestatuette", watch("open", "mq3012noblestatuette"));
+        assert!(open_window_ids(&fresh, &[row]).is_empty());
     }
 
     #[test]

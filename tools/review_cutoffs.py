@@ -206,6 +206,16 @@ def window_error(idx, w):
             return "the availability window names no file evidence"
         if not w.get("gap_headline"):
             return "the availability window does not say what to do when it closes"
+        import dialog_windows
+        err, _ = dialog_windows.community_evidence(idx, w)
+        if err:
+            return err
+        if w.get("opens_at") and not w.get("dialogue"):
+            return "a window with an opening gate must name the dialogue option that carries it"
+        if w.get("dialogue"):
+            err, _ = dialog_windows.dialogue_evidence(idx, w)
+            if err:
+                return err
         return ""
     for a in affects:
         q = idx["quests"].get(a)
@@ -228,6 +238,13 @@ def window_error(idx, w):
         return f"{phase} is not a phase in {closer}.journal"
     if not w.get("files"):
         return "the window names no file evidence"
+    if w.get("opens_at") and not w.get("dialogue"):
+        return "a window with an opening gate must name the dialogue option that carries it"
+    if w.get("dialogue"):
+        import dialog_windows
+        err, _ = dialog_windows.dialogue_evidence(idx, w)
+        if err:
+            return err
     return ""
 
 
@@ -236,6 +253,8 @@ def resolve_window(idx, name, w):
     out = {
         "id": w["id"], "level": w.get("level", "stop"), "mechanism": w.get("mechanism", "journal_failure"),
         "resource": w.get("resource", ""),
+        "community": w.get("community", ""),
+        "community_phases": w.get("community_phases", []),
         "affects": [a.lower() for a in w["affects"]],
         "affected_titles": [name.get(a.lower(), a) for a in w["affects"]],
         "closed_by": [closer], "closed_by_titles": [name.get(closer, closer)],
@@ -248,7 +267,8 @@ def resolve_window(idx, name, w):
     }
     if w.get("turn_in") is not None:
         out["turn_in"] = w["turn_in"]
-    for k in ("gap_headline", "gap_action"):
+    for k in ("gap_headline", "gap_action", "opens_at", "not_yet_headline", "not_yet_action",
+              "dialogue", "close_gate"):
         if w.get(k):
             out[k] = w[k]
     return out
@@ -356,6 +376,10 @@ def build():
                 decisions.append({"family": "window:" + str(w.get("id", "?")), "decision": "exclude", "why": why})
                 continue
             resolved = resolve_window(idx, name, w)
+            if resolved.get("mechanism") == "availability":
+                import dialog_windows
+                _, phases = dialog_windows.community_evidence(idx, w)
+                resolved["phases"] = phases
             windows.append(resolved)
             if resolved.get("mechanism") == "availability":
                 keep_why = (f"an availability window: {resolved['closes_at']} is a phase of "

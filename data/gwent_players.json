@@ -1,0 +1,602 @@
+{
+ "note": "Gwent opponent availability, read from the hub context-dialogue blocks (tools/dialogscan.py index) and joined to the route's own Gwent objectives and the card source rows. This is availability evidence, not a loss claim: a card window may use these facts as `opens.requires` (see card_dijkstra and cg_baron_discovered), but an ambiguous gate needs a review decision first.",
+ "players": [
+  {
+   "player": "crossroads innkeeper",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 371,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\no_mans_land\\quest_files\\cg100_no_mans_land\\scenes\\cg100_04_crossroads_innkeeper.w2scene",
+   "target_scene": "quests\\secondary_npcs\\default_dialogues\\crossroads_barkeep_default.w2scene",
+   "gates": [],
+   "steps": [
+    {
+     "step": "cginnkeepers",
+     "objective": "Win unique card from crossroads innkeeper"
+    }
+   ],
+   "gated": false,
+   "simple": false,
+   "cards": [
+    {
+     "id": "card_horn",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "card_impera_brigade2",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "card_nausicaa2",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "card_combat_engineer",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "leader_emhyr_bronze",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    }
+   ]
+  },
+  {
+   "player": "crossroads innkeeper",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 383,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\no_mans_land\\quest_files\\cg100_no_mans_land\\scenes\\cg100_04_crossroads_innkeeper.w2scene",
+   "target_scene": "quests\\part_1\\quest_files\\q101_agent\\scenes\\q101_01a_inkeep_int.w2scene",
+   "gates": [],
+   "steps": [
+    {
+     "step": "cginnkeepers",
+     "objective": "Win unique card from crossroads innkeeper"
+    }
+   ],
+   "gated": false,
+   "simple": false,
+   "cards": [
+    {
+     "id": "card_horn",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "card_impera_brigade2",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "card_nausicaa2",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "card_combat_engineer",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+     "id": "leader_emhyr_bronze",
+     "kind": "vendor",
+     "text": "Sold by Crossroads Innkeeper"
+    }
+   ]
+  },
+  {
+   "player": "lambert",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 1370,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\novigrad\\quest_files\\cg300_novigrad\\scenes\\cg300_05_lambert.w2scene",
+   "target_scene": "quests\\secondary_npcs\\default_dialogues\\lambert_default.w2scene",
+   "gates": [
+    {
+     "fact": "witcher3_game_finished",
+     "state": "set",
+     "via": 1395,
+     "set_by": [
+      {
+       "file": "quests\\videos_scenes\\ending_boards.w2phase",
+       "block": 137,
+       "comment": "witcher3_game_finished",
+       "quests": [
+        "q503newquest",
+        "q504ciriempress",
+        "q505cirifree"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "q403_lambert_dead",
+     "state": "set",
+     "via": 1246,
+     "set_by": [
+      {
+       "file": "quests\\part_2\\q403_battle.w2phase",
+       "block": 15701,
+       "comment": "Add q403_lambert_dead",
+       "quests": [
+        "q110postbattle",
+        "q403battle"
+       ]
+      },
+      {
+       "file": "quests\\part_2\\quest_files\\q403_battle\\phases\\q403_first_square.w2phase",
+       "block": 2634,
+       "comment": "Add q403_lambert_dead",
+       "quests": [
+        "q403battle"
+       ]
+      }
+     ],
+     "setter_count": 2,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "q403_completed",
+     "state": "set",
+     "via": 1246,
+     "set_by": [
+      {
+       "file": "quests\\part_2\\q403_battle.w2phase",
+       "block": 11859,
+       "comment": "Add q403_completed",
+       "quests": [
+        "q110postbattle",
+        "q403battle"
+       ]
+      },
+      {
+       "file": "quests\\part_2\\quest_files\\q403_battle\\phases\\q403_burial.w2phase",
+       "block": 14,
+       "comment": "Add q403_completed",
+       "quests": [
+        "q110postbattle",
+        "q403battle"
+       ]
+      }
+     ],
+     "setter_count": 2,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "q403_keira_saved_lambert",
+     "state": "set",
+     "via": 1246,
+     "set_by": [
+      {
+       "file": "quests\\part_2\\q403_battle.w2phase",
+       "block": 14842,
+       "comment": "Add q403_keira_saved_lambert",
+       "quests": [
+        "q110postbattle",
+        "q403battle"
+       ]
+      },
+      {
+       "file": "quests\\part_2\\quest_files\\q403_battle\\phases\\q403_first_square.w2phase",
+       "block": 1972,
+       "comment": "Add q403_keira_saved_lambert",
+       "quests": [
+        "q403battle"
+       ]
+      }
+     ],
+     "setter_count": 2,
+     "setter_note": "",
+     "ambiguous": true
+    },
+    {
+     "fact": "q401_completed",
+     "state": "set",
+     "via": 1254,
+     "set_by": [
+      {
+       "file": "quests\\part_1\\q401_konsylium.w2phase",
+       "block": 2751,
+       "comment": "q401_completed += 1",
+       "quests": [
+        "q401_hunt_with_eskel",
+        "q401_konsylium",
+        "q401_megascope",
+        "q401_phylactery",
+        "q401_reunion",
+        "q401_the_curse",
+        "searchforugly"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "q401_lambert_defeated_in_gwint",
+     "state": "set",
+     "via": 1310,
+     "set_by": [
+      {
+       "file": "quests\\part_1\\q401_konsylium.w2phase",
+       "block": 3936,
+       "comment": "q401_lambert_defeated_in_gwint += 1",
+       "quests": [
+        "q401_hunt_with_eskel",
+        "q401_konsylium",
+        "q401_megascope",
+        "q401_phylactery",
+        "q401_reunion",
+        "q401_the_curse",
+        "searchforugly"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "q403_keira_saved_lambert",
+     "state": "unset",
+     "via": 1258,
+     "set_by": [
+      {
+       "file": "quests\\part_2\\q403_battle.w2phase",
+       "block": 14842,
+       "comment": "Add q403_keira_saved_lambert",
+       "quests": [
+        "q110postbattle",
+        "q403battle"
+       ]
+      },
+      {
+       "file": "quests\\part_2\\quest_files\\q403_battle\\phases\\q403_first_square.w2phase",
+       "block": 1972,
+       "comment": "Add q403_keira_saved_lambert",
+       "quests": [
+        "q403battle"
+       ]
+      }
+     ],
+     "setter_count": 2,
+     "setter_note": "",
+     "ambiguous": true
+    }
+   ],
+   "steps": [
+    {
+     "step": "cgoldfriends",
+     "objective": "Win unique card from Lambert"
+    },
+    {
+     "step": "cgoldfriends",
+     "objective": "When occasion presents itself win unique card from Lambert"
+    }
+   ],
+   "gated": true,
+   "simple": false,
+   "cards": [
+    {
+     "id": "card_triss",
+     "kind": "quest",
+     "text": "Quest loot: cg300 lamberts card locker"
+    }
+   ]
+  },
+  {
+   "player": "olivier",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 526,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\novigrad\\quest_files\\cg300_novigrad\\scenes\\cg300_04_olivier.w2scene",
+   "target_scene": "gameplay\\community\\dialogues\\novigrad\\shops\\shop_novigrad_kingfisher_inn_olivier.w2scene",
+   "gates": [
+    {
+     "fact": "q309_saw_olivier_dead",
+     "state": "unset",
+     "via": 511,
+     "set_by": [
+      {
+       "file": "quests\\part_2\\q309_casablanca.w2phase",
+       "block": 10865,
+       "comment": "for gwint card minigame objective",
+       "quests": [
+        "q309mages"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": true
+    },
+    {
+     "fact": "q309_saw_olivier_dead",
+     "state": "set",
+     "via": 540,
+     "set_by": [
+      {
+       "file": "quests\\part_2\\q309_casablanca.w2phase",
+       "block": 10865,
+       "comment": "for gwint card minigame objective",
+       "quests": [
+        "q309mages"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": true
+    }
+   ],
+   "steps": [
+    {
+     "step": "cginnkeepers",
+     "objective": "Win unique card fro Olivier"
+    }
+   ],
+   "gated": true,
+   "simple": false,
+   "cards": [
+    {
+     "id": "card_tibor",
+     "kind": "quest",
+     "text": "Quest loot: cg300 oliviers card locker"
+    },
+    {
+     "id": "card_havcaaren_support3",
+     "kind": "vendor",
+     "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+     "id": "card_vrihedd_brigade2",
+     "kind": "vendor",
+     "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+     "id": "card_mahakam5",
+     "kind": "vendor",
+     "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+     "id": "card_havcaaren_medic3",
+     "kind": "vendor",
+     "text": "Sold by Kingfisher Inn Olivier"
+    }
+   ]
+  },
+  {
+   "player": "roche",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 856,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\novigrad\\quest_files\\cg300_novigrad\\scenes\\cg300_08_roche.w2scene",
+   "target_scene": "quests\\main_npcs\\default_dialogues\\roche_default.w2scene",
+   "gates": [
+    {
+     "fact": "mq3035_fdb_roche_talar_dead",
+     "state": "set",
+     "via": 864,
+     "set_by": [
+      {
+       "file": "quests\\minor_quests\\novigrad\\quest_files\\mq3035_emhyr\\phases\\mq3035_wrap_up.w2phase",
+       "block": 326,
+       "comment": "mq3035_fdb_roche_talar_dead ==1",
+       "quests": [
+        "mq3035_emhyr"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    }
+   ],
+   "steps": [
+    {
+     "step": "cgoldfriends",
+     "objective": "Win unique card from Roche"
+    }
+   ],
+   "gated": true,
+   "simple": true,
+   "cards": []
+  },
+  {
+   "player": "stjepan",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 175,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\novigrad\\quest_files\\cg300_novigrad\\scenes\\cg300_03_stjepan.w2scene",
+   "target_scene": "gameplay\\community\\dialogues\\novigrad\\shops\\shop_novigrad_whitebridge_inn_stjepan.w2scene",
+   "gates": [
+    {
+     "fact": "cg_stjepan_discovered",
+     "state": "set",
+     "via": 201,
+     "set_by": [],
+     "setter_count": 0,
+     "setter_note": "tested here but no phase sets it (scene or script)",
+     "logic": "or",
+     "ambiguous": false
+    },
+    {
+     "fact": "q001_talked_about_stjepan",
+     "state": "set",
+     "via": 201,
+     "set_by": [],
+     "setter_count": 0,
+     "setter_note": "tested here but no phase sets it (scene or script)",
+     "logic": "or",
+     "ambiguous": false
+    }
+   ],
+   "steps": [
+    {
+     "step": "cginnkeepers",
+     "objective": "Win unique card from Stjepan the innkeeper"
+    }
+   ],
+   "gated": true,
+   "simple": true,
+   "cards": [
+    {
+     "id": "card_horn",
+     "kind": "vendor",
+     "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+     "id": "card_vrihedd_brigade",
+     "kind": "vendor",
+     "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+     "id": "card_dwarf",
+     "kind": "vendor",
+     "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+     "id": "card_mahakam2",
+     "kind": "vendor",
+     "text": "Sold by Innkeeper Stjepan"
+    }
+   ]
+  },
+  {
+   "player": "thaler",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 1070,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\no_mans_land\\quest_files\\cg100_no_mans_land\\scenes\\cg100_06_talar.w2scene",
+   "target_scene": "quests\\secondary_npcs\\default_dialogues\\talar_default.w2scene",
+   "gates": [
+    {
+     "fact": "mq3035_fdb_roche_talar_dead",
+     "state": "set",
+     "via": 1077,
+     "set_by": [
+      {
+       "file": "quests\\minor_quests\\novigrad\\quest_files\\mq3035_emhyr\\phases\\mq3035_wrap_up.w2phase",
+       "block": 326,
+       "comment": "mq3035_fdb_roche_talar_dead ==1",
+       "quests": [
+        "mq3035_emhyr"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    }
+   ],
+   "steps": [],
+   "gated": true,
+   "simple": true,
+   "cards": []
+  },
+  {
+   "player": "thaler",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 1569,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\no_mans_land\\quest_files\\cg100_no_mans_land\\scenes\\cg100_06_talar.w2scene",
+   "target_scene": "quests\\secondary_npcs\\default_dialogues\\talar_default.w2scene",
+   "gates": [
+    {
+     "fact": "sq315_fdb_quest_complete",
+     "state": "set",
+     "via": 1546,
+     "set_by": [
+      {
+       "file": "quests\\sidequests\\novigrad\\quest_files\\sq315_talar\\phases\\sq315_investigation.w2phase",
+       "block": 1762,
+       "comment": "sq315_fdb_quest_complete",
+       "quests": [
+        "sq315talar"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "mq3035_fdb_roche_talar_dead",
+     "state": "set",
+     "via": 1542,
+     "set_by": [
+      {
+       "file": "quests\\minor_quests\\novigrad\\quest_files\\mq3035_emhyr\\phases\\mq3035_wrap_up.w2phase",
+       "block": 326,
+       "comment": "mq3035_fdb_roche_talar_dead ==1",
+       "quests": [
+        "mq3035_emhyr"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    },
+    {
+     "fact": "cg300_talar_omitted",
+     "state": "set",
+     "via": 1550,
+     "set_by": [
+      {
+       "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+       "block": 1001,
+       "comment": "",
+       "quests": [
+        "cginnkeepers",
+        "cgmetagatherall",
+        "cgoldfriends",
+        "cgtalar"
+       ]
+      }
+     ],
+     "setter_count": 1,
+     "setter_note": "",
+     "ambiguous": false
+    }
+   ],
+   "steps": [],
+   "gated": true,
+   "simple": true,
+   "cards": []
+  },
+  {
+   "player": "zoltan",
+   "file": "quests\\generic_quests\\card_minigame_all_hubs\\cg_card_minigame_meta.w2phase",
+   "block": 765,
+   "class": "CQuestContextDialogBlock",
+   "comment": "",
+   "scene": "quests\\generic_quests\\novigrad\\quest_files\\cg300_novigrad\\scenes\\cg300_02_zoltan.w2scene",
+   "target_scene": "quests\\secondary_npcs\\default_dialogues\\zoltan_chivay_default.w2scene",
+   "gates": [],
+   "steps": [],
+   "gated": false,
+   "simple": false,
+   "cards": []
+  }
+ ]
+}

@@ -726,7 +726,36 @@ fn join_titles(items: &[String]) -> String {
 /// route that switches the resource off. Only the save knows whether that is still ahead of you, already
 /// behind you, or the quest you are inside right now, so the sentence is rebuilt here rather than shown
 /// as advice that may be years out of date. Returns false when there is nothing left to warn about.
+/// Test-only entry point: a cutoff read without the save's facts.
+#[cfg(test)]
 pub fn live_cutoff(item: &mut Value, state: &HashMap<String, String>, done_q: &HashSet<String>, ticked_q: &HashSet<String>) -> bool {
+    live_cutoff_facts(item, state, done_q, ticked_q, &HashSet::new())
+}
+
+/// A window can open later than its journal phase: the turn-in dialogue is the game's own graph,
+/// and Triss tests `q310_philippa_rescued` before she will discuss the statuettes, however long
+/// Final Preparations has been running. An unmet opening gate is a note, never a "do this now".
+fn window_not_yet(item: &mut Value, facts: &HashSet<String>, saved: &str) -> bool {
+    let Some(list) = item.get("opens_at").and_then(|x| x.as_array()).filter(|a| !a.is_empty()) else {
+        return false;
+    };
+    if list.iter().filter_map(|x| x.as_str()).all(|f| facts.contains(f)) {
+        return false;
+    }
+    put(item, "live", json!("not_yet"));
+    put(item, "level", json!("info"));
+    put(item, "tag", json!("WINDOW NOT OPEN YET"));
+    if let Some(h) = item.get("not_yet_headline").and_then(|x| x.as_str()) {
+        put(item, "headline", json!(h));
+    }
+    if let Some(a) = item.get("not_yet_action").and_then(|x| x.as_str()) {
+        put(item, "action", json!(a));
+    }
+    put(item, "live_note", json!(saved));
+    true
+}
+
+pub fn live_cutoff_facts(item: &mut Value, state: &HashMap<String, String>, done_q: &HashSet<String>, ticked_q: &HashSet<String>, facts: &HashSet<String>) -> bool {
     let affected = qlist(item, "affected");
     let closed = qlist(item, "closed_by");
     if affected.is_empty() || closed.is_empty() {
@@ -819,6 +848,9 @@ pub fn live_cutoff(item: &mut Value, state: &HashMap<String, String>, done_q: &H
             put(item, "live_note", json!(saved));
             return true;
         }
+        if window_not_yet(item, facts, &saved) {
+            return true;
+        }
         put(item, "live", json!("open"));
         put(item, "level", json!("stop"));
         put(item, "tag", json!("DO THIS NOW"));
@@ -853,6 +885,9 @@ pub fn live_cutoff(item: &mut Value, state: &HashMap<String, String>, done_q: &H
         return true;
     }
     if !running.is_empty() {
+        if window_not_yet(item, facts, &saved) {
+            return true;
+        }
         put(item, "live", json!("inside"));
         put(item, "level", json!("stop"));
         put(item, "tag", json!("DO THIS NOW"));
@@ -981,9 +1016,9 @@ pub fn live_refutation(item: &mut Value, state: &HashMap<String, String>, titles
 /// Annotate any warning the data can be re-read against the save. Returns false when it no longer applies.
 /// `done_q` is every quest the route counts as finished; `ticked_q` is the ones you ticked yourself while the
 /// journal still has them open, which are held back from `done_q` so they cannot silence a warning.
-pub fn live_warning(item: &mut Value, state: &HashMap<String, String>, titles: &HashMap<String, String>, done_q: &HashSet<String>, ticked_q: &HashSet<String>) -> bool {
+pub fn live_warning_facts(item: &mut Value, state: &HashMap<String, String>, titles: &HashMap<String, String>, done_q: &HashSet<String>, ticked_q: &HashSet<String>, facts: &HashSet<String>) -> bool {
     if !qlist(item, "affected").is_empty() && !qlist(item, "closed_by").is_empty() {
-        return live_cutoff(item, state, done_q, ticked_q);
+        return live_cutoff_facts(item, state, done_q, ticked_q, facts);
     }
     // a refuted claim is answered by the journal, not by a gate: the question is whether the quests it
     // names failed, and only the save knows that
@@ -1586,6 +1621,35 @@ mod tests {
         assert!(live_cutoff(&mut item, &passed, &HashSet::new(), &HashSet::new()));
         assert_eq!(item["live"], "check");
         assert!(!item["headline"].as_str().unwrap().contains("can no longer be completed"));
+    }
+
+    #[test]
+    fn a_window_whose_dialogue_option_opens_later_says_so() {
+        let make = || json!({
+            "id": "triss_statuettes_window", "level": "stop", "mechanism": "journal_failure",
+            "affected": ["mq3012noblestatuette"], "affected_titles": ["The Nobleman Statuette"],
+            "closed_by": ["q210preparations"], "closed_by_titles": ["Battle Preparations"],
+            "closes_at": "q210preparations#Novigrad", "closes_at_title": "the end of Final Preparations",
+            "opens_at": ["q310_philippa_rescued"],
+            "not_yet_headline": "Triss will not take the statuettes yet",
+            "not_yet_action": "Rescue Philippa during Final Preparations"
+        });
+        let inside = state(&[("q210preparations#Novigrad", "Active"), ("mq3012noblestatuette", "Active")]);
+        let none = HashSet::new();
+        let mut early = make();
+        assert!(live_cutoff_facts(&mut early, &inside, &none, &none, &none));
+        assert_eq!(early["live"], "not_yet", "the option is not offered before Philippa is rescued");
+        assert_eq!(early["level"], "info");
+        assert_eq!(early["headline"], "Triss will not take the statuettes yet");
+        let facts = HashSet::from(["q310_philippa_rescued".to_string()]);
+        let mut ready = make();
+        assert!(live_cutoff_facts(&mut ready, &inside, &none, &none, &facts));
+        assert_eq!(ready["live"], "inside");
+        assert_eq!(ready["tag"], "DO THIS NOW");
+        let passed = state(&[("q210preparations#Novigrad", "Done"), ("mq3012noblestatuette", "Active")]);
+        let mut late = make();
+        assert!(live_cutoff_facts(&mut late, &passed, &none, &none, &none));
+        assert_eq!(late["live"], "check", "a passed window still reads as passed, not as not-open");
     }
 
     #[test]
