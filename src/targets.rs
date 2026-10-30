@@ -559,7 +559,7 @@ mod tests {
             lv: "34".into(), files: vec!["q704b_fairy_tale".into()], hard: vec![],
             hard_facts: HashMap::new(), by: vec![], note: String::new(), kind: "main".into(),
             opt: false, when: vec![], order: 0, desc: String::new(), branch: true,
-            dialogue_choice: false, ending_relevant: true, start_known: true,
+            ending_relevant: true, start_known: true,
             provenance: "game_file".into(), review_reason: String::new(),
             review_source: String::new(), reviewed: String::new(),
         };

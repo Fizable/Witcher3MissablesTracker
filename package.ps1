@@ -73,7 +73,9 @@ Copy-Item (Join-Path $targetDir 'release\witcher3-missables-tracker.exe') (Join-
 # deliberately not packaged: the app never loads them.
 # 1.0 reads the reviewed targets, the extracted branch graph, the card index, coverage and the
 # exclusivity rows as well; a build without them would start with the 1.0 screen but none of its data.
-foreach ($f in 'route.json', 'derived.json', 'quest_graph.json', 'cutoffs.json', 'cutoff_windows.json', 'route_disputes.json', 'prereqs_review.json', 'prereq_relations.json', 'endings.json', 'outcomes.json', 'branches.json', 'gwent_cards.json', 'card_windows.json', 'card_window_review.json', 'coverage.json', 'exclusive.json') {
+# cutoff_windows.json is the reviewed source behind cutoffs.json; it lives in tools/ as provenance
+# and is deliberately not packaged, so the resolved windows have one shipped owner.
+foreach ($f in 'route.json', 'derived.json', 'quest_graph.json', 'cutoffs.json', 'route_disputes.json', 'prereqs_review.json', 'prereq_relations.json', 'endings.json', 'outcomes.json', 'branches.json', 'gwent_cards.json', 'card_windows.json', 'card_window_review.json', 'coverage.json', 'exclusive.json') {
     if (Test-Path "data\$f") { Copy-Item "data\$f" (Join-Path $dist 'data') } else { Write-Warning "missing data\$f" }
 }
 foreach ($f in 'LICENSE', 'LICENSE-DATA.md', 'NOTICE.txt', 'THIRD-PARTY-LICENSES.txt') { Copy-Item $f $dist }

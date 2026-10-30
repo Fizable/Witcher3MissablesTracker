@@ -16,6 +16,7 @@
 
 # tools/: derived indexes, caches and reports, regenerate per tools/README.md
 /tools/*_index.json
+/tools/gwent_players.json
 /tools/save_facts.json
 /tools/gate_report.md
 /tools/contradictions.json

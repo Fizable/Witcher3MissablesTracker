@@ -14,7 +14,7 @@ rules plus an explicit keep/exclude list:
           - the affected quest's own phase does not switch the actor back on for its turn-in, and
           - the affected journal actually fails: a save records it `Failed` after the closer, or
             its own graph has a connected Failure input gated by the closer's journal.
-  keep    reviewed journal windows from `data/cutoff_windows.json` only when the affected quest
+  keep    reviewed journal windows from `tools/cutoff_windows.json` only when the affected quest
           has a connected Failure input, that input is gated by the closer's journal, and
           `closes_at` is a real phase of that journal.
   exclude the aggregate/phase-placeholder quests and the pending review's Yennefer case, with
@@ -39,7 +39,7 @@ import stringsdb
 from paths import HERE, REDKIT_R4, TRACKER
 
 OUT = TRACKER / "data" / "cutoffs.json"
-WINDOWS = TRACKER / "data" / "cutoff_windows.json"
+WINDOWS = HERE / "cutoff_windows.json"
 INDEX = HERE / "cutoff_index.json"
 QUEST_INDEX = HERE / "quest_index.json"
 

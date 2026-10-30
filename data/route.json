@@ -25,7 +25,6 @@
    "order": 536870911,
    "desc": "Emhyr var Emreis had been searching for his daughter Ciri for quite some time.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -48,7 +47,6 @@
    "order": 2147483647,
    "desc": "Every story has to start somewhere.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -71,7 +69,6 @@
    "order": 2684354558,
    "desc": "Yennefer had contacted Geralt - finally.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -94,7 +91,6 @@
    "order": 3154116606,
    "desc": "Ciri's spirits were high after killing Imlerith, but Geralt knew this fight had been but an appetizer before the full…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -117,7 +113,6 @@
    "order": 4278190078,
    "desc": "Finally, after so many faint and elusive trails, Geralt had happened upon something directly tied to Ciri's…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -140,7 +135,6 @@
    "order": 2147483647,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -163,7 +157,6 @@
    "order": 3489660926,
    "desc": "Witchers should be neutral, avoid meddling in the affairs of others.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -186,7 +179,6 @@
    "order": 3690987518,
    "desc": "Geralt had spent years looking for Yennefer, only to have her find him.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -209,7 +201,6 @@
    "order": 3221225470,
    "desc": "The commander of the Nilfgaardian garrison in White Orchard knew where Yennefer had gone.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -232,7 +223,6 @@
    "order": 704643070,
    "desc": "Geralt traveled to Velen in search of Ciri, an act that attested to the depth of his devotion.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -255,7 +245,6 @@
    "order": 914358270,
    "desc": "Geralt's search for information about the baron's wife and daughter took him to the local pellar.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -278,7 +267,6 @@
    "order": 918552574,
    "desc": "Fleeing the monsters of Crookback Bog, Ciri arrived at a dried-up branch of the Pontar.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -301,7 +289,6 @@
    "order": 920649726,
    "desc": "The baron treated Ciri like a daughter - no, better - for slaughtering a boar is sadly a delight few fathers think to…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -324,7 +311,6 @@
    "order": 921698302,
    "desc": "Ciri and the baron were testing their mettle in a horse race when a basilisk swooped down and put an end to the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -347,7 +333,6 @@
    "order": 922222590,
    "desc": "The notes left by Hendrik, the Nilfgaardian agent, mentioned that Ciri had quarreled with some witch, and that the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -370,7 +355,6 @@
    "order": 935329790,
    "desc": "When Ciri arrived in Velen, she found herself in the very heart of the notorious Crookback Bog.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -393,7 +377,6 @@
    "order": 872415230,
    "desc": "Nilfgaard's agent had determined Ciri had stayed with the baron - the self-proclaimed ruler of Velen.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -416,7 +399,6 @@
    "order": 889192446,
    "desc": "The baron turned out to be a tough negotiator who knew the full value of the information he possessed.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -439,7 +421,6 @@
    "order": 922746878,
    "desc": "Finding Ciri in Velen had proven harder than tracking a swallow on a rainy day.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -462,7 +443,6 @@
    "order": 931135486,
    "desc": "Information found in the home of Hendrik, the Nilfgaardian agent, indicated Ciri had entered into conflict with some…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -485,7 +465,6 @@
    "order": 2977955838,
    "desc": "Oneiromancers - or dreamers, as they are more commonly called - possess the ability their name implies to divine the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -508,7 +487,6 @@
    "order": 3717201918,
    "desc": "After a long search, Geralt had at last found Whoreson Junior and forced him to recount the truth of his dealings with…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -531,7 +509,6 @@
    "order": 3741843454,
    "desc": "As you are, no doubt, already well aware, Geralt has always paid particular interest to crowns and the men who wear…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -554,7 +531,6 @@
    "order": 2583691262,
    "desc": "Ciri's trail took Geralt to Novigrad, the largest city in the North.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -577,7 +553,6 @@
    "order": 3963617278,
    "desc": "Geralt had learned from the dreamer Corinne Tilly that Ciri contacted me while in Novigrad.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -600,7 +575,6 @@
    "order": 4021288958,
    "desc": "As you surely recall, Geralt knew Ciri had been in Novigrad, that she had contacted Dudu and me and that afterwards all…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -623,7 +597,6 @@
    "order": 4064542718,
    "desc": "Ciri had defeated Whoreson and freed Dudu - but then the real trouble started.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -646,7 +619,6 @@
    "order": 3766484990,
    "desc": "It turned out Sigi Reuven was none other than Sigismund Dijkstra, former head of Redanian intelligence and a man…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -669,7 +641,6 @@
    "order": 4050124798,
    "desc": "Ah, what times those were, times of adventure, action and unexpected twists around every corner!",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -692,7 +663,6 @@
    "order": 1005584382,
    "desc": "While talking to the inhabitants of Larvik, Geralt and Yennefer found out Ciri had been in the village right before the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -715,7 +685,6 @@
    "order": 1006108670,
    "desc": "Craven's reanimated corpse told Geralt and Yennefer about Ciri's stay on Hindarsfjall.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -738,7 +707,6 @@
    "order": 1004535806,
    "desc": "Though Ermion was incensed (no druidic pun intended) at Yennefer and Geralt's theft and desecration of an ancient…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -761,7 +729,6 @@
    "order": 956301310,
    "desc": "The search for Ciri had taken Yennefer to the wind-swept Skellige Isles - that is to say, lest your mind fill with…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -784,7 +751,6 @@
    "order": 973078526,
    "desc": "Crach an Craite, an old friend, invited Geralt and Yennefer to a farewell feast for the recently-departed King Bran.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -807,7 +773,6 @@
    "order": 1000341502,
    "desc": "A magic cataclysm had devastated a large part of the isle of Ard Skellig, and Yennefer suspected Ciri had had something…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -830,7 +795,6 @@
    "order": 4078960638,
    "desc": "When a witcher investigates, he expects to uncover the unexpected.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -853,7 +817,6 @@
    "order": 4194303998,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -876,7 +839,6 @@
    "order": 4202692606,
    "desc": "Yennefer asked - or rather, if I am to be completely honest with you, dear reader, ordered - Geralt to help Eskel hunt…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -899,7 +861,6 @@
    "order": 4211081214,
    "desc": "The task of preparing the phylactery fell to Lambert, to his great dissatisfaction.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -922,7 +883,6 @@
    "order": 4215275518,
    "desc": "Once Geralt had helped both Lambert and Eskel, Yennefer was ready to lift Uma's curse.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -945,7 +905,6 @@
    "order": 4219469822,
    "desc": "Traveling via Geralt's most beloved means of transport, teleportation, Yennefer reached Kaer Morhen first - and…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -968,7 +927,6 @@
    "order": 3290431486,
    "desc": "Ciri's explosion of power had frightened everyone, her most of all.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -991,7 +949,6 @@
    "order": 4275044350,
    "desc": "That the Wild Hunt would come for Ciri as soon as Geralt found her was more than certain.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -1014,7 +971,6 @@
    "order": 4278190078,
    "desc": "After a long search Geralt was at last a step from his goal.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1039,7 +995,6 @@
    "order": 4290772990,
    "desc": "A direct fight against Eredin and the Wild Hunt had become inevitable, and Geralt knew he could never defeat them alone.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1064,7 +1019,6 @@
    "order": 4292870142,
    "desc": "Nowhere in the world can one find warriors braver than those born in Skellige, and thus Geralt set off to those isles…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1091,7 +1045,6 @@
    "order": 4293918718,
    "desc": "The one person in Velen who could help Geralt battle the Wild Hunt was Keira Metz.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1116,7 +1069,6 @@
    "order": 4294443006,
    "desc": "Geralt realized the fight against Eredin and his soldiers would most likely be the most difficult challenge he had ever…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1139,7 +1091,6 @@
    "order": 4286578686,
    "desc": "Geralt and Ciri had no choice but to teleport away from the Isle of Mists when the Wild Hunt threatened to attack.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1162,7 +1113,6 @@
    "order": 3300917246,
    "desc": "Vesemir's death tore a gaping hole in Ciri's heart and left only a burning drive for revenge to fill it.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1187,7 +1137,6 @@
    "order": 4294705150,
    "desc": "Life, like art, abounds in tragedy, and sadly the ending of Keira Metz's story added to its cornucopia of woe.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1210,7 +1159,6 @@
    "order": 4294901758,
    "desc": "News that Ciri and Geralt had defeated and killed Imlerith reached Avallac'h at once.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1233,7 +1181,6 @@
    "order": 3321888766,
    "desc": "Cities like Novigrad have their own, special magic.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1256,7 +1203,6 @@
    "order": 3405774846,
    "desc": "Triss returned to Novigrad after leaving Kaer Morhen with one goal - to find Philippa Eilhart.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1279,7 +1225,6 @@
    "order": 3426746366,
    "desc": "In the mission to gather the members of the former Lodge of Sorceress, it fell to Yennefer to bring Margarita…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1305,7 +1250,6 @@
    "order": 3447717886,
    "desc": "When it comes to matters of the heart, my friend the witcher was never one of the most decisive men in the world.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1328,7 +1272,6 @@
    "order": 3468689406,
    "desc": "Thanks to Triss and Yennefer's hard work, Ciri's team of defenders now had two more outstanding sorceresses in its…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1351,7 +1294,6 @@
    "order": 3489660926,
    "desc": "Geralt knew he could only defeat Eredin with the help of mages and on his own terms.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1374,7 +1316,6 @@
    "order": 3888119806,
    "desc": "As an attentive reader you surely remember that the Wild Hunt could only be defeated with the help of powerful magic…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1397,7 +1338,6 @@
    "order": 4293918718,
    "desc": "When Ciri and Geralt reached Hindarsfjall, Ciri mentioned she wished to visit someone very special to her, a young man…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1420,7 +1360,6 @@
    "order": 3221225470,
    "desc": "My story began in Temeria, near Vizima, with Geralt dreaming a dream of Yennefer, Ciri and the Wild Hunt.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1443,7 +1382,6 @@
    "order": 3758096382,
    "desc": "My story began in Temeria, near Vizima, with Geralt dreaming a dream of Yennefer, Ciri and the Wild Hunt.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1466,7 +1404,6 @@
    "order": 4026531838,
    "desc": "My story began in Temeria, near Vizima, with Geralt dreaming a dream of Yennefer, Ciri and the Wild Hunt.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1489,7 +1426,6 @@
    "order": 4294934526,
    "desc": "Every story, even the longest epic, must end, and so this one too now nears its conclusion.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1512,7 +1448,6 @@
    "order": 4294950910,
    "desc": "It turned out that, while Avallac'h had not been entirely honest with the witcher, he was no traitor.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1535,7 +1470,6 @@
    "order": 4286578686,
    "desc": "Ciri pulled Geralt aside for a confidential heart-to-heart.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1558,7 +1492,6 @@
    "order": 2147483647,
    "desc": "When Geralt later told me the story which began at the Seven Cats Inn notice board, he mentioned he had felt drawn to…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1581,7 +1514,6 @@
    "order": 3221225470,
    "desc": "As Master Mirror forewarned, Olgierd von Everec asked Geralt to perform several tasks for him.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1604,7 +1536,6 @@
    "order": 3758096382,
    "desc": "Olgierd's wishes were unusual, to say the least.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1627,7 +1558,6 @@
    "order": 4227858430,
    "desc": "Robbing a building requires, at a bare minimum, finding a way inside it.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1650,7 +1580,6 @@
    "order": 4261412862,
    "desc": "Vaults are, as a rule, difficult to enter.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1673,7 +1602,6 @@
    "order": 4294705150,
    "desc": "Oxenfurt, once a city of students, had been transformed by war into a city of soldiers.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1696,7 +1624,6 @@
    "order": 4294836222,
    "desc": "It was a time when there seemed to be two Geralts.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1719,7 +1646,6 @@
    "order": 1073741823,
    "desc": "No sooner had Geralt arrived in Toussaint than he got his first taste of the local color.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1742,7 +1668,6 @@
    "order": 4026531838,
    "desc": "With two wishes down and one more to go, Geralt reported back to Olgierd.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1765,7 +1690,6 @@
    "order": 1476263934,
    "desc": "When word of yet another murder reached the tourney participants, panic broke out among them.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1788,7 +1712,6 @@
    "order": 4160749566,
    "desc": "Having completed all of Olgierd von Everec's wishes, Geralt went to the Alchemy Inn, where he was to meet with the…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1811,7 +1734,6 @@
    "order": 1878786046,
    "desc": "The Beast's and Geralt's clash had been violent albeit brief.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1834,7 +1756,6 @@
    "order": 2180677630,
    "desc": "It proved quite the ordeal for Regis, a sacrifice one might say.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1857,7 +1778,6 @@
    "order": 4294934526,
    "desc": "Following what can only be described as a surprising turn of events, the witcher had no choice but to report to the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1880,7 +1800,6 @@
    "order": 4294950910,
    "desc": "It seemed as if matters had come to a head and the witcher would finally face he who had for some time succeeded in…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1903,7 +1822,6 @@
    "order": 2683830270,
    "desc": "Ducal guardsmen commanded by Captain Damien de la Tour were to aid Geralt in storming Dun Tynne - this was the duchess'…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1926,7 +1844,6 @@
    "order": 3488874494,
    "desc": "It was painfully clear the audience with the duchess would not be a pleasant one.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1949,7 +1866,6 @@
    "order": 4293918718,
    "desc": "Geralt had waded through the city's vampire-infested streets to reach Orianna's estate.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1972,7 +1888,6 @@
    "order": 4294049790,
    "desc": "Geralt now knew how to find the Unseen Elder's lair.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -1995,7 +1910,6 @@
    "order": 4294180862,
    "desc": "Geralt ventured out to find Damien.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2018,7 +1932,6 @@
    "order": 4294115326,
    "desc": "Geralt had done what was required.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2041,7 +1954,6 @@
    "order": 4294443006,
    "desc": "During her final confrontation with the Beast of Beauclair, Sylvia Anna, sister to Her Highness Anna Henrietta, had…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2064,7 +1976,6 @@
    "order": 4294705150,
    "desc": "The witcher had, at last, defeated the Beast of Beauclair.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2087,7 +1998,6 @@
    "order": 4294901758,
    "desc": "Geralt decided to go home to Corvo Bianco.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2108,7 +2018,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -2132,7 +2041,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -2156,7 +2064,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -2180,7 +2087,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -2204,7 +2110,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -2230,7 +2135,6 @@
    "order": 4198498302,
    "desc": "Vesemir told Geralt that Yennefer had set up her trusty megascope as soon as she arrived at Kaer Morhen, but could not…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2253,7 +2157,6 @@
    "order": 1458044926,
    "desc": "As it turned out, Geralt was not alone in searching White Orchard for a lost loved one.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2276,7 +2179,6 @@
    "order": 1489502206,
    "desc": "The merchant Geralt found standing by the side of the road in White Orchard was extremely distraught.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2299,7 +2201,6 @@
    "order": 1560281086,
    "desc": "Many think that the life of a witcher consists of nothing but adventure after grand adventure, an endless stream of…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2322,7 +2223,6 @@
    "order": 1585446910,
    "desc": "There were only a handful of nonhumans in White Orchard.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2345,7 +2245,6 @@
    "order": 1607467006,
    "desc": "On one of Velen's muddy roads Geralt came across an unfortunate soul trapped under his cart.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2368,7 +2267,6 @@
    "order": 1610575870,
    "desc": "An old woman in Velen asked Geralt for an unusual favor.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2391,7 +2289,6 @@
    "order": 1610612158,
    "desc": "Deep in the swampy woods of Velen there is a roadside altar praising the glories of one of the forgotten gods.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2414,7 +2311,6 @@
    "order": 4160749565,
    "desc": "There was not much in the way of entertainment at Crow's Perch, so the baron's men were always looking for new ways to…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2437,7 +2333,6 @@
    "order": 4285497342,
    "desc": "Age-old customs can be as dangerous as they are beautiful - a lesson learned the hard way by the two young fishermen…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2460,7 +2355,6 @@
    "order": 4294705150,
    "desc": "Geralt overheard a conversation between two knights.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2483,7 +2377,6 @@
    "order": 4294967292,
    "desc": "Geralt stopped by a certain Novigrad book merchant whose owner recognized him at once.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2506,7 +2399,6 @@
    "order": 4294967292,
    "desc": "The Vegelbud family's out-of-town estate was famed not only for its lovely guardians and sumptuous banquets, but also…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2529,7 +2421,6 @@
    "order": 4294967292,
    "desc": "Kaer Trolde was host to something called the Helmsman's Dash, a race in which the best sailors from all of Ard Skellig…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -2552,7 +2443,6 @@
    "order": 4294967292,
    "desc": "Some gossiping students informed Geralt about the annual intramural regatta organized by the Oxenfurt Academy.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -2575,7 +2465,6 @@
    "order": 4294967292,
    "desc": "Those on the Continent worship the gods by praying, burning incense and making offerings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2598,7 +2487,6 @@
    "order": 4294967292,
    "desc": "The glory of Modron Freya knows no bounds and in Skellige everyone pays their resects to this goddess.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2621,7 +2509,6 @@
    "order": 4294967293,
    "desc": "Some time after he reunited with Yennefer in White Orchard Geralt returned to that village.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2644,7 +2531,6 @@
    "order": 4294967293,
    "desc": "During the war that pitted the Northern Realms against Nilfgaard, the border along the Pontar river was closed.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2667,7 +2553,6 @@
    "order": 4294967293,
    "desc": "While travelling in Toussaint, Geralt learned of the existence of a new deck.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2690,7 +2575,6 @@
    "order": 4294967293,
    "desc": "Everyone who has even a passing acquaintance with Geralt of Rivia knows it was very rare for the witcher to be paid…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2713,7 +2597,6 @@
    "order": 4294967293,
    "desc": "While walking around the Novigrad port, Geralt overheard some townsfolk discussing a series of boat races.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -2736,7 +2619,6 @@
    "order": 4294967293,
    "desc": "Though Geralt had not had much sailing experience prior to his stay in Skellige, he quickly grew to feel comfortable…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -2759,7 +2641,6 @@
    "order": 4294967293,
    "desc": "There are various ways to honor the gods: prayer, bloody offerings butchered on altars marked with pentagrams and…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2782,7 +2663,6 @@
    "order": 4294967293,
    "desc": "Every man who wishes to take part in the final race on Hindarsfjall must first win the races organized in Kaer Trolde…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2805,7 +2685,6 @@
    "order": 4294967293,
    "desc": "What would you do if a stranger walked up and asked to borrow a large sum of gold, swearing he would pay you back later?",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2828,7 +2707,6 @@
    "order": 1610609662,
    "desc": "One of the individuals Geralt met in his travels was a dwarf by the name of Rostan Muggs.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2851,7 +2729,6 @@
    "order": 3892314110,
    "desc": "Once again Geralt had a near impossible choice to make - a choice between a greater and lesser evil.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2874,7 +2751,6 @@
    "order": 1610588158,
    "desc": "In No Man's Land Geralt was given a contract by an Eternal Fire priest.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2897,7 +2773,6 @@
    "order": 908066814,
    "desc": "Having learned which room Ciri had stayed in during her time at Crow's Perch, Geralt, for whom any excuse to paw…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2920,7 +2795,6 @@
    "order": 1598029822,
    "desc": "When Geralt saw a dog which was clearly someone's beloved pet surrounded by a pack of starving wolves, he could not…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2943,7 +2817,6 @@
    "order": 2466250750,
    "desc": "While roaming the thick, gloomy tangles of the Velen woodlands, Geralt came across a spirit whose heart was trapped in…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2966,7 +2839,6 @@
    "order": 926941182,
    "desc": "Keira Metz had helped Geralt in his search for Ciri, so the witcher decided to return the favor.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -2989,7 +2861,6 @@
    "order": 1207959550,
    "desc": "A horrible curse had befallen Fyke Isle and the tower that stood upon it.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3012,7 +2883,6 @@
    "order": 1275068414,
    "desc": "Geralt and Keira's journey to the elven mage's lair had forged a tight bond between them, the kind harrowing…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3035,7 +2905,6 @@
    "order": 2147483647,
    "desc": "During his travels through Velen, Geralt survived many a bizarre adventure, but few more memorable than that which I…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3058,7 +2927,6 @@
    "order": 2977955838,
    "desc": "When the devil cannot go himself, he sends a woman - and when a sorceress is indisposed, she sends a witcher to do her…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3081,7 +2949,6 @@
    "order": 3489660926,
    "desc": "Continuing his tour of rural Velen, Geralt stopped by the village of Lindenvale.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3106,7 +2973,6 @@
    "order": 3758096382,
    "desc": "What does one expect to find inside an abandoned country manor?",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3129,7 +2995,6 @@
    "order": 4294967293,
    "desc": "Novigrad, the most cosmopolitan city of the North, attracts its fair share of oddballs and eccentrics.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3152,7 +3017,6 @@
    "order": 1409286142,
    "desc": "During his travels through No Man's Land Geralt ran into the pellar once more.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3175,7 +3039,6 @@
    "order": 1610514430,
    "desc": "Should a soldier be held responsible for the decisions of his commanding officers?",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3198,7 +3061,6 @@
    "order": 1610612542,
    "desc": "In the backwoods of Velen Geralt came across an altar, and next to it - two troubled villagers.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3221,7 +3083,6 @@
    "order": 3758096382,
    "desc": "While muddling around the well-shaded village of Blackbough, Geralt happened across a notice.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3244,7 +3105,6 @@
    "order": 4294967292,
    "desc": "While strolling the bustling streets of Novigrad, Geralt came across a most intriguing notice.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3267,7 +3127,6 @@
    "order": 4294967292,
    "desc": "The Redanian army had placed blockades on the crossings of the Pontar, something which at one point proved quite…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3290,7 +3149,6 @@
    "order": 1476395006,
    "desc": "Nothing about sorceresses should be taken at face value.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3313,7 +3171,6 @@
    "order": 4294958586,
    "desc": "During his travels through Novigrad the witcher witnessed an extraordinary event.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3336,7 +3193,6 @@
    "order": 4294967292,
    "desc": "On the high road outside Novigrad Geralt came across a merry band of troubadours who invited him to join them around…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3359,7 +3215,6 @@
    "order": 1342177278,
    "desc": "As you recall, the self-proclaimed baron of Velen had asked Geralt to find his missing family.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3382,7 +3237,6 @@
    "order": 1604321278,
    "desc": "An abandoned home, or even an abandoned village, was no rare sight in the Velen of those days, but a certain set of…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3405,7 +3259,6 @@
    "order": 1609039870,
    "desc": "The Nilfgaardian and Redanian forces had fought many bloody yet indecisive battles in Velen from which both sides had…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3428,7 +3281,6 @@
    "order": 1609826302,
    "desc": "The old woman looked much like the many other widows of Velen, though her eyes seemed to have seen even more hardship…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3457,7 +3309,6 @@
    "order": 3569352702,
    "desc": "When Geralt entered the Novigrad bathhouse, he happened to walk in on a meeting of the heads of the city's criminal…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3486,7 +3337,6 @@
    "order": 3667918846,
    "desc": "It turned out even thieves have honor.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3509,7 +3359,6 @@
    "order": 1610219518,
    "desc": "Geralt has a \"live and let live\" policy regarding the gods and their worshipers: if they don't bother him, he returns…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3532,7 +3381,6 @@
    "order": 1610416126,
    "desc": "Geralt learned of a witcher who had earned the ire of several villages in Velen.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3555,7 +3403,6 @@
    "order": 1610611966,
    "desc": "While wandering Velen Geralt happened across a woman who was weeping violently.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3578,7 +3425,6 @@
    "order": 4294967292,
    "desc": "War had transformed the once-charming student town of Oxenfurt beyond all recognition.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3601,7 +3447,6 @@
    "order": 4294967293,
    "desc": "Men can be terribly cruel, especially to those of different races.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3624,7 +3469,6 @@
    "order": 1610611198,
    "desc": "Near Novigrad Geralt came across a village whose inhabitants had themselves a bit of a ghoul problem.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3647,7 +3491,6 @@
    "order": 3758096382,
    "desc": "While wallowing in the Bits, Novigrad's worst and most notorious slum, the witcher took a contract on a monster…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3670,7 +3513,6 @@
    "order": 4264034302,
    "desc": "After Geralt and Triss raided their outpost and killed Menge, the witch hunters decided to exact revenge on mages and…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3693,7 +3535,6 @@
    "order": 4294967292,
    "desc": "When Geralt found out a fistfighting circuit was operating in Velen, he decided to test his strength and enter.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3716,7 +3557,6 @@
    "order": 4294967293,
    "desc": "Geralt had already won a great many victories while fistfighting opponents across the land, but still could not call…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3739,7 +3579,6 @@
    "order": 1610600446,
    "desc": "Geralt met a man who claimed one of his horses had been stolen by some kind of woodland spook.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3762,7 +3601,6 @@
    "order": 1610612338,
    "desc": "Near the Nilfgaardian camp Geralt ran into a noblewoman from far-off Nazair.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3785,7 +3623,6 @@
    "order": 2667577342,
    "desc": "Holger Blackhand had stolen a great many priceless goods during his many plunderous raids.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3808,7 +3645,6 @@
    "order": 3758096382,
    "desc": "Of all the so-called \"witches\" they hunted, there was none the witch hunters wanted more than Triss Merigold, a…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3831,7 +3667,6 @@
    "order": 3758096382,
    "desc": "They say chess is the game of kings, and Radovid proved this point twice over during his meeting with Geralt.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3854,7 +3689,6 @@
    "order": 4285333502,
    "desc": "I'm used to my good friend encountering the bizarre and the appalling in his journeys, but what happened to him on…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3877,7 +3711,6 @@
    "order": 4288675824,
    "desc": "Zoltan Chivay has never had much luck in business.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3906,7 +3739,6 @@
    "order": 4293394414,
    "desc": "Those under Roche's command rarely defied orders.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3929,7 +3761,6 @@
    "order": 4294962938,
    "desc": "A certain nobleman asked Geralt for a bit of assistance.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3958,7 +3789,6 @@
    "order": 4294967292,
    "desc": "Geralt had learned that Rosa var Attre was a passionate devotee of the art of swordplay.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -3981,7 +3811,6 @@
    "order": 1610606590,
    "desc": "While meandering through the sunny but war-damaged lands near Oxenfurt, Geralt's sensitive ears picked up a very…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4004,7 +3833,6 @@
    "order": 4294897658,
    "desc": "Geralt ran into a suspicious gentleman who was looking for a woman who spoke in a strange, unknown tongue.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4027,7 +3855,6 @@
    "order": 4294932474,
    "desc": "On one of Skellige's beaches, Geralt ran into a man desperately fending off an enraged assailant.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4050,7 +3877,6 @@
    "order": 4294967292,
    "desc": "While in the passageways underneath Novigrad (I've been there as well, and don't recommend them as tourist destinations…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4073,7 +3899,6 @@
    "order": 4294967292,
    "desc": "When men sense death's approach, they try to finish all manner of unresolved business.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4096,7 +3921,6 @@
    "order": 4294967292,
    "desc": "Geralt can hardly spend a day in even the most seemingly idyllic village without being asked to kill a monster, so it…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4119,7 +3943,6 @@
    "order": 3758096382,
    "desc": "The common folk rarely show witchers the gratitude they deserve for practicing their dangerous trade.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4142,7 +3965,6 @@
    "order": 3758096382,
    "desc": "Lugos, Jarl of Clan Drummond, might indeed have been as mad as they said, but when the need arose he could calculate as…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4165,7 +3987,6 @@
    "order": 4227858430,
    "desc": "Ever since that fateful eve near twenty years ago when my dear friend Geralt and I visited a no-longer-extant cabaret…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4188,7 +4009,6 @@
    "order": 4253024254,
    "desc": "Novigrad was once famed as a place of tolerance and the rule of law.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4211,7 +4031,6 @@
    "order": 4285661182,
    "desc": "Legend claims the warriors of Spikeroog had tested their mettle in the arena found near the cliffs on the northwestern…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4234,7 +4053,6 @@
    "order": 4288282621,
    "desc": "In Skellige Geralt met a desperate and broken man named Lothar.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4257,7 +4075,6 @@
    "order": 4292739067,
    "desc": "In the Clan Dimun village Geralt spied a feverish man who was waiting for his brothers to bring his betrothed from one…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4280,7 +4097,6 @@
    "order": 4294967290,
    "desc": "Though Geralt avoided politics like the plague, there were times when he simply couldn't avoid getting entangled.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4303,7 +4119,6 @@
    "order": 4294967292,
    "desc": "Near Crippled Kate's, Geralt encountered a sobbing woman.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4326,7 +4141,6 @@
    "order": 4294967292,
    "desc": "While examining a Novigrad stallkeeper's wares, Geralt spied a remarkable jade statuette.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4349,7 +4163,6 @@
    "order": 4294967292,
    "desc": "While visiting an accountant by the name of Caesar Bilzen, Geralt snitched a soldier figurine from his host's…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4372,7 +4185,6 @@
    "order": 2516582398,
    "desc": "Skelligers value three things above all else: honor, the memory of their ancestors and sturdy weapons.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4395,7 +4207,6 @@
    "order": 3758096382,
    "desc": "Ciri's trail had led Geralt and Yennefer to a derelict garden in Skellige.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4418,7 +4229,6 @@
    "order": 3758096382,
    "desc": "Before Geralt and Yennefer parted after their adventure in Freya's garden, the sorceress asked him to meet her in…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4441,7 +4251,6 @@
    "order": 4267704318,
    "desc": "Geralt happened across a terrified bard who trembled when he spoke of his \"beloved\", yet other than that refused to say…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4464,7 +4273,6 @@
    "order": 4285169662,
    "desc": "Though Skelligers are famed warriors able to hold their own in almost any battle, those whom Geralt encountered near…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4487,7 +4295,6 @@
    "order": 4294949882,
    "desc": "Geralt was only able to escape from Madman Lugos' prison thanks to the help of a mysterious old man called Simun…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4510,7 +4317,6 @@
    "order": 4294967292,
    "desc": "Geralt's travels took him to a certain village whose inhabitants were clearly anxious about something.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4533,7 +4339,6 @@
    "order": 4294967293,
    "desc": "Life on the Path is full of surprises.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4556,7 +4361,6 @@
    "order": 4294967293,
    "desc": "While passing the infamous Devil's Pit, Geralt overheard the desperate pleas of prayer - a prayer he answered.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4579,7 +4383,6 @@
    "order": 4240441342,
    "desc": "Telling this story, my dear reader, will tax me greatly.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4602,7 +4405,6 @@
    "order": 4290510844,
    "desc": "Skellige is a nation of sailors.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -4625,7 +4427,6 @@
    "order": 4294688762,
    "desc": "During his stay in Skellige Geralt learned of something called the Path of Warriors.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4648,7 +4449,6 @@
    "order": 989855742,
    "desc": "It is a truth universally acknowledged that children only prove more troublesome as they mature.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4671,7 +4471,6 @@
    "order": 998244350,
    "desc": "Concern filled Crach's voice.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4694,7 +4493,6 @@
    "order": 1610612734,
    "desc": "With Geralt's help, both Hjalmar and Cerys had defied death and won glory, greatly improving their chances in the race…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4717,7 +4515,6 @@
    "order": 4234149886,
    "desc": "At last, the day had come.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4740,7 +4537,6 @@
    "order": 4294828026,
    "desc": "On a small beach on the shores of Undvik Geralt came across a man chained to the rocks, the tide threatening to engulf…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4763,7 +4559,6 @@
    "order": 4293853178,
    "desc": "In one of Skellige's famed arenas Geralt met an undefeated warrior named Jutta and decided to try his strength against…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4786,7 +4581,6 @@
    "order": 4294967292,
    "desc": "Geralt spent some time rutting around in the dank alleyways of Novigrad and at one point came upon the body of a…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4809,7 +4603,6 @@
    "order": 4276092926,
    "desc": "Perhaps there was a time, under the pax of a just ruler or before the Conjunction brought so many hideous beasts to our…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4832,7 +4625,6 @@
    "order": 4294967292,
    "desc": "An observation tower located on a hillside near Kaer Morhen caught Geralt's eye.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4855,7 +4647,6 @@
    "order": 4294967293,
    "desc": "Geralt found out a series of fistfights was being organized in Novigrad.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4878,7 +4669,6 @@
    "order": 3355443198,
    "desc": "Strewn across the Skellige shore lay the remnants of an entire fortune, testimonies to a tragedy that had struck some…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4901,7 +4691,6 @@
    "order": 3758096382,
    "desc": "Witchers live to kill monsters, and so they place great importance on the weapons and armor they use.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4924,7 +4713,6 @@
    "order": 3758096382,
    "desc": "A witcher without a blade is like a potter without hands, and thus they are always on the lookout for skilled smiths to…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4947,7 +4735,6 @@
    "order": 3758096382,
    "desc": "At one point during his travels Geralt learned of a master alchemist named Gremist.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4970,7 +4757,6 @@
    "order": 4294410234,
    "desc": "Though druids have gained fame worldwide as outstanding healers, even with all their spells and elixirs they at times…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -4993,7 +4779,6 @@
    "order": 4294967293,
    "desc": "In a certain forest Geralt found himself looking at a clearly abandoned sawmill enveloped in thick undergrowth.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5016,7 +4801,6 @@
    "order": 1073741823,
    "desc": "Life in Velen is not easy.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5039,7 +4823,6 @@
    "order": 3221225470,
    "desc": "Gaetan probably hadn't expected that Geralt would spare his life.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5062,7 +4845,6 @@
    "order": 3556769790,
    "desc": "Geralt was surprised to find a group of women hanging around outside the entrance to a crypt on the isle of Ard Skellig…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5085,7 +4867,6 @@
    "order": 4285046782,
    "desc": "On the coast of Ard Skellig Geralt ran into a young warrior - well, he stopped running before he hit the young man, but…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5108,7 +4889,6 @@
    "order": 4279238654,
    "desc": "If ever I tire of writing of Geralt of Rivia, I will take up the tale of Djenge Frett, an itinerant bounty hunter.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5131,7 +4911,6 @@
    "order": 4294967292,
    "desc": "While walking along the shore of the lake near Kaer Morhen, Geralt came across the body of a drowner.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5154,7 +4933,6 @@
    "order": 4294967292,
    "desc": "In one of the now-unused bedrooms of Kaer Morhen Geralt found a note left by Berengar, a witcher who had once been his…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5177,7 +4955,6 @@
    "order": 4294967292,
    "desc": "It turned out even the area around Kaer Morhen, a place which - one would think - Geralt knows by heart, can hide a…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5200,7 +4977,6 @@
    "order": 3758096382,
    "desc": "Wind-whipped and rain-battered, Geralt stumbled into a small village on the coast of An Skellig.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5223,7 +4999,6 @@
    "order": 4294967292,
    "desc": "Geralt learned a fistfighting tournament was being held in Skellige.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5246,7 +5021,6 @@
    "order": 4294967292,
    "desc": "Momentous decisions altering the fate of entire nations are often made under unusual circumstances.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5269,7 +5043,6 @@
    "order": 4294967292,
    "desc": "While poking around in the forgotten recesses of Kaer Morhen, Geralt happened across an illusory wall.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5292,7 +5065,6 @@
    "order": 4292870142,
    "desc": "Northeast of Novigrad Geralt stumbled across a small camp of Ofieri travelers.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5315,7 +5087,6 @@
    "order": 4294443006,
    "desc": "Though he carried several pounds of silver on his back at all times, Geralt was usually quite coin-poor.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5338,7 +5109,6 @@
    "order": 4294934526,
    "desc": "\"Witcher\" has become a synonym for \"monster slayer\" in many minds.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5361,7 +5131,6 @@
    "order": 4294946814,
    "desc": "While wandering the lands to the northeast of Novigrad, Geralt came across a small camp of Ofieri travelers.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5384,7 +5153,6 @@
    "order": 4294959102,
    "desc": "The Ofieri runewright got down to work, but announced at once that more advanced runes or glyphs would require special…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5407,7 +5175,6 @@
    "order": 4294963198,
    "desc": "The Ofieri runewright provided Geralt with very good runes and glyphs, but still was not able to exercise his art to…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5430,7 +5197,6 @@
    "order": 4278190078,
    "desc": "Though Vlodimir had returned to the nether realms, the night was still young and the wedding not yet over.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5453,7 +5219,6 @@
    "order": 4294901758,
    "desc": "\"The White Wolf\", \"the Butcher of Blaviken\" – Geralt gathered many sobriquets on his Path, one of which was the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5476,7 +5241,6 @@
    "order": 4294836222,
    "desc": "Geralt is often taken for a boor.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5499,7 +5263,6 @@
    "order": 3221225470,
    "desc": "Tradition has sanctified two codes of conduct in Toussaint: the teachings of the Prophet Lebioda and the chivalric…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5522,7 +5285,6 @@
    "order": 4294967293,
    "desc": "It was a warm summer evening...",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5545,7 +5307,6 @@
    "order": 671088638,
    "desc": "While strolling through Beauclair's charmingly romantic streets, Geralt learned of a circumstance thoroughly charmless…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5568,7 +5329,6 @@
    "order": 4273995774,
    "desc": "One day, an old acquaintance ran into Geralt and pulled him aside for a chat.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5591,7 +5351,6 @@
    "order": 4278190078,
    "desc": "On one of the notice boards of Beauclair Geralt found a very interesting contract.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5614,7 +5373,6 @@
    "order": 4294959102,
    "desc": "While traversing Toussaint, Geralt learned local aficionados of wine and raucous entertainment were fond of organizing…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5637,7 +5395,6 @@
    "order": 4026531838,
    "desc": "One day, while traversing Toussaint's charming wilderness, Geralt ran into two men desperately calling for help.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5660,7 +5417,6 @@
    "order": 4294950910,
    "desc": "Wine is important - this we all know.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5683,7 +5439,6 @@
    "order": 4294959102,
    "desc": "In the duchy of wine there is nothing more important than this noblest of beverages.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5706,7 +5461,6 @@
    "order": 4294967262,
    "desc": "Perusing a notice board in Toussaint, Geralt found the appeal of a ducal clerk.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5729,7 +5483,6 @@
    "order": 4294967290,
    "desc": "As he was roaming wine country, Geralt was not at all surprised to come upon a vintner.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5752,7 +5505,6 @@
    "order": 4294965246,
    "desc": "Geralt had become deeply involved in the matter of the Belgaard Vineyard's transfer to a new owner.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5775,7 +5527,6 @@
    "order": 2684354558,
    "desc": "A short distance from Castel Ravello, Geralt happened on a notice posted by Jacob, a lumberjack.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5798,7 +5549,6 @@
    "order": 4294901758,
    "desc": "All signs seemed to suggest the statue and those working on it suffered from a hefty dose of rotten luck.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5821,7 +5571,6 @@
    "order": 4294901758,
    "desc": "Though many find it hard to believe, witchers can catch the scent of blood from over a league away.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5844,7 +5593,6 @@
    "order": 4294966270,
    "desc": "When Geralt first agreed to look into problems at some vineyards in Toussaint, he had not expected these matters to…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5867,7 +5615,6 @@
    "order": 4294966782,
    "desc": "Passing by Castel Ravello, Geralt came upon a vintner in desperate need of help.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5890,7 +5637,6 @@
    "order": 4294967166,
    "desc": "Descending the hill atop which stood Dun Tynne, Geralt came upon a wounded vintner begging for help.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -5913,7 +5659,6 @@
    "order": 4294967293,
    "desc": "While in Toussaint, one day Geralt found a notice posted by an armorer.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5936,7 +5681,6 @@
    "order": 4294967293,
    "desc": "Geralt defeated three lesser contenders in fistfighting bouts and thus earned the right to face off against the Maestro.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5959,7 +5703,6 @@
    "order": 4294967293,
    "desc": "At a sacred site of the cult of the Prophet Lebioda, Geralt stumbled upon the remains of one of the prophet's most…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -5982,7 +5725,6 @@
    "order": 2080047102,
    "desc": "In the vision Geralt had experienced after imbibing Resonance, he had also seen a mill.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6005,7 +5747,6 @@
    "order": 2281308158,
    "desc": "The witcher had decided not to kill the wight.",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6028,7 +5769,6 @@
    "order": 4294964222,
    "desc": "Toussaint is a land where spilling some wine is at times a greater crime than spilling some blood.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6051,7 +5791,6 @@
    "order": 1073741823,
    "desc": "One day Geralt got an unusual proposition.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6074,7 +5813,6 @@
    "order": 3221225470,
    "desc": "Beauclair is a city steeped in tradition, awash with wine and echoing with song.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6097,7 +5835,6 @@
    "order": 4294836222,
    "desc": "Proceeding on his way, Geralt encountered one in need, as he had many times before.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6120,7 +5857,6 @@
    "order": 4294967038,
    "desc": "While roaming the slopes of Mount Gorgon, Geralt ran into a vintner who required a witcher's aid.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6143,7 +5879,6 @@
    "order": 4294967293,
    "desc": "Geralt overheard a conversation between two knights.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6166,7 +5901,6 @@
    "order": 4294836222,
    "desc": "While wandering around Toussaint, Geralt did not neglect his vocation and the true core of his existence, namely…",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6189,7 +5923,6 @@
    "order": 4294967230,
    "desc": "The denizens of the Land of a Thousand Fables had problems, just like you or I… Balbina the Goose, for example, had the…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6212,7 +5945,6 @@
    "order": 4294967293,
    "desc": "One could put forward the brashly contrarian thesis that a stay in a prison would be a welcome change for a witcher.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6233,7 +5965,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -6257,7 +5988,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -6281,7 +6011,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",
@@ -6307,7 +6036,6 @@
    "order": 4227858430,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6330,7 +6058,6 @@
    "order": 4269539326,
    "desc": "After Geralt and Triss raided their outpost and killed Menge, the witch hunters decided to exact revenge on mages and…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6353,7 +6080,6 @@
    "order": 4294967293,
    "desc": "The fifth transport was to have arrived by boat.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6376,7 +6102,6 @@
    "order": 4294967293,
    "desc": "The first group traveling to the construction site was said to consist of master builders who were bringing with them a…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6399,7 +6124,6 @@
    "order": 4294967293,
    "desc": "The fourth group of missing workers had been due to travel to the building site through an area with a very bad…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6422,7 +6146,6 @@
    "order": 4294967293,
    "desc": "The second of the missing transports was especially important, for with it was to have arrived the builders' supply of…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6445,7 +6168,6 @@
    "order": 4294967293,
    "desc": "The third of the lost transports had gone missing somewhere in the nearby wilds.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6468,7 +6190,6 @@
    "order": 4294967293,
    "desc": "The Duchy of Toussaint is the homeland of wine and knights errant.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -6491,7 +6212,6 @@
    "order": 402653183,
    "desc": "In White Orchard Geralt happened across a notice posted by a certain Odolan residing in the village.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6514,7 +6234,6 @@
    "order": 3875536894,
    "desc": "Monsters, like men, each have their own individual tastes and preferences.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6537,7 +6256,6 @@
    "order": 1610612254,
    "desc": "Those who stray off the beaten tracks in the bogs of Velen rarely live to amend their error.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6560,7 +6278,6 @@
    "order": 4294770686,
    "desc": "One thing about Geralt - he loves to meander.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6583,7 +6300,6 @@
    "order": 4294903806,
    "desc": "While traversing the fields near Midcopse, Geralt came across some strange tracks.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6606,7 +6322,6 @@
    "order": 4294963198,
    "desc": "In an old cottage Geralt came across living arrangements that clearly indicated the occupant was no humanoid.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6629,7 +6344,6 @@
    "order": 4294965758,
    "desc": "A mysterious fog that killed all who ventured into it had arisen near the village of Downwarren - inconveniently close…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6652,7 +6366,6 @@
    "order": 4026531838,
    "desc": "A Novigrad merchant by the name of Sylvester Armello had hung a notice on the Novigrad board asking for help in…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6675,7 +6388,6 @@
    "order": 4026531838,
    "desc": "While traversing the outskirts of Novigrad, Geralt happened across a contract on a creature known as the Apiarian…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6698,7 +6410,6 @@
    "order": 4026531838,
    "desc": "During a conversation with a certain guardsman, Geralt learned that members of the city watch had been disappearing…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6721,7 +6432,6 @@
    "order": 2415919102,
    "desc": "Skellige warriors are the hearty, adventure-loving sort, so surely they handle their own monster problems?",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6744,7 +6454,6 @@
    "order": 4026531838,
    "desc": "Geralt spent some time walking through the rich farmlands outside of Novigrad.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6767,7 +6476,6 @@
    "order": 4026531838,
    "desc": "While traveling across Skellige, Geralt happened upon a rocky isle covered in thick fog, from which came the screaming…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6790,7 +6498,6 @@
    "order": 4026531838,
    "desc": "The sea is a source of endless riches for the inhabitants of Skellige.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6813,7 +6520,6 @@
    "order": 4026531838,
    "desc": "In Clan Brokvar's village on Spikeroog Geralt took on a search-and-rescue contract.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6836,7 +6542,6 @@
    "order": 4294959102,
    "desc": "In the village of Lindenvale Geralt came across a highly unusual contract.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6859,7 +6564,6 @@
    "order": 3758096382,
    "desc": "Geralt's first clue?",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6882,7 +6586,6 @@
    "order": 4294922238,
    "desc": "A Nilfgaardian patrol had gone missing near the village of Byways.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6905,7 +6608,6 @@
    "order": 4294940670,
    "desc": "Once upon a time, Geralt took a contract from a group of refugees.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6928,7 +6630,6 @@
    "order": 201326591,
    "desc": "A true master armorer is a rare bird indeed, so we can honestly speak of delight sparking in Geralt's heart when he…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6951,7 +6652,6 @@
    "order": 4026531838,
    "desc": "Sprawling out-of-town manors always hide their fair share of mysteries, and the residence on Novigrad's outskirts were…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6974,7 +6674,6 @@
    "order": 2147483647,
    "desc": "The inhabitants of Honorton had a problem - one only a witcher could resolve.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -6997,7 +6696,6 @@
    "order": 4026531838,
    "desc": "While traversing the woods outside Novigrad, Geralt came across some monster tracks that struck him as unusual.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7020,7 +6718,6 @@
    "order": 4026531838,
    "desc": "Oxenfurt the academy may be my alma mater, but Oxenfurt the town - that is where I received my true education.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7043,7 +6740,6 @@
    "order": 2147483647,
    "desc": "The mountains ridges of Ard Skellig can be treacherous for those who get distracted by their snow-bound beauty.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7066,7 +6762,6 @@
    "order": 4026531838,
    "desc": "Geralt caught word that the villagers of Fyresdal had caught sight of a dragon.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7089,7 +6784,6 @@
    "order": 2147483647,
    "desc": "During his time in the village of Fyresdal Geralt learned of a contract on a monster said to have attacked a merchant…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7112,7 +6806,6 @@
    "order": 4026531838,
    "desc": "While riding through the village nestled at the base of Kaer Trolde, Geralt spotted a notice posted by a certain Odhen…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7135,7 +6828,6 @@
    "order": 4294819838,
    "desc": "Though Geralt had plenty of other worries, he had not forgotten about his trade - which is, let I remind you, slaying…",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7158,7 +6850,6 @@
    "order": 4026531838,
    "desc": "Mercenaries are usually the ones getting paid for killing things.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7181,7 +6872,6 @@
    "order": 3758096382,
    "desc": "One day, Geralt happened upon an unusual contract notice.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7204,7 +6894,6 @@
    "order": 2147483647,
    "desc": "A witcher's life is never dull.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7227,7 +6916,6 @@
    "order": 4294934526,
    "desc": "I have oft heard Geralt boast that in terms of monsters, he firmly believes he has seen it all.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7250,7 +6938,6 @@
    "order": 536870911,
    "desc": "Few know just how nosy Geralt actually is.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7273,7 +6960,6 @@
    "order": 2147483647,
    "desc": "Customs in Toussaint differ markedly from those observed in the North.",
    "branch": false,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7296,7 +6982,6 @@
    "order": 3758096382,
    "desc": "While meandering the bogs of Velen, Geralt found some notes written by a frustrated soldier.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7319,7 +7004,6 @@
    "order": 4294967293,
    "desc": "While passing through a burned-down village, Geralt came across a body.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7342,7 +7026,6 @@
    "order": 4261412862,
    "desc": "During his stay in White Orchard, a certain letter found its way into Geralt's possession.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7365,7 +7048,6 @@
    "order": 4278190078,
    "desc": "Discipline is the backbone of any army.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7388,7 +7070,6 @@
    "order": 3221225470,
    "desc": "Geralt happened across an intriguing note written by someone who, first of all, clearly suffered from a poor memory…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7411,7 +7092,6 @@
    "order": 4026531838,
    "desc": "While in Velen, Geralt stumbled upon a letter to a certain Molke.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7434,7 +7114,6 @@
    "order": 4286578686,
    "desc": "Whenever I would ask the witcher for his opinion concerning my latest sonnet, elegy or even couplet, he'd always claim…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7457,7 +7136,6 @@
    "order": 4293918718,
    "desc": "Geralt was, at his core, a curious individual.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7480,7 +7158,6 @@
    "order": 4294967293,
    "desc": "While Geralt knew reading other people's correspondence was ill-mannered, he also knew it could prove extremely useful…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7503,7 +7180,6 @@
    "order": 4294967293,
    "desc": "Geralt found a crumpled note on the body of an itinerant merchant.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7526,7 +7202,6 @@
    "order": 4294737918,
    "desc": "While traveling the downtrodden lands of Velen and the former Temerian border regions, Geralt found clues about the…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7549,7 +7224,6 @@
    "order": 4160749566,
    "desc": "They say the road to hell is paved with curiosity.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7572,7 +7246,6 @@
    "order": 4294967293,
    "desc": "Unwary visitors to cemeteries just might find their stay prolonged indefinitely.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7595,7 +7268,6 @@
    "order": 4294967292,
    "desc": "While in the Skellige Isles Geralt came across a riddle hinting at the location of a treasure.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7618,7 +7290,6 @@
    "order": 4294967292,
    "desc": "Geralt came across evidence of the legendary witcher George's equally legendary equipment.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7641,7 +7312,6 @@
    "order": 4236247038,
    "desc": "Geralt found a key and a map with a location on Ard Skellig marked on it.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7664,7 +7334,6 @@
    "order": 4294967293,
    "desc": "Geralt never claimed to be an expert in epistolography, but experience had taught him one of its secrets: dead men…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7687,7 +7356,6 @@
    "order": 4227858430,
    "desc": "One day an intriguing letter came into Geralt's possession.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7710,7 +7378,6 @@
    "order": 4290772990,
    "desc": "While traveling the world in search of Ciri, Geralt happened across a barely-legible document which made mention of a…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7733,7 +7400,6 @@
    "order": 4292870142,
    "desc": "Geralt found a document which grabbed his attention…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7756,7 +7422,6 @@
    "order": 4294967292,
    "desc": "During his travels Geralt came across a well-worn letter.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7779,7 +7444,6 @@
    "order": 4294967292,
    "desc": "Geralt always kept an eye out for possible new adventures.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7802,7 +7466,6 @@
    "order": 4294967292,
    "desc": "Geralt found some cryptic notes which seemed to be hiding some sort of secret.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7825,7 +7488,6 @@
    "order": 4294967293,
    "desc": "During his journeys Geralt came across an unsent letter.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7848,7 +7510,6 @@
    "order": 4294967293,
    "desc": "One time Geralt found a long, yellowed parchment.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7871,7 +7532,6 @@
    "order": 4294967293,
    "desc": "Elven ruins are as dangerous as they are beautiful.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7894,7 +7554,6 @@
    "order": 4294836222,
    "desc": "In his travels, Geralt happened upon the trail of a witcher named Kiyan.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7917,7 +7576,6 @@
    "order": 4240441342,
    "desc": "Geralt found a map on the isle of Undvik with a key attached to it and a location deep in the isle's interior marked on…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -7940,7 +7598,6 @@
    "order": 4294967292,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7963,7 +7620,6 @@
    "order": 4294967293,
    "desc": "The gradual expansion of literacy in the Northern Realms pleased Geralt greatly, for this meant he happened across more…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -7986,7 +7642,6 @@
    "order": 4294967293,
    "desc": "Bodies aren't hard to come by in Velen.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8009,7 +7664,6 @@
    "order": 4294967293,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8032,7 +7686,6 @@
    "order": 4294967293,
    "desc": "Geralt came across an abandoned cart.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8055,7 +7708,6 @@
    "order": 4294967293,
    "desc": "Geralt found a mutilated corpse which was carrying some notes.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8078,7 +7730,6 @@
    "order": 4294967293,
    "desc": "During one of his many escapades, Geralt happened across the diagram of a powerful item that once belonged to a…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8101,7 +7752,6 @@
    "order": 4294860796,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8124,7 +7774,6 @@
    "order": 4294897657,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8147,7 +7796,6 @@
    "order": 4294909945,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8170,7 +7818,6 @@
    "order": 4294967292,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8193,7 +7840,6 @@
    "order": 4294967292,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8216,7 +7862,6 @@
    "order": 4294967293,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8239,7 +7884,6 @@
    "order": 4294967293,
    "desc": "During his travels, Geralt came across a certain letter.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8262,7 +7906,6 @@
    "order": 4294934520,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8285,7 +7928,6 @@
    "order": 4294967292,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8308,7 +7950,6 @@
    "order": 4294967293,
    "desc": "They say one can hardly spit in Skellige without splashing a pirate or a pirate's treasure.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8331,7 +7972,6 @@
    "order": 4294967293,
    "desc": "Travel in wartime can be dangerous.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8354,7 +7994,6 @@
    "order": 4293918718,
    "desc": "The nature of Geralt's trade means finding corpses is a normal part of a day's work.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8377,7 +8016,6 @@
    "order": 4294966270,
    "desc": "While wandering the Redanian borderlands Geralt happened across some crafting diagrams written in a foreign tongue.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -8400,7 +8038,6 @@
    "order": 4294950906,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8423,7 +8060,6 @@
    "order": 4294967292,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8446,7 +8082,6 @@
    "order": 4294967293,
    "desc": "During one of his numerous adventures, Geralt got his hands on a map covered with strange markings.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8469,7 +8104,6 @@
    "order": 3758096382,
    "desc": "Another day, another corpse -- and, the witcher suspected, another document revealing the tale of the deceased's demise.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8492,7 +8126,6 @@
    "order": 4026531838,
    "desc": "Unfortunate accidents happen to even the most gods-fearing of men.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8515,7 +8148,6 @@
    "order": 4290772990,
    "desc": "In a certain cellar located near a nest of drowners, Geralt found a body.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8538,7 +8170,6 @@
    "order": 4160749566,
    "desc": "While traversing the boggy flood plains along the Sansretour, Geralt almost tripped over the corpse of a drowned man…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8561,7 +8192,6 @@
    "order": 4227858430,
    "desc": "Roaming through the Caroberta Woods, Geralt ran into a group of bandits… He tended to the overly aggressive rogues…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8584,7 +8214,6 @@
    "order": 4294443006,
    "desc": "While exploring the catacombs beneath the city cemetery, Geralt ran into a crew of grave robbers.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8607,7 +8236,6 @@
    "order": 4294967230,
    "desc": "While milling about the duchy's highroads and tracts, Geralt happened on a secluded hut.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8630,7 +8258,6 @@
    "order": 4294967278,
    "desc": "While traversing the roads and backwoods of Toussaint, Geralt happened upon two wild rock trolls who seemed vehemently…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8653,7 +8280,6 @@
    "order": 2147483647,
    "desc": "While searching a body he found in a ravaged campsite, Geralt found a key and a journal.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8676,7 +8302,6 @@
    "order": 3221225470,
    "desc": "Despite numerous warnings, Geralt ventured deep into Deadwight Wood, where he found the ruins of Castle Arnskrone.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8699,7 +8324,6 @@
    "order": 4286578686,
    "desc": "While traveling near Novigrad, Geralt happened across the body of an unfortunate wretch who had stumbled into a cave…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8722,7 +8346,6 @@
    "order": 3758096382,
    "desc": "While unheroically roaming the backcountry that was the Champs-Désolés, our heroic witcher was ambushed by a pack of…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8745,7 +8368,6 @@
    "order": 4026531838,
    "desc": "Wandering around outside the prison, Geralt came upon a desiccated human skeleton.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8768,7 +8390,6 @@
    "order": 4293918718,
    "desc": "Traversing the fairytale duchy of Toussaint, Geralt came upon a gang of degenerate scoundrels.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8791,7 +8412,6 @@
    "order": 4294966782,
    "desc": "Only once in his life had Geralt ever seen armor made from diagrams hailing from the School of the Manticore.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -8814,7 +8434,6 @@
    "order": 4294967038,
    "desc": "Geralt himself was of the School of the Wolf, so it's no surprise he was particularly interested in finding diagrams…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -8837,7 +8456,6 @@
    "order": 4294967198,
    "desc": "While searching for diagrams that would let him craft grandmaster level gear from the School of the Cat, Geralt…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -8860,7 +8478,6 @@
    "order": 4294967206,
    "desc": "Witchers of the School of the Bear are stereotypically thought of as much like their animal patron - in other words…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -8883,7 +8500,6 @@
    "order": 4294967214,
    "desc": "Our tale of diagrams for grandmaster level gear of the School of the Griffin is a sad one.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -8906,7 +8522,6 @@
    "order": 4294934526,
    "desc": "While snooping about the cursed Trastamara Estate, Geralt happened on a strange, spoon-like key.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8929,7 +8544,6 @@
    "order": 4261412862,
    "desc": "While strolling along the banks of the Sansretour, Geralt came upon a riverboat.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8952,7 +8566,6 @@
    "order": 4294705150,
    "desc": "The witcher had made his way to the infamous ruins of the Old Amphitheatre, where - no surprise - he found the mortal…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8975,7 +8588,6 @@
    "order": 4294967293,
    "desc": "While seeking a bit of respite amidst the forests that covered the slopes of Mount Gorgon, Geralt ran into… a dead man…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -8998,7 +8610,6 @@
    "order": 4278190078,
    "desc": "Wandering about the primeval forest that covered the duchy's frontier, the witcher made a discovery most macabre.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -9021,7 +8632,6 @@
    "order": 4294967292,
    "desc": "Wandering about the slopes of Mount Gorgon, Geralt came upon some grim, foreboding ruins.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -9044,7 +8654,6 @@
    "order": 4294967286,
    "desc": "While exploring the abandoned Casteldaccia Estate, Geralt found it haunted by the specter of a knight.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -9067,7 +8676,6 @@
    "order": 4294967293,
    "desc": "While traveling through Skellige Geralt found the body of a warrior who had been torn apart by some monster.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -9090,7 +8698,6 @@
    "order": 2684354558,
    "desc": "Gathering a good set of gear is a matter of life and death for a witcher.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9113,7 +8720,6 @@
    "order": 3221225470,
    "desc": "Geralt happened across a map which contained markings showing the locations of caches of old witcher diagrams.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9136,7 +8742,6 @@
    "order": 3758096382,
    "desc": "Geralt happened across a map which contained markings showing the locations of caches of old witcher diagrams.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9159,7 +8764,6 @@
    "order": 4026531838,
    "desc": "Geralt happened across a map which contained markings showing the locations of caches of old witcher diagrams.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9182,7 +8786,6 @@
    "order": 4160749566,
    "desc": "While at the Borsodis' auction, Geralt bid a not insignificant sum on a strange figurine.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "game_file"
@@ -9205,7 +8808,6 @@
    "order": 4160749566,
    "desc": "Geralt happened across a map which contained markings showing the locations of caches of old witcher diagrams.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9228,7 +8830,6 @@
    "order": 4227858430,
    "desc": "Geralt happened across a map which contained markings showing the locations of caches of old Wolf School witcher…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9251,7 +8852,6 @@
    "order": 4261412862,
    "desc": "Geralt happened across a map which contained markings showing the locations of caches of old Wolf School witcher…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9274,7 +8874,6 @@
    "order": 4294967293,
    "desc": "Conversing with Reinald's ill-fated spirit gave Geralt the exciting chance to forge anew some ancient, forgotten Wolven…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9297,7 +8896,6 @@
    "order": 2147483647,
    "desc": "Though you might think it unlikely, even war-ravaged Velen boasted many prominent gwent players.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9324,7 +8922,6 @@
    "order": 3221225470,
    "desc": "Gwint is played wherever long evenings, warm fires and strong alcohol are present - meaning it is quite popular in the…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9349,7 +8946,6 @@
    "order": 3758096382,
    "desc": "It is an innkeeper's job to tend to his guests' needs.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9373,7 +8969,6 @@
    "order": 4026531838,
    "desc": "Gwent is played for pleasure, a pleasure that is highest when playing in good company - and the best company of all is…",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9396,7 +8991,6 @@
    "order": 4160749566,
    "desc": "Bernard Dukat, a.k.a.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9419,7 +9013,6 @@
    "order": 4227858430,
    "desc": "Novigrad is a cosmopolitan city, a true melting pot of diverse diversities.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9442,7 +9035,6 @@
    "order": 4294967292,
    "desc": "In his previous adventures, Geralt had gained fame as a master dice poker player.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9465,7 +9057,6 @@
    "order": 3372220414,
    "desc": "Thanks to the lovely Priscilla, Geralt now knew Ciri and I had struck a deal with Whoreson Junior, one of the Big Four…",
    "branch": true,
-   "dialogue_choice": true,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9494,7 +9085,6 @@
    "order": 4244635646,
    "desc": "Geralt is hardly an ace gambler.",
    "branch": true,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9517,7 +9107,6 @@
    "order": 4294967262,
    "desc": "When Geralt found himself in possession of a card belonging to the Skellige faction, he was incredibly surprised.",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": true,
    "provenance": "game_file"
@@ -9538,7 +9127,6 @@
    "order": 0,
    "desc": "",
    "branch": false,
-   "dialogue_choice": false,
    "ending_relevant": false,
    "start_known": false,
    "provenance": "manual_reviewed",

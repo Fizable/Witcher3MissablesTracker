@@ -10,7 +10,7 @@ Every shipped card gets exactly one window classification:
   source with no single route step, or an explicit unknown source.
 
 The reviewed decisions live in ``data/card_window_review.json``. Everything else is derived from
-the generated source rows in ``data/gwent_cards.json``; the generated report is
+the generated source rows in ``tools/card_sources.json``; the generated report is
 ``data/card_windows.json``. ``cards.py build`` attaches the same rows to every card so the app has
 one payload, and this checker fails if the two files disagree or if any of the 224 cards is
 unaccounted for.
@@ -30,6 +30,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from paths import HERE, TRACKER
 
 CARDS = TRACKER / "data" / "gwent_cards.json"
+# Source rows are provenance, kept beside the builder; the shipped ledger keeps only the primary row.
+SOURCES = HERE / "card_sources.json"
+USE_SOURCES = None
+_PROVENANCE = None
 REVIEW = TRACKER / "data" / "card_window_review.json"
 OUT = TRACKER / "data" / "card_windows.json"
 ROUTE = TRACKER / "data" / "route.json"
@@ -133,12 +137,25 @@ def _evidence(row):
     return out
 
 
+def sources_for(card):
+    """The card's provenance rows: the freshly built map, then the shipped ledger, then tools/."""
+    global _PROVENANCE
+    if USE_SOURCES is not None:
+        return USE_SOURCES.get(card.get("id")) or []
+    rows = card.get("sources")
+    if isinstance(rows, list) and rows:
+        return rows
+    if _PROVENANCE is None:
+        _PROVENANCE = load_json(SOURCES) if SOURCES.exists() else {}
+    return _PROVENANCE.get(card.get("id")) or []
+
+
 def _source_kinds(card):
-    return {row.get("kind") for row in card.get("sources") or [] if isinstance(row, dict)}
+    return {row.get("kind") for row in sources_for(card) if isinstance(row, dict)}
 
 
 def _step_row(card):
-    rows = [row for row in card.get("sources") or []
+    rows = [row for row in sources_for(card)
             if isinstance(row, dict) and row.get("kind") in ONE_TIME and row.get("step")]
     if not rows:
         return None
@@ -149,7 +166,7 @@ def _step_row(card):
 def _source_refs(card):
     """The concrete source rows this no-window decision was checked against."""
     refs = []
-    for row in card.get("sources") or []:
+    for row in sources_for(card):
         if not isinstance(row, dict) or not row.get("kind"):
             continue
         ref = {"kind": str(row["kind"])}
@@ -204,7 +221,7 @@ def _no_window_reason(card):
         return (f"Checked {count} source row(s), including {sample}; the source remains "
                 "available after every route step, and no phase grant or journal failure "
                 "closes this card.")
-    functions = {row.get("function") for row in card.get("sources") or []
+    functions = {row.get("function") for row in sources_for(card)
                  if isinstance(row, dict) and row.get("kind") == "native_script"}
     if functions & {"UnlockSkelligeGwentDeck", "OnGwintSetupNewgame"}:
         return (f"Checked {count} source row(s), including {sample}; the collection is filled "
@@ -289,7 +306,7 @@ def _auto_window(card, titles):
             "evidence": [{"kind": "file", "value": card["source"].get("file", "")}],
         }
     if kinds & PERSISTENT:
-        files = sorted({row.get("file") for row in card.get("sources") or []
+        files = sorted({row.get("file") for row in sources_for(card)
                         if isinstance(row, dict) and row.get("kind") in PERSISTENT
                         and row.get("file")})
         return {
@@ -318,7 +335,7 @@ def _auto_window(card, titles):
         "tier_rank": "A",
         "reason": _no_window_reason(card),
         "evidence": [{"kind": "file", "value": Path(row.get("file", "")).name}
-                     for row in card.get("sources") or []
+                     for row in sources_for(card)
                      if isinstance(row, dict) and row.get("file")],
     }
 
@@ -502,7 +519,7 @@ def _validate_window(card, window, route_ids, errors):
         # A phase or quest grant with a route step is a one-time source. Hiding it under a
         # no-window row is the Dijkstra bug: the ledger would say the card never closes while a
         # real quest phase hands it out.
-        step_sources = [row for row in card.get("sources") or []
+        step_sources = [row for row in sources_for(card)
                         if isinstance(row, dict) and row.get("kind") in ONE_TIME and row.get("step")]
         if step_sources:
             errors.append(f"{cid}: a no-window row hides a one-time source "

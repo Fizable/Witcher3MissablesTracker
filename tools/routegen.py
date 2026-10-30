@@ -175,7 +175,6 @@ def build():
             "order": q.get("order") or 0,
             "desc": first_sentence(q.get("description")),
             "branch": bool(q.get("has_branch")),
-            "dialogue_choice": bool(q.get("has_dialogue_choice")),
             "ending_relevant": bundle in covered_ending_steps,
             "start_known": bundle in graph.get("starts", {}),
             "provenance": "game_file",
@@ -190,7 +189,7 @@ def build():
             "files": [], "hard": [], "hard_facts": {}, "by": [],
             "note": "", "kind": m.get("kind", "manual"), "opt": bool(m.get("opt")),
             "when": m.get("when", []), "order": 0, "desc": "", "branch": False,
-            "dialogue_choice": False, "ending_relevant": False,
+            "ending_relevant": False,
             "start_known": False,
             "provenance": m["provenance"],
             "review_reason": m["review_reason"],
@@ -359,8 +358,7 @@ def check():
         return 1
     print(f"route ok: {len(quest_steps)} quest + {len(manual)} manual = {len(nodes)} steps; "
           f"{len(replaced)} baseline manual replaced; {len(gwent)} Gwent; {sum(1 for n in nodes if n['lv'])} levelled; "
-          f"{sum(1 for n in nodes if n['branch'])} with a branch, "
-          f"{sum(1 for n in nodes if n.get('dialogue_choice'))} with a dialogue choice; "
+          f"{sum(1 for n in nodes if n['branch'])} with a branch; "
           f"{sum(1 for n in nodes if n.get('opt'))} optional; {sum(1 for n in nodes if n.get('when'))} when; "
           f"{len(route.get('conditional') or [])} conditional; {len(route.get('flags') or [])} flags; "
           f"{len(graph['lost_when'])} loss edges")

@@ -1,0 +1,4616 @@
+{
+  "card_albrich": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Village_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Village Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_arachas": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Arinbjorn_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Arinbjorn Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_arachas2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Tuiseach_Inn_owner",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Tuiseach Inn owner"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_arachas3": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Brokvar_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Brokvar Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_arachas_behemoth": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_archer_support": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Midcotts_trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Midcotts trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "CrossroadsInnkeeper, Gambler, Gremista, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CrossroadsInnkeeper, Gambler, Gremista, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_archer_support2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Glinsks_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Glinsks Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "CrossroadsInnkeeper, Gambler, Gremista, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CrossroadsInnkeeper, Gambler, Gremista, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_assire": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ballista": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ballista2": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_barclay": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Golden_Sturgeon_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Golden Sturgeon Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, ScoiaTrader, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, ScoiaTrader, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_berserker": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_birna_bran": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_black_archer": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Glinsks_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Glinsks Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_black_archer2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Midcotts_trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Midcotts trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, Gremista, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, Gremista, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_blue_stripes": [
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Quartermaster",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Quartermaster"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Griffon_merchant",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Griffon merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeperess_Prologue",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeperess Prologue"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Mouths_Shopkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Mouths Shopkeeper"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Dijkstra, Halflings, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Dijkstra, Halflings, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_blueboy_lugos": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_botchling": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kaer_Trolde_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kaer Trolde Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, LugosTheMad, Mousesack, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, LugosTheMad, Mousesack, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_bruxa": [
+    {
+      "confidence": "strong",
+      "file": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "sq301triss",
+      "text": "Scripted quest grant in sq301_dawn_estate (AddItemQuest)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_cahir": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_catapult": [
+    {
+      "confidence": "strong",
+      "container": "_store__Griffon_merchant",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Griffon merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeperess_Prologue",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeperess Prologue"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_catapult2": [
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Passiflora",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Passiflora"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_celaeno_harpy": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    }
+  ],
+  "card_cerys": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_ciaran": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "ScoiaTrader, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the ScoiaTrader, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ciri": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/novigrad/cg300_novigrad.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnovigrad",
+      "text": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)"
+    }
+  ],
+  "card_cirigog": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Crach, CrossroadsInnkeeper, Gremista, Halflings, Lambert, LugosTheMad, MarkizaSerenity, Olgierd, Roche, Shani, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Crach, CrossroadsInnkeeper, Gremista, Halflings, Lambert, LugosTheMad, MarkizaSerenity, Olgierd, Roche, Shani, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_clan_an_craite_warrior": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_clan_brokvar_archer": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_clan_dimun_pirate": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_clan_drummond_shieldmaiden": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_clan_drummond_shieldmaiden2": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_clan_drummond_shieldmaiden3": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_clan_heymaey_skald": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_clan_tordarroch_armorsmith": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_clear_sky": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Gremista, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Thaler, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Gremista, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Thaler, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_cock": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_cockatrice": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "LugosTheMad",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the LugosTheMad opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_combat_engineer": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Crossroads_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_cow": [
+    {
+      "confidence": "strong",
+      "container": "q602_gwent_cow_card",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_quests.xml",
+      "kind": "quest",
+      "pack": "ep1",
+      "text": "Quest loot: q602 gwent cow card"
+    }
+  ],
+  "card_crinfrid": [
+    {
+      "confidence": "strong",
+      "container": "_store__Griffon_merchant",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Griffon merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeperess_Prologue",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeperess Prologue"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_crinfrid2": [
+    {
+      "confidence": "strong",
+      "container": "_store__Glinsks_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Glinsks Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_crinfrid3": [
+    {
+      "confidence": "strong",
+      "container": "_store__Mouths_Shopkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Mouths Shopkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_crone_brewess": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_crone_weavess": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnomansland",
+      "text": "Scripted quest grant in cg100_no_mans_land (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_crone_whispess": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Arinbjorn_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Arinbjorn Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_cynthia": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Quartermaster",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Quartermaster"
+    },
+    {
+      "confidence": "weak",
+      "container": "Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dandelion": [
+    {
+      "confidence": "strong",
+      "file": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "sq301triss",
+      "text": "Scripted quest grant in sq301_dawn_estate (AddItemQuest)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Dijkstra, Gambler, Gremista, Halflings, Hermit, Lambert, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, Shani, Sjusta, Stjepan, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Dijkstra, Gambler, Gremista, Halflings, Hermit, Lambert, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, Shani, Sjusta, Stjepan, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dennis": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, ScoiaTrader, Shani, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, ScoiaTrader, Shani, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dethmold": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    }
+  ],
+  "card_dijkstra": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnomansland",
+      "text": "Scripted quest grant in cg100_no_mans_land (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Dijkstra, Halflings, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Dijkstra, Halflings, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dol_archer": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Passiflora",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Passiflora"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dol_scout": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Golden_Sturgeon_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Golden Sturgeon Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dol_scout2": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dol_scout3": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_donar_an_hindar": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_draig": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_draug": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/skellige/cg200_skellige.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgskellige",
+      "text": "Scripted quest grant in cg200_skellige (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dummy": [
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Quartermaster",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Quartermaster"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeperess_Prologue",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeperess Prologue"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Seven_Cats_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Seven Cats Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Gremista, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Thaler, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Gremista, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Thaler, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dun_banner_medic": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dwarf": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeper_Stjepan",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+      "confidence": "weak",
+      "container": "Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dwarf2": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Shani, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Shani, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_dwarf3": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Shani, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Shani, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_earth_elemental": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kaer_Trolde_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kaer Trolde Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, LugosTheMad, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, LugosTheMad, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_eithne": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ekkima": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Brokvar_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Brokvar Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_elf_skirmisher": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Tuiseach_Inn_owner",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Tuiseach Inn owner"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, ScoiaTrader",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, ScoiaTrader opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_elf_skirmisher2": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, ScoiaTrader",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, ScoiaTrader opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_elf_skirmisher3": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "ScoiaTrader",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the ScoiaTrader opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_emiel": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Crach, Dijkstra, Gremista, Hermit, MarkizaSerenity, Mousesack, Olgierd, ScoiaTrader, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Crach, Dijkstra, Gremista, Hermit, MarkizaSerenity, Mousesack, Olgierd, ScoiaTrader, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_endrega": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, LugosTheMad, Mousesack, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, LugosTheMad, Mousesack, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ermion": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_esterad": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/novigrad/cg300_novigrad.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnovigrad",
+      "text": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Halflings",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Halflings opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_fiend": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Arinbjorn_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Arinbjorn Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_filavandrel": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_fire_elemental": [
+    {
+      "confidence": "strong",
+      "container": "_chest_uniq_freyachest",
+      "file": "gameplay/items/def_loot_unique.xml",
+      "kind": "unique",
+      "pack": "base",
+      "text": "Unique loot: chest uniq freyachest"
+    },
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, LugosTheMad, Mousesack, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, LugosTheMad, Mousesack, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_fleder": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Dimun_Tavern_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Dimun Tavern Barkeep"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_fog": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gremista, Halflings, Hermit, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Stjepan, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gremista, Halflings, Hermit, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Stjepan, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_fogling": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Brokvar_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Brokvar Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "LugosTheMad",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the LugosTheMad opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_forktail": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    }
+  ],
+  "card_frightener": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_fringilla": [
+    {
+      "confidence": "strong",
+      "container": "sq310_gwint_cards",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq310 gwint cards"
+    },
+    {
+      "confidence": "strong",
+      "container": "sq310_card_3",
+      "file": "gameplay/items/def_loot_quests.xml",
+      "kind": "quest",
+      "pack": "base",
+      "text": "Quest loot: sq310 card 3"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_frost": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CircusGwentAddict, Crach, Dijkstra, Gremista, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olivier, ScoiaTrader, Stjepan, Thaler, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CircusGwentAddict, Crach, Dijkstra, Gremista, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olivier, ScoiaTrader, Stjepan, Thaler, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_gargoyle": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_garkain": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_geralt": [
+    {
+      "confidence": "strong",
+      "container": "cg300_talars_card_locker",
+      "file": "gameplay/items/def_loot_quests.xml",
+      "kind": "quest",
+      "pack": "base",
+      "text": "Quest loot: cg300 talars card locker"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    }
+  ],
+  "card_geraltgog": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CircusGwentAddict, Crach, CrossroadsInnkeeper, Gambler, Gremista, Halflings, Hermit, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, Shani, Sjusta, Stjepan, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CircusGwentAddict, Crach, CrossroadsInnkeeper, Gambler, Gremista, Halflings, Hermit, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, Shani, Sjusta, Stjepan, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ghoul": [
+    {
+      "confidence": "strong",
+      "container": "_nov_casino_casket_with_gwint_card_uniq",
+      "file": "gameplay/items/def_loot_unique.xml",
+      "kind": "unique",
+      "pack": "base",
+      "text": "Unique loot: nov casino casket with gwint card uniq"
+    },
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Dimun_Tavern_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Dimun Tavern Barkeep"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, Mousesack, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, Mousesack, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ghoul2": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, Mousesack, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, Mousesack, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ghoul3": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, Mousesack, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, Mousesack, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_grave_hag": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, LugosTheMad, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, LugosTheMad, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_griffin": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, LugosTheMad, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, LugosTheMad, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_harpy": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Dimun_Tavern_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Dimun Tavern Barkeep"
+    }
+  ],
+  "card_havcaaren_medic": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, Shani, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, Shani, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_havcaaren_medic2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Gooses_Cunt_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Gooses Cunt Barkeep"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, Shani, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, Shani, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_havcaaren_medic3": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kingfisher_Inn_Olivier",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Shani, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Shani, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_havcaaren_support": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Seven_Cats_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Seven Cats Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_havcaaren_support2": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, ScoiaTrader, Shani, Thaler, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, ScoiaTrader, Shani, Thaler, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_havcaaren_support3": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kingfisher_Inn_Olivier",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_heavy_zerri": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Midcotts_trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Midcotts trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_hjalmar": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_holger_blackhand": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_horn": [
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Crossroads_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeper_Stjepan",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Passiflora",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Passiflora"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ice_giant": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Brokvar_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Brokvar Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ida": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "ScoiaTrader, Thaler, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the ScoiaTrader, Thaler, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_imlerith": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    }
+  ],
+  "card_impera_brigade": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Village_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Village Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_impera_brigade2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Crossroads_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_impera_brigade3": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Seven_Cats_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Seven Cats Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_impera_brigade4": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Gooses_Cunt_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Gooses Cunt Barkeep"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_iorveth": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, ScoiaTrader, Shani",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, ScoiaTrader, Shani opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_isengrim": [
+    {
+      "confidence": "strong",
+      "container": "sq310_gwint_cards",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq310 gwint cards"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/sidequests/novigrad/sq310_dangerous_game.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "sq310dangerousgame",
+      "text": "Scripted quest grant in sq310_dangerous_game (AddItemQuest)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader, Shani, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader, Shani, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_kaedweni_siege": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Dijkstra, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Dijkstra, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_kaedweni_siege2": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_kaedweni_siege3": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "Halflings",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Halflings opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_katakan": [
+    {
+      "confidence": "strong",
+      "container": "cg200_lugos_the_mad_card_locker",
+      "file": "gameplay/items/def_loot_quests.xml",
+      "kind": "quest",
+      "pack": "base",
+      "text": "Quest loot: cg200 lugos the mad card locker"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/skellige/cg200_skellige.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgskellige",
+      "text": "Scripted quest grant in cg200_skellige (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_kayran": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "LugosTheMad, Mousesack, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the LugosTheMad, Mousesack, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_keira": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_leshen": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/skellige/cg200_skellige.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgskellige",
+      "text": "Scripted quest grant in cg200_skellige (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Hermit, LugosTheMad, Olgierd, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Hermit, LugosTheMad, Olgierd, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_letho": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnomansland",
+      "text": "Scripted quest grant in cg100_no_mans_land (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_light_drakkar": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_madman_lugos": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_mahakam": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Passiflora",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Passiflora"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_mahakam2": [
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeper_Stjepan",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_mahakam3": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Seven_Cats_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Seven Cats Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_mahakam4": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Golden_Sturgeon_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Golden Sturgeon Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Lambert, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Lambert, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_mahakam5": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kingfisher_Inn_Olivier",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+      "confidence": "weak",
+      "container": "VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_menno": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_milva": [
+    {
+      "confidence": "strong",
+      "file": "quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "sq301triss",
+      "text": "Scripted quest grant in sq301_dawn_estate (AddItemQuest)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, ScoiaTrader, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, ScoiaTrader, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_moorvran": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/novigrad/cg300_novigrad.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnovigrad",
+      "text": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, Gambler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, Gambler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_morteisen": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Mouths_Shopkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Mouths Shopkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_mrmirror": [
+    {
+      "confidence": "strong",
+      "file": "dlc/ep1/data/quests/q603_bank.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "ep1",
+      "text": "Scripted quest grant in q603_bank (AddItemQuestExt)"
+    }
+  ],
+  "card_mrmirror_foglet": [
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Ofir_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Ofir merchant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_mushroom": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_mysterious_elf": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/skellige/cg200_skellige.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgskellige",
+      "text": "Scripted quest grant in cg200_skellige (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Dijkstra, Gambler, Gremista, Olgierd, ScoiaTrader, Shani, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Dijkstra, Gambler, Gremista, Olgierd, ScoiaTrader, Shani, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_natalis": [
+    {
+      "confidence": "strong",
+      "container": "sq310_gwint_cards",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq310 gwint cards"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/sidequests/novigrad/sq310_dangerous_game.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "sq310dangerousgame",
+      "text": "Scripted quest grant in sq310_dangerous_game (AddItemQuest)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_nausicaa": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Quartermaster",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Quartermaster"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_nausicaa2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Crossroads_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Crossroads Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_nausicaa3": [
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Village_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Village Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_nekker": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_nekker2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Dimun_Tavern_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Dimun Tavern Barkeep"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_nekker3": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Hermit, LugosTheMad, Mousesack, Olgierd",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Hermit, LugosTheMad, Mousesack, Olgierd opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_olaf": [
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_olgierd": [
+    {
+      "confidence": "strong",
+      "container": "cg600_shani",
+      "file": "dlc/ep1/data/gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "ep1",
+      "text": "Quest reward event: cg600 shani"
+    }
+  ],
+  "card_philippa": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Halflings",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Halflings opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_plague_maiden": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "LugosTheMad, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the LugosTheMad, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_poor_infantry": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CardProdigy, Roche, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CardProdigy, Roche, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_poor_infantry2": [
+    {
+      "confidence": "strong",
+      "container": "_store__Mouths_Shopkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Mouths Shopkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Roche, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Roche, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_poor_infantry3": [
+    {
+      "confidence": "strong",
+      "container": "_store__Midcotts_trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Midcotts trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_puttkammer": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Glinsks_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Glinsks Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_rain": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, Crach, Gremista, Hermit, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, ScoiaTrader, Stjepan, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, Crach, Gremista, Hermit, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Olivier, ScoiaTrader, Stjepan, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_rainfarn": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Midcotts_trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Midcotts trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gremista, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gremista, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_redanian": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Roche, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Roche, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_redanian2": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
+      "function": "OnGwintSetupNewgame",
+      "kind": "collection_grant",
+      "line": 158,
+      "pack": "base",
+      "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, Dijkstra, Roche, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, Dijkstra, Roche, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_renuald": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CrossroadsInnkeeper, MarkizaSerenity",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CrossroadsInnkeeper, MarkizaSerenity opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_riordain": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_roach": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CircusGwentAddict, Crach, CrossroadsInnkeeper, Gambler, Gremista, Halflings, Hermit, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, Shani, Sjusta, Stjepan, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CircusGwentAddict, Crach, CrossroadsInnkeeper, Gambler, Gremista, Halflings, Hermit, MarkizaSerenity, Mousesack, Olgierd, Olivier, Roche, Shani, Sjusta, Stjepan, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_rotten": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CrossroadsInnkeeper",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CrossroadsInnkeeper opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_sabrina": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_saskia": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader, Shani, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader, Shani, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_schirru": [
+    {
+      "confidence": "strong",
+      "file": "dlc/ep1/data/quests/ep1_additional_game_elements.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "ep1",
+      "text": "Merchant card grant in ep1_additional_game_elements (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_scorch": [
+    {
+      "confidence": "strong",
+      "container": "_store__Gooses_Cunt_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Gooses Cunt Barkeep"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kaer_Trolde_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kaer Trolde Inn"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Tuiseach_Inn_owner",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Tuiseach Inn owner"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, BoatBuilder, CardProdigy, CircusGwentAddict, Crach, CrossroadsInnkeeper, Dijkstra, Gambler, Halflings, Hermit, Lambert, LugosTheMad, MarkizaSerenity, Mousesack, Olgierd, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_sheldon": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    }
+  ],
+  "card_shilard": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CrossroadsInnkeeper, Gambler, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CrossroadsInnkeeper, Gambler, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_siege_support": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Golden_Sturgeon_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Golden Sturgeon Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_siege_tower": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_siegfried": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_sile": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_skellige_storm": [
+    {
+      "confidence": "strong",
+      "container": "mq7001_card_container",
+      "file": "dlc/bob/data/gameplay/items/def_loot_quest.xml",
+      "kind": "quest",
+      "pack": "bob",
+      "text": "Quest loot: mq7001 card container"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/sidequests/sq701_tournament_backup.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "bob",
+      "step": "sq701tournament",
+      "text": "Scripted quest grant in sq701_tournament_backup (AddItemQuest)"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_stefan": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, Gambler, MarkizaSerenity, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, Gambler, MarkizaSerenity, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_stennis": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Halflings, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Halflings, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_svanrige": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_sweers": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Glinsks_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Glinsks Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gremista, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gremista, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_thaler": [
+    {
+      "confidence": "strong",
+      "container": "_store__Arinbjorn_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Arinbjorn Innkeeper"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Halflings",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Halflings opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_tibor": [
+    {
+      "confidence": "strong",
+      "container": "cg300_oliviers_card_locker",
+      "file": "gameplay/items/def_loot_quests.xml",
+      "kind": "quest",
+      "pack": "base",
+      "text": "Quest loot: cg300 oliviers card locker"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler, Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler, Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_toad": [
+    {
+      "confidence": "strong",
+      "container": "cg600_olgierd",
+      "file": "dlc/ep1/data/gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "ep1",
+      "text": "Quest reward event: cg600 olgierd"
+    }
+  ],
+  "card_toruviel": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler, VimmeVivaldi",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler, VimmeVivaldi opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_trebuchet": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_trebuchet2": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Halflings, Roche",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Halflings, Roche opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_triss": [
+    {
+      "confidence": "strong",
+      "container": "cg300_lamberts_card_locker",
+      "file": "gameplay/items/def_loot_quests.xml",
+      "kind": "quest",
+      "pack": "base",
+      "text": "Quest loot: cg300 lamberts card locker"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Crach, CrossroadsInnkeeper, Gambler, Halflings, Hermit, LugosTheMad, Mousesack, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Crach, CrossroadsInnkeeper, Gambler, Halflings, Hermit, LugosTheMad, Mousesack, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_udalryk": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    }
+  ],
+  "card_vanhemar": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_vattier": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, Gambler, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, Gambler, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_vernon": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnomansland",
+      "text": "Scripted quest grant in cg100_no_mans_land (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Halflings",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Halflings opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_ves": [
+    {
+      "confidence": "unknown",
+      "container": "no concrete grant or vendor row",
+      "file": "gameplay/items/def_gwint_cards_final.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    },
+    {
+      "confidence": "weak",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_definition",
+      "pack": "base",
+      "text": "Northern Kingdoms deck definition; a deck list is not a collection grant"
+    },
+    {
+      "confidence": "weak",
+      "container": "Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_vesemir": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/novigrad/cg300_novigrad.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnovigrad",
+      "text": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Crach, Gremista, Lambert, LugosTheMad, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Crach, Gremista, Lambert, LugosTheMad, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_villen": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CircusGwentAddict, CrossroadsInnkeeper, Gambler, Gremista, Halflings, Lambert, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Thaler, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CircusGwentAddict, CrossroadsInnkeeper, Gambler, Gremista, Halflings, Lambert, Mousesack, Olgierd, Olivier, Roche, ScoiaTrader, Shani, Sjusta, Stjepan, Thaler, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_vreemde": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    }
+  ],
+  "card_vrihedd_brigade": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeper_Stjepan",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeper Stjepan"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Shani, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Shani, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_vrihedd_brigade2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kingfisher_Inn_Olivier",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kingfisher Inn Olivier"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Shani, Thaler, VimmeVivaldi, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Shani, Thaler, VimmeVivaldi, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_vrihedd_cadet": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Thaler, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Thaler, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_war_drakkar": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_werewolf": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Tuiseach_Inn_owner",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Tuiseach Inn owner"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, LugosTheMad, Mousesack",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, LugosTheMad, Mousesack opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_wyvern": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "GiveMerchantRandomGwintCardToPlayerQuest",
+      "kind": "random_merchant",
+      "line": 7641,
+      "pack": "base",
+      "text": "Random merchant card reward (GiveMerchantRandomGwintCardToPlayerQuest in quest_function.ws:7641; the specific merchant is not identified)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Crach, Olivier",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Crach, Olivier opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_yaevinn": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/skellige/cg200_skellige.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgskellige",
+      "text": "Scripted quest grant in cg200_skellige (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CircusGwentAddict, Lambert, ScoiaTrader, Shani, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_yarpen": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
+      "function": "OnGwintSetupNewgame",
+      "kind": "collection_grant",
+      "line": 158,
+      "pack": "base",
+      "text": "Collection grant by OnGwintSetupNewgame() in gwintManager.ws:158"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, Dijkstra, Roche, Sjusta",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, Dijkstra, Roche, Sjusta opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_yennefer": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/card_minigame_all_hubs/cg_card_minigame_meta.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in cg_card_minigame_meta (AddItemQuestExt)"
+    },
+    {
+      "confidence": "weak",
+      "container": "CardProdigy, CircusGwentAddict, Dijkstra, Gambler, Gremista, Halflings, Lambert, Olgierd, Roche, Shani, Sjusta, Zoltan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the CardProdigy, CircusGwentAddict, Dijkstra, Gambler, Gremista, Halflings, Lambert, Olgierd, Roche, Shani, Sjusta, Zoltan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_young_berserker": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/quests/quest_function.ws",
+      "function": "UnlockSkelligeGwentDeck",
+      "kind": "collection_grant",
+      "line": 6636,
+      "pack": "bob",
+      "text": "Collection grant by UnlockSkelligeGwentDeck() in quest_function.ws:6636"
+    },
+    {
+      "confidence": "strong",
+      "container": "mq7002_card_container",
+      "file": "dlc/bob/data/gameplay/items/def_loot_quest.xml",
+      "kind": "quest",
+      "pack": "bob",
+      "text": "Quest loot: mq7002 card container"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/gameplay/community/shops_and_craftsmen/bob_shops_and_craftsmen.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in bob_shops_and_craftsmen (GiveSpecificGwentCardViaMerchantQuest)"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ],
+  "card_young_emissary": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Gooses_Cunt_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Gooses Cunt Barkeep"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, Gambler, Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, Gambler, Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_young_emissary2": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Seven_Cats_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Seven Cats Inn"
+    },
+    {
+      "confidence": "weak",
+      "container": "Gambler, Gremista",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Gambler, Gremista opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_zerri": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Barons_Village_Trader",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Barons Village Trader"
+    },
+    {
+      "confidence": "weak",
+      "container": "BoatBuilder, CrossroadsInnkeeper, Gambler, Stjepan",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the BoatBuilder, CrossroadsInnkeeper, Gambler, Stjepan opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "card_zoltan": [
+    {
+      "confidence": "strong",
+      "container": "cg_academic",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: cg academic"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/bugfixing_phase.w2phase",
+      "function": "AddItemQuest",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in bugfixing_phase (AddItemQuest)"
+    },
+    {
+      "confidence": "weak",
+      "container": "Baron, CircusGwentAddict, CrossroadsInnkeeper, Halflings, Lambert, MarkizaSerenity, Mousesack, Olgierd, Sjusta, Thaler",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "opponent_deck",
+      "pack": "base",
+      "text": "Appears in the Baron, CircusGwentAddict, CrossroadsInnkeeper, Halflings, Lambert, MarkizaSerenity, Mousesack, Olgierd, Sjusta, Thaler opponent deck; opponent evidence, not a proven reward"
+    }
+  ],
+  "leader_crach_an_craite": [
+    {
+      "confidence": "strong",
+      "file": "content/content0/scripts/game/gui/menus/gwintManager.ws",
+      "function": "OnGwintSetupSkellige",
+      "kind": "native_script",
+      "pack": "bob",
+      "text": "Fixed Skellige deck leader assigned by OnGwintSetupSkellige()"
+    }
+  ],
+  "leader_emhyr_bronze": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Crossroads_Innkeeper",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Crossroads Innkeeper"
+    }
+  ],
+  "leader_emhyr_copper": [
+    {
+      "confidence": "strong",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_default",
+      "pack": "base",
+      "text": "Default Nilfgaard deck leader"
+    }
+  ],
+  "leader_emhyr_gold": [
+    {
+      "confidence": "strong",
+      "container": "sq306_02_defeated_sacha",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq306 02 defeated sacha"
+    }
+  ],
+  "leader_emhyr_platinium": [
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    }
+  ],
+  "leader_emhyr_silver": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/skellige/cg200_skellige.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgskellige",
+      "text": "Scripted quest grant in cg200_skellige (AddItemQuestExt)"
+    }
+  ],
+  "leader_eredin_bronze": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Kaer_Trolde_Inn",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Kaer Trolde Inn"
+    }
+  ],
+  "leader_eredin_copper": [
+    {
+      "confidence": "unknown",
+      "file": "gameplay/items/def_gwint_battle_king_cards.xml",
+      "kind": "unknown",
+      "pack": "base",
+      "text": "unknown source"
+    }
+  ],
+  "leader_eredin_gold": [
+    {
+      "confidence": "strong",
+      "container": "sq306_04_defeated_tybalt",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq306 04 defeated tybalt"
+    }
+  ],
+  "leader_eredin_platinium": [
+    {
+      "confidence": "strong",
+      "container": "_store__Ofir_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Ofir merchant"
+    }
+  ],
+  "leader_eredin_silver": [
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/no_mans_land/cg100_no_mans_land.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnomansland",
+      "text": "Scripted quest grant in cg100_no_mans_land (AddItemQuestExt)"
+    }
+  ],
+  "leader_foltest_bronze": [
+    {
+      "confidence": "strong",
+      "container": "_store__Griffon_merchant",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Griffon merchant"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Innkeeperess_Prologue",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Innkeeperess Prologue"
+    }
+  ],
+  "leader_foltest_copper": [
+    {
+      "confidence": "strong",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_default",
+      "pack": "base",
+      "text": "Default Northern Kingdoms deck leader"
+    }
+  ],
+  "leader_foltest_gold": [
+    {
+      "confidence": "strong",
+      "container": "sq306_01_defeated_bernard",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq306 01 defeated bernard"
+    }
+  ],
+  "leader_foltest_platinium": [
+    {
+      "confidence": "strong",
+      "container": "_store__Circus_camp_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Circus camp merchant"
+    }
+  ],
+  "leader_foltest_silver": [
+    {
+      "confidence": "strong",
+      "file": "quests/persistent_content.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in persistent_content (AddItemQuestExt)"
+    }
+  ],
+  "leader_francesca_bronze": [
+    {
+      "confidence": "strong",
+      "container": "_EP2_store__Innkeeper",
+      "file": "dlc/bob/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "bob",
+      "text": "Sold by Innkeeper"
+    },
+    {
+      "confidence": "strong",
+      "container": "_store__Gooses_Cunt_Barkeep",
+      "file": "gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "base",
+      "text": "Sold by Gooses Cunt Barkeep"
+    }
+  ],
+  "leader_francesca_copper": [
+    {
+      "confidence": "strong",
+      "file": "gameplay/items/def_gwint_decks.xml",
+      "kind": "deck_default",
+      "pack": "base",
+      "text": "Default Scoia'tael deck leader"
+    }
+  ],
+  "leader_francesca_gold": [
+    {
+      "confidence": "strong",
+      "container": "sq306_03_defeated_finneas",
+      "file": "gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "base",
+      "text": "Quest reward event: sq306 03 defeated finneas"
+    }
+  ],
+  "leader_francesca_platinium": [
+    {
+      "confidence": "strong",
+      "container": "_store__Ofir_merchant",
+      "file": "dlc/ep1/data/gameplay/items/def_loot_shops.xml",
+      "kind": "vendor",
+      "pack": "ep1",
+      "text": "Sold by Ofir merchant"
+    }
+  ],
+  "leader_francesca_silver": [
+    {
+      "confidence": "strong",
+      "file": "quests/bugfixing_phase.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "text": "Scripted quest grant in bugfixing_phase (AddItemQuestExt)"
+    },
+    {
+      "confidence": "strong",
+      "file": "quests/generic_quests/novigrad/cg300_novigrad.w2phase",
+      "function": "AddItemQuestExt",
+      "kind": "phase_grant",
+      "pack": "base",
+      "step": "cgnovigrad",
+      "text": "Scripted quest grant in cg300_novigrad (AddItemQuestExt)"
+    }
+  ],
+  "leader_king_bran": [
+    {
+      "confidence": "strong",
+      "container": "cg700_tournament_card",
+      "file": "dlc/bob/data/gameplay/rewards/rewards.xml",
+      "kind": "reward",
+      "pack": "bob",
+      "text": "Quest reward event: cg700 tournament card"
+    },
+    {
+      "confidence": "strong",
+      "file": "dlc/bob/data/quests/minor_quests/quest_files/cg700_gwent_players.w2phase",
+      "function": "GiveSpecificGwentCardViaMerchantQuest",
+      "kind": "merchant_card",
+      "pack": "bob",
+      "text": "Merchant card grant in cg700_gwent_players (GiveSpecificGwentCardViaMerchantQuest)"
+    }
+  ]
+}

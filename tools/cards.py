@@ -51,6 +51,10 @@ import stringsdb
 from paths import HERE, SAVES, TRACKER
 
 OUT = TRACKER / "data" / "gwent_cards.json"
+# The per-card source rows are provenance: the app reads only the primary `source`. They are
+# written next to the tool that builds them so the shipped ledger carries no unused copy.
+PROVENANCE = HERE / "card_sources.json"
+SOURCES_BY_ID = {}
 CARD_FILE = probe.CARD_DB
 ITEM_FILE = probe.ITEM_DB
 LEADER_FILE = probe.LEADER_DB
@@ -239,6 +243,7 @@ def card_refs(name, cards_by_name, card_items, leaders_by_name, leader_items_by_
 
 
 def build_doc():
+    SOURCES_BY_ID.clear()
     if not probe.GAME.is_dir():
         raise SystemExit(f"game folder not found: {probe.GAME}")
     bundles = probe.Bundles()
@@ -483,7 +488,6 @@ def build_doc():
                 "faction": card["faction"],
                 "pack": card_pack(collection, card["index"]),
                 "source": primary,
-                "sources": row_list,
                 "evidence": evidence(collection, card["index"], row_list),
             }
             title = (card.get("title") or "").strip()
@@ -498,6 +502,7 @@ def build_doc():
                     "A fixed deck leader, not a normal SBLeaderCollectionCard row; the save "
                     "collection or the Skellige deck-unlock fact decides it, otherwise unknown."
                 )
+            SOURCES_BY_ID[item["id"]] = row_list
             shipped.append(item)
 
     excluded = []
@@ -555,7 +560,15 @@ def build_doc():
         "excluded": sorted(excluded, key=lambda row: row["index"]),
         "cards": shipped,
     }
+    cardwindows.USE_SOURCES = SOURCES_BY_ID
     return cardwindows.attach(doc)
+
+
+def load_sources():
+    """The per-card source rows kept beside this tool; the shipped ledger keeps only `source`."""
+    if not PROVENANCE.exists():
+        return {}
+    return json.loads(PROVENANCE.read_text(encoding="utf-8"))
 
 
 def validate_schema(doc, errors):
@@ -612,7 +625,7 @@ def validate_schema(doc, errors):
             err(path, "must be an object")
             continue
         for key in sorted(set(card) - {"id", "index", "collection", "name", "internal_name",
-                                       "deck", "faction", "pack", "source", "sources", "evidence",
+                                       "deck", "faction", "pack", "source", "evidence",
                                        "name_key", "name_locid", "ownership", "ownership_note",
                                        "missable", "window"}):
             err(path, f"unknown key {key!r}")
@@ -648,7 +661,7 @@ def validate_schema(doc, errors):
                 for token in PLACEHOLDERS:
                     if token in value:
                         err(path + "." + key, f"contains placeholder token {token!r}")
-        sources = card.get("sources")
+        sources = SOURCES_BY_ID.get(cid) or load_sources().get(cid)
         if not isinstance(sources, list) or not sources:
             err(path + ".sources", "must be a non-empty list")
             sources = []
@@ -784,7 +797,7 @@ def live_checks(doc, errors, warnings):
         route_ids = {node.get("id") for node in load_json(route_path).get("nodes", [])
                      if isinstance(node, dict)}
     for card in shipped:
-        for row in card.get("sources") or []:
+        for row in load_sources().get(card.get("id")) or []:
             if isinstance(row, dict) and row.get("step") and row["step"] not in route_ids:
                 errors.append(f"{card.get('id')}: source step {row['step']!r} is not in route.json")
         window = card.get("window")
@@ -912,6 +925,7 @@ def load_doc(path=OUT):
 def command_build(args):
     doc = build_doc()
     write_json(OUT, doc)
+    write_json(PROVENANCE, {cid: SOURCES_BY_ID[cid] for cid in sorted(SOURCES_BY_ID)})
     counts = doc["counts"]
     print(f"wrote {OUT.relative_to(TRACKER)}")
     print(f"  {counts['total']} cards = {counts['main_collectible']} collectible main + "

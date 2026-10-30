@@ -37,6 +37,9 @@ OUTPUTS = [
     TRACKER / "data" / "derived.json",
     TRACKER / "data" / "route_disputes.json",
     TRACKER / "data" / "prereq_relations.json",
+    # cards.py owns the ledger and cardwindows.py its windows; neither is a step in this chain, so
+    # the hash is the guard that the shipped card data did not move unnoticed.
+    TRACKER / "data" / "gwent_cards.json",
 ]
 STEPS = [
     # --all: the route is every CJournalQuest in the game, not just the ones the old route named

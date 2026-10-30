@@ -12,17 +12,20 @@ Inputs, all of them read-only:
 
 Output `data/derived.json` (sorted, no timestamps: the same inputs give the same bytes):
 
-  quests.<stem>   title, objectives with their GUIDs and the game's wording, activators, the phase
-                  files and scenes the quest is read from, its dialogue choices, the facts only
-                  dialogue sets, the save status histogram, and its reviewed cutoffs.
-  steps.<id>      per route step: the quests it reads, the game's own name for it, and `watch` -
-                  one entry per reason to be careful, each naming the mechanism that causes it.
+  quests.<stem>   the game's own name for the quest. That title is the only per-quest field the
+                  app reads (`qtitles`). The extraction anatomy - activators, phase files, scenes,
+                  dialogue-set facts, save histograms - stays in tools/quest_index.json and
+                  tools/save_index.json, where the pipeline and its audits read it.
+  steps.<id>      per route step: the quests it reads, its journal objectives, its stems, and
+                  `watch` - one entry per reason to be careful, each naming the mechanism that
+                  causes it. `activators` and `game_title` were forwarded into every poll and
+                  never read, so they do not ship.
 
 """
 import json
 import re
 import sys
-from collections import Counter, defaultdict
+from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -31,7 +34,6 @@ from paths import HERE, ROUTE, TRACKER
 
 CUTOFFS = TRACKER / "data" / "cutoffs.json"
 DERIVED = TRACKER / "data" / "derived.json"
-PRESENT = ("Active", "Done", "Failed")
 LEVELS = {"stop", "warn", "info"}
 
 
@@ -87,12 +89,6 @@ def build(verbose=True):
     def game_name(q):
         """the game's name for a quest, by bundle name or REDkit stem, falling back to the id itself"""
         return title_of.get(q) or title_of.get(alias.get(q, q)) or q
-
-    status = defaultdict(Counter)
-    for name, v in saves.items():
-        for q, st in (v.get("state") or {}).items():
-            if st in PRESENT:
-                status[q][st] += 1
 
     def texts(quest):
         """The game's own wording for a quest: journal text of its file."""
@@ -164,7 +160,10 @@ def build(verbose=True):
         if r["level"] not in LEVELS:
             raise SystemExit(f"cutoffs.json: level {r['level']!r} in {r['id']}")
 
-    # quests the app knows about: every route stem, resolved through the alias map
+    # quests the app knows about: every route stem, resolved through the alias map.
+    # Only the title ships. Objectives are copied onto the step that shows them; every other field
+    # is extraction provenance in tools/quest_index.json. Choice text was never shipped.
+    quest_texts = {}
     quests_out = {}
     for bundle in sorted({q for qs in step_quests.values() for q in qs}):
         stem = alias.get(bundle, bundle)
@@ -172,22 +171,8 @@ def build(verbose=True):
         if not q:
             continue
         t = texts(q)
-        # Choice text is deliberately not shipped: the app only says that a fact-setting branch
-        # changes later content (`has_branch`) or that a one-shot dialogue row exists
-        # (`has_dialogue_choice`), never what the options are. The text stays in the audit JSON.
-        quests_out[stem] = {
-            "bundle_names": sorted(set(q.get("bundle_names", [])) | {bundle}),
-            "title": t["title"], "objectives": t["objectives"],
-            "has_branch": bool(q.get("has_branch")),
-            "has_dialogue_choice": bool(q.get("has_dialogue_choice")),
-            # the app never shows the GUID chains tools/prereqs.py needs, so they stay in the index
-            "activators": [{k: v for k, v in a.items() if k != "guids"} for a in q.get("activators", [])],
-            "phase_files": [p["file"] for p in q.get("phases", []) if not p.get("global")],
-            "global_phase_files": [p["file"] for p in q.get("phases", []) if p.get("global")],
-            "scenes": [s["file"] for s in q.get("scenes", [])][:40],
-            "dialogue_only_facts": q.get("dialogue_only", [])[:60],
-            "saves": dict(status.get(bundle, {})),
-        }
+        quest_texts[stem] = t
+        quests_out[stem] = {"title": t["title"]}
 
     # prerequisites the saves disagree with (tools/contradictions.py writes this): shown as a note,
     # never as a rule, so nobody is told a quest is locked when the saves say otherwise
@@ -213,13 +198,10 @@ def build(verbose=True):
                         f"Treat the order as advice, not as a rule, until it is settled."),
                 "evidence": "saves-disagree", "caveats": [], "affected": [], "resources": [],
                 "saves": {"open_before": d["violations"], "finished_after": 0}}]
-        game_title = next((quests_out[s]["title"] for s in stems if quests_out.get(s, {}).get("title")), None)
         steps_out[sid] = {
             "quests": names,
             "stems": stems,
-            "game_title": game_title,
-            "objectives": next((quests_out[s]["objectives"] for s in stems if quests_out.get(s, {}).get("objectives")), []),
-            "activators": next((quests_out[s]["activators"] for s in stems if quests_out.get(s, {}).get("activators")), []),
+            "objectives": next((quest_texts[s]["objectives"] for s in stems if quest_texts.get(s, {}).get("objectives")), []),
             "watch": sorted(watch, key=lambda r: ({"stop": 0, "warn": 1, "info": 2}[r["level"]], r["id"])),
         }
 

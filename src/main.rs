@@ -635,7 +635,6 @@ impl Inner {
             order: 0,
             desc: String::new(),
             branch: false,
-            dialogue_choice: false,
             ending_relevant: false,
             start_known: false,
             provenance: "save_only".into(),
@@ -782,7 +781,7 @@ impl Inner {
     fn attach_derived(&self, step: &mut Value, st: &model::Step, done_q: &DoneQuests) {
         let Some(id) = step.get("id").and_then(|v| v.as_str()).map(|s| s.to_string()) else { return };
         let Some(d) = self.derived.get("steps").and_then(|s| s.get(&id)) else { return };
-        for k in ["game_title", "objectives", "activators", "watch", "stems"] {
+        for k in ["objectives", "watch", "stems"] {
             if let Some(v) = d.get(k) {
                 if !v.is_null() {
                     step[k] = v.clone();
@@ -1795,7 +1794,6 @@ fn main() {
                     "live": items.first().and_then(|x| x.get("live")).cloned().unwrap_or(Value::Null),
                     "tag": items.first().and_then(|x| x.get("tag")).cloned().unwrap_or(Value::Null),
                     "live_note": items.first().and_then(|x| x.get("live_note")).cloned().unwrap_or(Value::Null),
-                    "game_title": s.get("game_title").cloned().unwrap_or(Value::Null),
                 })
             }).collect::<Vec<_>>(),
             "derived_note": inner.derived.get("note").cloned().unwrap_or(Value::Null),
@@ -1850,7 +1848,7 @@ mod top_tests {
             files: files.iter().map(|f| f.to_string()).collect(), hard: vec![],
             hard_facts: HashMap::new(), by: vec![], note: String::new(), kind: "side".into(),
             opt: false, when: vec![], order: 0, desc: String::new(), branch: false,
-            dialogue_choice: false, ending_relevant: false, start_known: true,
+            ending_relevant: false, start_known: true,
             provenance: "game_file".into(), review_reason: String::new(),
             review_source: String::new(), reviewed: String::new(),
         }

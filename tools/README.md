@@ -30,17 +30,17 @@ and a saves folder to point at.
 | `questindex.py` | Every `CJournalQuest` in the base game and both expansions (405 here): journal entry and objectives with their phase names, the block that activates it, the `Failure` inputs attached to its journal blocks, type/order/description/level, choice and Gwent flags, facts, scenes, and what its phases switch off and back on. |
 | `questgraph.py` | Reads the phase graphs for activation blocks, connected `Failure` inputs and the conditions gating them; writes `../data/quest_graph.json`: the journal-activation block (`starts`), the reviewed fact prerequisites (`requires`), and the reviewed loss edges (`lost_when`). The 25 hand-written 0.1.9 events in `legacy_events.json` are the acceptance corpus; each is replaced by a file edge or recorded as dropped with its reason. |
 | `cutoffs.py` | Every candidate cutoff: quest E switches off resource R, quest X references R; each is judged on the order the saves were written, including whether any save actually marks X `Failed` after E. |
-| `review_cutoffs.py` | The review pass over that pool. Writes `../data/cutoffs.json`. A community cutoff is rejected when the affected quest starts after the switch, its own phase switches the actor back on, or nothing marks it failed; reviewed journal windows from `../data/cutoff_windows.json` are accepted only when the affected quest has a connected `Failure` input whose upstream conditions name the closer's journal, and `closes_at` is a real phase of that journal. Every kept and excluded family is recorded with a reason, and regression self-checks fail the build if Haunted House, the old Triss cutoff, or the old early `Q310 Gather Lodge` window is accepted again. |
+| `review_cutoffs.py` | The review pass over that pool. Writes `../data/cutoffs.json`. A community cutoff is rejected when the affected quest starts after the switch, its own phase switches the actor back on, or nothing marks it failed; reviewed journal windows from `../tools/cutoff_windows.json` are accepted only when the affected quest has a connected `Failure` input whose upstream conditions name the closer's journal, and `closes_at` is a real phase of that journal. Every kept and excluded family is recorded with a reason, and regression self-checks fail the build if Haunted House, the old Triss cutoff, or the old early `Q310 Gather Lodge` window is accepted again. |
 | `dialog_windows.py` | The NPC side of a window. `activations` reads which community phases a quest's own phase switches on; `dialogue_gates` reads the branches of the block that actually offers the option (`CQuestContextDialogBlock`), with True/False polarity, so `q309_completed` on the False output is "Now or Never not completed"; `fact_setters` names the phases that set a gate fact. `dialogue --stem mq3012noblestatuette` prints the statuette turn-in's gates (`q309_completed` unset, `q310_philippa_rescued` set), `scan` lists other quests whose dialogue blocks are gated the same way, and `review_cutoffs.py` calls `dialogue_evidence` so a reviewed `opens_at`/`close_gate` cannot drift from the graph. |
 | `routegen.py` | Writes `../data/route.json` from `quest_index.json`, `../data/quest_sections.json`, `../data/route_overrides.json` and `../data/quest_graph.json`: 403 quest + 9 reviewed manual steps = 412, five sections, levels, descriptions, fact locks, loss edges, and the 11-step manual audit. No hand-written note or level. |
 | `branchgen.py` | Writes `../data/branches.json`: 2,286 fact-setting scene-choice rows on 141 route steps. A one-shot dialogue row and a contract are never branches; each row keeps its scene, locId, set/test facts and exact text for the opt-in guidance path. |
 | `coverage.py` | Writes `../data/coverage.json`: per-pack route/quest/phase/scene/branch/cutoff counts, plus the measured card column. It refuses an untallied pack and a DLC family with zero scene rows. |
 | `matrixcheck.py` | Checks the audited 412-node matrix and the 11-step manual audit: 403 quest + 9 `manual_reviewed` rows, 2 replacements, every source anchor and review date, every named exclusion, the four chosen targets and the six-state payload counts. `test_matrix.py` proves it rejects each missing label. |
-| `cards.py` | Writes and checks `../data/gwent_cards.json`: 224 collectible cards (202 main + 22 leaders), sources, summon-only exclusions, one `window` per card, and save ownership from `SBCollectionCard` / `SBLeaderCollectionCard`. |
+| `cards.py` | Writes and checks `../data/gwent_cards.json`: 224 collectible cards (202 main + 22 leaders), the primary source, summon-only exclusions, one `window` per card, and save ownership from `SBCollectionCard` / `SBLeaderCollectionCard`. The full per-card source rows are provenance in `../tools/card_sources.json`; the shipped ledger keeps only the primary `source`. |
 | `cardwindows.py` | Writes and checks `../data/card_windows.json` and attaches the reviewed windows to every card. Fails on an unaccounted card, a Tier B row without a source/URL/review date, a no-window row without concrete `sources_checked`, a category-only no-window reason, a stale payload, or a bare zero. |
 | `dialogscan.py` | The audit over every quest, not just one: `build` reads every dialogue-bearing `.w2phase` (369 files, 1,310 option blocks) and records each block's `dialogue_gates` plus every fact setter, then `report` joins a gate fact to the quests whose phases set it. It separates turn-ins (the option reacts to its own journal *and* a fact another quest sets - the statuette shape) from the 167 foreign-fact options that are Gwent tables, fistfights and hero-card cameos. `show <quest>` prints one quest's gates and setters. Writes `dialog_gate_index.json` (git-ignored) and `dialog_gate_report.md`. |
-| `gwentplayers.py` | The Gwent hub dialogue blocks as an availability table: who the option is hung on, the fact each branch tests and whether it expects the fact set or unset, the phase and quest that sets it, the game's own `cg...#Win unique card from ...` objective, and the cards whose non-deck source names that player. Writes `../data/gwent_players.json` (shipped) and `gwent_players_report.md`; `check` fails on a missing block, an unresolved fact or deck-only card evidence. A fact tested both ways is marked `ambiguous` - it is not a simple "wait for X" gate and must not become a card rule without review. |
-| `derive.py` | Writes `../data/derived.json` (what the app shows per step: game name, objectives, activation block, reviewed cutoff). |
+| `gwentplayers.py` | The Gwent hub dialogue blocks as an availability table: who the option is hung on, the fact each branch tests and whether it expects the fact set or unset, the phase and quest that sets it, the game's own `cg...#Win unique card from ...` objective, and the cards whose non-deck source names that player. Writes `../tools/gwent_players.json` (provenance, not shipped) and `gwent_players_report.md`; `check` fails on a missing block, an unresolved fact or deck-only card evidence. A fact tested both ways is marked `ambiguous` - it is not a simple "wait for X" gate and must not become a card rule without review. |
+| `derive.py` | Writes `../data/derived.json`: per step, the quests and stems, the journal objectives and the reviewed `watch` rows; per quest, only the game's title. Activators, phase files, scenes, dialogue-set facts and save histograms are extraction provenance and stay in `quest_index.json` / `save_index.json`, not in the shipped payload. |
 | `prereqs.py` | Settles every route prerequisite from the game's files *and* the saves: keeps it as a lock, re-tests it on the fact the game actually gates on, or drops it. Re-checks the reviewed decisions in `../data/prereqs_review.json` and writes `prereq_relations.json`. |
 | `contradictions.py` | Tests every derived claim, every cutoff and every route prerequisite against all saves; checks route/derived coverage and the built app's `--dump`; writes `contradiction_report.md` and `../data/route_disputes.json`. |
 | `regen.py` | Runs the whole chain and compares the bytes of every output against `goldens.json` (`--update` to record). |
@@ -54,6 +54,34 @@ and a saves folder to point at.
 `py review_cutoffs.py build` · `py questgraph.py build` · `py routegen.py build` · `py derive.py` ·
 `py prereqs.py check` (~2 min) · `py contradictions.py` (15s) · `py regen.py`
 
+## What ships, what is evidence, and who owns it
+
+`data/` is not one thing. A file is **live** when the app loads it, **evidence** when it is shipped
+so a claim can be checked but is never read at run time, and **provenance** when it stays in
+`tools/` for the pipeline and the release does not carry it.
+
+| file | role | owner |
+|---|---|---|
+| `data/route.json` | live: titles, sections, levels, files, prerequisites, loss edges | `routegen.py` |
+| `data/derived.json` | live: per-step quests/stems, objectives and `watch`; per-quest title | `derive.py` |
+| `data/quest_graph.json` | live: start blocks, reviewed facts, loss edges | `questgraph.py` |
+| `data/branches.json` | live (opt-in guidance): fact-setting scene choices | `branchgen.py` |
+| `data/gwent_cards.json` | live: card ledger, primary source, reviewed window | `cards.py` + `cardwindows.py` |
+| `data/cutoffs.json` | live through `derived.json`; evidence of the review | `review_cutoffs.py` |
+| `data/card_windows.json` | live through `gwent_cards.json`; evidence of the review | `cardwindows.py` |
+| `data/coverage.json` | live: measured pack counts | `coverage.py` |
+| `data/endings.json`, `outcomes.json`, `exclusive.json` | reviewed inputs | hand-reviewed |
+| `data/prereqs_review.json`, `route_disputes.json`, `route_sections.json`, `route_overrides.json`, `card_window_review.json` | reviewed inputs | hand-reviewed |
+| `data/prereq_relations.json`, `contradiction_report.md` | evidence | `prereqs.py`, `contradictions.py` |
+| `tools/cutoff_windows.json` | provenance: the reviewed source behind `cutoffs.json` | hand-reviewed |
+| `tools/card_sources.json` | provenance: every card source row | `cards.py` |
+| `tools/gwent_players.json`, `gwent_players_report.md` | provenance: Gwent hub availability evidence | `gwentplayers.py` |
+| `tools/quest_index.json`, `cutoff_index.json`, `save_index.json` | provenance: extraction and save indexes | the pipeline |
+
+`package.ps1` copies the live files and the shipped evidence to the release. It does not copy
+provenance, and it does not copy the wiki-era `audit_*.json`, `guide_*.json` or `legacy_*.json`,
+which stay in the checkout for comparison.
+
 ## The checks the release must pass
 
 ```
@@ -61,7 +89,7 @@ py tools/endings.py check --release  # schema, branches, locIds and exact lines;
 py tools/outcomecheck.py --release    # 4 groups, 11 outcomes, 11 exclusion edges, 0 warnings
 py tools/exclusivity.py --check       # accepted edges and the rejected candidate report
 py tools/contradictions.py           # 5 derived claims, 0 contradicted; 5 route prerequisites, 0 disputed
-py tools/regen.py --check            # all 11 outputs match the recorded hashes
+py tools/regen.py --check            # all 12 outputs match the recorded hashes
 cargo test                           # ordering, frontier, tags, empty top section, tick rule
 ```
 

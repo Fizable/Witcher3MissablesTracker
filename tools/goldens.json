@@ -5,11 +5,12 @@
   "coverage.json": "6f6c6626823d9516",
   "cutoff_index.json": "24f6c3cfa9ded6cf",
   "cutoffs.json": "9eaa7e348f2cbbba",
-  "derived.json": "6dd535381e73fd4b",
+  "derived.json": "626a54ba83e88b3f",
+  "gwent_cards.json": "8d86c59194c9e13d",
   "prereq_relations.json": "a3c3bfdb1231ce85",
   "quest_graph.json": "00e0962c3b5e2775",
   "quest_index.json": "be43d556497c2cbb",
-  "route.json": "7ca28bca138532b7",
+  "route.json": "6e000c10e60f420f",
   "route_disputes.json": "44037b1b7fe47afc"
  },
  "note": "sha256 (first 16) of the LF-normalized pipeline outputs; py regen.py compares against these"

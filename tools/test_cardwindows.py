@@ -116,7 +116,7 @@ class CardWindowCheckerTests(unittest.TestCase):
     def test_every_card_has_a_source_a_window_and_evidence(self):
         self.assertEqual(len(self.doc["cards"]), 224)
         for card in self.doc["cards"]:
-            self.assertTrue(card.get("sources"), card["id"])
+            self.assertTrue(cardwindows.sources_for(card), card["id"])
             self.assertIn(card["window"]["kind"], ("missable", "one_time", "none"), card["id"])
             self.assertTrue(card["window"].get("evidence"), card["id"])
             if card["window"]["kind"] in ("missable", "one_time"):
@@ -132,8 +132,8 @@ class CardWindowCheckerTests(unittest.TestCase):
         self.assertEqual(window["step"], "cgnomansland")
         self.assertEqual(window["opens"]["step"], "cgnomansland")
         self.assertTrue(window["fallback"])
-        self.assertTrue(any(row["kind"] == "phase_grant" for row in card["sources"]))
-        self.assertFalse(any(row["kind"] == "starter_deck" for row in card["sources"]))
+        self.assertTrue(any(row["kind"] == "phase_grant" for row in cardwindows.sources_for(card)))
+        self.assertFalse(any(row["kind"] == "starter_deck" for row in cardwindows.sources_for(card)))
 
 
 if __name__ == "__main__":

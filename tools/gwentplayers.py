@@ -15,7 +15,7 @@ which is exactly what `dialog_gates` reads. This tool turns those gates into a t
     cards           card ids whose non-deck source names the player (never opponent-deck rows:
                     an opponent deck is evidence of a deck, not of a reward)
 
-Output: `data/gwent_players.json` (shipped, generated) and `tools/gwent_players_report.md`.
+Output: `tools/gwent_players.json` (provenance, not shipped) and `tools/gwent_players_report.md`.
 Read-only against the game; nothing here is a loss claim.
 
   py gwentplayers.py build
@@ -27,6 +27,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import cardwindows
 import dialogscan
 from paths import HERE, TRACKER
 
@@ -34,7 +35,7 @@ INDEX = HERE / "dialog_gate_index.json"
 QUEST_INDEX = HERE / "quest_index.json"
 ROUTE = TRACKER / "data" / "route.json"
 CARDS = TRACKER / "data" / "gwent_cards.json"
-OUT = TRACKER / "data" / "gwent_players.json"
+OUT = HERE / "gwent_players.json"
 REPORT = HERE / "gwent_players_report.md"
 
 HUBS = "card_minigame_all_hubs"
@@ -141,7 +142,7 @@ def card_matches(rows, cards):
         player = row["player"]
         hits = []
         for card in cards:
-            for src in card.get("sources") or []:
+            for src in cardwindows.sources_for(card):
                 if src.get("kind") in DECK_ONLY:
                     continue
                 text = " ".join(str(src.get(k) or "") for k in ("text", "container")).lower()

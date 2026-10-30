@@ -31,13 +31,10 @@ pub struct Node {
     #[serde(default)]
     pub desc: String,
     /// A scene section of this quest sets a fact when the choice is taken: an outcome branch. A
-    /// one-shot dialogue row is `dialogue_choice` and is never a branch. The choice text is never
-    /// shown. Read from the scene's own fact-setting blocks by tools/questindex.py.
+    /// one-shot dialogue row is never a branch. The choice text is never shown. Read from the
+    /// scene's own fact-setting blocks by tools/questindex.py.
     #[serde(default)]
     pub branch: bool,
-    /// A one-shot (`singleUseChoice`) dialogue row exists. Dialogue, not an outcome branch.
-    #[serde(default)]
-    pub dialogue_choice: bool,
     /// A reviewed ending target (data/endings.json) names a fact this quest's branch sets. Never
     /// inferred from a scene; false until a target is reviewed.
     #[serde(default)]
@@ -586,7 +583,7 @@ pub fn step_json_goal(_rd: &RouteData, ev: &Eval, i: usize, goal: bool) -> Value
         "id": s.n.id, "title": s.n.title, "section": s.n.section, "lv": s.n.lv, "status": s.status,
         "journal": s.journal, "frontier": s.frontier, "manual": s.manual, "opt": s.n.opt,
         "kind": s.n.kind, "desc": s.n.desc, "branch": s.n.branch,
-        "dialogue_choice": s.n.dialogue_choice, "ending_relevant": s.n.ending_relevant,
+        "ending_relevant": s.n.ending_relevant,
         "provenance": s.n.provenance, "review_reason": s.n.review_reason,
         "review_source": s.n.review_source, "reviewed": s.n.reviewed,
         "goal": goal, "order": s.n.order,
@@ -1208,7 +1205,7 @@ mod tests {
             files: files.iter().map(|f| f.to_string()).collect(), hard: vec![],
             hard_facts: HashMap::new(), by: vec![], note: String::new(), kind: kind.into(),
             opt: false, when: vec![], order, desc: "A line about the quest.".into(),
-            branch: false, dialogue_choice: false, ending_relevant: false, start_known,
+            branch: false, ending_relevant: false, start_known,
             provenance: if files.is_empty() { "manual_reviewed".into() } else { "game_file".into() },
             review_reason: String::new(), review_source: String::new(), reviewed: String::new(),
         }
@@ -1526,7 +1523,8 @@ mod tests {
         // mq1050_true_vision). It is dialogue, so it must not become a branch.
         let one_shot = rd.nodes.iter().find(|n| n.id == "mq1050writteninthestars")
             .expect("mq1050writteninthestars in the route");
-        assert!(one_shot.dialogue_choice, "mq1050 has a one-shot dialogue row");
+        // The build-time one-shot marker stays in tools/quest_index.json; the route ships only the
+        // decision the app needs. What matters here is that the row did not become a branch.
         assert!(!one_shot.branch, "a one-shot dialogue row must not become a branch");
         assert!(!one_shot.ending_relevant, "a dialogue row is not an ending choice");
         // The Whispering Hillock spirit choice is a fact-setting branch (sections 195/197 run the
@@ -1540,9 +1538,7 @@ mod tests {
     fn only_a_fact_setting_branch_gets_a_choice_chip() {
         let mut branch = node("branch", "", &["branch"], "side", 0, true);
         branch.branch = true;
-        branch.dialogue_choice = true;
-        let mut dialogue = node("dialogue", "", &["dialogue"], "side", 0, true);
-        dialogue.dialogue_choice = true;
+        let dialogue = node("dialogue", "", &["dialogue"], "side", 0, true);
         let mut ending = node("ending", "", &["ending"], "side", 0, true);
         ending.branch = true;
         ending.ending_relevant = true;

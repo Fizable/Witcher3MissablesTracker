@@ -623,7 +623,7 @@ mod tests {
             section: "Main".into(), id: id.into(), title: format!("Step {id}"), lv: String::new(),
             files: vec![id.into()], hard: vec![], hard_facts: HashMap::new(), by: vec![],
             note: String::new(), kind: "main".into(), opt: false, when: vec![], order: 0,
-            desc: String::new(), branch: false, dialogue_choice: false, ending_relevant: false,
+            desc: String::new(), branch: false, ending_relevant: false,
             start_known: true, provenance: "game_file".into(), review_reason: String::new(),
             review_source: String::new(), reviewed: String::new(),
         }
