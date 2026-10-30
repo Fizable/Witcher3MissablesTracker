@@ -74,7 +74,12 @@ These are decisions the user already made. Do not re-litigate them.
 
 ---
 
-## 5. Audit summary
+## 5. Pre-fix audit summary
+
+This section records the audit that started the phase, before Phases 1–5 changed the payload. The
+"Partly", "Broken" and "Contradiction" verdicts below are the findings that drove those phases; the
+final state is the progress log in section 11 and the acceptance record in `DESIGN.md` 10.2. They are
+kept here as the reproduction trail, not as open work.
 
 ### 5.1 What was run
 
