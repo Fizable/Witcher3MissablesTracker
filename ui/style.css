@@ -37,7 +37,10 @@ button:disabled { cursor: default; }
 #app { display: flex; flex-direction: column; height: 100vh; min-width: 0; }
 
 /* ---------- header ---------- */
-#hdr { flex: none; padding: 10px 14px 8px; background: #171a20; border-bottom: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0,0,0,.35); z-index: 5; }
+#hdr { flex: none; max-height: 100vh; display: flex; flex-direction: column; padding: 10px 14px 8px; background: #171a20; border-bottom: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0,0,0,.35); z-index: 5; }
+/* The header is capped at the window. The title rows stay put; only the my-game panel scrolls, so
+   a short window can still reach the goal row and the folders instead of clipping them. */
+#hdr > :not(#flagsPanel) { flex: none; }
 .hdr-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .hdr-row.sub { margin-top: 3px; justify-content: flex-start; font-size: 12px; }
 .hdr-row h1 { flex: 1; }
@@ -206,7 +209,7 @@ a.src:hover { text-decoration: underline; }
 /* ---------- my game panel, folders and N/A rows ---------- */
 .gear { background: transparent; border: 1px solid #2c313c; color: #8c93a3; border-radius: 6px; font: inherit; font-size: 12px; padding: 2px 8px; cursor: pointer; margin-right: 10px; }
 .gear:hover, .gear.on { color: #d4a84b; border-color: #d4a84b; }
-#flagsPanel { margin: 8px 0 2px; padding: 10px; background: #1c1f26; border-radius: 10px; }
+#flagsPanel { flex: 0 1 auto; min-height: 0; overflow-y: auto; margin: 8px 0 2px; padding: 10px; background: #1c1f26; border-radius: 10px; }
 #flagsPanel .flag { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 7px 0; border-top: 1px solid #242832; }
 #flagsPanel .flag:first-of-type { border-top: 0; }
 #flagsPanel .ftxt { flex: 1; min-width: 0; }

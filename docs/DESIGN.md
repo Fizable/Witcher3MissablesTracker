@@ -598,6 +598,65 @@ RECORDED LIMITATION: `missable_windows.note` still calls all 15 Tier B community
 14 are missable and one (Iorveth) is a one-time source. The counts are right and the card ledger
 shows the difference; only that generated sentence is imprecise.
 
+### 10.11 Short-window fix for the my game panel (2026-10-31)
+
+The gear panel sat inside the header, and the header was `flex: none` while `body` was
+`overflow: hidden`. Opening the panel therefore grew the header by the panel's full content
+height. At 480x820 that fit; below roughly 820px it did not, and the window has its own
+`minHeight` of 420 in `tauri.conf.json`. The panel is 719px tall on the newest copied save, so a
+resized window clipped the goal row and the folder pickers with no way to scroll them: the page
+itself is not scrollable by design.
+
+Reproduced at 480x520 and 480x360 before the change: `#hdr` measured 823px (`clientHeight` 822),
+`#flagsPanel` 719px starting at y=93, `flagsBottomVisible` false, body overflow `hidden`,
+`window.scrollY` 0 and no scrollable ancestor. The panel's last row ("Use" for the saves folder)
+was unreachable at any window height below 812px.
+
+The fix is purely CSS in `ui/style.css` and adds no element and no script:
+
+- `#hdr` keeps `flex: none` but gains `max-height: 100vh`, `display: flex` and
+  `flex-direction: column`, so the header can never be taller than the window.
+- `#hdr > :not(#flagsPanel) { flex: none; }` keeps the two title rows, the band and the setup
+  gate at their natural height; only the panel is allowed to shrink.
+- `#flagsPanel` becomes `flex: 0 1 auto; min-height: 0; overflow-y: auto`, so the panel takes the
+  leftover height and scrolls inside itself.
+
+The title rows, the gear button, the close behaviour, `#listPane` and the goal picker markup are
+unchanged; `app.js` still just toggles `hidden` on `#flagsPanel`.
+
+Measured on the real `ui/` in Chromium, one root per window height:
+
+| viewport | `#hdr` | panel client | panel scroll | scrollTop | last control in view | pane when closed |
+|---|---|---|---|---|---|---|
+| 480x360 | 360 (max 360px) | 256 | 719 | 463 | "Use" at 301-331 | 266 |
+| 480x420 | 420 (max 420px) | 316 | 719 | 403 | "Use" at 361-391 | 326 |
+| 480x520 | 520 | 416 | 719 | 303 | last control in view | 426 |
+| 480x820 | 94 (unchanged) | 716 | 719 | 0 | whole panel in view | 726 |
+
+The gear button stayed visible (y 21-45) at every height, the page never scrolled horizontally
+(`scrollWidth == clientWidth == 480`), and closing the panel returned the header to 94px and the
+list pane to its full height. At 360 the goal picker still fits: `.picker-box` scrolls
+(`clientHeight` 187 of 260 content) and `Apply goals` stays in view at y 233-261 without the
+matrix and y 269-298 with it open. The outcome matrix, the goal row and the folder pickers were
+all reachable after scrolling the panel, with no console errors.
+
+The packaged 1.3.8 exe was then driven in its own WebView2, with a temporary `APPDATA` whose
+`settings.json` points at a copied save folder, through the WebView2 debugging port. The window
+refuses to go below its `minHeight` of 420, so the smallest real client area measured 464x381: the
+header capped at 381px, the panel scrolled 277px of 719px, and "Use" landed at y 322-352 inside the
+window. At the default size (464x781) the header stayed 94px, the panel showed 677px of 719px and
+scrolled 42px to reach "Use" at y 722-752, and closing the panel returned the header to 94px and
+the pane to 687px. This confirms the shipped binary carries the new CSS, not just the source tree.
+
+Screenshots of the open panel at 360, 420 and 820 are in
+`%TEMP%\opencode\w3realign\shot-final-panel-{360,420,820}.jpeg`. This model cannot read images,
+so the check above is a rendered DOM and layout measurement, not an eyeball read; the images are
+left for the user.
+
+Artifact: `dist/Witcher3MissablesTracker-1.3.8/Witcher3MissablesTracker.exe`, copied to
+`w3tracker/Witcher3MissablesTracker.exe`, FileVersion and ProductVersion 1.3.8, SHA-256
+`DEC36362BC24FBC34B5BFB705543DAE8532C11C592F1DD634BDE2568E4CA027D`.
+
 ## 11. How an audit uses this page
 
 - **Completeness:** every row of section 5 delivers its question, and every invariant in section 6
