@@ -767,7 +767,8 @@ every median `--view` field except the save's elapsed age, and on `--cards`; the
 and `testzip()` is clean. The script's final copy to
 the repo root failed because the 1.3.3 tracker was still running; PID 37304 was stopped, the same
 dist binary was copied to the root, and all three copies match the hash. The 1.3.4 release note,
-`Cargo.toml`, `Cargo.lock`, `tauri.conf.json` and the README link all name 1.3.4. The release was
+`Cargo.toml`, `Cargo.lock`, `tauri.conf.json` and the README link all name 1.3.4. The build is
+unsigned; the repo configures no signing or store command and holds no credentials. The release was
 committed locally only; no remote push, tag or store upload was attempted.
 
 **Formatting.** `cargo fmt --check` could not run because the toolchain has no `rustfmt` component

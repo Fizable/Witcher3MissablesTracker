@@ -96,6 +96,8 @@ is not a tracker fault, and the tracker has no log by design.
 - The packaged binary matched the target build on every median `--view` field except the save's
   elapsed age, and on `--cards`.
 - Repo-root `Witcher3MissablesTracker.exe` is the same binary.
+- The build is unsigned. The repo configures no signing or store command and holds no credentials,
+  so there is no remaining authorized release step.
 
 `package.ps1` built the version and both artifacts. Its final convenience copy to the repo root
 failed because the 1.3.3 tracker process was still running; the process was stopped, the same dist
