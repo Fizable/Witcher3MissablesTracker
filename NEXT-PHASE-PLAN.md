@@ -745,9 +745,11 @@ statuette combos `{'both': 174, 'noble': 263, 'soldier': 0, 'neither': 81}` and 
 statuette, or an unowned Dijkstra past the Baron line; those branches remain shipped-data unit
 tests, not save runs.
 
-**Phase 3.** `cargo test --locked` reports 67 passed, 0 failed. The invariant 1/3/4/5/6/7 break-and-
-restore record is section 11.4; each named test failed when the guarantee was removed and the files
-were restored. The choice warning still has no real-save run because none of the 518 saves has an
+**Phase 3.** `cargo test --locked` reports 67 passed, 0 failed after the mutation run. The six
+invariants were re-broken on this tree: the network-client scan, the ending-label spoiler scan, the
+route count, the card `ahead` guard, the plan conflict guard and the settled-instruction guard each
+failed its named test, and every file was restored before the full suite. The earlier record is
+section 11.4. The choice warning still has no real-save run because none of the 518 saves has an
 Active `ending_relevant` step; it is proved by its unit test and a fixture row in the real UI.
 
 **Phase 4.** Six first-run scenarios were driven at 480x820 in the real `ui/` with payloads from the

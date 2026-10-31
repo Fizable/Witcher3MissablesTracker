@@ -76,8 +76,9 @@ file both times, said the tracker retries, reopened FOLDERS and painted no band.
 | `py tools/outcomecheck.py --release` | 4 groups, 11 outcomes, 0 warnings |
 | payload assertion | `PASS: 4 real profiles, 518 corpus saves, 418 Baron-fact card rows` |
 
-The mutation record for invariants 1, 3, 4, 5, 6 and 7 is in `NEXT-PHASE-PLAN.md` section 11.4: each
-named test failed when its guarantee was deliberately broken, and every file was restored.
+The six mutations for invariants 1, 3, 4, 5, 6 and 7 were re-run on this tree: each named test
+failed when its guarantee was deliberately broken, every file was restored, and the full suite was
+green again. The earlier record is `NEXT-PHASE-PLAN.md` section 11.4; this release's run is in 11.5.
 
 Game logs were re-read. `w3loadfix.log` ends with 0 verify errors, `WitcherNativeBridge.log` has all
 registrations OK, `BeardmosImmersiveWorld.log` ends with its rain timer alive, and `OptiScaler.log`
