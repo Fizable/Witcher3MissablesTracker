@@ -4,24 +4,26 @@ A small always-on-top Windows tool that reads your newest Witcher 3 save (read-o
 question: **what do I do next in this save, and what can I still lose?**
 
 - **NOW**: a sticky band that appears only while an action can still change the outcome - a story
-  event that would fail a quest you still have open, an ordering conflict, a choice that matters to
-  the endings in play, or a card window you can act on now. A loss that already happened or a
-  cutoff that already passed is not a band row: it lives in **MORE > STATUS** and on the quest page.
-  A card window that is still ahead is not a warning and never enters the band; it is a row in
-  **MORE > CARDS > LATER**. When nothing is at stake the band disappears.
-- **UP NEXT**: the quest you are tracking and the one plan step that is next. Other quests in your
-  log stay in **MORE > PROGRESS**; the queue is not a second quest log. A quest whose turn-in window
-  is open right now is not repeated here: the NOW band already carries it with the NPC and the
-  deadline (the statuettes in Final Preparations are the case this was written for). Future goal
-  steps sit under one collapsed **PLAN AHEAD** line. A plan step and a quest are one card, never two.
-  The exact line appears only on the tracked goal step, and turning guidance off removes the line
-  without removing the plan.
+  event that would fail a quest you still have open, an ordering conflict, or a card window you can
+  act on now. A loss that already happened or a cutoff that already passed is not a band row: it
+  lives in **MORE > STATUS** and on the quest page. A card window that is still ahead is not a
+  warning and never enters the band; it is a row in **MORE > CARDS > LATER**. When nothing is at
+  stake the band disappears. A choice that matters to the endings is not a band row either: it is
+  stated on the tracked quest card (see below).
+- **UP NEXT**: the quest you are tracking, and nothing else. Other quests in your log stay in
+  **MORE > PROGRESS**; the queue is not a second quest log. A quest whose turn-in window is open
+  right now is not repeated here: the NOW band already carries it with the NPC and the deadline (the
+  statuettes in Final Preparations are the case this was written for). There is no separate plan
+  card, `PLAN` chip or **PLAN AHEAD** list. The plan's one visible product is the ending-choice note
+  and, with guidance on and a goal selected, the exact reviewed line inside the tracked quest card.
+  Turning guidance off removes both the exact line and the choice chip, leaving only the constant
+  sentence "This choice affects an ending."
 - **MORE**: the reference drawer, with tabs.
   - **STATUS**: quest and card completion, split into done/owned, still possible, at risk, lost and
     unknown - never one misleading percentage.
-  - **CARDS**: every card with source, owned/not-owned/unknown and one reviewed window: 15 Tier B
-    community windows, 17 Tier A one-time sources, or a documented no-window reason. A deck list
-    is not ownership, so 24 cards carry an explicit unknown-source row rather than a false
+  - **CARDS**: every card with source, owned/not-owned/unknown and one reviewed window: 14 Tier B
+    community missable windows, 18 one-time sources, or a documented no-window reason. A deck list
+    is not ownership, so 23 cards carry an explicit unknown-source row rather than a false
     no-window claim. Filters are open now, later, owned and unknown. Tier B rows show their source
     and review date.
   - **COVERAGE**: measured counts per pack, so an empty section is not mistaken for a clean one.
@@ -133,10 +135,12 @@ Unofficial fan tool. Not affiliated with CD PROJEKT RED. See `NOTICE.txt`.
 - **Card ownership is separate from quest completion.** The save's collection block is authoritative;
   a card the save cannot show is `unknown`, never silently "not owned". Manual ticks fill only what
   the save cannot see.
-- **Card windows are reviewed, not guessed.** 15 cards have a Tier B community closing window with
-  a named source and date; 15 more are Tier A one-time sources; the other 194 have a documented
-  no-window reason (187 Tier A, 7 explicit unknown-source rows). No Gwent quest failure is turned
-  into "every card in it is missable". See [`docs/CARD-WINDOWS.md`](docs/CARD-WINDOWS.md).
+- **Card windows are reviewed, not guessed.** 14 cards have a Tier B community closing window with
+  a named source and date; 18 more are one-time sources (a quest or merchant grants them once, with
+  no reviewed failure branch); the other 192 have a documented no-window reason (23 explicit
+  unknown-source rows). No quest failure is turned into "every card in it is missable", and a
+  completion reward such as Iorveth from Shock Therapy is a one-time source, never a warning. See
+  [`docs/CARD-WINDOWS.md`](docs/CARD-WINDOWS.md).
 - **"All quests" means the maximum consistent set.** The route has 403 quest steps; mutually
   exclusive branches cannot all be completed in one save, and the planner reports the achievable set
   instead of claiming 100% of every branch.

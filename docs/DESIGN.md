@@ -10,7 +10,9 @@ it serves it, and an audit is judged by whether every row below is actually deli
 they chose.**
 
 The warning is the product. Every other screen exists so that warning can be trusted and so the
-player can find what is left.## 2. The four warnings
+player can find what is left.
+
+## 2. The warnings
 
 The top band (`NOW`) must warn about exactly these, and nothing else:
 
@@ -19,22 +21,25 @@ The top band (`NOW`) must warn about exactly these, and nothing else:
 2. **Order.** Do this quest before that one. A player who has chosen a quest must be told when
    finishing it fails other quests still open in their log.
 3. **Gwent cards.** A card window open now. A window that closed already is `MORE > STATUS`.
-4. **A consequential choice.** That a quest in the log contains a choice that matters to the
-   endings in play. The row never prints the choice text, the ending name or the recommended
-   option, so it is safe with guidance off and no goal selected.
+
+The fourth warning, a **consequential choice**, belongs to the tracked quest card instead of the
+band. The card for the quest the player is on carries the constant sentence "This choice affects an
+ending."; the sentence never prints the choice text, the ending name or the recommended option, so
+it is safe with guidance off and no goal selected. It is never a NOW row and never a separate row
+under the card.
 
 Every quest-window band row names the action, what is lost, and the quest or phase that closes the
 window. If the data cannot supply all three, the row does not ship. "Actionable now" means the save
 permits the action and the journal has not settled it; it does not mean the player is standing at
 the NPC, and the app must never imply that.
 
-All four band warnings apply whether or not an ending has been chosen. A chosen ending changes
-which choices are named and what line is shown; it is never a precondition for being warned.
+The three band warnings apply whether or not an ending has been chosen. A chosen ending changes
+which choice line is shown on the tracked card; it is never a precondition for being warned.
 
 Each item is answered by the loaded save: a warning about something the journal has already settled
 is not shown, and a choice still ahead is not a NOW item. `LOST IN THIS SAVE` and `CUTOFF PASSED -
-CHECK NOW` live on `MORE > STATUS` and the quest page. `UP NEXT` and `PLAN AHEAD` are on the main
-surface below the band.
+CHECK NOW` live on `MORE > STATUS` and the quest page. `UP NEXT` is on the main surface below the
+band and carries the tracked quest only.
 
 **Silence is correct.** When nothing can still change, the band is hidden. An empty band is not a
 failure state and must not be filled with reference data to look useful.
@@ -42,11 +47,12 @@ failure state and must not be filled with reference data to look useful.
 ## 3. Guidance is opt-in, and it is a second layer
 
 By default the app says only that a choice changes the outcome. It never says which choice, or what
-follows. The band row is the constant sentence `<quest name> contains a choice that matters to the
-endings in play.` with no ending name, outcome or recommended option. With guidance toggled on, a
-goal chosen and the quest's page open, it tells the player what to say in that scene, using the
-exact line from the game's own scene data. That gate is why choice text can ship at all: the line is
-reviewed game text, and the default payload carries none of it.
+follows. The tracked quest card carries the constant sentence "This choice affects an ending." with
+no ending name, outcome or recommended option. With guidance toggled on, a goal chosen and that
+quest still ahead, the card tells the player what to say in that scene, using the exact line from
+the game's own scene data. Turning guidance off removes both the exact line and the choice chip,
+leaving the constant sentence. That gate is why choice text can ship at all: the line is reviewed
+game text, and the default payload carries none of it.
 
 ## 4. One hundred percent is supported, not the headline
 
@@ -62,8 +68,7 @@ Every screen answers one question. If it stops answering that, it is broken even
 | surface | the question it answers | backend | must never |
 |---|---|---|---|
 | `NOW` band | what can I act on, right now? | `get_view.top` | show a row that cannot be acted on now, a settled loss, or an ahead card window; pad itself to look busy |
-| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | repeat an in-log quest that is neither the tracked quest nor the next plan step; list future goal steps alongside actionable ones; re-filter the payload's queue in the UI |
-| `PLAN AHEAD` | what is still coming in my chosen run? | `view.target`, `get_plan` | compete with `UP NEXT` as a second to-do list |
+| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | repeat an in-log quest other than the tracked one; add a plan step as a second card; show a plan chip, a plan summary or a `PLAN AHEAD` list; re-filter the payload's queue in the UI |
 | quest detail | what is this quest, and am I safe to do it? | `get_detail` | put choice text in the default view |
 | `can I do this now?` search | is this quest safe yet? | `search`, `check_quest` | answer without naming the blocking quest |
 | `MORE > STATUS` | what is settled, and how much is done? | `view.completion`, `view.status` | print one percentage, or hide a settled loss or a passed cutoff |
@@ -185,17 +190,16 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 
 | surface | payload | positive test | negative test | last verified |
 |---|---|---|---|---|
-| NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card or quest window; no instruction key | 2026-10-30 |
-| UP NEXT | `view.todo` | tracked + next plan step only | clean: 0 ids; no other in-log quest; no available quest; no open NOW row; no done/failed id | 2026-10-31 |
-| PLAN AHEAD | `view.target`, `get_plan` | plan survives guidance off; instructions gone | no plan with an empty target | 2026-10-30 |
+| NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `choice` row; a choice lives on `tracked.choice` and never enters `top`; no `ahead` card or quest window; no instruction key | 2026-10-31 |
+| UP NEXT | `view.todo` | the tracked quest only, also with a goal selected | clean: 0 ids; the plan adds no card, chip or summary; no other in-log quest; no available quest; no open NOW row; no done/failed id | 2026-10-31 |
 | quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`, `info` verdict, no live watch; a lost window keeps its journal verdict | 2026-10-30 |
 | search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label; no save returns `info`, not `safe` | 2026-10-30 |
 | STATUS / PROGRESS | `view.completion` | 412 = 403 + 9; sections 96/183/35/87/11 | no sixth section; no single percentage | 2026-10-30 |
-| CARDS | `get_cards`, `set_card` | 224 cards, 15 Tier B + 17 one-time, 200 sourced / 24 explicit unknown, Dijkstra's Baron source and office fallback | ahead row is not a NOW item; a deck definition is not ownership; no `not_yet` in `top` | 2026-10-30 |
+| CARDS | `get_cards`, `set_card` | 224 cards, 14 Tier B missable + 18 one-time, 200 sourced / 23 explicit unknown, Dijkstra's Baron source and office fallback | ahead row is not a NOW item; a one-time reward such as Iorveth never enters `top` or `status`; a deck definition is not ownership; no `not_yet` in `top` | 2026-10-31 |
 | COVERAGE | `view.coverage` | measured counts per pack | `with_cards == 0` reads `not modelled` | 2026-10-30 |
 | goal picker | `get_targets`, `set_target` | only after opt-in | absent from the clean payload | 2026-10-30 |
 | outcomes / tradeoffs | `get_outcomes`, `view.tradeoffs` | engine conflict test | clean tradeoffs empty | 2026-10-30 |
-| guidance toggle | `set_guidance` | plan and chips remain | instructions absent | 2026-10-30 |
+| guidance toggle | `set_guidance` | the tracked card shows the exact reviewed line | only the constant sentence remains; the choice chip is gone and instructions are absent | 2026-10-31 |
 | my game | `set_flag` | a flag excludes an unstarted quest | a flag never overrules `Active` | 2026-10-30 |
 | header / setup / pin | `view.save`, `view.setup`, `set_pin` | read error named with file and next step | setup card below NOW | 2026-10-30 |
 
@@ -203,26 +207,28 @@ Invariants 1, 3, 4, 5, 6 and 7 each have a named test that fails when the guaran
 mutation runs are recorded in `NEXT-PHASE-PLAN.md` section 11. Invariant 2 is the tick truth table
 above, tested for every journal state. Invariant 8 is stated in the README and `NOTICE.txt`.
 
-Phase 2 adds the card-source audit: 224 rows = 15 reviewed missable windows (15 Tier B) +
-17 one-time sources + 192 documented no-window rows, with 200 sourced and 24 explicit unknown
+Phase 2 adds the card-source audit: 224 rows = 14 reviewed missable windows (14 Tier B) +
+18 one-time sources + 192 documented no-window rows, with 200 sourced and 23 explicit unknown
 rows. A deck definition is no longer a persistent source. Dijkstra is a one-time Baron source
-(opened by `cgnomansland` and `cg_baron_discovered`, with the office as fallback); the statuette
-turn-in reads both/one/neither on the three real saves. `cardwindows.py check` enforces every
-rule and 13 mutation tests prove the checker fails when the rule is removed.
+(opened by `cgnomansland` and `cg_baron_discovered`, with the office as fallback); Iorveth is a
+one-time Shock Therapy completion reward with no reviewed failure branch. The statuette turn-in
+reads both/one/neither on the three real saves. `cardwindows.py check` enforces every rule and 13
+mutation tests prove the checker fails when the rule is removed.
 
 ### 10.1 Six first-run scenarios at 480x820
 
 1. **No save.** The band is hidden; UP NEXT says "Load a save to see what is next."; the folder
    panel opens once with the saves path and a Browse action.
-2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest and the next
-   plan step only; other in-log quests stay in PROGRESS. MORE > CARDS > LATER lists the ahead windows.
+2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest only; other
+   in-log quests stay in PROGRESS. MORE > CARDS > LATER lists the ahead windows.
 3. **Cutoff passed.** The band stays hidden, because the action is gone; MORE > STATUS shows
    `CUTOFF PASSED - CHECK NOW` with its headline and next step, and the same warning is on the quest
    page and in search. The corpus has no save in this state, so the row is exercised as a fixture in
    the real `ui/` (section 10.8).
 4. **Tick a not-started step.** The card keeps Not started, PROGRESS shows a pencil note rather
    than a green check, and the warning stays.
-5. **Goal selected, guidance off.** PLAN AHEAD and the goal chips remain; no quoted line appears.
+5. **Goal selected, guidance off.** The tracked card keeps the constant sentence and no exact line;
+   no choice chip, plan card or PLAN AHEAD list appears.
 6. **Corrupt save.** The header names the file and says the tracker retries; the folder panel can
    be reopened; no stale band from the previous save is presented as current.
 
@@ -500,6 +506,9 @@ in-log quests stay in `MORE > PROGRESS`; a quest whose open window is already a 
 the remaining guard. A tracked quest still enters even when its journal has not opened, and the one
 next plan step enters by name; nothing else does.
 
+Superseded by 10.10: the plan step no longer enters `view.todo`; the queue is the tracked quest
+only. The statuette result below still holds.
+
 | copied profile | `view.todo` | queue content | statuettes in queue |
 |---|---|---|---|
 | clean | 0 | none | no |
@@ -514,6 +523,80 @@ statuette warning in NOW on the median profile, and two cards on the goal profil
 same one-card queue on the newest copied save, read through WebView2's debugging port. `--dump`
 matched `--view` on `todo` for all seven profiles. `cargo test --locked` reports 67 passed; `cargo
 build --release` is warning-free; `node --check ui/app.js` passes.
+
+### 10.10 Choice on the tracked card and tracked-only UP NEXT (2026-10-31)
+
+Supersedes 10.9. The plan step no longer enters `view.todo`; the queue is the tracked quest only.
+The consequential-choice warning is no longer a NOW row: it is stated inside the tracked quest card.
+
+What changed, in the shipped `ui/` and payload:
+
+- `get_view.top` carries three warning kinds only: cutoff, order and an active card window. No
+  `choice` TopItem is built. A choice is answered by `tracked.choice`.
+- `tracked.choice` is null when the tracked quest has no open `ending_relevant` step or its plan step
+  is not `ahead`. With guidance off it is `{"guided": false, "text": "This choice affects an
+  ending.", "lines": []}`. With guidance on and a goal selected it carries the exact reviewed line
+  and its target, e.g. `I'll pay you for the ribbon.` / `bw_both_sisters`.
+- `view.todo` is the tracked quest and nothing else, with or without a goal. The removed plan card,
+  `PLAN` chip, plan summary (`5 ahead · 1 set · ready`) and `PLAN AHEAD` list have no element left
+  in `ui/index.html`, and `ui/app.js` no longer renders them.
+- Guidance off removes both the exact line and the choice chip from the tracked card, leaving the
+  constant sentence. Informational quest tags (for example `Gwent` on Get Junior) are not choice
+  chips and stay.
+- Iorveth is a one-time Shock Therapy completion reward (`kind: "one_time"`), so it is in the card
+  ledger but never in `top` or `status`.
+
+Payloads from the packaged 1.3.7 exe, each run with its own temporary `APPDATA` and a copied save
+folder. No Documents save or setting was read.
+
+| profile | save | `top` | `todo` | tracked card | `tracked.choice` |
+|---|---|---|---|---|---|
+| clean | no save | `[]` | `[]` | none | null |
+| earliest | `ManualSave_53db8_7e221800_4f13d1b.sav` | `[]` | `[q001beggining]` | Kaer Morhen | null |
+| median | `ManualSave_5258a_7e224000_39e1473.sav` | `[DO THIS NOW]` soldier statuette | `[q302mafia]` | Get Junior | null |
+| newest | `AutoSave_10d9e0_7ea4f000_581b307.sav` | `[]` | `[wolfupgrades2b]` | Wolf School Gear Part 4 | null |
+| goal | newest + `bw_both_sisters`, guidance on | `[]` | `[wolfupgrades2b]` | Wolf School Gear Part 4 | null |
+| goaloff | same, guidance off | `[]` | `[wolfupgrades2b]` | Wolf School Gear Part 4 | null |
+
+`--cards` on the same exe reports 224 cards: 14 missable (14 Tier B), 18 one-time, 192 no-window,
+23 explicit unknown, 1 unknown ownership; `windows.tier_a` 186, `windows.tier_b` 15,
+`windows.tier_c` 23. `py tools/cardwindows.py check` passes. `cargo test --locked` reports 68
+passed, including the shipped-data test that Iorveth is `one_time` and never a band or status row.
+
+No copied save tracks an ending-relevant quest, so no real profile exercises `tracked.choice`. The
+choice render is a documented fixture assembled from the release payloads, not invented text: the
+tracked step is `q704bfairyland` (Beyond Hill and Dale...), and the line
+`I'll pay you for the ribbon.` and target `Blood and Wine: both sisters live` come from the same
+exe's `--plan` output for `bw_both_sisters`. This is the only place in 10.10 where the input is a
+fixture rather than a save.
+
+The real `ui/` was driven in Chromium inside a 480x820 iframe, one root per profile, with a mock
+built by the release exe. Every profile stayed 480 wide (`scrollWidth == clientWidth == 480`) with
+no horizontal overflow and no console errors. Each non-clean profile rendered exactly one tracked
+card; median also rendered the soldier-statuette `DO THIS NOW` row. No page had `#planNote`,
+`#planAhead` or a plan summary. On the choice fixture the block was inside the card
+(`card.contains(choice)` true), above the footer (`choice.bottom == 382`, `footer.top == 391`), with
+no `SAY THIS` heading, no exact line and no chip when guidance was off; the paragraph
+"This choice affects an ending." occupied the same slot (`choice.bottom == 337`,
+`footer.top == 346`). With guidance on the block read `SAY THIS`, the exact line and the target
+label. Screenshots were captured at 480 wide for clean, earliest, median, newest, goal, goaloff and
+both choice fixtures; this model cannot view images, so the pixel check was a rendered DOM and
+layout measurement, not an eyeball read. The images were left for the user to open.
+
+The render found one pre-existing 480px defect unrelated to the plan work: the clean-state
+`#saveError` prints a long saves path, which did not break, so the page scrolled to 510 wide.
+`ui/style.css` now gives `.save-error` `overflow-wrap: anywhere`, the same rule the other text
+rows already use. The error text is unchanged; it wraps inside its 449px box and the page measures
+480 again. This is why the package is 1.3.7 and not the 1.3.6 built before the render.
+
+Artifact: `dist/Witcher3MissablesTracker-1.3.7/Witcher3MissablesTracker.exe`, copied to
+`w3tracker/Witcher3MissablesTracker.exe`, FileVersion and ProductVersion 1.3.7, SHA-256
+`883515640D4C79D44B4FCEC33C1C3A5720A3416C5228C3CA3038C1D113023589`. The 1.3.6 folder built
+earlier in this pass is left untouched.
+
+RECORDED LIMITATION: `missable_windows.note` still calls all 15 Tier B community rows "windows";
+14 are missable and one (Iorveth) is a one-time source. The counts are right and the card ledger
+shows the difference; only that generated sentence is imprecise.
 
 ## 11. How an audit uses this page
 

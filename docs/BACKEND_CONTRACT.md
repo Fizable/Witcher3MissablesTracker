@@ -40,13 +40,17 @@ UI calls `window.__TAURI__.core.invoke(cmd, args)` and listens with
   },
   "sections": ["Main", "Secondary", "Contracts", "Treasure Hunts", "Gwent"],
   "steps": [ Step, ... ],                       // all 412 route nodes, section then level then order
-  "todo": ["q205lofoten", ...],                 // ordered ids for UP NEXT: the tracked quest and the one next
-                                                // unblocked plan step. Other in-log quests and a window already
-                                                // in NOW are not repeated; they live in MORE > PROGRESS / NOW.
+  "todo": ["q205lofoten", ...],                 // ordered ids for UP NEXT: the tracked quest only. Other
+                                                // in-log quests and a window already in NOW are not repeated;
+                                                // they live in MORE > PROGRESS / NOW. The plan adds no id.
   "tracked": null | {
     "short": "q301dreamer", "display": "Pyres of Novigrad", "status": "Active",
     "steps": ["q301dreamer"],
-    "warning": null | { "level": "stop"|"warn", "headline": "...", "details": ["..."] }
+    "warning": null | { "level": "stop"|"warn", "headline": "...", "details": ["..."] },
+    "choice": null | {
+      "guided": true, "text": null,
+      "lines": [ { "line": "Velen.", "target": "bw_both_sisters" } ]
+    } | { "guided": false, "text": "This choice affects an ending.", "lines": [] }
   },
   "top": [ TopItem, ... ],                      // empty is a valid, tested answer; the UI hides the section
   "status": [ StatusItem, ... ],                // MORE > STATUS only: settled losses, passed cutoffs and
@@ -73,9 +77,9 @@ UI calls `window.__TAURI__.core.invoke(cmd, args)` and listens with
     "exclusions": [ { "id": "q310keira", "title": "A Final Kindness",
                        "mechanism": ["keira_sent=no"], "reason": "Excluded: ..." } ],
     "cards":  { "owned": 129, "available": 94, "at_risk": 0, "ahead": 0, "check": 0, "lost": 0,
-                "excluded": 0, "unknown": 1, "total": 224, "missable": 15,
-                "window_tier_a": 202, "window_tier_b": 15,
-                "missable_tier_a": 0, "missable_tier_b": 15, "max_achievable": 223 }
+                "excluded": 0, "unknown": 1, "total": 224, "missable": 14,
+                "window_tier_a": 186, "window_tier_b": 15,
+                "missable_tier_a": 0, "missable_tier_b": 14, "max_achievable": 223 }
   },
   "coverage": { "packs": { "base": { "quests": 281, "with_phases": 225, ... }, ... } },
   "tradeoffs": [ { "a": "...", "b": "...", "a_label": "...", "b_label": "...", "reason": "..." } ]
@@ -205,9 +209,9 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 
 ```
 {
-  "kind": "lost"|"failed"|"risk"|"order"|"missable"|"choice"|"card",
+  "kind": "lost"|"failed"|"risk"|"order"|"missable"|"card",
   "level": "lost"|"stop"|"warn",
-  "tag": "ENDING CHOICE AHEAD"|"DO THIS NOW"|"ORDER"|"CARD WINDOW OPEN"|
+  "tag": "DO THIS NOW"|"ORDER"|"CARD WINDOW OPEN"|
          "CUTOFF PASSED - CHECK NOW"|"LOST IN THIS SAVE"|"FAILED IN YOUR QUEST LOG"|
          "CARD WINDOW PASSED - CHECK NOW"|"CARD LOST IN THIS SAVE",
   "headline": "One player-facing sentence naming the quest and why it is lost or at risk.",
@@ -223,14 +227,15 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 
 `StatusItem` has the same fields as `TopItem`, plus `live` for the row's win state (`lost`, `check`,
 `passed`), and is read only by MORE > STATUS. `settled` and `unknown` never become a TopItem. `top`
-carries only `open` and `inside` quest
-windows, an `active` card window, and an Active quest's `choice`; `lost`, `passed`/`check` and
-`ahead` rows are STATUS or ledger rows. `Step.watch` and `Detail.derived.watch` are the same
+carries only `open` and `inside` quest windows and an `active` card window; `lost`, `passed`/`check`
+and `ahead` rows are STATUS or ledger rows. `Step.watch` and `Detail.derived.watch` are the same
 save-aware read through `main.rs::read_warning`; a reviewed turn-in applies its both/one/neither
 wording before either surface or `top` sees the row, so the card, the band and `verdict.headline`
-cannot disagree about what is still missing. `kind` ordering is risk, order, card, then choice. `choice`
-names the quest and says a choice matters to the endings in play; it never carries the choice text
-or a recommended option.
+cannot disagree about what is still missing. `kind` ordering is risk, order, then card. A choice is
+not a TopItem at all: `tracked.choice` states it on the tracked quest card. With guidance off it is
+only the constant sentence and empty `lines`; with guidance on and a goal selected it carries the
+exact reviewed line and its target. A quest with no open `ending_relevant` step, or whose plan step
+is not `ahead`, has `choice: null`.
 A cutoff that has fired while the journal still has the quest open is `risk` with the tag
 `CUTOFF PASSED - CHECK NOW`, not `lost`: only a `Failed` journal entry produces `lost`.
 The UI shows only `tag` and `headline` on the top card; `detail`, `mechanism`, `file`, `action` and

@@ -271,6 +271,10 @@ def _reviewed_window(card_id, row, review, titles):
             "event": row["event"],
             "mechanism": row["mechanism"],
         })
+        # A community-tier row names its source on every kind, not only on a missable window:
+        # a review that is not from game files must stay visibly sourced and dated.
+        if tier == "community":
+            window["source"] = _source(review, row.get("source"))
     else:
         reason = row.get("reason")
         if not isinstance(reason, str) or not reason.strip():
@@ -655,7 +659,7 @@ def command_build(args):
           f"{Path(args.out or OUT).relative_to(TRACKER)}")
     print(f"  {counts['total']} cards: {counts['missable']} missable "
           f"({counts['missable_tier_b']} Tier B, {counts['missable_tier_a']} Tier A), "
-          f"{counts['one_time']} one-time Tier A, {counts['none']} no-window "
+          f"{counts['one_time']} one-time, {counts['none']} no-window "
           f"({counts['tier_c']} Tier C)")
     return 0
 

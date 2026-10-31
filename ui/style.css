@@ -53,7 +53,7 @@ input[type=number], input[type=search] {
 input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(212,168,75,.18); }
 .pin { display: flex; align-items: center; gap: 5px; color: var(--dim); cursor: pointer; user-select: none; }
 .pin input { accent-color: var(--gold); }
-.save-error { margin-top: 6px; padding: 6px 9px; border-radius: 6px; background: rgba(229,83,75,.12); color: var(--red); border-left: 3px solid var(--red); }
+.save-error { margin-top: 6px; padding: 6px 9px; border-radius: 6px; background: rgba(229,83,75,.12); color: var(--red); border-left: 3px solid var(--red); overflow-wrap: anywhere; }
 
 /* ---------- panes ---------- */
 .pane { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 14px 28px; scrollbar-gutter: stable; }

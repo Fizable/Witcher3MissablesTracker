@@ -236,16 +236,20 @@
       }
     },
     "card_iorveth": {
-      "kind": "missable",
+      "kind": "one_time",
       "tier": "community",
       "step": "mq2039vowofsilence",
-      "event": "Shock Therapy ends",
-      "mechanism": "Complete Shock Therapy; skipping or failing the quest closes the Iorveth card.",
+      "event": "Shock Therapy is completed",
+      "mechanism": "Reward for completing Shock Therapy. The quest grants the card when it is completed; it has no reviewed failure branch, so this is a one-time source, not a missable window.",
       "source": "fandom_shock_therapy",
       "evidence": [
         {
           "kind": "community",
           "value": "https://witcher.fandom.com/wiki/Shock_Therapy"
+        },
+        {
+          "kind": "community",
+          "value": "https://witcher.fandom.com/wiki/Iorveth_(gwent_card)"
         }
       ],
       "opens": {

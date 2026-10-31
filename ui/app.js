@@ -66,7 +66,7 @@ const el = {
 const ui = {
   setup: $('#setupCard'), runTargets: $('#runTargets'), runCounts: $('#runCounts'),
   goalRow: $('#goalRow'), impossibleSec: $('#impossibleSec'), impossible: $('#impossible'),
-  planNote: $('#planNote'), planIssues: $('#planIssues'), planAhead: $('#planAhead'), topLater: $('#topLater'),
+  planIssues: $('#planIssues'), topLater: $('#topLater'),
   tradeoffsSec: $('#tradeoffsSec'), tradeoffs: $('#tradeoffs'), outcomeMatrix: $('#outcomeMatrix'),
   cards: $('#cards'), cardsCount: $('#cardsCount'), cardsNote: $('#cardsNote'),
   coverage: $('#coverage'), picker: $('#targetPicker'), targetOptions: $('#targetOptions'),
@@ -352,10 +352,8 @@ function planMatchesView(p) {
 function clearPlan() {
   planSeq++;
   planData = null;
-  ui.planNote.textContent = '';
   ui.planIssues.classList.add('hidden');
   ui.planIssues.replaceChildren();
-  if (view) renderTodo(view);
 }
 async function loadPlan() {
   const t = view && view.target;
@@ -366,7 +364,6 @@ async function loadPlan() {
   if (seq !== planSeq || !view || !view.target) return;
   planData = p;
   renderPlanIssues(p);
-  renderTodo(view);
 }
 function renderPlanIssues(p) {
   ui.planIssues.replaceChildren();
@@ -395,11 +392,6 @@ function renderPlanIssues(p) {
   });
   issues.forEach((card) => ui.planIssues.append(card));
   ui.planIssues.classList.toggle('hidden', !issues.length);
-  const c = p.coverage || {};
-  ui.planNote.textContent = (c.ahead || 0) + ' ahead · ' + (c.met || 0) + ' set · ' + (p.state || 'unknown');
-  if (p.state === 'ready' && !(p.steps || []).some((s) => s.state !== 'settled')) {
-    ui.planNote.textContent += ' · all selected outcomes set';
-  }
 }
 
 // ---------- outcome matrix (inside the spoiler-gated picker) ----------
@@ -818,7 +810,31 @@ const rowList = keyedList($('#todoRows'));
  * then only spoiler-free chips. The cutoff box lives in the top section and the detail pane; the
  * hand-written note, the wiki start text and the match confidence are gone.
  */
-function buildCard(s, objs, tracked, planStep) {
+function choiceBlock(tracked) {
+  const ch = tracked && tracked.choice;
+  if (!ch) return null;
+  const box = h('div', 'trk-choice');
+  if (ch.guided && (ch.lines || []).length) {
+    add(box, h('div', 'lbl gold', 'SAY THIS'));
+    ch.lines.forEach((x) => {
+      add(box, h('div', 'goal-line', '“' + x.line + '”'));
+      if (x.target) add(box, h('div', 'dim small', targetLabel(x.target)));
+    });
+  } else if (ch.text) {
+    add(box, h('div', 'txt choice-note', ch.text));
+  } else {
+    return null;
+  }
+  return box;
+}
+
+/**
+ * A tracked mission card: the current objective first, then one short description, then the choice
+ * warning the player came here for. The plan is not a card of its own; when guidance is on and a
+ * goal is selected it contributes exactly one reviewed line, and with guidance off it contributes
+ * only the constant sentence.
+ */
+function buildCard(s, objs, tracked) {
   const active = s.status === 'Active';
   const w = tracked ? tracked.warning : null;
   const accent = w ? (w.level === 'stop' ? 'red' : 'amber') : active ? 'green' : s.conditional ? 'blue' : 'gold';
@@ -826,50 +842,25 @@ function buildCard(s, objs, tracked, planStep) {
   const top = h('div', 'card-top');
   // A tracked step is in the save even when its journal state is "not started" (the tracker may
   // know the next goal before the log flips it active). Never label that card "not in your log".
-  const place = active ? 'in your quest log'
-    : tracked ? 'tracked in your game'
-      : s.conditional ? 'only if it exists in your game' : 'not in your log yet';
+  const place = active ? 'in your quest log' : 'tracked in your game';
   add(top, h('span', 'chip', lvlChip(s)), tracked ? h('span', 'tag blue', 'TRACKED IN YOUR GAME') : null,
-    planStep ? h('span', 'tag blue', 'PLAN') : null,
     h('span', 'sidetag ' + (active ? 'green' : 'dim'), place));
   add(c, top, h('button', 'title link', s.title, { 'data-act': 'detail', 'data-id': s.id }));
 
-  // Guidance belongs on the card that is actually current. A plan step that is still ahead shows
-  // only its goal marker; the exact line appears when its quest is tracked, so the list cannot
-  // leak a future scene line.
-  if (planStep) {
-    const chips = h('div', 'chips');
-    (planStep.targets || []).forEach((id) => add(chips, h('span', 'tagchip goalchip', targetLabel(id))));
-    if (planStep.state === 'unreachable') add(chips, h('span', 'tagchip', 'BLOCKED'));
-    if (planStep.state === 'unknown') add(chips, h('span', 'tagchip', 'UNKNOWN'));
-    add(c, chips);
-    if (tracked && planStep.state === 'ahead' && (planStep.instructions || []).length) {
-      const box = h('div', 'plan-guidance');
-      add(box, h('div', 'lbl gold', 'SAY THIS'));
-      planStep.instructions.forEach((i) => {
-        add(box, h('div', 'goal-line', '“' + i.instruction + '”'));
-        add(box, h('div', 'dim small', targetLabel(i.target) + (i.locid ? ' · locId ' + i.locid : '')));
-      });
-      add(c, box);
-    }
-    if (planStep.note) add(c, h('div', 'why', planStep.note));
-    if (planStep.facts && planStep.facts.length) add(c, h('div', 'dim small', 'Phase fact: ' + planStep.facts.join(', ')));
-  }
-
-  // Only the current quest (and any tracked step) carries its description and objectives. A plan
-  // step that is still ahead is a reference row: title, goal, level and the one-line note are enough
-  // to decide what comes next without turning UP NEXT into five full dossier cards.
-  const full = !planStep || tracked;
-  if (full && objs.length) {
+  if (objs.length) {
     const ul = h('ul', 'bul');
     objs.slice(0, 2).forEach((o) => add(ul, h('li', '', o)));
     add(c, h('div', 'lbl', active ? 'CURRENT OBJECTIVE' : 'STARTS WITH'), ul);
   }
-  if (full && s.desc) add(c, h('div', 'txt desc', s.desc));
-  const chipTags = (s.tags || []).filter((t) => !(s.goal && (t.id === 'ending_choice' || t.id === 'branch')));
-  if (s.goal || chipTags.length || s.provenance === 'manual_reviewed') {
+  if (s.desc) add(c, h('div', 'txt desc', s.desc));
+  const choice = choiceBlock(tracked);
+  if (choice) add(c, choice);
+
+  // Choice and goal chips were plan decoration: the tracked card states the warning in words, so
+  // turning guidance off removes the line and leaves no chip behind. Informational tags stay.
+  const chipTags = (s.tags || []).filter((t) => t.id !== 'ending_choice' && t.id !== 'branch');
+  if (chipTags.length || s.provenance === 'manual_reviewed') {
     const chips = h('div', 'chips');
-    if (s.goal) add(chips, h('span', 'tagchip goalchip', 'GOAL'));
     chipTags.forEach((t) => add(chips, h('span', 'tagchip', t.label)));
     if (s.provenance === 'manual_reviewed') add(chips, h('span', 'tagchip', 'MANUAL REVIEWED', { title: s.review_reason || 'Reviewed checklist step, not gamefile-proven.' }));
     add(c, chips);
@@ -886,69 +877,33 @@ function buildCard(s, objs, tracked, planStep) {
   return c;
 }
 
-function buildRow(s, rank, planStep) {
+function buildRow(s, rank) {
   const b = h('button', 'row', null, { 'data-act': 'detail', 'data-id': s.id });
   const st = s.status === 'Active' ? 'in your log' : s.conditional ? 'if it exists' : 'not in log';
   if ((s.watch || []).length) add(b, h('span', 'warnmark', '⚠', { title: s.watch[0].headline }));
   add(b, h('span', 'rank dim', String(rank)), h('span', 'rtitle', noParen(s.title)),
     h('span', 'dim small rreg', s.section), h('span', 'small ' + (s.status === 'Active' ? 'green' : 'dim'), st));
-  if (planStep) add(b, h('span', 'tagchip', 'PLAN'));
   return b;
 }
 
-function planStepMap() {
-  const p = planMatchesView(planData) ? planData : null;
-  const map = new Map();
-  if (p) (p.steps || []).forEach((s) => { if (s.state !== 'settled') map.set(s.step, s); });
-  return map;
-}
-
-function renderPlanAhead(items) {
-  const box = ui.planAhead;
-  if (!box) return;
-  box.replaceChildren();
-  if (!items.length) { box.classList.add('hidden'); return; }
-  const details = h('details', 'plan-ahead');
-  const levels = items.map((s) => Number(s.level) || 0).filter((n) => n > 0);
-  const span = levels.length ? ' (L' + Math.min(...levels) + (Math.max(...levels) !== Math.min(...levels) ? '-' + Math.max(...levels) : '') + ')' : '';
-  add(details, h('summary', '', 'PLAN AHEAD · ' + items.length + ' future goal step' + (items.length === 1 ? '' : 's') + span));
-  const ul = h('ul', 'plan-ahead-list');
-  items.forEach((s) => {
-    const st = stepsById.get(s.step);
-    const li = h('li');
-    add(li, h('span', 'plan-ahead-name', st.title),
-      h('span', 'plan-ahead-meta', ' · L' + (st.lv || '?') + ((s.targets || []).length ? ' · ' + s.targets.map(targetLabel).join(', ') : '')));
-    ul.append(li);
-  });
-  details.append(ul);
-  box.append(details);
-  box.classList.remove('hidden');
-}
-
 /**
- * UP NEXT is the play queue, not the route. It carries the tracked quest and the one plan step that
- * is current. Other in-log quests stay in PROGRESS; a window already in NOW is not repeated. Future
- * goal steps go into one collapsed PLAN AHEAD line.
+ * UP NEXT is the tracked quest and nothing else. Other in-log quests stay in PROGRESS; a window
+ * already in NOW is not repeated. The plan adds no row of its own: its one visible product is
+ * `tracked.choice`, rendered inside the tracked card.
  */
 function renderTodo(v) {
-  // The backend decides the queue and its order: tracked + the one next plan step. PLAN AHEAD is
-  // the same plan minus the ids the queue carries, so the two cannot disagree.
   const ids = (v.todo || []).filter((id) => stepsById.has(id));
-  const inQueue = new Set(ids);
   const tr = v.tracked, trackedSteps = new Set(tr ? tr.steps : []);
-  const planById = planStepMap();
-  const planAhead = [...planById.values()].filter((s) => !inQueue.has(s.step));
   const first = ids.slice(0, FIRST_N), rest = ids.slice(FIRST_N);
   const trackedOf = (id) => (trackedSteps.has(id) ? tr : null);
-  renderPlanAhead(planAhead);
   $('#todoEmpty').classList.toggle('hidden', ids.length > 0);
   const emptyText = (v.save && v.save.error) ? 'Load a save to see what is next.' : 'Nothing queued right now.';
   if ($('#todoEmpty').textContent !== emptyText) $('#todoEmpty').textContent = emptyText;
-  cardList(first, (id) => id, (id) => [stepsById.get(id), v.objectives[id] || [], v.level, trackedOf(id), planById.get(id)],
-    (id) => buildCard(stepsById.get(id), v.objectives[id] || [], trackedOf(id), planById.get(id)));
+  cardList(first, (id) => id, (id) => [stepsById.get(id), v.objectives[id] || [], v.level, trackedOf(id)],
+    (id) => buildCard(stepsById.get(id), v.objectives[id] || [], trackedOf(id)));
   const rank = new Map(ids.map((id, i) => [id, i + 1]));
-  rowList(rest, (id) => id, (id) => [stepsById.get(id), rank.get(id), planById.get(id)],
-    (id) => buildRow(stepsById.get(id), rank.get(id), planById.get(id)));
+  rowList(rest, (id) => id, (id) => [stepsById.get(id), rank.get(id)],
+    (id) => buildRow(stepsById.get(id), rank.get(id)));
   $('#todoToggle').classList.toggle('hidden', !rest.length);
   $('#todoMore').classList.toggle('closed', !showAll || !rest.length);
   $('#todoToggle').textContent = showAll
@@ -1232,10 +1187,14 @@ function renderDetail(d) {
     add(root, verdictCard(d.verdict, { label: 'CAN I DO THIS NOW?', detail: true, action: same && same.action }));
   }
   const lost = warns.some((x) => x.live === 'lost' || String(x.tag || '').includes('LOST'));
-  const tags = (s.tags || []).filter((t) => !(lost && t.id === 'missable') && !(s.goal && (t.id === 'ending_choice' || t.id === 'branch')));
-  if (s.goal || tags.length) {
+  // Choice and goal chips are plan decoration. The warning is stated in words by the guidance
+  // block, so turning guidance off removes the chip as well as the exact line.
+  const guided = !!(view && view.target && view.target.guidance === 'on');
+  const showGoal = guided && s.goal;
+  const tags = (s.tags || []).filter((t) => !(lost && t.id === 'missable') && t.id !== 'ending_choice' && t.id !== 'branch');
+  if (showGoal || tags.length) {
     const chips = h('div', 'chips');
-    if (s.goal) add(chips, h('span', 'tagchip goalchip', 'GOAL'));
+    if (showGoal) add(chips, h('span', 'tagchip goalchip', 'GOAL'));
     tags.forEach((t) => add(chips, h('span', 'tagchip', t.label)));
     add(root, chips);
   }

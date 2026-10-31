@@ -12,7 +12,7 @@
     "total": 224,
     "with_source": 200,
     "unknown_source": 24,
-    "missable": 15,
+    "missable": 14,
     "packs": {
       "base": 196,
       "ep1": 0,
@@ -22,10 +22,10 @@
     },
     "windows": {
       "total": 224,
-      "missable": 15,
+      "missable": 14,
       "missable_tier_a": 0,
-      "missable_tier_b": 15,
-      "one_time": 17,
+      "missable_tier_b": 14,
+      "one_time": 18,
       "none": 192,
       "tier_a": 186,
       "tier_b": 15,
@@ -39,8 +39,8 @@
     "tier_a": 186,
     "tier_b": 15,
     "tier_c": 23,
-    "missable": 15,
-    "one_time": 17,
+    "missable": 14,
+    "one_time": 18,
     "none": 192,
     "note": "No Tier A card-level deadline is proven. 15 Tier B community-reviewed windows are labelled in the UI; every other card has a one-time or documented no-window reason."
   },
@@ -6946,14 +6946,14 @@
       ],
       "name_key": "gwint_name_iorveth",
       "window": {
-        "kind": "missable",
+        "kind": "one_time",
         "tier": "community",
         "tier_rank": "B",
         "reviewed": "2026-10-30",
         "step": "mq2039vowofsilence",
         "step_title": "Shock Therapy",
-        "event": "Shock Therapy ends",
-        "mechanism": "Complete Shock Therapy; skipping or failing the quest closes the Iorveth card.",
+        "event": "Shock Therapy is completed",
+        "mechanism": "Reward for completing Shock Therapy. The quest grants the card when it is completed; it has no reviewed failure branch, so this is a one-time source, not a missable window.",
         "source": {
           "name": "Witcher Wiki - Shock Therapy",
           "url": "https://witcher.fandom.com/wiki/Shock_Therapy",
@@ -6963,6 +6963,10 @@
           {
             "kind": "community",
             "value": "https://witcher.fandom.com/wiki/Shock_Therapy"
+          },
+          {
+            "kind": "community",
+            "value": "https://witcher.fandom.com/wiki/Iorveth_(gwent_card)"
           }
         ],
         "opens": {

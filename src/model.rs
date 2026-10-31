@@ -507,12 +507,13 @@ pub fn check_quest(rd: &RouteData, ev: &Eval, short_name: &str, state: &HashMap<
 
 // ------------------------------------------------------------------ JSON views for the UI
 
-/// UP NEXT order. The queue is deliberately small: the quest tracked in the game, then the one
-/// next unblocked plan step. Other in-log quests stay in `MORE > PROGRESS`; a quest whose live
+/// UP NEXT order. The queue is deliberately small: the quest tracked in the game, and nothing else.
+/// The plan is not a second surface and adds no step; its one visible product is the reviewed line
+/// on the tracked quest card. Other in-log quests stay in `MORE > PROGRESS`; a quest whose live
 /// window is in `NOW` is removed by the caller. Gated, done, lost and unsafe steps never appear.
 /// Inside the queue: nearest deadline (a live cutoff), then lowest suggested level, then the
 /// journal's own `order` as a tie-break.
-pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>, caution: &HashSet<usize>, next_plan: Option<&str>) -> Vec<usize> {
+pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>, caution: &HashSet<usize>) -> Vec<usize> {
     let mut out: Vec<usize> = ev
         .todo
         .iter()
@@ -522,8 +523,8 @@ pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>,
             let s = &ev.steps[i];
             let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
             // UP NEXT answers "what do I do next?", not "what is in my log?". The log is the
-            // ledger in MORE > PROGRESS; only the tracked quest and the next plan step belong here.
-            is_tracked || next_plan == Some(s.n.id.as_str())
+            // ledger in MORE > PROGRESS; only the tracked quest belongs here.
+            is_tracked
         })
         .collect();
     out.sort_by_key(|&i| {
@@ -1413,7 +1414,7 @@ mod tests {
     }
 
     #[test]
-    fn do_next_is_the_tracked_quest_or_the_next_plan_step() {
+    fn do_next_is_the_tracked_quest_and_nothing_else() {
         let tracked = node("tracked", "20", &["tracked"], "side", 9, true);
         let active_low = node("active_low", "30", &["active_low"], "side", 9, true);
         let avail_l5 = node("avail_l5", "5", &["avail_l5"], "side", 2, true);
@@ -1430,25 +1431,26 @@ mod tests {
         let st = state(&[("tracked", "Active"), ("active_low", "Active")]);
         let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
         let caution_ids: HashSet<usize> = HashSet::from([at(&ev, "caution")]);
-        let ord = todo_order(&ev, Some("tracked"), &HashSet::new(), &caution_ids, None);
+        let ord = todo_order(&ev, Some("tracked"), &HashSet::new(), &caution_ids);
         let pos = |id: &str| ord.iter().position(|&i| ev.steps[i].n.id == id)
             .unwrap_or_else(|| panic!("{id} is not in DO NEXT: {:?}", ord.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>()));
         assert_eq!(pos("tracked"), 0, "the tracked quest comes first");
+        assert_eq!(ord.len(), 1, "the tracked quest is the whole queue: {:?}", ord.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>());
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "active_low"), "an in-log quest is not repeated in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "avail_l3"), "a merely unlocked quest is not in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "caution"), "caution alone does not enter UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gwent"), "an unopened Gwent quest is not in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "treasure"), "an unopened treasure hunt is not in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gated"), "gated is never in DO NEXT");
-        // the tracked quest enters even when its journal has not opened, and the single next plan
-        // step enters by name; nothing else does
-        let tracked_gwent = todo_order(&ev, Some("gwent"), &HashSet::new(), &HashSet::new(), Some("treasure"));
+        // The plan adds no step of its own any more: a named plan step is not queued either. Only
+        // the tracked quest enters, even when its journal has not opened.
+        let tracked_gwent = todo_order(&ev, Some("gwent"), &HashSet::new(), &HashSet::new());
+        assert_eq!(tracked_gwent.len(), 1, "the plan adds no row: {:?}", tracked_gwent.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>());
         assert_eq!(ev.steps[tracked_gwent[0]].n.id, "gwent");
-        assert!(tracked_gwent.iter().any(|&i| ev.steps[i].n.id == "treasure"));
-        assert!(!tracked_gwent.iter().any(|&i| ev.steps[i].n.id == "avail_l5"), "one plan step, not all available ones");
+        assert!(!tracked_gwent.iter().any(|&i| ev.steps[i].n.id == "treasure"), "a plan step is not an UP NEXT row");
         // a fired cutoff takes its step out of DO NEXT; the top section names it instead
         let unsafe_ids = HashSet::from([at(&ev, "avail_l3")]);
-        let without = todo_order(&ev, Some("tracked"), &unsafe_ids, &caution_ids, None);
+        let without = todo_order(&ev, Some("tracked"), &unsafe_ids, &caution_ids);
         assert!(!without.iter().any(|&i| ev.steps[i].n.id == "avail_l3"));
     }
 

@@ -706,8 +706,9 @@ impl Inner {
     /// A step that a fired cutoff already cost is `unsafe`: it is not something to do, it is in the
     /// top section. A step that is the closing quest of a live cutoff is unsafe too: doing it costs
     /// another open quest, and the top section names it. The protected quest is `caution` - it keeps
-    /// its place in DO NEXT, with the warning above it.
-    fn todo_order(&self, ev: &Eval, steps: &[Value], next_plan: Option<&str>) -> Vec<usize> {
+    /// its place in DO NEXT, with the warning above it. The plan adds no step: its only visible
+    /// product is the reviewed line on the tracked quest card.
+    fn todo_order(&self, ev: &Eval, steps: &[Value]) -> Vec<usize> {
         let open = open_window_ids(ev, steps);
         let mut unsafe_ids: HashSet<usize> = HashSet::new();
         let mut caution: HashSet<usize> = HashSet::new();
@@ -737,7 +738,7 @@ impl Inner {
                 caution.insert(i);
             }
         }
-        let mut order = model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution, next_plan);
+        let mut order = model::todo_order(ev, self.tracked_short().as_deref(), &unsafe_ids, &caution);
         // A quest whose window is open is already the NOW band's instruction: the band says "do
         // this now" with the NPC and the deadline, so the queue must not repeat it as well.
         order.retain(|&i| !open.iter().any(|a| model::tracks(&ev.steps[i].n, a)));
@@ -745,18 +746,23 @@ impl Inner {
     }
 
     /// the quest tracked in the game for the UI (null when the save has none)
-    fn tracked_json(&self, ev: &Eval) -> Value {
+    ///
+    /// `choice` is the fourth warning, carried by the tracked card rather than the band: with
+    /// guidance off it is only the constant sentence, and with guidance on plus a goal it is the
+    /// exact reviewed line for a choice the player is about to reach.
+    fn tracked_json(&self, ev: &Eval, plan: Option<&Value>) -> Value {
         if self.tracked.is_none() {
             return Value::Null;
         }
         let Some(short) = self.tracked_short() else {
-            return json!({"short": "", "display": "a quest the tracker does not know yet", "status": "", "steps": [], "warning": null});
+            return json!({"short": "", "display": "a quest the tracker does not know yet", "status": "", "steps": [], "warning": null, "choice": null});
         };
         let display = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
         let steps: Vec<String> = self.tracked_steps(ev, &short).iter().map(|&i| ev.steps[i].n.id.clone()).collect();
         let warning = model::tracked_warning(ev, &short).map(|(level, headline, details)| json!({"level": level, "headline": headline, "details": details}));
+        let choice = tracked_choice(ev, &short, plan, self.guidance_on);
         json!({"short": short, "display": display, "status": self.state.get(&short).cloned().unwrap_or_default(),
-               "steps": steps, "warning": warning})
+               "steps": steps, "warning": warning, "choice": choice})
     }
 
     /// Attach what the game's own files say about a step: the game's name for it, its quest-log
@@ -1048,45 +1054,14 @@ impl Inner {
         })
     }
 
-    /// The top section: only what still has a cost in this save.
-    ///
-    /// One entry per reviewed loss edge, already re-read against the save by `live_cutoff`: a cutoff
-    /// that fired over an open quest is a loss, one whose closing quest is in the log is urgent, and
-    /// one whose closer is still ahead is missable. `settled`/`unknown`/done never reach here. A
-    /// Failed quest is its own entry. The list is empty when nothing is at stake - no heading, no
-    /// reassuring placeholder.
-    /// The one plan step UP NEXT may add: the first ahead step in plan order that the save has not
-    /// locked. Everything else ahead stays in the collapsed PLAN AHEAD line. `view()` and `--dump`
-    /// both call this so a selected goal cannot make their `todo` disagree.
-    fn next_plan(&self, ev: &Eval) -> Option<String> {
-        if self.selected.is_empty() {
-            return None;
-        }
-        self.plan_report_with(ev, None)
-            .get("steps")
-            .and_then(|x| x.as_array())
-            .and_then(|a| {
-                a.iter().find(|s| {
-                    s.get("state").and_then(|x| x.as_str()) == Some("ahead")
-                        && s.get("step")
-                            .and_then(|x| x.as_str())
-                            .and_then(|id| ev.byid.get(id))
-                            .map(|&i| ev.steps[i].locked.is_empty())
-                            .unwrap_or(false)
-                })
-            })
-            .and_then(|s| s.get("step"))
-            .and_then(|x| x.as_str())
-            .map(String::from)
-    }
-
     fn view(&mut self) -> Value {
         let rt = self.effective_route();
         let ev = model::evaluate(&rt, &self.state, &self.ticks, &self.flags, &self.facts);
         let target_evals = self.target_evals(&ev);
-        // Goal chips and PLAN AHEAD survive guidance being off; only exact instructions are gated.
+        // The plan is no longer a surface of its own: it supplies the one reviewed line the tracked
+        // quest card may carry, and `gate_instructions` still empties it when guidance is off.
         let goal_steps = targets::goal_steps(&self.selected, &target_evals);
-        let next_plan = self.next_plan(&ev);
+        let plan = self.plan_report_with(&ev, None);
         let age = self.save_mtime.and_then(|m| SystemTime::now().duration_since(m).ok()).map(|d| d.as_secs()).unwrap_or(0);
         let name = self.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("").to_string();
         let mut steps: Vec<Value> = (0..ev.steps.len())
@@ -1198,8 +1173,8 @@ impl Inner {
             },
             "sections": rt.sections,
             "steps": steps,
-            "todo": self.todo_order(&ev, &steps, next_plan.as_deref()).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
-            "tracked": self.tracked_json(&ev),
+            "todo": self.todo_order(&ev, &steps).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "tracked": self.tracked_json(&ev, Some(&plan)),
             "top": top,
             "status": status,
             "objectives": Value::Object(objs),
@@ -1217,12 +1192,6 @@ impl Inner {
         let mut top = top_items(ev, steps);
         let Some(list) = top.as_array_mut() else { return top };
         list.extend(cards::top_items(card_report));
-        let covered: HashSet<String> = list
-            .iter()
-            .flat_map(|i| i.get("ids").and_then(|x| x.as_array()).into_iter().flatten())
-            .filter_map(|x| x.as_str().map(String::from))
-            .collect();
-        list.extend(choice_items(ev, &covered));
         sort_top(list);
         top
     }
@@ -1236,25 +1205,51 @@ impl Inner {
     }
 }
 
-/// A consequential choice is a NOW item: the band must say that a quest in the log holds a choice
-/// that matters to the endings in play, without printing the choice text or the recommended option.
-/// The row does not name an ending, so it is safe with guidance off and no goal selected.
-fn choice_items(ev: &Eval, covered: &HashSet<String>) -> Vec<Value> {
-    let mut out = Vec::new();
-    for s in &ev.steps {
-        if s.status != "Active" || !s.n.ending_relevant || covered.contains(&s.n.id) {
-            continue;
+/// The fourth warning, on the tracked quest card instead of the band.
+///
+/// A consequential choice belongs to the quest the player is on, not to a separate queue entry
+/// underneath it and not to a plan card. With guidance off the card carries only the constant
+/// sentence, so no exact line, branch fact or ending id leaves the backend. With guidance on and a
+/// selected goal it carries the reviewed line for that scene. A settled or unreachable plan step
+/// says nothing: there is no action left to take.
+fn tracked_choice(ev: &Eval, short: &str, plan: Option<&Value>, guidance_on: bool) -> Value {
+    let Some(i) = (0..ev.steps.len()).find(|&i| {
+        let s = &ev.steps[i];
+        model::tracks(&s.n, short)
+            && !matches!(s.status.as_str(), "Done" | "N/A")
+            && s.n.ending_relevant
+    }) else {
+        return Value::Null;
+    };
+    let id = ev.steps[i].n.id.as_str();
+    let step_plan = plan
+        .and_then(|p| p.get("steps"))
+        .and_then(|x| x.as_array())
+        .and_then(|a| a.iter().find(|s| s.get("step").and_then(|x| x.as_str()) == Some(id)));
+    if let Some(sp) = step_plan {
+        if sp.get("state").and_then(|x| x.as_str()) != Some("ahead") {
+            return Value::Null;
         }
-        let title = model::short(&s.n.title);
-        out.push(json!({
-            "kind": "choice", "level": "warn", "tag": "ENDING CHOICE AHEAD",
-            "headline": format!("{title} contains a choice that matters to the endings in play."),
-            "detail": "A scene section of this quest sets a fact a reviewed ending target needs.",
-            "action": Value::Null, "live_note": Value::Null, "mechanism": "scene choice rows",
-            "file": "", "quests": [title], "ids": [s.n.id],
-        }));
     }
-    out
+    if guidance_on {
+        let lines: Vec<Value> = step_plan
+            .and_then(|s| s.get("instructions"))
+            .and_then(|x| x.as_array())
+            .into_iter()
+            .flatten()
+            .filter_map(|row| {
+                let line = row.get("instruction").and_then(|x| x.as_str())?;
+                if line.is_empty() {
+                    return None;
+                }
+                Some(json!({"line": line, "target": row.get("target").cloned().unwrap_or(Value::Null)}))
+            })
+            .collect();
+        if !lines.is_empty() {
+            return json!({"guided": true, "text": Value::Null, "lines": lines});
+        }
+    }
+    json!({"guided": false, "text": "This choice affects an ending.", "lines": []})
 }
 
 /// Guidance off removes the exact lines and nothing else: the plan, its steps and its goal chips
@@ -1873,7 +1868,7 @@ fn main() {
             inner.attach_derived(s, &ev.steps[i], &done_q);
         }
         let card_report = inner.cards_report(&ev);
-        let next_plan = inner.next_plan(&ev);
+        let plan = inner.plan_report_with(&ev, None);
         let top = inner.top_section(&ev, &steps, &card_report);
         let status_rows = status_items(&ev, &steps, &card_report);
         let dump = json!({
@@ -1882,8 +1877,8 @@ fn main() {
             "quest_files": inner.db.quests.len(),
             "states": inner.state,
             "status": status,
-            "todo": inner.todo_order(&ev, &steps, next_plan.as_deref()).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
-            "tracked": inner.tracked_json(&ev),
+            "todo": inner.todo_order(&ev, &steps).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            "tracked": inner.tracked_json(&ev, Some(&plan)),
             "status_rows": status_rows,
             "objectives": inner.objectives,
             // the route's fact-gated prerequisites, and whether this save has the game's own condition
@@ -2155,7 +2150,7 @@ mod top_tests {
     }
 
     #[test]
-    fn a_choice_in_an_active_quest_is_a_now_item_without_the_choice_text() {
+    fn the_choice_warning_lives_on_the_tracked_card_and_never_reaches_the_band() {
         let mut nd = node("q110postbattle", &["q110postbattle"]);
         nd.ending_relevant = true;
         let rd = RouteData { sections: vec!["Main".into()], nodes: vec![nd, node("q999plain", &["q999plain"])],
@@ -2164,20 +2159,29 @@ mod top_tests {
         let st = HashMap::from([("q110postbattle".to_string(), "Active".to_string()),
                                ("q999plain".to_string(), "Active".to_string())]);
         let ev = model::evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
-        let items = choice_items(&ev, &HashSet::new());
-        assert_eq!(items.len(), 1, "only the ending-relevant quest is a choice row");
-        assert_eq!(items[0]["ids"], json!(["q110postbattle"]));
-        assert_eq!(items[0]["kind"], "choice");
-        assert_eq!(items[0]["tag"], "ENDING CHOICE AHEAD");
-        let text = serde_json::to_string(&items[0]).unwrap().to_lowercase();
-        for leak in ["ciri", "emperor", "radovid", "sorceress", "crown", "blood and wine"] {
-            assert!(!text.contains(leak), "the warning must not name {leak}");
+        // The band has no choice row at all any more: the warning belongs to the tracked card.
+        let top = top_items(&ev, &[]);
+        assert_eq!(top, json!([]), "a choice is not a NOW band item");
+        // Guidance off: only the constant sentence, no line, no branch fact, no ending id.
+        let off = tracked_choice(&ev, "q110postbattle", None, false);
+        assert_eq!(off["guided"], false);
+        assert_eq!(off["text"], "This choice affects an ending.");
+        assert!(off["lines"].as_array().unwrap().is_empty());
+        let text = serde_json::to_string(&off).unwrap().to_lowercase();
+        for leak in ["ciri", "emperor", "radovid", "sorceress", "crown", "blood and wine", "bw_"] {
+            assert!(!text.contains(leak), "the constant sentence must not name {leak}");
         }
-        // A row already covered by a stronger warning, and a quest not in the log, do not duplicate it.
-        assert!(choice_items(&ev, &HashSet::from(["q110postbattle".to_string()])).is_empty());
-        let fresh = HashMap::from([("q110postbattle".to_string(), "Not started".to_string())]);
-        let ev = model::evaluate(&rd, &fresh, &HashSet::new(), &HashMap::new(), &HashSet::new());
-        assert!(choice_items(&ev, &HashSet::new()).is_empty(), "a choice still ahead is not a NOW item");
+        // Guidance on plus a goal: only the exact reviewed line, on this quest.
+        let plan = json!({"steps": [{"step": "q110postbattle", "state": "ahead",
+            "instructions": [{"instruction": "Velen.", "target": "bw_both_sisters"}]}]});
+        let on = tracked_choice(&ev, "q110postbattle", Some(&plan), true);
+        assert_eq!(on["guided"], true);
+        assert_eq!(on["lines"][0]["line"], "Velen.");
+        assert!(on["text"].is_null());
+        // A settled plan step and a quest that does not carry the choice stay silent.
+        let settled = json!({"steps": [{"step": "q110postbattle", "state": "settled"}]});
+        assert!(tracked_choice(&ev, "q110postbattle", Some(&settled), true).is_null());
+        assert!(tracked_choice(&ev, "q999plain", Some(&plan), true).is_null());
     }
 
     #[test]

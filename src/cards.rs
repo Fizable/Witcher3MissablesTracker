@@ -696,4 +696,30 @@ mod tests {
         assert_eq!(got["owned"], "owned");
         assert_eq!(live(&got)["state"], "owned");
     }
+
+    #[test]
+    fn the_shipped_iorveth_card_is_a_one_time_reward_and_never_a_band_row() {
+        let data: Value = serde_json::from_str(include_str!("../data/gwent_cards.json")).unwrap();
+        let index = CardIndex::from_json(&data);
+        let empty = CardCollection { normal: HashMap::new(), leaders: HashMap::new() };
+        let statuses = |gate: &str| HashMap::from([("mq2039vowofsilence".to_string(), gate.to_string())]);
+        let card = |gate: &str| {
+            let report = index.report(Some(&empty), true, "", &HashSet::new(), &HashMap::new(), &statuses(gate));
+            report["cards"].as_array().unwrap().iter().find(|c| c["id"] == "card_iorveth").unwrap().clone()
+        };
+
+        // Iorveth is the completion reward of Shock Therapy, not a reviewed failure branch: the
+        // shipped ledger must keep it a one-time source so it can never open a warning.
+        let row = card("Active");
+        assert_eq!(row["window"]["kind"], "one_time");
+        assert_eq!(row["window"]["step"], "mq2039vowofsilence");
+        assert_eq!(row["window"]["tier"], "community");
+
+        // However the Shock Therapy journal state moves, a one-time row is never NOW or STATUS.
+        for gate in ["Not started", "Active", "Done"] {
+            let report = index.report(Some(&empty), true, "", &HashSet::new(), &HashMap::new(), &statuses(gate));
+            assert!(top_items(&report).is_empty(), "Iorveth is not actionable now ({gate})");
+            assert!(status_items(&report).is_empty(), "and not a settled check ({gate})");
+        }
+    }
 }
