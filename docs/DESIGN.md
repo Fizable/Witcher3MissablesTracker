@@ -466,8 +466,9 @@ has no real save, so a fixture row was rendered in MORE > STATUS: the tag and ac
 the band stayed hidden, and the quest and search pages returned the same `warn` verdict. A
 note-only tick on `q110postbattle` kept the card `Not started`, showed the pencil in PROGRESS and
 the NOTE block on the detail page, and left the band's statuette warning in place. The goal-off
-profile kept PLAN AHEAD and the GOAL chip and rendered no exact line. The corrupt-save payload named
-`CheckPoint_corrupt.sav`, said the tracker retries, reopened FOLDERS and painted no band.
+profile kept PLAN AHEAD and the GOAL chip and rendered no exact line. The corrupt-save payload,
+loaded twice, named `CheckPoint_corrupt.sav` both times, said the tracker retries, reopened FOLDERS
+and painted no band.
 
 `cargo test --locked` reports 67 passed; `cargo build --release` is warning-free; `node --check
 ui/app.js` passes. `py tools/regen.py --check`, `py tools/cardwindows.py check`, `py

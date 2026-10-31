@@ -756,8 +756,9 @@ open with the saves path and Browse. Earliest save: band hidden, only tracked an
 ahead cards under MORE > CARDS > LATER. Passed cutoff fixture: band hidden, tag and action on MORE >
 STATUS, the same `warn` verdict on the quest and search pages. Note-only tick on `q110postbattle`:
 card remains `Not started`, PROGRESS shows the pencil, detail shows NOTE, band warning stays.
-Guidance off: PLAN AHEAD and the GOAL chip remain, no exact line. Corrupt save: file named, retry
-stated, FOLDERS reopened, no stale band. There were no console errors and no horizontal overflow.
+Guidance off: PLAN AHEAD and the GOAL chip remain, no exact line. Corrupt save on two successive
+loads: file named both times, retry stated, FOLDERS reopened, no stale band. There were no console
+errors and no horizontal overflow.
 
 **Phase 5.** `package.ps1` produced `dist/Witcher3MissablesTracker-1.3.4/` and its zip; FileVersion
 and ProductVersion are 1.3.4. The exe SHA-256 is

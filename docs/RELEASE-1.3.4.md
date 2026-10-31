@@ -58,8 +58,8 @@ next" in UP NEXT, and opened FOLDERS with the saves path and Browse. The earlies
 carried only the tracked and in-log quests, and listed 31 ahead cards under MORE > CARDS > LATER. A
 note-only tick kept `q110postbattle` at `Not started`, showed the pencil in PROGRESS and the NOTE
 block on the detail page, and left the statuette warning in the band. The goal-off profile kept PLAN
-AHEAD and the GOAL chip and showed no exact line. The corrupt-save payload named the file, said the
-tracker retries, reopened FOLDERS and painted no band.
+AHEAD and the GOAL chip and showed no exact line. The corrupt-save payload, loaded twice, named the
+file both times, said the tracker retries, reopened FOLDERS and painted no band.
 
 ## Checks
 
