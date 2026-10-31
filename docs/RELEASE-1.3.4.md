@@ -110,4 +110,6 @@ upload was performed.
   save.
 - The native Tauri WebView was not automated. The real `ui/` was driven in Chromium at 480x820 with
   a mock built from the release binary's payloads.
+- `cargo fmt --check` could not run because the toolchain has no `rustfmt` component installed. No
+  formatting-only changes were made.
 - The recorded native-layer crash above predates this release and is outside the tracker.

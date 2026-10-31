@@ -770,6 +770,10 @@ dist binary was copied to the root, and all three copies match the hash. The 1.3
 `Cargo.toml`, `Cargo.lock`, `tauri.conf.json` and the README link all name 1.3.4. The release was
 committed locally only; no remote push, tag or store upload was attempted.
 
+**Formatting.** `cargo fmt --check` could not run because the toolchain has no `rustfmt` component
+(`cargo-fmt.exe` not installed); no formatting-only changes were made, and the touched Rust files
+keep the repo's existing style.
+
 **Logs.** `w3loadfix.log` ends with 0 verify errors; `WitcherNativeBridge.log` has all registrations
 OK; `BeardmosImmersiveWorld.log` ends with its rain timer alive; `OptiScaler.log` ends with a normal
 detach. `ReShade.log` and `RenoDX-DLSS5-crash.log` still record the 2026-10-30 20:09 native-layer
