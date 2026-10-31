@@ -37,6 +37,7 @@ def main():
     ap.add_argument("--saves", required=True, help="folder holding the copied .sav fixture")
     ap.add_argument("--out", default=str(ROOT / "ui" / "mock"))
     ap.add_argument("--game", default=os.environ.get("W3_GAME_DIR", r"C:\Steam\steamapps\common\The Witcher 3"))
+    ap.add_argument("--settings", help="an existing profile's settings.json (for goals and guidance)")
     ap.add_argument("--limit", type=int, default=0, help="debug: detail only the first N steps")
     a = ap.parse_args()
 
@@ -50,10 +51,9 @@ def main():
     tmp = Path(tempfile.mkdtemp(prefix="w3mockui-"))
     app = tmp / "appdata" / "Witcher3MissablesTracker"
     app.mkdir(parents=True)
-    (app / "settings.json").write_text(
-        json.dumps({"saves_dir": str(saves), "game_dir": a.game, "setup_v1": True}),
-        encoding="utf-8",
-    )
+    settings = json.loads(Path(a.settings).read_text(encoding="utf-8")) if a.settings else {}
+    settings.update({"saves_dir": str(saves), "game_dir": a.game, "setup_v1": True})
+    (app / "settings.json").write_text(json.dumps(settings), encoding="utf-8")
     env = dict(os.environ, APPDATA=str(tmp / "appdata"))
 
     run(exe, ["--view", str(out / "view.json")], ROOT, env)

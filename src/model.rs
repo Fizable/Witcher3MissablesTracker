@@ -1141,14 +1141,27 @@ mod tests {
         let endings: Value = serde_json::from_str(
             &std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/data/endings.json")).unwrap(),
         ).unwrap();
-        let labels: Vec<String> = endings
+        let outcomes: Value = serde_json::from_str(
+            &std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/data/outcomes.json")).unwrap(),
+        ).unwrap();
+        // Every ending name, not only the four currently offered as targets: an outcome the player
+        // did not select is still a spoiler if it reaches the default payload.
+        let labels: HashSet<String> = endings
             .get("targets")
             .and_then(|x| x.as_object())
             .into_iter()
             .flatten()
             .filter_map(|(_, t)| t.get("label").and_then(|x| x.as_str()).map(String::from))
+            .chain(
+                outcomes
+                    .get("outcomes")
+                    .and_then(|x| x.as_object())
+                    .into_iter()
+                    .flatten()
+                    .filter_map(|(_, t)| t.get("label").and_then(|x| x.as_str()).map(String::from)),
+            )
             .collect();
-        assert!(!labels.is_empty(), "the shipped labels are what the scan must catch");
+        assert!(labels.len() > 4, "the shipped labels are what the scan must catch");
         for i in 0..ev.steps.len() {
             let body = step_json(&rd, &ev, i).to_string();
             assert!(!body.contains("\"instruction\""), "{} carries an instruction", ev.steps[i].n.id);
@@ -1306,6 +1319,46 @@ mod tests {
 
         let mut lost = json!({"live": "lost", "turn_in": turn});
         assert!(!turn_in_text(&mut lost, &both), "a lost window keeps its journal verdict");
+    }
+
+    #[test]
+    fn the_shipped_statuette_windows_name_both_one_and_neither() {
+        let data: Value = serde_json::from_str(include_str!("../data/cutoffs.json")).unwrap();
+        let windows = data["windows"].as_array().unwrap();
+        let required = ["mq3012_noble_statuette", "mq3012_soldier_statuette"];
+        for (id, both_action, neither_action) in [
+            ("triss_statuettes_window", "Talk to Triss during Final Preparations",
+             "Find both statuettes before Final Preparations ends"),
+            ("triss_statuettes_before_now_or_never", "Talk to Triss in Novigrad before Now or Never",
+             "Find both statuettes before Triss leaves Novigrad"),
+        ] {
+            let w = windows.iter().find(|w| w["id"] == id).unwrap();
+            let turn = w.get("turn_in").unwrap();
+            let mut both = json!({"live": "open", "turn_in": turn});
+            let facts = HashSet::from(required.map(String::from));
+            assert!(turn_in_text(&mut both, &facts), "{id}");
+            assert_eq!(both["headline"], "Both statuettes in hand - talk to Triss now", "{id}");
+            assert_eq!(both["action"], both_action, "{id}");
+            assert_eq!(both["live"], "open", "the wording never changes whether the window is live");
+            assert_eq!(both["live_note"], "Both items are in the save's facts.");
+
+            let mut noble = json!({"live": "open", "turn_in": turn});
+            assert!(turn_in_text(&mut noble, &HashSet::from([required[0].to_string()])));
+            assert_eq!(noble["headline"], "You still need the soldier statuette", "{id}");
+            assert_eq!(noble["action"], "Find the soldier statuette, then talk to Triss", "{id}");
+            assert_eq!(noble["live_note"], "One of the two items is still missing.");
+
+            let mut soldier = json!({"live": "open", "turn_in": turn});
+            assert!(turn_in_text(&mut soldier, &HashSet::from([required[1].to_string()])));
+            assert_eq!(soldier["headline"], "You still need the nobleman statuette", "{id}");
+            assert_eq!(soldier["action"], "Find the nobleman statuette, then talk to Triss", "{id}");
+
+            let mut neither = json!({"live": "open", "turn_in": turn});
+            assert!(turn_in_text(&mut neither, &HashSet::new()));
+            assert_eq!(neither["headline"], "Find both statuettes, then talk to Triss", "{id}");
+            assert_eq!(neither["action"], neither_action, "{id}");
+            assert_eq!(neither["live_note"], "The save has neither item.");
+        }
     }
 
     #[test]

@@ -340,22 +340,31 @@ fn text<'a>(value: &'a Value, key: &str) -> &'a str {
 
 /// Card windows share the top warning surface with quest cutoffs. They are grouped by their
 /// closing step so a party or tournament with three cards does not become three near-identical
-/// cards. The card rows keep the individual names, sources and live state.
+/// cards. Only a window the player can act on now is a band row; a closed or passed window is a
+/// STATUS row.
 pub fn top_items(report: &Value) -> Vec<Value> {
+    grouped(report, &["active"])
+}
+
+/// A card window that has closed or passed is a check, not an action now.
+pub fn status_items(report: &Value) -> Vec<Value> {
+    grouped(report, &["check", "lost"])
+}
+
+fn grouped(report: &Value, wanted: &[&str]) -> Vec<Value> {
     let mut groups: HashMap<String, Vec<&Value>> = HashMap::new();
     for card in report.get("cards").and_then(|x| x.as_array()).into_iter().flatten() {
         let window = card.get("window").cloned().unwrap_or(Value::Null);
         // A one-time source is a window in the ledger, but it is not a reviewed deadline; only a
-        // missable row belongs in AT RISK NOW.
+        // missable row belongs in the warning surfaces.
         if text(&window, "kind") != "missable" {
             continue;
         }
         let live = card.get("window_live").cloned().unwrap_or(Value::Null);
         let state = text(&live, "state");
-        // A window whose closing quest has not started is ledger-only: it belongs to
-        // MORE > CARDS > LATER, never to NOW. Only a card the player can act on now, or one whose
-        // window has already closed, is a warning.
-        if !matches!(state, "active" | "check" | "lost") {
+        // A window whose closing quest has not started is ledger-only. An active window is the
+        // only card state the band may carry; check and lost are STATUS rows.
+        if !wanted.contains(&state) {
             continue;
         }
         let step = text(&live, "step");
@@ -395,7 +404,7 @@ pub fn top_items(report: &Value) -> Vec<Value> {
         };
         let (level, tag, rank) = match state {
             "active" => ("stop", "CARD WINDOW OPEN", 0u8),
-            "check" => ("lost", "CARD WINDOW PASSED - CHECK NOW", 2u8),
+            "check" => ("stop", "CARD WINDOW PASSED - CHECK NOW", 1u8),
             _ => ("lost", "CARD LOST IN THIS SAVE", 2u8),
         };
         let place = if step_title == event { event.to_string() } else { format!("{step_title} - {event}") };
@@ -419,6 +428,8 @@ pub fn top_items(report: &Value) -> Vec<Value> {
             "headline": headline,
             "detail": mechanism,
             "action": action,
+            "lost_titles": names,
+            "closing_titles": [step_title],
             "live_note": live_note,
             "mechanism": "reviewed card window",
             "file": file,
@@ -562,6 +573,25 @@ mod tests {
         });
         let items = top_items(&report);
         assert!(items.is_empty(), "a window that has not opened is a ledger row, not a NOW warning");
+        assert!(status_items(&report).is_empty(), "and it is not a STATUS row either");
+    }
+
+    #[test]
+    fn a_closed_card_window_moves_to_status_not_the_band() {
+        let report = json!({
+            "cards": [{
+                "name": "Card A",
+                "window": {"kind": "missable", "tier": "community", "tier_rank": "B",
+                           "step": "sq301triss", "step_title": "A Matter of Life and Death",
+                           "event": "The party ends", "mechanism": "Win the rounds.",
+                           "evidence": [{"kind": "file", "value": "q301.w2phase"}]},
+                "window_live": {"state": "check", "tone": "amber", "label": "PASSED", "step": "sq301triss"}
+            }]
+        });
+        assert!(top_items(&report).is_empty(), "a passed window is not actionable now");
+        let status = status_items(&report);
+        assert_eq!(status.len(), 1);
+        assert!(status[0]["tag"].as_str().unwrap().contains("CHECK NOW"));
     }
 
     #[test]
@@ -621,5 +651,49 @@ mod tests {
         let facts = HashSet::from(["cg_baron_discovered".to_string()]);
         let open = window_live(&window, "not_owned", true, &facts, &statuses);
         assert_eq!(open["state"], "active");
+    }
+
+    #[test]
+    fn the_shipped_dijkstra_window_is_open_before_the_baron_line_and_gone_after() {
+        let data: Value = serde_json::from_str(include_str!("../data/gwent_cards.json")).unwrap();
+        let index = CardIndex::from_json(&data);
+        let facts = HashSet::from(["cg_baron_discovered".to_string()]);
+        let empty = CardCollection { normal: HashMap::new(), leaders: HashMap::new() };
+        let owned = CardCollection { normal: HashMap::from([(109, 1)]), leaders: HashMap::new() };
+        let statuses = |gate: &str| HashMap::from([("cgnomansland".to_string(), gate.to_string())]);
+        let row = |collection: &CardCollection, statuses: &HashMap<String, String>, facts: &HashSet<String>| {
+            let report = index.report(Some(collection), true, "", facts, &HashMap::new(), statuses);
+            report["cards"].as_array().unwrap().iter().find(|c| c["id"] == "card_dijkstra").unwrap().clone()
+        };
+        let live = |card: &Value| card["window_live"].clone();
+
+        // The Baron is not in the save's facts yet: the source is not available, not missed.
+        let early = row(&empty, &statuses("Active"), &HashSet::new());
+        assert_eq!(early["owned"], "not_owned");
+        assert_eq!(live(&early)["state"], "not_yet");
+        assert!(live(&early)["label"].as_str().unwrap().contains("SOURCE NOT YET"));
+
+        // Before the Baron line ends the invitation is open. A one-time row is never a band item.
+        for gate in ["Not started", "Active"] {
+            let report = index.report(Some(&empty), true, "", &facts, &HashMap::new(), &statuses(gate));
+            let card = report["cards"].as_array().unwrap().iter().find(|c| c["id"] == "card_dijkstra").unwrap();
+            assert_eq!(card["window_live"]["state"], if gate == "Active" { "active" } else { "ahead" });
+            assert!(top_items(&report).is_empty(), "a one-time card is never a NOW row ({gate})");
+            assert!(status_items(&report).is_empty(), "and never a STATUS row ({gate})");
+        }
+
+        // After the line the invitation is gone; the reviewed office fallback keeps it a check,
+        // never a proved loss, and a one-time row still never reaches NOW or STATUS.
+        let passed = row(&empty, &statuses("Done"), &facts);
+        assert_eq!(live(&passed)["state"], "check");
+        assert_eq!(live(&passed)["label"], "PASSED - CHECK FALLBACK · ONE-TIME · TIER A");
+        let report = index.report(Some(&empty), true, "", &facts, &HashMap::new(), &statuses("Done"));
+        assert!(top_items(&report).is_empty());
+        assert!(status_items(&report).is_empty());
+
+        // The save's own collection is the only thing that can say owned.
+        let got = row(&owned, &statuses("Done"), &HashSet::new());
+        assert_eq!(got["owned"], "owned");
+        assert_eq!(live(&got)["state"], "owned");
     }
 }

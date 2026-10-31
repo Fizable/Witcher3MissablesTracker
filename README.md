@@ -3,10 +3,11 @@
 A small always-on-top Windows tool that reads your newest Witcher 3 save (read-only) and answers one
 question: **what do I do next in this save, and what can I still lose?**
 
-- **NOW**: a sticky band that appears only while an action can still change the outcome - a loss
-  that already happened, a story event that would fail a quest you still have open, a choice that
-  matters to the endings in play, or a missable quest or card window you can act on now. A card
-  window that is still ahead is not a warning and never enters the band; it is a row in
+- **NOW**: a sticky band that appears only while an action can still change the outcome - a story
+  event that would fail a quest you still have open, an ordering conflict, a choice that matters to
+  the endings in play, or a card window you can act on now. A loss that already happened or a
+  cutoff that already passed is not a band row: it lives in **MORE > STATUS** and on the quest page.
+  A card window that is still ahead is not a warning and never enters the band; it is a row in
   **MORE > CARDS > LATER**. When nothing is at stake the band disappears.
 - **UP NEXT**: only what you can act on now - the quest you are tracking, quests already in your
   log, and the one plan step that is next. A quest whose turn-in window is open right now is not
@@ -167,7 +168,7 @@ To see what the app itself computed, run the exe with `--dump out.json` (state, 
 section), `--view out.json` (exactly what the window is handed), `--detail <quest id> out.json`
 (one mission, including any goal line), `--cards out.json`, `--targets out.json`, `--outcomes
 out.json` or `--plan out.json [id,id]`; all exit without opening a window. `--outcomes` and `--plan`
-are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.3.md` records what was
+are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.4.md` records what was
 verified for this release and what is still open; `docs/RELEASE-1.0.0.md` is the historical 1.0
 record.
 

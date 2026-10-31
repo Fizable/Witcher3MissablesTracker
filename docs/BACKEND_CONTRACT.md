@@ -49,6 +49,8 @@ UI calls `window.__TAURI__.core.invoke(cmd, args)` and listens with
     "warning": null | { "level": "stop"|"warn", "headline": "...", "details": ["..."] }
   },
   "top": [ TopItem, ... ],                      // empty is a valid, tested answer; the UI hides the section
+  "status": [ StatusItem, ... ],                // MORE > STATUS only: settled losses, passed cutoffs and
+                                                // failed quests; same row shape as TopItem, with "live" added
   "objectives": { "<step id>": ["Follow Yennefer to Lofoten.", ...] },  // up to 4, current objective first
   "flags": [ { "id": "letho", "label": "...", "note": "...", "value": "yes"|"no"|"" }, ... ],
   "target": null | {
@@ -203,9 +205,11 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 
 ```
 {
-  "kind": "lost"|"failed"|"risk"|"missable"|"choice"|"card",
+  "kind": "lost"|"failed"|"risk"|"order"|"missable"|"choice"|"card",
   "level": "lost"|"stop"|"warn",
-  "tag": "LOST IN THIS SAVE"|"FAILED IN YOUR QUEST LOG"|"CUTOFF PASSED - CHECK NOW"|"DO THIS NOW"|"MISSABLE",
+  "tag": "ENDING CHOICE AHEAD"|"DO THIS NOW"|"ORDER"|"CARD WINDOW OPEN"|
+         "CUTOFF PASSED - CHECK NOW"|"LOST IN THIS SAVE"|"FAILED IN YOUR QUEST LOG"|
+         "CARD WINDOW PASSED - CHECK NOW"|"CARD LOST IN THIS SAVE",
   "headline": "One player-facing sentence naming the quest and why it is lost or at risk.",
   "detail": "The file mechanism behind it.",
   "action": null | "Give both statuettes to Triss during Final Preparations", // null once the journal marks the quest Failed
@@ -217,10 +221,16 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 }
 ```
 
-`settled` and `unknown` never become a TopItem. `kind` ordering is risk, lost, failed, choice,
-card, missable. `card` is only a window the player can act on now or one that has closed; an
-`ahead` window is never a TopItem. `choice` names the quest and says a choice matters to the
-endings in play; it never carries the choice text or a recommended option.
+`StatusItem` has the same fields as `TopItem`, plus `live` for the row's win state (`lost`, `check`,
+`passed`), and is read only by MORE > STATUS. `settled` and `unknown` never become a TopItem. `top`
+carries only `open` and `inside` quest
+windows, an `active` card window, and an Active quest's `choice`; `lost`, `passed`/`check` and
+`ahead` rows are STATUS or ledger rows. `Step.watch` and `Detail.derived.watch` are the same
+save-aware read through `main.rs::read_warning`; a reviewed turn-in applies its both/one/neither
+wording before either surface or `top` sees the row, so the card, the band and `verdict.headline`
+cannot disagree about what is still missing. `kind` ordering is risk, order, card, then choice. `choice`
+names the quest and says a choice matters to the endings in play; it never carries the choice text
+or a recommended option.
 A cutoff that has fired while the journal still has the quest open is `risk` with the tag
 `CUTOFF PASSED - CHECK NOW`, not `lost`: only a `Failed` journal entry produces `lost`.
 The UI shows only `tag` and `headline` on the top card; `detail`, `mechanism`, `file`, `action` and
@@ -306,3 +316,9 @@ SearchHit = { "short": "mq1015lynch", "display": "Lynch Mob", "status": "Not sta
 Verdict   = { "verdict": "safe"|"warn"|"stop"|"info", "headline": "...", "details": ["..."],
               "display": "Lynch Mob", "from_game_files": true, "evidence": "files"|"files+saves" }
 ```
+
+Every hit resolves through `step_short`, so a node carrying several files reports the first
+journal in `short`; opening the hit cannot change the answer. `check_quest(short)` and
+`get_detail(id)` both call `verdict_for`. The detail page renders `detail.verdict` at the top under
+`CAN I DO THIS NOW?`; a hit without a step renders the same `Verdict` in the search panel. `--detail`
+is the parity oracle for the rendered headline.

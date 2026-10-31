@@ -10,9 +10,7 @@ it serves it, and an audit is judged by whether every row below is actually deli
 they chose.**
 
 The warning is the product. Every other screen exists so that warning can be trusted and so the
-player can find what is left.
-
-## 2. The four warnings
+player can find what is left.## 2. The four warnings
 
 The top band (`NOW`) must warn about exactly these, and nothing else:
 
@@ -20,14 +18,23 @@ The top band (`NOW`) must warn about exactly these, and nothing else:
    arrived and has not been taken.
 2. **Order.** Do this quest before that one. A player who has chosen a quest must be told when
    finishing it fails other quests still open in their log.
-3. **Gwent cards.** A card window closing now, or one that closed already.
-4. **A consequential choice.** That this quest contains a choice that matters to the endings in play.
+3. **Gwent cards.** A card window open now. A window that closed already is `MORE > STATUS`.
+4. **A consequential choice.** That a quest in the log contains a choice that matters to the
+   endings in play. The row never prints the choice text, the ending name or the recommended
+   option, so it is safe with guidance off and no goal selected.
 
-All four apply whether or not an ending has been chosen. A chosen ending changes which choices are
-named and what line is shown; it is never a precondition for being warned.
+Every quest-window band row names the action, what is lost, and the quest or phase that closes the
+window. If the data cannot supply all three, the row does not ship. "Actionable now" means the save
+permits the action and the journal has not settled it; it does not mean the player is standing at
+the NPC, and the app must never imply that.
 
-Each item names what is lost and which quest causes it, and each is answered by the loaded save: a
-warning about something the journal has already settled is not shown.
+All four band warnings apply whether or not an ending has been chosen. A chosen ending changes
+which choices are named and what line is shown; it is never a precondition for being warned.
+
+Each item is answered by the loaded save: a warning about something the journal has already settled
+is not shown, and a choice still ahead is not a NOW item. `LOST IN THIS SAVE` and `CUTOFF PASSED -
+CHECK NOW` live on `MORE > STATUS` and the quest page. `UP NEXT` and `PLAN AHEAD` are on the main
+surface below the band.
 
 **Silence is correct.** When nothing can still change, the band is hidden. An empty band is not a
 failure state and must not be filled with reference data to look useful.
@@ -35,9 +42,11 @@ failure state and must not be filled with reference data to look useful.
 ## 3. Guidance is opt-in, and it is a second layer
 
 By default the app says only that a choice changes the outcome. It never says which choice, or what
-follows. With guidance toggled on and a goal chosen, it tells the player what to say in that scene,
-using the exact line from the game's own scene data. That gate is why choice text can ship at all:
-the line is reviewed game text, and the default payload carries none of it.
+follows. The band row is the constant sentence `<quest name> contains a choice that matters to the
+endings in play.` with no ending name, outcome or recommended option. With guidance toggled on, a
+goal chosen and the quest's page open, it tells the player what to say in that scene, using the
+exact line from the game's own scene data. That gate is why choice text can ship at all: the line is
+reviewed game text, and the default payload carries none of it.
 
 ## 4. One hundred percent is supported, not the headline
 
@@ -52,12 +61,12 @@ Every screen answers one question. If it stops answering that, it is broken even
 
 | surface | the question it answers | backend | must never |
 |---|---|---|---|
-| `NOW` band | what can I still lose, right now? | `get_view.top` | show a settled loss, or pad itself to look busy |
-| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | list future goal steps alongside actionable ones |
+| `NOW` band | what can I act on, right now? | `get_view.top` | show a row that cannot be acted on now, a settled loss, or an ahead card window; pad itself to look busy |
+| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | list future goal steps alongside actionable ones; re-filter the payload's queue in the UI |
 | `PLAN AHEAD` | what is still coming in my chosen run? | `view.target`, `get_plan` | compete with `UP NEXT` as a second to-do list |
 | quest detail | what is this quest, and am I safe to do it? | `get_detail` | put choice text in the default view |
 | `can I do this now?` search | is this quest safe yet? | `search`, `check_quest` | answer without naming the blocking quest |
-| `MORE > STATUS` | how much is done, in six honest states? | `view.completion` | print one percentage |
+| `MORE > STATUS` | what is settled, and how much is done? | `view.completion`, `view.status` | print one percentage, or hide a settled loss or a passed cutoff |
 | `MORE > CARDS` | which cards are left, and which have a window? | `get_cards`, `set_card` | call an invisible card `not owned` |
 | `MORE > COVERAGE` | is an empty section actually clean? | `view.coverage` | report a bare zero without the measured count |
 | `MORE > PROGRESS` | where am I in the whole game, by section? | `view.completion.matrix` | count a section header that disagrees with the total |
@@ -140,13 +149,23 @@ MORE > CARDS > LATER only) -> `active` (the closing step is open; the only card 
 owns the failure. `owned` and `unknown` are ownership states, not window states. A window that is
 `ahead` is never a TopItem. A deck definition is not ownership and not a source.
 
-### 9.4 Warning lifecycle and search
+### 9.4 Warning lifecycle, the band and search
 
 A reviewed warning is rebuilt against the loaded save on every refresh. `settled` and `unknown`
-are not warnings. A search answer and the quest's own detail page call the same save-aware verdict
-function, so the same quest cannot be `safe` on its page and `at risk` in search. The default
-payload carries no target label, ending name or instruction; only `get_plan` and `get_detail`
-after the opt-in may carry an exact line.
+are not warnings. The band accepts `live: open` and `live: inside` window rows, and only when the
+row also names its action, the titles it costs and the quest or phase that closes the window. A
+row missing any of those does not ship. `lost`, `passed` and `check` are `MORE > STATUS` rows, and
+`ahead` is ledger-only. A consequential choice enters the band only when its quest is Active; no
+choice text, ending name or recommended option is ever in that row.
+
+A search answer and the quest's own detail page call the same save-aware verdict function, so the
+same quest cannot be `safe` on its page and `at risk` in search. Both resolve a step through
+`step_short`, so a multi-file node names one journal. The detail page renders `detail.verdict` at the
+top under `CAN I DO THIS NOW?`; a hit with no step renders the same `Verdict` in the search panel,
+and a hit with a step opens that page. When a warning already carries the verdict's headline, the
+page keeps the warning's action and does not print the sentence twice. The default payload carries
+no target label, ending name or instruction; only `get_plan` and `get_detail` after the opt-in may
+carry an exact line.
 
 ### 9.5 The PROGRESS bar
 
@@ -197,8 +216,10 @@ rule and 13 mutation tests prove the checker fails when the rule is removed.
    panel opens once with the saves path and a Browse action.
 2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest and in-log
    quests only. MORE > CARDS > LATER lists the ahead windows.
-3. **Cutoff passed.** NOW shows `CUTOFF PASSED - CHECK NOW` with the protected quest and the
-   closing quest; the same warning is on the quest page and in search.
+3. **Cutoff passed.** The band stays hidden, because the action is gone; MORE > STATUS shows
+   `CUTOFF PASSED - CHECK NOW` with its headline and next step, and the same warning is on the quest
+   page and in search. The corpus has no save in this state, so the row is exercised as a fixture in
+   the real `ui/` (section 10.8).
 4. **Tick a not-started step.** The card keeps Not started, PROGRESS shows a pencil note rather
    than a green check, and the warning stays.
 5. **Goal selected, guidance off.** PLAN AHEAD and the goal chips remain; no quoted line appears.
@@ -295,6 +316,177 @@ Novigrad" in the band; the newest (`AutoSave_10d9e0_7ea4f000_581b307.sav`) and t
 Novigrad - the next chance is Final Preparations" with only the Iorveth card in the band.
 `cargo test --locked` reports 59 passed; the two new tests cover the open window and the closed one.
 `py tools/regen.py --check` reports all 11 outputs matching.
+
+### 10.5 Band and main-surface restoration (2026-10-30)
+
+An uncommitted post-1.3.3 realignment removed `ENDING CHOICE AHEAD` from `top`, moved `UP NEXT` and
+`PLAN AHEAD` under `MORE > PLAN`, and replaced the queue with a tracked card. That contradicted the
+locked decisions: the choice warning is a NOW item and `UP NEXT` is the main surface under the band.
+This pass restored both, kept the correct part of the realignment (settled losses and checks on
+`MORE > STATUS`), and removed the tracked card and the extra `PLAN` tab. `view.tracked` is back to
+its 1.3.3 shape, so no choice sentence is duplicated outside the band.
+
+| copied save | band tags | UP NEXT ids | statuette watch | detail verdict |
+|---|---|---|---|---|
+| clean | `[]` | 0 | `[]` | `info` "Load a save" |
+| earliest | `[]` | 2 | 1 | `warn` "Find both" |
+| median | `DO THIS NOW`, `CARD WINDOW OPEN` | 51 | 1 | `warn` "You still need the soldier statuette" |
+| newest | `CARD WINDOW OPEN` | 60 | 1 | `info` "Triss has left" |
+| goal (newest, four goals) | `CARD WINDOW OPEN` | 61, includes `q110postbattle` | 1 | `info` |
+
+The earliest band is empty because its statuette window is on a quest the journal never started:
+an open window is only a NOW item when the quest is in the log. The clean profile has no save, so
+`view.steps` and the plural matrix now report no live watch and `at_risk` 0 instead of two statuette
+rows; `live_watch` is the single gate both `view()` and `detail_json` use.
+
+The queue is the backend's `view.todo` as-is. The UI no longer re-derives which plan steps are
+"current", so the next plan step (`q110postbattle` with a goal selected) reaches UP NEXT even though
+it is not in the log.
+
+Checks: `cargo test --locked` reports 64 passed; `cargo build --release` is warning-free. The two
+new guards are `a_choice_in_an_active_quest_is_a_now_item_without_the_choice_text` and
+`a_watch_needs_a_usable_save_on_every_surface`; removing the `ending_relevant` check or the
+save-ready check makes its test fail. `--view` and `--dump` agree on `top` and `todo` in all six
+profiles; 412 nodes and section totals 96+183+35+87+11 hold; the clean payload has no target,
+tradeoff, goal step or watch.
+
+No real save among all 518 in the corpus has one of the three `ending_relevant` route steps Active,
+so the choice row is proved at the payload level by the unit test and at 480x820 by serving the real
+`ui/` with the row added to an otherwise unmodified goal-profile payload. RECORDED LIMITATION: the
+choice row is not exercised end to end from a real save; the data has three ending-relevant nodes,
+none currently in the log.
+
+### 10.6 Search verdict parity (2026-10-30)
+
+The search box used to dead-end on every route hit: all hits carry a step, so a click opened the
+detail pane, and the detail pane never rendered `d.verdict`. The answer existed in the payload and
+was invisible. The detail page now renders `detail.verdict` under `CAN I DO THIS NOW?`; a hit
+without a step still renders the same `Verdict` in the search panel. Both surfaces use
+`verdict_for`, and `step_short` makes search and detail name the same journal for a multi-file step.
+When a warning carries the verdict's headline, its action moves into the verdict card and the
+duplicate sentence is not printed.
+
+Verified at 480x820 through the real `ui/` and real `--detail` payloads, in a temporary `APPDATA`.
+For `mq3012noblestatuette`, typing `Nobleman` and pressing Enter opens the page; the rendered
+`.verdict-text` was asserted equal to the `--detail` headline:
+
+| profile | `--detail` verdict | rendered headline | equal |
+|---|---|---|---|
+| clean | `info` "Load a save to see this quest in your game" | the same | yes |
+| earliest | `warn` "Find both statuettes, then talk to Triss" | the same | yes |
+| median | `warn` "You still need the soldier statuette" | the same | yes |
+| newest | `info` "Triss has left Novigrad - the next chance is Final Preparations" | the same | yes |
+| goal (newest, four goals) | the newest headline | the same | yes |
+
+Opening the same step from its UP NEXT card rendered the same headline. An empty (`zzzz`) and a
+one-letter query leave the verdict panel hidden and show no hit. The new unit test
+`a_step_names_one_journal_for_search_and_detail` covers the multi-file resolution;
+`cargo test --locked` reports 65 passed and `cargo build --release` is warning-free.
+
+RECORDED LIMITATION: no real save in the 518-file corpus has one of the three `ending_relevant`
+route steps Active, so the choice warning still has no real-save end-to-end run.
+
+### 10.7 Card and statuette truth tables (2026-10-30)
+
+The release binary was run on four copied saves in temporary `APPDATA` profiles: clean (no save),
+earliest `ManualSave_53db8_7e221800_4f13d1b.sav`, median `ManualSave_5258a_7e224000_39e1473.sav`,
+and newest `CheckPoint_10083c_7ea4f400_4f324d3.sav`. The statuette facts were read with `--facts`;
+the card ownership and window with `--cards`; the band, step watch and verdict with `--view`,
+`--dump` and `--detail`. A direct scan of all 518 saves supplied the corpus counts below. The
+temporary assertion script is `.next-phase/truth/assert.py`; it exited 0 and printed
+`PASS: 4 real profiles, 518 corpus saves, 418 Baron-fact card rows`.
+
+| statuette case | save | facts | `top` | step `watch` | `--detail` verdict |
+|---|---|---|---|---|---|
+| neither | earliest | neither | `[]` (quests not in the log) | `open` "Find both statuettes, then talk to Triss" | `warn`, the same |
+| one (noble) | median | `mq3012_noble_statuette` | `DO THIS NOW` "You still need the soldier statuette" | `open`, the same | `warn`, the same |
+| both | newest | both | `[]` (Triss has left) | `later` "Triss has left Novigrad - the next chance is Final Preparations" | `info`, the same |
+| both, window open | none | both with Now or Never not done: 0 saves | expected `DO THIS NOW` "Both statuettes in hand - talk to Triss now" | the same | `warn`, the same |
+
+The last row is unreachable in the corpus: all 174 saves with both facts have Now or Never Done,
+and no save has Battle Preparations Active. It is proved at the data level by
+`model::tests::the_shipped_statuette_windows_name_both_one_and_neither`, which reads the shipped
+`data/cutoffs.json` and asserts the exact both, noble-only, soldier-only and neither wording for both
+reviewed windows. At 480x820 the real `ui/` rendered that exact row and verdict from a fixture
+payload built from the shipped wording; the DOM read back the same headline. There is no save with
+the soldier statuette and not the noble one, so that one-fact branch has a unit test only.
+
+The median run exposed one seam before this record: `view.steps[].watch` and the band carried the
+generic "Hand both statuettes" while `--detail` already named the missing soldier. `read_warning` is
+now the one save-aware read used by the step card, the band and `live_watch_for`; it applies
+`turn_in_text` before any surface sees the row. The three surfaces now carry the same wording.
+
+| Dijkstra case | real save | owned | `window_live` | `top` / `status` |
+|---|---|---|---|---|
+| no save | clean | `unknown` | `unknown` | none |
+| Baron undiscovered | earliest | `not_owned` | `not_yet` "SOURCE NOT YET · ONE-TIME · TIER A" | none |
+| owned | median, newest | `owned` | `owned` | none |
+| pre-line, unowned | none | `not_owned` | expected `active` | none; a one-time row is never a band row |
+| post-line, unowned | none | `not_owned` | expected `check`, "PASSED - CHECK FALLBACK · ONE-TIME · TIER A" | none |
+
+The two unowned rows cannot be produced by the corpus: all 418 saves with `cg_baron_discovered`
+and Gwent: Velen Players Active or Done own the card (411 Done, 7 Active). The 97 saves with the
+quest not started have no Baron fact and are `not_yet`; the 3 Active saves without the fact also own
+the card. `cards::tests::the_shipped_dijkstra_window_is_open_before_the_baron_line_and_gone_after`
+reads `data/gwent_cards.json` and asserts the not-yet, ahead, active, check-fallback and owned
+states, and that no one-time row enters `top` or `status`. Dijkstra is `check`, not `passed`, after
+the line because the office fallback is reviewed; a one-time window without a fallback still reaches
+`passed` in the synthetic test.
+
+`cargo test --locked` reports 67 passed; `cargo build --release` is warning-free. `--view` and
+`--dump` agree on `top` and `todo` on all four profiles; the 412 steps and section totals
+96+183+35+87+11 hold; the clean profile has `at_risk` 0 and no watch.
+
+### 10.8 1.3.4 verification record (2026-10-31)
+
+1.3.4 packages the band and surface work recorded in 10.5-10.7. The 1.3.3 artifact predated those
+changes, so this release was built again from the tree and the checks below were run against the new
+package, not against a previous pass's claim.
+
+The headless commands ran on four copied saves in temporary `APPDATA` profiles: clean (no save),
+earliest `ManualSave_53db8_7e221800_4f13d1b.sav`, median `ManualSave_5258a_7e224000_39e1473.sav`,
+newest `CheckPoint_10083c_7ea4f400_4f324d3.sav`, plus the four-goal profile and the same profile with
+guidance off. Every profile had 412 steps, section totals 96+183+35+87+11, and `--dump` matched
+`--view` on `top`, `todo` and the warning rows (`dump.status_rows` equals `view.status`).
+
+| profile | `top` tags | `todo` | cards owned/not/unknown | statuette answer |
+|---|---|---|---|---|
+| clean | `[]` | 0 | 0/0/224 | `info` "Load a save to see this quest in your game"; no watch |
+| earliest | `[]` | 2 | 27/196/1 | `warn` "Find both statuettes, then talk to Triss" |
+| median | `DO THIS NOW`, `CARD WINDOW OPEN` | 51 | 114/109/1 | `warn` "You still need the soldier statuette" |
+| newest | `CARD WINDOW OPEN` | 60 | 129/94/1 | `info` "Triss has left Novigrad - the next chance is Final Preparations" |
+| goal | `CARD WINDOW OPEN` | 61, includes `q110postbattle` | 129/94/1 | the newest answer |
+| goal, guidance off | `CARD WINDOW OPEN` | 61 | 129/94/1 | the newest answer; 7 plan steps, 0 instructions, 4 goal chips |
+
+The six first-run scenarios were driven at 480x820 in the real `ui/` against payloads produced by
+the release binary. The no-save payload hid the band, read "Load a save to see what is next" in UP
+NEXT, and opened FOLDERS with the saves path and Browse. The earliest save hid the band and carried
+only the tracked and in-log quests; MORE > CARDS > LATER held 31 ahead cards. The cutoff-passed row
+has no real save, so a fixture row was rendered in MORE > STATUS: the tag and action appeared there,
+the band stayed hidden, and the quest and search pages returned the same `warn` verdict. A
+note-only tick on `q110postbattle` kept the card `Not started`, showed the pencil in PROGRESS and
+the NOTE block on the detail page, and left the band's statuette warning in place. The goal-off
+profile kept PLAN AHEAD and the GOAL chip and rendered no exact line. The corrupt-save payload named
+`CheckPoint_corrupt.sav`, said the tracker retries, reopened FOLDERS and painted no band.
+
+`cargo test --locked` reports 67 passed; `cargo build --release` is warning-free; `node --check
+ui/app.js` passes. `py tools/regen.py --check`, `py tools/cardwindows.py check`, `py
+tools/test_cardwindows.py` (13 tests), `py tools/cards.py check`, `py tools/endings.py check
+--release` and `py tools/outcomecheck.py --release` are green. The temporary payload assertion
+exited 0 with `PASS: 4 real profiles, 518 corpus saves, 418 Baron-fact card rows` and statuette
+combos `{'both': 174, 'noble': 263, 'soldier': 0, 'neither': 81}`.
+
+The artifact is `dist/Witcher3MissablesTracker-1.3.4/` with FileVersion 1.3.4. Its exe SHA-256 is
+`9b7d8454a50e185754b785f338ef810ac2ecd118c8574c59c2209b1cac4cf02d`, identical to the freshly built
+`target/release/witcher3-missables-tracker.exe`; the packaged binary matched the target build on every
+median `--view` field except the save's elapsed age, and on `--cards`. The zip has 21 entries and
+`testzip()` is clean.
+
+RECORDED LIMITATIONS: no save has both statuettes with the window open, a soldier-only statuette, an
+unowned Dijkstra past the Baron line, an Active ending-relevant quest, or a passed cutoff check.
+Those rows are proved by shipped-data unit tests or fixture payloads, not by a real save. The native
+Tauri WebView was not automated; the real `ui/` was driven in Chromium at 480x820 with a mock built
+from the release binary's payloads.
 
 ## 11. How an audit uses this page
 

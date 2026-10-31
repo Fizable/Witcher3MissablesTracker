@@ -89,7 +89,7 @@ function openMore(tab) {
   if (tab === 'cards') { if (cardsData) renderCards(cardsData); else loadCards(); }
   else if (tab === 'progress' && view) renderProgress(view, true);
   else if (tab === 'coverage' && view) renderCoverage(view, true);
-  else if (tab === 'status' && view) { renderImpossible(view, true); renderTradeoffs(view, true); }
+  else if (tab === 'status' && view) { renderStatus(view); renderImpossible(view, true); renderTradeoffs(view, true); }
 }
 function closeMore() {
   ui.morePanel.classList.add('hidden');
@@ -729,17 +729,18 @@ async function applyPicker() {
 const topList = keyedList($('#top'));
 
 /**
- * The only list-level warning surface. The backend sends an entry only while acting on it can still
- * change the outcome: a loss that happened, a cutoff you are standing inside, or a missable quest
- * that is still winnable. Settled and done never arrive here; an empty list hides the section.
+ * The only list-level warning surface. The backend sends an entry only when the loaded save
+ * permits an action now: an open quest window, an ordering conflict, an open card window, or an
+ * active quest that holds a consequential choice. Settled losses and passed cutoffs are on
+ * STATUS; an empty list hides the section.
  *
  * A card says what is at stake and why, in the game's own names. The file mechanism and the
  * save-status transcript stay on the quest's detail page, behind "Technical details".
  */
 function renderTop(v) {
-  // The payload is the whole truth: a loss, a live cutoff, a failed quest, a choice that matters
-  // now, or a card window the player can act on. An ahead card window is a count in
-  // MORE > CARDS > LATER, never a band entry.
+  // The payload is the whole truth: an action available now, an ordering conflict, an open card
+  // window, or a choice in the quest the player is on. Settled losses and passed cutoffs are
+  // MORE > STATUS; an ahead window is a count in MORE > CARDS > LATER, never a band entry.
   const items = v.top || [];
   ui.topLater.replaceChildren();
   // Silence is the correct answer: an empty band is hidden, not filled.
@@ -753,6 +754,26 @@ function renderTop(v) {
     else add(c, h('div', 'title', x.headline));
     if (x.action) add(c, h('div', 'action', x.action));
     return c;
+  });
+}
+
+/** MORE > STATUS carries the warnings the band must not show: settled losses and checks. */
+function renderStatus(v) {
+  const rows = v.status || [];
+  const sec = $('#statusWarnSec');
+  const box = $('#statusRows');
+  if (!sec || !box) return;
+  sec.classList.toggle('hidden', !rows.length);
+  box.replaceChildren();
+  rows.forEach((x) => {
+    const col = x.level === 'lost' ? 'red' : x.level === 'stop' ? 'amber' : 'blue';
+    const c = h('div', 'card accent-' + col);
+    add(c, h('div', 'tag ' + col, x.tag || 'CHECK'));
+    const first = (x.ids || [])[0];
+    if (first) add(c, h('button', 'title link', x.headline || '', { 'data-act': 'detail', 'data-id': first }));
+    else add(c, h('div', 'title', x.headline || ''));
+    if (x.action) add(c, h('div', 'action', x.action));
+    box.append(c);
   });
 }
 
@@ -910,28 +931,13 @@ function renderPlanAhead(items) {
  * one collapsed PLAN AHEAD line; route steps that are merely unlocked stay in PROGRESS.
  */
 function renderTodo(v) {
-  const plan = planMatchesView(planData) ? planData : null;
-  const allPlan = plan ? (plan.steps || []).filter((s) => s.state !== 'settled' && stepsById.has(s.step)) : [];
+  // The backend already decided the queue and its order: tracked + in-log + the one next plan
+  // step. PLAN AHEAD is the same plan minus the ids the queue carries, so the two cannot disagree.
+  const ids = (v.todo || []).filter((id) => stepsById.has(id));
+  const inQueue = new Set(ids);
   const tr = v.tracked, trackedSteps = new Set(tr ? tr.steps : []);
-  const currentPlan = (s) => {
-    const st = stepsById.get(s.step);
-    return trackedSteps.has(s.step) || st.status === 'Active' || st.frontier === 'in_log';
-  };
-  const planSteps = allPlan.filter(currentPlan);
-  const planAhead = allPlan.filter((s) => !currentPlan(s));
-  const aheadIds = new Set(planAhead.map((s) => s.step));
-  // "Unlocked" is not "actionable": most of the route is available and not in the log, so it would
-  // fill this queue with things the player has not found yet. Only the log can prove a live quest.
-  // The backend already decided the queue: tracked + in-log + the one plan step that is next.
-  // Future goal steps belong to PLAN AHEAD, so they are removed here rather than re-filtered by a
-  // second rule the payload could disagree with.
-  const base = (v.todo || []).filter((id) => stepsById.has(id) && !aheadIds.has(id));
-  const planById = new Map(planSteps.map((s) => [s.step, s]));
-  // Tracked first, then the plan step you are actually on, then the ordinary route order. One id appears once.
-  const ids = [];
-  base.forEach((id) => { if (trackedSteps.has(id) && !ids.includes(id)) ids.push(id); });
-  planSteps.forEach((s) => { if (!ids.includes(s.step)) ids.push(s.step); });
-  base.forEach((id) => { if (!ids.includes(id)) ids.push(id); });
+  const planById = planStepMap();
+  const planAhead = [...planById.values()].filter((s) => !inQueue.has(s.step));
   const first = ids.slice(0, FIRST_N), rest = ids.slice(FIRST_N);
   const trackedOf = (id) => (trackedSteps.has(id) ? tr : null);
   renderPlanAhead(planAhead);
@@ -1050,7 +1056,7 @@ function render(v) {
   }
   renderHeader(v); renderFlags(v); renderFolders(v); renderSetup(v); renderRun(v); renderGoalRow(v);
   loadPlan();
-  renderTop(v); renderTodo(v); renderImpossible(v); renderTradeoffs(v); renderCoverage(v); renderProgress(v);
+  renderTop(v); renderStatus(v); renderTodo(v); renderImpossible(v); renderTradeoffs(v); renderCoverage(v); renderProgress(v);
   if (!cardsData) loadCards();
   if (detailId && !detailCache.has(detailId)) openDetail(detailId, true);
 }
@@ -1100,20 +1106,28 @@ function activateHit(i) {
   hideHits();
 }
 
+/** The one verdict card: search and the detail page must paint the same answer. */
+function verdictCard(v, opts) {
+  const color = { safe: 'green', warn: 'amber', stop: 'red', info: 'blue' }[v.verdict] || 'blue';
+  const c = h('div', 'card verdict accent-' + color);
+  const top = h('div', 'card-top');
+  add(top, h('span', 'tag ' + color, (opts.label || v.display || '').toUpperCase()), h('span', 'grow'));
+  if (opts.detail) add(top, h('span', 'dim small', (v.display || '').toUpperCase()));
+  if (opts.close) add(top, h('button', 'x', '✕', { 'data-act': 'closeverdict', 'aria-label': 'close' }));
+  add(c, top);
+  if (v.from_game_files) add(c, h('div', 'tag green', (v.evidence === 'files+saves' ? 'GAME FILES + YOUR SAVES' : 'GAME FILES')));
+  add(c, h('div', 'title verdict-text', v.headline));
+  if (opts.action) add(c, h('div', 'action', opts.action));
+  (v.details || []).forEach((d) => add(c, h('div', 'why', d)));
+  return c;
+}
+
 async function showVerdict(sh) {
   selectedShort = sh; markSelected();
   let v;
   try { v = await Api.check_quest(sh); } catch (e) { console.error(e); return; }
   if (selectedShort !== sh || !v) return;
-  const color = { safe: 'green', warn: 'amber', stop: 'red', info: 'blue' }[v.verdict] || 'blue';
-  const c = h('div', 'card verdict accent-' + color);
-  const top = h('div', 'card-top');
-  add(top, h('span', 'tag ' + color, (v.display || '').toUpperCase()), h('span', 'grow'),
-    h('button', 'x', '✕', { 'data-act': 'closeverdict', 'aria-label': 'close' }));
-  if (v.from_game_files) add(c, h('div', 'tag green', (v.evidence === 'files+saves' ? 'GAME FILES + YOUR SAVES' : 'GAME FILES')));
-  add(c, h('div', 'title', v.headline));
-  (v.details || []).forEach((d) => add(c, h('div', 'why', d)));
-  el.verdict.replaceChildren(c);
+  el.verdict.replaceChildren(verdictCard(v, { close: true }));
   el.verdict.classList.remove('hidden');
 }
 
@@ -1210,6 +1224,13 @@ function renderDetail(d) {
   // AT RISK NOW. Fall back to the generated watch row when the step has no current top item.
   const topWarns = ((view && view.top) || []).filter((x) => (x.ids || []).includes(s.id));
   const warns = topWarns.length ? topWarns : (dv && dv.watch ? dv.watch : []);
+  // The search box's answer is the page's answer: the same save-aware verdict `--detail` returns.
+  // When a warning already carries that exact headline, keep its action and do not print the
+  // sentence twice.
+  const same = d.verdict && d.verdict.headline ? warns.find((x) => x.headline === d.verdict.headline) : null;
+  if (d.verdict && d.verdict.headline) {
+    add(root, verdictCard(d.verdict, { label: 'CAN I DO THIS NOW?', detail: true, action: same && same.action }));
+  }
   const lost = warns.some((x) => x.live === 'lost' || String(x.tag || '').includes('LOST'));
   const tags = (s.tags || []).filter((t) => !(lost && t.id === 'missable') && !(s.goal && (t.id === 'ending_choice' || t.id === 'branch')));
   if (s.goal || tags.length) {
@@ -1219,7 +1240,7 @@ function renderDetail(d) {
     add(root, chips);
   }
 
-  warns.forEach((x) => add(root, watchBox(x)));
+  warns.forEach((x) => { if (x !== same) add(root, watchBox(x)); });
 
   // The exact line is the only thing the player needs at the table. Fact names and the scene
   // source are evidence, so they live in Technical details instead of beside the instruction.

@@ -536,11 +536,11 @@ The existing `Step` object gains or fixes:
 | `branch` | boolean | a scene section on this quest sets a fact when a choice is taken; this is an outcome branch, not a one-shot dialogue row |
 | `dialogue_choice` | boolean | a `singleUseChoice` dialogue row exists; never a branch and never a chip |
 | `ending_relevant` | boolean | at least one reviewed target names this branch; the vague `ENDING CHOICE` chip is allowed |
-| `goal` | boolean | at least one selected target is `reachable` and has an `ahead` guidance row for this step; the `GOAL` chip is allowed |
+| `goal` | boolean | at least one selected target is `reachable` and has an `ahead` guidance row for this step; the `GOAL` chip is allowed. The flag is independent of the guidance toggle. |
 
 Rules:
 
-- `goal` is `false` in spoiler-free mode, and `false` whenever `guidance` is `"off"`.
+- `goal` is `false` in spoiler-free mode. With a target selected it stays true when `guidance` is `"off"`; only the exact `instruction` is gated.
 - `goal` does not reveal which target or line. The detail does that.
 - The old `choice` field and `choice` tag are gone. `tags` uses:
   - `{ "id": "ending_choice", "label": "ENDING CHOICE" }` when `ending_relevant`;
@@ -675,7 +675,8 @@ When `settings.endings` is non-empty:
    - every non-null `instruction` belongs to the element's own target and appears only when its
      `step_state` is `ahead`.
 4. If `guidance` is `"off"`:
-   - every `View.steps[*].goal` is `false`;
+   - `View.steps[*].goal` is unchanged from the guided selection; goal chips are not gated by the
+     toggle;
    - every `Detail.guidance` is `null`;
    - no `instruction` appears anywhere;
    - target labels and states remain visible in `View.target` and the RUN header.
@@ -735,7 +736,7 @@ would leak.
 
 | | `ENDING CHOICE` | `GOAL` |
 |---|---|---|
-| mode | spoiler-free default; also in guided mode when `guidance` is off, or on an ending-relevant branch not covered by a selected target | guided mode only: target selected and `guidance` on |
+| mode | spoiler-free default; also in guided mode on an ending-relevant branch not covered by a selected target | guided mode: a target is selected; the chip does not depend on the guidance toggle |
 | data source | `Step.ending_relevant` from a reviewed target naming the branch | `Step.goal` from a selected target's `guidance` row at this step |
 | payload | fixed tag/label only; no target id, label, option or line | target id, label, exact `instruction`, `facts`, source in `Detail.guidance` |
 | meaning | "a choice here affects an ending" | "for the goal you chose, say this exact line here" |
@@ -761,9 +762,10 @@ Exact UI strings:
   - `Not guided yet`
 
 Precedence on a card: `GOAL` > `ENDING CHOICE` > `CHOICE` > no chip. `GOAL` is impossible when no
-target is selected or when guidance is off; in those cases an ending-relevant branch shows
-`ENDING CHOICE`, a non-ending fact branch shows `CHOICE`, and a one-shot dialogue row shows nothing.
-A one-shot dialogue row never reaches the chip logic.
+target is selected; with a target selected it stays visible when guidance is off, because only the
+exact line is gated. Without a goal, an ending-relevant branch shows `ENDING CHOICE`, a non-ending
+fact branch shows `CHOICE`, and a one-shot dialogue row shows nothing. A one-shot dialogue row never
+reaches the chip logic.
 
 What `GOAL` is not:
 
@@ -1178,8 +1180,8 @@ Positive and negative controls:
 - Inject `label(A)` into a copy of `view` and assert the scanner fails. This proves the scanner can
   catch a leak.
 - Select A, then clear; assert the default payload returns and no A label/instruction remains.
-- Select A with `guidance: "off"`; assert labels remain, every `goal` is false, every `guidance` is
-  null, and no instruction exists.
+- Select A with `guidance: "off"`; assert labels and goal chips remain as with guidance on, every
+  `guidance` is null, and no instruction exists.
 - A save where A is settled must still produce a spoiler-free default payload. The default gate is
   about settings, not about whether the save happens to prove a target.
 
@@ -1192,7 +1194,7 @@ Mistakes the test MUST catch:
 | `Detail.guidance` left populated after **Clear** | clear test |
 | target B's line appears in target A's detail | selected-target scan |
 | instruction retained when `step_state` is `settled`/`unreachable`/`unknown` | instruction-only-when-ahead assertion |
-| `GOAL` shown when guidance is off | guidance-off test |
+| `GOAL` shown when no target is selected | default scan |
 | target list fetched on startup | invoke-call log in the browser mock |
 | skip does not write the three default keys | settings file read after skip |
 
@@ -1209,7 +1211,8 @@ Mistakes the test MUST catch:
 - [ ] Apply writes canonical ids, `guidance: "on"`, `setup_v1: true`; only those labels appear.
 - [ ] **Clear** writes `endings: []`, `guidance: "off"`; `setup_v1` stays `true`; the default
       payload returns immediately.
-- [ ] **Guidance off** keeps labels, removes `GOAL` and every instruction.
+- [ ] **Guidance off** keeps labels and goal chips, removes every instruction, and leaves
+      `Detail.guidance` null.
 - [ ] A stale id in settings is dropped on load without a crash or a label leak.
 - [ ] A corrupt settings file falls back to defaults and shows the card once, not a crash loop.
 

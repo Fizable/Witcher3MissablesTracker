@@ -314,6 +314,7 @@ a.src:hover { text-decoration: underline; }
 #topSec h2 { margin-bottom: 4px; }
 #topSec .stack { gap: 7px; }
 #topSec .card { padding-top: 8px; padding-bottom: 8px; }
+#statusWarnSec { margin-bottom: 14px; }
 .top-later { margin-left: auto; }
 .top-later .linkbtn { padding: 0; font-size: 11px; }
 

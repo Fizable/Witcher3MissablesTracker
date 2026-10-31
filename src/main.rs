@@ -212,6 +212,15 @@ fn save_is_ready(save_path: Option<&PathBuf>, error: &str) -> bool {
     save_path.is_some() && error.is_empty()
 }
 
+/// Every cutoff is read against a usable save. Without one no row may reach the step card or the
+/// detail pane, so both surfaces take their watch from here and cannot disagree.
+fn live_watch(ready: bool, found: Option<&Value>) -> Value {
+    match (ready, found) {
+        (true, Some(v)) if v.is_array() => v.clone(),
+        _ => json!([]),
+    }
+}
+
 /// The detail pane and search box are available before a save is loaded. They answer with the
 /// quest's name and ask for a save; they never guess a live warning or call the quest safe.
 fn no_save_verdict(display: &str) -> Value {
@@ -746,7 +755,8 @@ impl Inner {
         let display = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
         let steps: Vec<String> = self.tracked_steps(ev, &short).iter().map(|&i| ev.steps[i].n.id.clone()).collect();
         let warning = model::tracked_warning(ev, &short).map(|(level, headline, details)| json!({"level": level, "headline": headline, "details": details}));
-        json!({"short": short, "display": display, "status": self.state.get(&short).cloned().unwrap_or_default(), "steps": steps, "warning": warning})
+        json!({"short": short, "display": display, "status": self.state.get(&short).cloned().unwrap_or_default(),
+               "steps": steps, "warning": warning})
     }
 
     /// Attach what the game's own files say about a step: the game's name for it, its quest-log
@@ -781,13 +791,14 @@ impl Inner {
     fn attach_derived(&self, step: &mut Value, st: &model::Step, done_q: &DoneQuests) {
         let Some(id) = step.get("id").and_then(|v| v.as_str()).map(|s| s.to_string()) else { return };
         let Some(d) = self.derived.get("steps").and_then(|s| s.get(&id)) else { return };
-        for k in ["objectives", "watch", "stems"] {
+        for k in ["objectives", "stems"] {
             if let Some(v) = d.get(k) {
                 if !v.is_null() {
                     step[k] = v.clone();
                 }
             }
         }
+        step["watch"] = live_watch(self.save_ready(), d.get("watch"));
         // each cutoff is read against this save: one that protects something already finished is dropped,
         // one that already fired reads as the loss it is, and one you are standing inside says so.
         // A step ticked done while the journal still has its quest open is not over: the cutoff stays on the card.
@@ -798,12 +809,23 @@ impl Inner {
             if over {
                 list.clear();
             } else {
-                list.retain_mut(|w| model::live_warning_facts(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked, &self.facts));
+                list.retain_mut(|w| self.read_warning(w, done_q));
                 // An ahead window is reference data, not a warning on the quest card: it stays out
                 // of the payload until the closing quest is in the log and the turn-in is possible.
                 list.retain(|w| w.get("live").and_then(|x| x.as_str()) != Some("ahead"));
             }
         }
+    }
+
+    /// One save-aware read of a reviewed warning. The step card, the NOW band and the detail pane
+    /// all take their row through here, so the same warning cannot carry different wording on two
+    /// surfaces.
+    fn read_warning(&self, w: &mut Value, done_q: &DoneQuests) -> bool {
+        if !model::live_warning_facts(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked, &self.facts) {
+            return false;
+        }
+        model::turn_in_text(w, &self.facts);
+        true
     }
 
     /// The live reviewed warning for a journal quest, read against this save exactly as the step
@@ -817,7 +839,7 @@ impl Inner {
         let d = self.derived.get("steps")?.get(&ev.steps[i].n.id)?;
         let mut list = d.get("watch")?.as_array()?.clone();
         let done_q = self.done_quests(ev);
-        list.retain_mut(|w| model::live_warning_facts(w, &self.state, &self.qtitles, &done_q.done, &done_q.ticked, &self.facts));
+        list.retain_mut(|w| self.read_warning(w, &done_q));
         // the page shows the strongest live row: a loss beats an open window, which beats the
         // note that the window has closed
         let rank = |w: &Value| match w.get("live").and_then(|x| x.as_str()) {
@@ -827,9 +849,7 @@ impl Inner {
             Some("later") | Some("ahead") => 4,
             _ => 5,
         };
-        let mut first = list.into_iter().min_by_key(rank)?;
-        model::turn_in_text(&mut first, &self.facts);
-        Some(first)
+        list.into_iter().min_by_key(rank)
     }
 
     /// One save-aware verdict. The route model answers first; a reviewed warning that is still
@@ -1102,6 +1122,7 @@ impl Inner {
         let error = if !self.db_error.is_empty() { self.db_error.clone() } else { self.error.clone() };
         let card_report = self.cards_report(&ev);
         let top = self.top_section(&ev, &steps, &card_report);
+        let status = status_items(&ev, &steps, &card_report);
         let completion = self.completion(&ev, &steps, &card_report);
         let target = targets::target_json(&self.endings, &self.selected, &target_evals, self.guidance_on);
         // Tradeoffs are spoilers: they name endings the player did not select. Keep the whole list
@@ -1180,6 +1201,7 @@ impl Inner {
             "todo": self.todo_order(&ev, &steps, next_plan.as_deref()).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": self.tracked_json(&ev),
             "top": top,
+            "status": status,
             "objectives": Value::Object(objs),
             "flags": self.route.flags.iter().map(|f| json!({"id": f.id, "label": f.label, "note": f.note, "value": self.flags.get(&f.id).cloned().unwrap_or_default()})).collect::<Vec<_>>(),
             "target": target,
@@ -1214,8 +1236,9 @@ impl Inner {
     }
 }
 
-/// The fourth warning: a choice that matters to the endings in play. It names the quest and
-/// nothing about the choice; only a quest the journal already has open is in play.
+/// A consequential choice is a NOW item: the band must say that a quest in the log holds a choice
+/// that matters to the endings in play, without printing the choice text or the recommended option.
+/// The row does not name an ending, so it is safe with guidance off and no goal selected.
 fn choice_items(ev: &Eval, covered: &HashSet<String>) -> Vec<Value> {
     let mut out = Vec::new();
     for s in &ev.steps {
@@ -1276,36 +1299,44 @@ fn open_window_ids(ev: &Eval, steps: &[Value]) -> HashSet<String> {
 fn top_items(ev: &Eval, steps: &[Value]) -> Value {
     let mut out: Vec<Value> = Vec::new();
     let mut seen: HashSet<String> = HashSet::new();
-    let mut covered: HashSet<usize> = HashSet::new();
     for v in steps {
         let Some(list) = v.get("watch").and_then(|x| x.as_array()) else { continue };
         for w in list {
             let Some(id) = w.get("id").and_then(|x| x.as_str()) else { continue };
             let Some(live) = w.get("live").and_then(|x| x.as_str()) else { continue };
+            // Only a window the player can act on now belongs in the band. A loss that already
+            // happened, a cutoff to check, a settled quest and a window whose closer has not
+            // started are STATUS rows or quest-page notes, never band rows.
             let (kind, level, tag) = match live {
-                "lost" => ("lost", "lost", "LOST IN THIS SAVE"),
-                // the cutoff fired but the journal still has the quest open: say what the save says
-                "passed" | "check" => ("risk", "stop", "CUTOFF PASSED - CHECK NOW"),
-                // an open availability window is actionable now: the NPC is here and the
-                // deadline is when they leave
-                "inside" | "open" => ("risk", "stop", "DO THIS NOW"),
-                // a window whose closing quest has not started is ledger-only: it is not
-                // something the player can act on, so it never enters the band
-                "ahead" => continue,
+                "open" => ("risk", "stop", "DO THIS NOW"),
+                "inside" => ("order", "stop", "ORDER"),
                 _ => continue,
             };
+            let action = w.get("action").and_then(|x| x.as_str()).unwrap_or("").trim().to_string();
             let affected: Vec<String> = w.get("affected").and_then(|x| x.as_array()).into_iter().flatten()
                 .filter_map(|x| x.as_str().map(String::from)).collect();
-            // A quest the save has started is actionable even before its cutoff fires; that is the
-            // MISSABLE case. A quest the journal never started is only shown when you are already
-            // inside the closer, because then the next step can still save it. A wall of late-game
-            // cutoffs in the prologue would be the noise 0.2 exists to remove.
+            let lost_titles: Vec<String> = w.get("affected_titles").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str().map(String::from)).collect();
+            let mut closing_titles: Vec<String> = w.get("closed_by_titles").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str().map(String::from)).collect();
+            if let Some(t) = w.get("closes_at_title").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
+                if !closing_titles.iter().any(|q| q == t) {
+                    closing_titles.push(t.to_string());
+                }
+            }
+            // Every band row names the action, what is lost and the quest or phase that closes
+            // the window. If the data cannot supply all three, the row does not ship.
+            if action.is_empty() || affected.is_empty() || lost_titles.is_empty() || closing_titles.is_empty() {
+                continue;
+            }
+            // A quest the save has started is actionable; a quest the journal never started is
+            // only shown when the player is already inside the closer, because then the next step
+            // can still save it. A wall of late-game cutoffs in the prologue is the noise the band
+            // exists to remove.
             let hits: Vec<usize> = ev.steps.iter().enumerate()
                 .filter(|(_, s)| {
                     let reachable = match live {
                         "inside" => matches!(s.journal.as_str(), "Active" | "Not started" | "Failed"),
-                        // an availability window nags only about a quest already accepted
-                        "open" | "ahead" => matches!(s.journal.as_str(), "Active" | "Failed"),
                         _ => matches!(s.journal.as_str(), "Active" | "Failed"),
                     };
                     affected.iter().any(|a| model::tracks(&s.n, a)) && (reachable || s.tick_disagrees)
@@ -1314,12 +1345,10 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
             if hits.is_empty() || !seen.insert(id.to_string()) {
                 continue;
             }
-            covered.extend(hits.iter().copied());
-            let mut quests: Vec<String> = w.get("affected_titles").and_then(|x| x.as_array()).into_iter().flatten()
-                .filter_map(|x| x.as_str().map(String::from)).collect();
-            for t in w.get("closed_by_titles").and_then(|x| x.as_array()).into_iter().flatten().filter_map(|x| x.as_str()) {
+            let mut quests: Vec<String> = lost_titles.clone();
+            for t in &closing_titles {
                 if !quests.iter().any(|q| q == t) {
-                    quests.push(t.to_string());
+                    quests.push(t.clone());
                 }
             }
             let file = w.get("files").and_then(|x| x.as_array()).and_then(|x| x.first()).and_then(|x| x.as_str()).unwrap_or("");
@@ -1327,7 +1356,9 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
                 "kind": kind, "level": level, "tag": tag,
                 "headline": w.get("headline").cloned().unwrap_or(Value::Null),
                 "detail": w.get("why").cloned().unwrap_or(Value::Null),
-                "action": if live == "lost" { Value::Null } else { w.get("action").cloned().unwrap_or(Value::Null) },
+                "action": action,
+                "lost_titles": lost_titles,
+                "closing_titles": closing_titles,
                 "live_note": w.get("live_note").cloned().unwrap_or(Value::Null),
                 "mechanism": match w.get("mechanism").and_then(|x| x.as_str()) {
                     Some("spawnset") => "CDeactivateSpawnset",
@@ -1340,17 +1371,70 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
             }));
         }
     }
+    Value::Array(out)
+}
+
+/// Warnings the journal has already settled, or that ask for a check rather than an action, keep
+/// their old tags on MORE > STATUS and on the quest page. They are not band rows.
+fn status_items(ev: &Eval, steps: &[Value], card_report: &Value) -> Value {
+    let mut out: Vec<Value> = Vec::new();
+    let mut seen: HashSet<String> = HashSet::new();
+    let mut covered: HashSet<usize> = HashSet::new();
+    for v in steps {
+        let Some(list) = v.get("watch").and_then(|x| x.as_array()) else { continue };
+        for w in list {
+            let Some(id) = w.get("id").and_then(|x| x.as_str()) else { continue };
+            let Some(live) = w.get("live").and_then(|x| x.as_str()) else { continue };
+            let (kind, level, tag) = match live {
+                "lost" => ("lost", "lost", "LOST IN THIS SAVE"),
+                "passed" | "check" => ("risk", "stop", "CUTOFF PASSED - CHECK NOW"),
+                _ => continue,
+            };
+            if !seen.insert(format!("{id}:{tag}")) {
+                continue;
+            }
+            let affected: Vec<String> = w.get("affected").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str().map(String::from)).collect();
+            let hits: Vec<usize> = ev.steps.iter().enumerate()
+                .filter(|(_, s)| affected.iter().any(|a| model::tracks(&s.n, a))
+                    && (matches!(s.journal.as_str(), "Active" | "Failed") || s.tick_disagrees))
+                .map(|(i, _)| i).collect();
+            if hits.is_empty() {
+                continue;
+            }
+            covered.extend(hits.iter().copied());
+            let mut quests: Vec<String> = w.get("affected_titles").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str().map(String::from)).collect();
+            for t in w.get("closed_by_titles").and_then(|x| x.as_array()).into_iter().flatten().filter_map(|x| x.as_str()) {
+                if !quests.iter().any(|q| q == t) {
+                    quests.push(t.to_string());
+                }
+            }
+            let file = w.get("files").and_then(|x| x.as_array()).and_then(|x| x.first()).and_then(|x| x.as_str()).unwrap_or("");
+            out.push(json!({
+                "kind": kind, "level": level, "tag": tag, "live": live,
+                "headline": w.get("headline").cloned().unwrap_or(Value::Null),
+                "detail": w.get("why").cloned().unwrap_or(Value::Null),
+                "action": w.get("action").cloned().unwrap_or(Value::Null),
+                "live_note": w.get("live_note").cloned().unwrap_or(Value::Null),
+                "mechanism": w.get("mechanism").cloned().unwrap_or(Value::Null),
+                "file": file, "quests": quests,
+                "ids": hits.iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
+            }));
+        }
+    }
     for (i, s) in ev.steps.iter().enumerate() {
         if s.status == "Failed" && !s.n.opt && !covered.contains(&i) {
             out.push(json!({
-                "kind": "failed", "level": "lost", "tag": "FAILED IN YOUR QUEST LOG",
+                "kind": "failed", "level": "lost", "tag": "FAILED IN YOUR QUEST LOG", "live": "lost",
                 "headline": format!("{} failed in your journal.", model::short(&s.n.title)),
                 "detail": Value::Null, "action": Value::Null, "live_note": Value::Null,
                 "mechanism": "save", "file": "your save's quest log", "quests": [s.n.title], "ids": [s.n.id],
             }));
         }
     }
-    sort_top(&mut out);
+    out.extend(cards::status_items(card_report));
+    sort_status(&mut out);
     Value::Array(out)
 }
 
@@ -1358,18 +1442,29 @@ fn top_items(ev: &Eval, steps: &[Value]) -> Value {
 fn sort_top(list: &mut [Value]) {
     let rank = |kind: &str| match kind {
         "risk" => 0u8,
-        "lost" => 1,
-        "failed" => 2,
-        "choice" => 3,
-        "card" => 4,
-        _ => 5,
+        "order" => 1,
+        "card" => 2,
+        _ => 3,
     };
     list.sort_by_cached_key(|item| {
         let kind = item.get("kind").and_then(|x| x.as_str()).unwrap_or("");
-        (
-            rank(kind),
-            item.get("headline").and_then(|x| x.as_str()).unwrap_or("").to_string(),
-        )
+        (rank(kind), item.get("headline").and_then(|x| x.as_str()).unwrap_or("").to_string())
+    });
+}
+
+/// STATUS keeps losses and checks in one place without competing with what is actionable now.
+fn sort_status(list: &mut [Value]) {
+    let rank = |kind: &str| match kind {
+        "lost" => 0u8,
+        "risk" => 1,
+        "failed" => 2,
+        "card" => 3,
+        _ => 4,
+    };
+    list.sort_by_cached_key(|item| {
+        let kind = item.get("kind").and_then(|x| x.as_str()).unwrap_or("");
+        (rank(kind), item.get("tag").and_then(|x| x.as_str()).unwrap_or("").to_string(),
+         item.get("headline").and_then(|x| x.as_str()).unwrap_or("").to_string())
     });
 }
 
@@ -1400,6 +1495,14 @@ fn get_view(st: State<Shared>) -> Value {
 fn get_detail(id: String, st: State<Shared>) -> Value {
     let g = st.0.lock().unwrap();
     detail_json(&g, &id)
+}
+
+/// The journal a step's answer belongs to. Search and the detail page both resolve a step through
+/// this, so a node carrying several files cannot answer for a different journal than the hit named.
+fn step_short(n: &model::Node) -> Option<&str> {
+    n.files.first().map(|f| {
+        f.split('|').next().unwrap_or(f).split('#').next().unwrap_or(f)
+    })
 }
 
 // Shared by the command and the headless `--detail` check so the two can never drift.
@@ -1446,9 +1549,8 @@ fn detail_json(g: &Inner, id: &str) -> Value {
     let attached_watch = attached.get("watch").cloned().unwrap_or(json!([]));
     let mut derived = g.derived.get("steps").and_then(|s| s.get(id)).cloned().unwrap_or(Value::Null);
     if let Some(obj) = derived.as_object_mut() {
-        // The quest page reads the same watch the step card does: an ahead window is not a warning
-        // there either, and with no usable save none of it is live.
-        obj.insert("watch".into(), if g.save_ready() { attached_watch } else { json!([]) });
+        // The quest page reads the same watch the step card does: one attachment decides both.
+        obj.insert("watch".into(), attached_watch);
     }
     json!({
         "step": step,
@@ -1460,10 +1562,7 @@ fn detail_json(g: &Inner, id: &str) -> Value {
         "guidance": guidance,
         "tracking": tracking,
         "overridden": g.ticks.contains(&n.id) && !ev.steps[i].manual,
-        "verdict": n.files.first().map(|f| {
-            let sh = f.split('|').next().unwrap_or(f).split('#').next().unwrap_or(f).to_string();
-            g.verdict_for(&rt, &ev, &sh)
-        }).unwrap_or(Value::Null),
+        "verdict": step_short(n).map(|sh| g.verdict_for(&rt, &ev, sh)).unwrap_or(Value::Null),
     })
 }
 
@@ -1543,7 +1642,13 @@ fn search(q: String, st: State<Shared>) -> Value {
         .iter()
         .filter(|(k, d)| (k.to_lowercase().contains(&q) || d.to_lowercase().contains(&q)) && !skip.iter().any(|s| k.starts_with(s)))
         .take(7)
-        .map(|(k, d)| json!({"short": k, "display": d, "status": g.state.get(k).cloned().unwrap_or_else(|| "Not started".into()), "step": model::step_for_short(&ev, k).map(|i| ev.steps[i].n.id.clone())}))
+        .map(|(k, d)| {
+            let step = model::step_for_short(&ev, k);
+            let short = step.and_then(|i| step_short(&ev.steps[i].n)).unwrap_or(k);
+            json!({"short": short, "display": d,
+                   "status": g.state.get(short).cloned().unwrap_or_else(|| "Not started".into()),
+                   "step": step.map(|i| ev.steps[i].n.id.clone())})
+        })
         .collect();
     Value::Array(hits)
 }
@@ -1770,6 +1875,7 @@ fn main() {
         let card_report = inner.cards_report(&ev);
         let next_plan = inner.next_plan(&ev);
         let top = inner.top_section(&ev, &steps, &card_report);
+        let status_rows = status_items(&ev, &steps, &card_report);
         let dump = json!({
             "save": inner.save_path.as_ref().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or(""),
             "game_dir": inner.game_dir.as_ref().map(|p| p.display().to_string()),
@@ -1778,6 +1884,7 @@ fn main() {
             "status": status,
             "todo": inner.todo_order(&ev, &steps, next_plan.as_deref()).iter().map(|&i| ev.steps[i].n.id.clone()).collect::<Vec<_>>(),
             "tracked": inner.tracked_json(&ev),
+            "status_rows": status_rows,
             "objectives": inner.objectives,
             // the route's fact-gated prerequisites, and whether this save has the game's own condition
             // set, so the settlement can be checked against what the app actually did
@@ -1865,6 +1972,10 @@ mod top_tests {
         json!({"id": id, "watch": watch})
     }
 
+    fn status(ev: &Eval, steps: &[Value]) -> Value {
+        status_items(ev, steps, &json!({"cards": []}))
+    }
+
     fn watch(live: &str, affected: &str) -> Value {
         json!([{
             "id": "edge", "live": live, "level": "stop",
@@ -1895,23 +2006,47 @@ mod top_tests {
     #[test]
     fn only_the_journal_can_declare_a_loss() {
         let ev = eval("mq3012noblestatuette", "Active");
-        let lost = top_items(&ev, &[step("mq3012noblestatuette", watch("lost", "mq3012noblestatuette"))]);
-        assert_eq!(lost[0]["kind"], "lost");
-        assert!(lost[0]["tag"].as_str().unwrap().contains("LOST"));
-        assert_eq!(lost[0]["mechanism"], "CDeactivateSpawnset");
-        assert!(lost[0]["file"].as_str().unwrap().contains("w2phase"));
-        // a cutoff that passed without a Failed journal entry is a check, not a loss
-        let check = top_items(&ev, &[step("mq3012noblestatuette", watch("passed", "mq3012noblestatuette"))]);
-        assert_eq!(check[0]["kind"], "risk");
-        assert!(check[0]["tag"].as_str().unwrap().contains("CHECK NOW"));
-        assert_eq!(check[0]["action"], "Finish The Quest");
-        let risk = top_items(&ev, &[step("mq3012noblestatuette", watch("inside", "mq3012noblestatuette"))]);
-        assert_eq!(risk[0]["kind"], "risk");
-        assert!(risk[0]["tag"].as_str().unwrap().contains("DO THIS NOW"));
-        assert_eq!(risk[0]["action"], "Finish The Quest");
-        // an ahead window is not actionable: it must never pad the band, even on an Active quest
+        // A loss and a passed cutoff are settled/check rows: they stay on STATUS, never the band.
+        for live in ["lost", "passed", "check"] {
+            let row = step("mq3012noblestatuette", watch(live, "mq3012noblestatuette"));
+            assert_eq!(top_items(&ev, std::slice::from_ref(&row)), json!([]), "{live} is not actionable now");
+            let s = status(&ev, std::slice::from_ref(&row));
+            assert_eq!(s.as_array().unwrap().len(), 1, "{live} stays on STATUS");
+            assert!(s[0]["tag"].as_str().unwrap().contains(if live == "lost" { "LOST" } else { "CHECK" }));
+        }
+        // An open window and an ordering conflict are actionable now, and name all three parts.
+        let open = top_items(&ev, &[step("mq3012noblestatuette", watch("open", "mq3012noblestatuette"))]);
+        assert_eq!(open[0]["tag"], "DO THIS NOW");
+        let inside = top_items(&ev, &[step("mq3012noblestatuette", watch("inside", "mq3012noblestatuette"))]);
+        assert_eq!(inside[0]["tag"], "ORDER");
+        assert!(inside[0]["action"].as_str().unwrap().contains("Finish"));
+        assert_eq!(inside[0]["lost_titles"][0], "The Quest");
+        assert_eq!(inside[0]["closing_titles"][0], "The Closer");
+        // An ahead window is a ledger row, never a band row.
         let ahead = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
         assert_eq!(ahead, json!([]), "an ahead window is a ledger row, not a NOW item");
+    }
+
+    #[test]
+    fn a_non_actionable_row_cannot_enter_top() {
+        let ev = eval("mq3012noblestatuette", "Active");
+        // The control row has the action, the loss and the closing quest.
+        let good = top_items(&ev, &[step("mq3012noblestatuette", watch("open", "mq3012noblestatuette"))]);
+        assert_eq!(good.as_array().unwrap().len(), 1);
+        for key in ["action", "affected_titles", "closed_by_titles"] {
+            let mut w = watch("open", "mq3012noblestatuette");
+            w[0].as_object_mut().unwrap().remove(key);
+            let top = top_items(&ev, &[step("mq3012noblestatuette", w)]);
+            assert_eq!(top, json!([]), "a row without {key} cannot ship");
+        }
+        // Everything the journal has settled, or that is still ahead, is not actionable.
+        for live in ["lost", "passed", "check", "ahead", "later", "not_yet", "settled", "unknown", ""] {
+            let top = top_items(&ev, &[step("mq3012noblestatuette", watch(live, "mq3012noblestatuette"))]);
+            assert_eq!(top, json!([]), "{live} must not enter the band");
+        }
+        // A failed quest is settled too.
+        let failed = eval("sq301triss", "Failed");
+        assert_eq!(top_items(&failed, &[step("sq301triss", json!([]))]), json!([]));
     }
 
     #[test]
@@ -1969,7 +2104,7 @@ mod top_tests {
     fn an_unstarted_quest_inside_the_closer_is_urgent_but_a_distant_one_is_silent() {
         let ev = eval("mq3012noblestatuette", "Not started");
         let inside = top_items(&ev, &[step("mq3012noblestatuette", watch("inside", "mq3012noblestatuette"))]);
-        assert_eq!(inside[0]["kind"], "risk", "the closer is in the log and this quest can still be saved");
+        assert_eq!(inside[0]["kind"], "order", "the closer is in the log and this quest can still be saved");
         assert!(inside[0]["action"].as_str().unwrap().contains("Finish"));
         let ahead = top_items(&ev, &[step("mq3012noblestatuette", watch("ahead", "mq3012noblestatuette"))]);
         assert_eq!(ahead, json!([]), "a distant cutoff on an unstarted quest is not yet a decision");
@@ -1999,11 +2134,12 @@ mod top_tests {
     }
 
     #[test]
-    fn a_failed_quest_is_its_own_entry() {
+    fn a_failed_quest_is_settled_and_goes_to_status() {
         let ev = eval("sq301triss", "Failed");
-        let top = top_items(&ev, &[step("sq301triss", json!([]))]);
-        assert_eq!(top[0]["kind"], "failed");
-        assert!(top[0]["headline"].as_str().unwrap().contains("failed"));
+        assert_eq!(top_items(&ev, &[step("sq301triss", json!([]))]), json!([]),
+                   "a failed quest is settled, not a band row");
+        let s = status(&ev, &[step("sq301triss", json!([]))]);
+        assert_eq!(s[0]["tag"], "FAILED IN YOUR QUEST LOG");
     }
 
     #[test]
@@ -2019,22 +2155,46 @@ mod top_tests {
     }
 
     #[test]
-    fn a_live_choice_is_a_now_item_with_no_choice_text() {
-        let mut n = node("endingstep", &["endingstep"]);
-        n.ending_relevant = true;
-        n.title = "The Choice Quest".into();
-        let rd = RouteData { sections: vec!["Main".into()], nodes: vec![n], events: vec![],
-                             prefs: vec![], conditional: HashSet::new(), flags: vec![], manual_audit: Value::Null };
-        let st = HashMap::from([("endingstep".to_string(), "Active".to_string())]);
+    fn a_choice_in_an_active_quest_is_a_now_item_without_the_choice_text() {
+        let mut nd = node("q110postbattle", &["q110postbattle"]);
+        nd.ending_relevant = true;
+        let rd = RouteData { sections: vec!["Main".into()], nodes: vec![nd, node("q999plain", &["q999plain"])],
+                             events: vec![], prefs: vec![], conditional: HashSet::new(), flags: vec![],
+                             manual_audit: Value::Null };
+        let st = HashMap::from([("q110postbattle".to_string(), "Active".to_string()),
+                               ("q999plain".to_string(), "Active".to_string())]);
         let ev = model::evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
         let items = choice_items(&ev, &HashSet::new());
-        assert_eq!(items.len(), 1, "an open quest with an ending branch is one NOW item");
+        assert_eq!(items.len(), 1, "only the ending-relevant quest is a choice row");
+        assert_eq!(items[0]["ids"], json!(["q110postbattle"]));
         assert_eq!(items[0]["kind"], "choice");
-        assert!(items[0]["headline"].as_str().unwrap().contains("The Choice Quest"));
-        assert!(items[0].get("instruction").is_none(), "the band never carries choice text");
-        // a choice on a quest the journal has not reached is ledger-only, not a warning
-        let ev = model::evaluate(&rd, &HashMap::new(), &HashSet::new(), &HashMap::new(), &HashSet::new());
-        assert!(choice_items(&ev, &HashSet::new()).is_empty());
+        assert_eq!(items[0]["tag"], "ENDING CHOICE AHEAD");
+        let text = serde_json::to_string(&items[0]).unwrap().to_lowercase();
+        for leak in ["ciri", "emperor", "radovid", "sorceress", "crown", "blood and wine"] {
+            assert!(!text.contains(leak), "the warning must not name {leak}");
+        }
+        // A row already covered by a stronger warning, and a quest not in the log, do not duplicate it.
+        assert!(choice_items(&ev, &HashSet::from(["q110postbattle".to_string()])).is_empty());
+        let fresh = HashMap::from([("q110postbattle".to_string(), "Not started".to_string())]);
+        let ev = model::evaluate(&rd, &fresh, &HashSet::new(), &HashMap::new(), &HashSet::new());
+        assert!(choice_items(&ev, &HashSet::new()).is_empty(), "a choice still ahead is not a NOW item");
+    }
+
+    #[test]
+    fn a_step_names_one_journal_for_search_and_detail() {
+        assert_eq!(step_short(&node("q2", &["q2#phase|q1#phase"])), Some("q2"));
+        assert_eq!(step_short(&node("q1", &["q1#phase"])), Some("q1"));
+        assert_eq!(step_short(&node("manual", &[])), None);
+    }
+
+    #[test]
+    fn a_watch_needs_a_usable_save_on_every_surface() {
+        let found = json!([{"id": "triss", "live": "open"}]);
+        assert_eq!(live_watch(false, Some(&found)), json!([]),
+                   "the step card must not carry a live row with no save");
+        assert_eq!(live_watch(true, Some(&found)), found);
+        assert_eq!(live_watch(true, None), json!([]));
+        assert_eq!(live_watch(false, None), json!([]));
     }
 
     #[test]
@@ -2067,7 +2227,7 @@ mod top_tests {
     }
 
     #[test]
-    fn a_ticked_step_with_a_fired_cutoff_still_appears_at_the_top() {
+    fn a_ticked_step_with_a_fired_cutoff_stays_on_status() {
         let id = "mq3012noblestatuette";
         let rd = RouteData {
             sections: vec!["Main".into()], nodes: vec![node(id, &[id])], events: vec![],
@@ -2079,10 +2239,11 @@ mod top_tests {
         assert!(ev.steps[0].tick_disagrees);
         let mut w = watch("check", id);
         w[0]["live_note"] = json!("In this save: done: Now or Never. You ticked The Nobleman Statuette done, but the journal still has it open - the journal wins here.");
-        let top = top_items(&ev, &[step(id, w)]);
-        assert_eq!(top[0]["kind"], "risk", "a tick must not hide the passed cutoff");
-        assert!(top[0]["tag"].as_str().unwrap().contains("CHECK NOW"));
-        assert!(top[0]["live_note"].as_str().unwrap().contains("You ticked"));
+        assert_eq!(top_items(&ev, &[step(id, w.clone())]), json!([]),
+                   "a tick must not put a settled cutoff in the band");
+        let s = status(&ev, &[step(id, w)]);
+        assert_eq!(s[0]["tag"], "CUTOFF PASSED - CHECK NOW");
+        assert!(s[0]["live_note"].as_str().unwrap().contains("You ticked"));
     }
 
     #[test]

@@ -1,6 +1,7 @@
 # Next Phase Plan — Witcher 3 Missables Tracker
 
-Status: complete; 1.3.1 built and verified 2026-10-30.
+Status: 1.3.4 released locally 2026-10-31. Phases 0-5 are complete against the tree; section 11.5
+records the re-run acceptance checks, the artifact and the remaining unreachable product states.
 Owner: the next coding agent.
 Workspace: `C:\Steam\steamapps\common\The Witcher 3\w3tracker` (Rust + Tauri 2, version in `Cargo.toml`).
 Scope: the `w3tracker/` project only. The game install and the saves are read-only. This plan is the source of truth; the mission prompt in chat is the entry point.
@@ -445,6 +446,340 @@ Update this table after each phase. Include the command, the key counts, and the
 | 5 — Verification and release | Complete | `cargo test --locked` 57/57; `py tools/cardwindows.py check`; `py tools/test_cardwindows.py` 13/13; `py tools/cards.py check`; three copied saves + clean; statuette turn-in both (newest) / soldier missing (median) / neither (earliest); Dijkstra owned (newest, median) and not_yet (earliest), active/check/fallback in Rust fixtures; `--dump` top equals `--view` top on all; `package.ps1 -Bump minor` built 1.3.0; packaged exe verified; artifact hashes in `docs/RELEASE-1.3.0.md`. Post-release audit found the no-save verdict/detail leak; 1.3.1 adds `save_is_ready` and clears `derived.watch` without a save, 57 tests, clean and three saves re-run, hashes in `docs/RELEASE-1.3.1.md`. | 8c83a24 (1.3.0); 8c84616 (1.3.1) |
 | — | Follow-up | Post-release cleanup: the statuette `turn_in` source (`data/cutoff_windows.json` and `tools/review_cutoffs.py`) is committed with the ledger it produces; `regen.py` hashes LF-normalized bytes and `goldens.json` records the eleven regenerated outputs; the temporary 14 MB `.next-phase-report/` evidence folder is gone; the README points at `docs/RELEASE-1.3.1.md`. The full chain was re-run and reproduced every shipped `data/*.json` byte for byte; `py tools/regen.py --check` reports all eleven outputs matching. | d8d3d92 |
 
+### 11.1 Baseline audit before resuming (2026-10-30)
+
+The table above is the 1.3.3 release record, not the state of the working tree. This audit was run
+before any Phase 0-5 edit and changed no product file. Read in full before the audit:
+`../AGENTS.md`, `README.md`, `docs/DESIGN.md`, `docs/BACKEND_CONTRACT.md`, `docs/CARD-WINDOWS.md`,
+`docs/TARGET-SCHEMA.md`, `tools/README.md`, `package.ps1` and this file.
+
+**Tree.** HEAD `241a7ec`, version 1.3.3 in `Cargo.toml` and `tauri.conf.json`. Six tracked files are
+modified and uncommitted: `docs/DESIGN.md`, `src/cards.rs`, `src/main.rs`, `ui/app.js`,
+`ui/index.html`, `ui/style.css`. They contain the band/surface realignment recorded in `DESIGN.md`
+10.5. The release artifact predates them: `dist/Witcher3MissablesTracker-1.3.3/Witcher3MissablesTracker.exe`
+is SHA-256 `6886cae1e30e5e53bcccfb5e6c41ccc974b41ebd7264fa3ab2ef19805bc09b51`, while the release
+build from this tree is `1dfc35e5e01814ac0ae7364267be7c402d361453c59d6006fd6d0992e8468f64`. There
+is no release note or package for the tree, so the current tree has no Phase 5 artifact.
+
+**Environment.** `cargo 1.99.0`, `rustc 1.99.0`, Python 3.15.0. The game is present at
+`C:/Steam/steamapps/common/The Witcher 3`; REDkit data is present at
+`F:/SteamLibrary/steamapps/common/The Witcher 3 REDkit/r4data`; `package.ps1` is present. The saves
+folder holds 518 `.sav` files. By file mtime the sampled corpus is:
+
+| role | save | path | mtime |
+|---|---|---|---|
+| earliest | `ManualSave_53db8_7e221800_4f13d1b.sav` | `C:/Users/Desktop-Isac/Documents/The Witcher 3/gamesaves/` | 2018-05-07 |
+| median | `ManualSave_5258a_7e224000_39e1473.sav` | the same folder | 2018-05-17 |
+| newest | `CheckPoint_10083c_7ea4f400_4f324d3.sav` | the same folder | 2026-10-30 19:51 |
+
+The 1.3.3 record's newest, `AutoSave_10d9e0_7ea4f000_581b307.sav`, is now older than this new
+checkpoint. The 1.3.3 tables must be re-run against the checkpoint; the median and earliest are
+unchanged.
+
+**Commands run.** `cargo test --locked` reports 63 passed, 0 failed. `cargo build --release` is
+clean. `py tools/regen.py --check` reports all 12 outputs matching. `py tools/cardwindows.py check`
+(224 = 15 missable + 17 one-time + 192 no-window), `py tools/test_cardwindows.py` (13 tests),
+`py tools/endings.py check --release` (4 targets), `py tools/outcomecheck.py --release` (11
+outcomes) and `py tools/cards.py check` are green. The headless CLI (`--view`, `--dump`, `--cards`,
+`--targets`, `--outcomes`, `--plan`, `--detail`) ran on four copied profiles under
+`.next-phase/baseline/` with a temporary `APPDATA` and one copied save each: earliest, median,
+current newest and a clean profile with an empty saves folder. A fifth copied profile selected all
+four goals with guidance on, and a sixth with guidance off. The real `ui/` was served on loopback at
+480x820 from `ui/mock`, built by `tools/mockui.py` from the current newest save; search, MORE, the
+PLAN tab, a detail page and a tick were exercised in the browser.
+
+**Payload evidence.** All four profiles have 412 steps = 403 quests + 9 manual, sections
+96+183+35+87+11 = 412, and `--dump` top/todo/status/tracked equal `--view`. Top: clean `[]`,
+earliest `[]`, median `[DO THIS NOW statuettes, CARD WINDOW OPEN Iorveth]`, newest `[CARD WINDOW
+OPEN Iorveth]`. Todo: 0 / 2 / 51 / 60, all `in_log` or the tracked quest. Cards (owned/not/unknown):
+0/0/224, 27/196/1, 114/109/1, 129/94/1; 224 total, 15 Tier B. The clean view has `target: null`,
+`tradeoffs: []`, no goal step and `--detail` returns `info` with no watch. It still has
+`at_risk: 2` and `unknown: 4` in the matrix, because both statuette steps carry a live `open`
+watch in `view.steps` while `--detail` correctly shows `derived.watch: []`. The goal profile has 4
+labels, 61 todo ids including the next plan step `q110postbattle`, and a 7-step ready plan; with
+guidance off the plan still has 7 steps and 0 instructions, and 4 steps keep `goal: true`.
+
+**What each remaining phase still owes.**
+
+| Phase | Found | Acceptance still owed |
+|---|---|---|
+| 0 - Definitions | `DESIGN.md` 10.5 is updated; `README.md`, `BACKEND_CONTRACT.md` and `TARGET-SCHEMA.md` are not. | `README` must place `UP NEXT` where the code puts it and list all five MORE tabs; the contract must document `view.status`, `TopItem.kind: "order"`, the card/order tags, and tracked `choice`/`note`/`guidance`; the schema must stop saying `goal` is false with guidance off (the goal-off view has 4 `goal: true` steps). Every section 5 row needs a payload/DOM/test/last-verified entry. |
+| 1 - Payload truth | Backend `todo` is exact (the goal profile includes `q110postbattle`); UI is not. | `renderTodo` still rebuilds `aheadIds` from the plan and removes plan steps the backend put in `todo`; exercising it with the backend view and a plan moved `q110postbattle` to `PLAN AHEAD`. The clean profile's `at_risk: 2` must be zero: `attach_derived` attaches the statuette watch without `save_is_ready`. Add tests for both, then keep the tick table, guidance-off plan, detail/search parity and dump=view green. |
+| 2 - Availability | Data checkers green; Dijkstra and statuette truth tables reproduce. | Dijkstra is `unknown` clean, `not_yet` earliest (Baron undiscovered), `owned` median/newest; the active/check states remain Rust fixtures because no real save is after the Baron line with the card unowned. Statuettes answer "Find both" (earliest), "You still need the soldier statuette" (median), "Triss has left..." (newest). The clean statuette step must not be `at_risk`; fix the no-save guard before calling the unit complete. |
+| 3 - Remaining completeness | Flag-vs-Active, coverage `not modelled`, the conflict engine and the 3 runtime `ending_relevant` steps exist. | The fourth warning is no longer a NOW item: `ENDING CHOICE AHEAD` was removed from `top` and only a tracked-card note remains, which contradicts the locked "choice warning is a NOW item" decision. `effective_route` still inserts a `section: "Tracked"` node, so the claimed removal is incomplete. The plan's test-gap list is still open: no tests for `completion()`, coverage, `search`/`check_quest`, `detail_json`, setup/pin/folders or JS, and no mutation run for invariants 1, 3, 4, 5, 6, 7 is recorded in this tree. |
+| 4 - UX | Tick and recovery code exist; MORE and search are reachable. | `UP NEXT` is inside `MORE > PLAN`; at 480x820 the main surface is search, NOW and TRACKED only, which fails the Phase 4 acceptance that the queue answers without opening MORE (and the README still says it is on the main surface). Search is a dead end for every route hit: all 403 `search_index` rows carry a step id, so a click opens the detail pane, and the detail pane never renders `d.verdict`; `showVerdict`/`check_quest` only runs for a hit without a step. The detail page carries two tick controls for one action. The MORE aria label omits PLAN. The six first-run scenarios are recorded but were not re-run as a DOM script in this tree. |
+| 5 - Verification and release | Tests, data checks, copied-save payloads and logs were read; artifact is stale. | Re-run the full Phase 5 matrix on the current newest checkpoint and the two older saves; update `DESIGN.md` 10.2/10.5 with the checkpoint; then bump `Cargo.toml`, `tauri.conf.json` and the README together, add `docs/RELEASE-x.y.z.md`, run `package.ps1`, verify the artifact hash and commit locally. The 1.3.3 package is not the tree under audit. |
+
+**Logs.** `w3loadfix.log` ends with 0 verify errors and normal load stages. `WitcherNativeBridge.log`
+has 0 error hits and all registrations OK. `BeardmosImmersiveWorld.log` ends with its rain timer
+alive. `OptiScaler.log` is from 2026-09-29 and ends with a normal DLL detach. `ReShade.log` and
+`RenoDX-DLSS5-crash.log` record a crash at 2026-10-30 20:09 (`code=0x80000003`,
+`witcher3.exe+0x1f103a3`, `addon-module=no`) after about 91 minutes; it is a native-layer/game
+crash, not a tracker fault, and no tracker log exists by design.
+
+**Hard blockers.** None for the tracker: the toolchain, game files, REDkit data, saves and
+packaging are present. The only blocker to a release is the unfinished acceptance work above.
+Signing and store credentials are not required for the unsigned local artifact, and no signing or
+store command is configured in the repo.
+
+### 11.2 Surface restoration pass (2026-10-30)
+
+The pass restored the locked play surface and sealed the two contradictions 11.1 proved. It changed
+`src/main.rs`, `ui/app.js`, `ui/index.html`, `ui/style.css`, `docs/DESIGN.md`, `tools/mockui.py` and
+this file; `src/cards.rs` was left as the earlier realignment wrote it.
+
+**Restored.** `ENDING CHOICE AHEAD` is a NOW item again: `choice_items` adds one row for an Active
+ending-relevant quest that no stronger band row already covers, with no choice text or ending name.
+`UP NEXT` and `PLAN AHEAD` are back on the main surface below the band; `MORE > PLAN` and the
+tracked card are gone. `view.status` and the settled/check rows on `MORE > STATUS` were kept, as was
+one row per warning. `view.tracked` is back to its 1.3.3 shape.
+
+**Fixed.** `live_watch` is the one gate for a reviewed watch: it returns `[]` unless a save is
+usable, and both `view()` and `detail_json` take their watch from it. On the clean profile the
+statuette steps no longer report a live `open` row, `at_risk` is 0 and `--detail` still says `info`.
+`renderTodo` no longer recomputes which plan steps are current: it displays `view.todo` in the
+backend's order, and PLAN AHEAD is that plan minus the ids the queue carries. With the goal profile
+the next plan step `q110postbattle` now appears in UP NEXT.
+
+**Commands and results.** `cargo test --locked`: 64 passed, 0 failed. `cargo build --release`:
+warning-free. Six copied profiles under `.next-phase/baseline/` with a temporary `APPDATA`
+(`clean`, `earliest`, `median`, `newest`, `goalnewest`, `goalnewoff`): 412 steps each, sections
+96+183+35+87+11 = 412, `--view` top/todo equal `--dump` on every profile. Top tags: clean and
+earliest `[]`; median `[DO THIS NOW, CARD WINDOW OPEN]`; newest, goal and guidance-off
+`[CARD WINDOW OPEN]`. UP NEXT ids: 0 / 2 / 51 / 60 / 61 / 61. Statuette `view.steps[*].watch` equals
+`--detail.derived.watch` on all six (0 clean, 1 elsewhere); clean `at_risk` 0, verdict `info`; the
+earliest still says "Find both statuettes, then talk to Triss", the median "You still need the soldier
+statuette", the newest "Triss has left Novigrad - the next chance is Final Preparations".
+
+**UI.** The real `ui/` was served on loopback and checked at 480x820 from `ui/mock` built by
+`tools/mockui.py --settings` on the goal profile: NOW shows the Iorveth card row, UP NEXT is the
+main section with 61 ids and 56 collapsed rows, and expanding it shows "Blood on the Battlefield"
+(`q110postbattle`). With the clean payload, the band is hidden, UP NEXT is visible and reads "Load a
+save to see what is next.", and the save error names the folder. On the median payload the band
+reads `DO THIS NOW` and `CARD WINDOW OPEN`; `MORE > STATUS` shows the retained "FAILED IN YOUR QUEST
+LOG" row for Twisted Firestarter, and MORE has four tabs. The page is 480 wide with no horizontal
+overflow. The choice row does not occur in
+any real save: a scan of all 518 `.sav` files via `--dump` found none with any of the three
+`ending_relevant` route steps Active. The row was exercised at payload level by
+`a_choice_in_an_active_quest_is_a_now_item_without_the_choice_text` and in the DOM by adding that
+exact payload row to the goal-profile mock; the limitation is recorded in `DESIGN.md` 10.5.
+
+**Mutations.** Changing `live_watch`'s ready check to accept any save fails
+`a_watch_needs_a_usable_save_on_every_surface`. Removing the `ending_relevant` condition fails
+`a_choice_in_an_active_quest_is_a_now_item_without_the_choice_text`. Both files were restored and
+the full 64-test run is green afterwards.
+
+**Still owed at the end of 11.2.** Phase 0 docs except `DESIGN.md` (README surface wording,
+BACKEND_CONTRACT `view.status`/`TopItem` tags), Phase 2 truth tables on this checkpoint, Phase 3
+test gaps and the invariant 1/3/4/5/6/7 mutation record, Phase 4 the six-scenario script, and Phase
+5 release. The `search`/detail mismatch from 11.1 (detail does not render `verdict`) was still open
+when 11.2 closed; 11.3 fixes it.
+
+### 11.3 Search verdict pass (2026-10-30)
+
+Playtested the search box at 480x820 through the real `ui/`, with real `--detail` payloads for the
+five copied profiles and a temporary `APPDATA`. Typing a title, following the hit, and opening the
+same step from its UP NEXT card showed the defect: the answer existed in `get_detail.verdict` but the
+detail pane never rendered it, so every route hit was a dead end.
+
+**Fix.** `renderDetail` now paints `d.verdict` under `CAN I DO THIS NOW?`; `showVerdict` and the
+detail page share `verdictCard`. The backend keeps one source: both `check_quest` and `detail_json`
+call `verdict_for`, and the new `step_short` resolves a step's first journal for both the search hit
+and the detail answer, so a multi-file node cannot answer for a different journal than the hit. A
+warning whose headline equals the verdict keeps its action but is not printed twice. `src/main.rs`
+also has the new unit test `a_step_names_one_journal_for_search_and_detail`.
+
+**Parity run at 480x820.** Typed `Nobleman` and pressed Enter on all five profiles. After the
+duplicate-warning cleanup, reopened each step through the same page and asserted
+`#detail .verdict-text` equals the `--detail` headline for `mq3012noblestatuette` on all five:
+
+| profile | `--detail` | rendered | equal |
+|---|---|---|---|
+| clean | `info` "Load a save to see this quest in your game" | the same | yes |
+| earliest | `warn` "Find both statuettes, then talk to Triss" | the same | yes |
+| median | `warn` "You still need the soldier statuette" | the same | yes |
+| newest | `info` "Triss has left Novigrad - the next chance is Final Preparations" | the same | yes |
+| goal (newest, four goals) | the newest headline | the same | yes |
+
+Opening the step from UP NEXT rendered the same headline. On the newest page the verdict carried
+"Talk to Triss in Novigrad during Final Preparations" and the duplicate warning was gone. The page
+was 480 wide with no horizontal overflow. An empty (`zzzz`) and a one-letter query left the search
+panel hidden and produced no hit. The same true-save limitation remains: none of the
+518 saves has an Active `ending_relevant` step, so the choice warning still lacks a real-save run.
+
+`cargo test --locked`: 65 passed, 0 failed. `cargo build --release`: warning-free. `node --check
+ui/app.js`: clean.
+
+**Still owed.** Phase 0 docs, Phase 2 truth tables on this checkpoint, Phase 3 test gaps and the
+invariant 1/3/4/5/6/7 mutation record, Phase 4 the six-scenario script, and Phase 5 release.
+
+### 11.4 Truth tables and invariant mutations (2026-10-30)
+
+This pass built the card and statuette truth tables from the release backend over copied saves in a
+temporary `APPDATA`, then broke each named invariant and watched its guard fail. It changed
+`src/main.rs`, `src/model.rs`, `src/cards.rs`, `docs/DESIGN.md`, `docs/BACKEND_CONTRACT.md` and this
+file. No save, game file or real profile was written; no game was launched.
+
+**One seam fixed before the table.** The median run showed `view.steps[].watch` and `top` carrying
+the generic "Hand both statuettes to Triss before she leaves Novigrad" while `--detail` already said
+"You still need the soldier statuette". `Inner::read_warning` is now the single save-aware read for
+the step payload and `live_watch_for`: it filters with `live_warning_facts` and applies
+`turn_in_text` before either surface sees the row. The three surfaces now carry the same wording.
+Two permanent tests read the shipped data rather than invented fixtures:
+`model::tests::the_shipped_statuette_windows_name_both_one_and_neither` (both, noble-only,
+soldier-only, neither, for both reviewed windows) and
+`cards::tests::the_shipped_dijkstra_window_is_open_before_the_baron_line_and_gone_after` (not-yet,
+ahead, active, check-fallback, owned; no one-time row in `top` or `status`). The spoiler guard now
+scans every outcome label, not only the four target labels; the old set would have let a
+non-target ending name through.
+
+**Profiles.** Copied saves under `.next-phase/truth/<role>/saves`, each with its own settings file
+in `.next-phase/truth/<role>/appdata/Witcher3MissablesTracker/settings.json`; the release exe ran
+with `APPDATA` pointed at that directory. Roles: clean (empty saves folder), earliest
+`ManualSave_53db8_7e221800_4f13d1b.sav`, median `ManualSave_5258a_7e224000_39e1473.sav`, newest
+`CheckPoint_10083c_7ea4f400_4f324d3.sav`. `--view`, `--dump`, `--cards`, `--detail` for
+`mq3012noblestatuette`, `mq3012warriorstatuette` and `cgnomansland` were written under each
+profile's `out/`.
+
+**Statuettes.** `--facts` on the copied saves reports neither (earliest), noble only (median) and
+both (newest). The asserted rows:
+
+| case | save | `top` | step `watch` | `--detail` verdict |
+|---|---|---|---|---|
+| neither | earliest | `[]` (quests not in the log) | `open` "Find both statuettes, then talk to Triss" / "Find both statuettes before Triss leaves Novigrad" | `warn`, the same |
+| one (noble) | median | `DO THIS NOW` "You still need the soldier statuette" / "Find the soldier statuette, then talk to Triss" | `open`, the same | `warn`, the same |
+| both | newest | `[]` (Triss has left) | `later` "Triss has left Novigrad - the next chance is Final Preparations" | `info`, the same |
+| both, window open | none | expected `DO THIS NOW` "Both statuettes in hand - talk to Triss now" | the same | `warn`, the same |
+
+The last row is unreachable in this corpus. A direct read-only scan of all 518 saves with
+`tools/save_reader.py` found 174 with both facts, 263 noble-only, 0 soldier-only and 81 neither;
+every one of the 174 both-fact saves has Now or Never Done, and no save has Battle Preparations
+Active. The rule is proved by the shipped-data unit test and at 480x820 by injecting that exact
+shipped row into an otherwise unmodified median payload: the real `ui/` rendered the headline in
+`#topSec`, and the detail page rendered it in `.verdict-text`, with no horizontal overflow. The
+soldier-only branch has the same unit test but no real save.
+
+**Dijkstra.** The card is `card_dijkstra` (collection index 109), window `one_time`, gate
+`cgnomansland`, fact `cg_baron_discovered`, fallback "The Baron's office". `--cards` on the copied
+saves gave `unknown` clean, `not_owned` + `not_yet` ("SOURCE NOT YET · ONE-TIME · TIER A") earliest,
+and `owned` median/newest; `top` and `status` carried no Dijkstra row in any profile. A read-only
+scan of every save with the fact and the gate Active or Done (418 saves: 411 Done, 7 Active) found
+the card owned in all of them; the 97 saves with the gate not started have no Baron fact. So a real
+unowned `active` or `check` row does not exist. The shipped-data unit test asserts `ahead` (gate Not
+started), `active` (gate Active), `check` with "PASSED - CHECK FALLBACK · ONE-TIME · TIER A" (gate
+Done) and `owned`; a one-time window with no fallback still reaches `passed` in the older synthetic
+test.
+
+**Payload assertion.** `py .next-phase/truth/assert.py` exited 0 and printed
+`PASS: 4 real profiles, 518 corpus saves, 418 Baron-fact card rows`, with statuette combos
+`{'both': 174, 'noble': 263, 'soldier': 0, 'neither': 81}` and Dijkstra rows `{'Active': 7,
+'Done': 411}`. It also asserts `--view` and `--dump` agree on `top` and `todo` for all four profiles,
+412 steps, section totals 96+183+35+87+11 = 412, clean `at_risk` 0 and no clean watch.
+
+**UI command.** `py tools/mockui.py --exe target/release/witcher3-missables-tracker.exe --saves
+.next-phase/truth/median/saves --out ui/mock`, then `py -m http.server 8765 --bind 127.0.0.1` from
+`ui/`, a 480x820 viewport, `#topSec` read as text, the statuette headline clicked, and
+`.verdict-text` read as text. The both-in-hand row was served the same way on 127.0.0.1:8766 from a
+copy of `ui/` whose `mock/view.json` and `mock/details.json` carried the shipped both wording; that
+copy was deleted and both servers stopped.
+
+**Mutations.** Each production file was copied to `.next-phase/mut/` first, the guarantee was broken,
+`cargo test --locked <named test>` was run, and the file was restored. `diff -q` afterwards reported `main.rs`,
+`model.rs`, `cards.rs` and `plan.rs` identical to their backups; `grep` found no `TcpListener` or
+injected `ending_label`.
+
+| # | break | named test | observed failure |
+|---|---|---|---|
+| 1 | add `std::net::TcpListener::bind` to `main` | `top_tests::the_app_has_no_network_client_and_never_writes_a_save` | "main.rs contains std::net" |
+| 3 | add `"ending_label": "Ciri lives: empress ending"` to `step_json` | `model::tests::the_default_step_payload_carries_no_instruction_or_ending_label` | "ch1quest carries the ending label ..." |
+| 4 | drop `ci_c1` in `load_route` | `model::tests::the_generated_route_is_the_whole_game` | route count assertion failed (manual rows expected 9) |
+| 5 | let `cards::top_items` accept `ahead` | `cards::tests::card_top_items_group_by_step_and_keep_the_tier_b_tag` | "a window that has not opened is a ledger row, not a NOW warning" |
+| 6 | make `plan` conflicts empty | `plan::tests::two_outcomes_in_one_group_are_a_conflict` | plan state was `ready`, expected `conflict` |
+| 7 | attach instructions to settled rows and keep them | `plan::tests::a_settled_step_does_not_leak_its_instruction` | `plan["steps"][0]["instructions"]` was not empty |
+
+Mutation 1 uses a compiled `std::net` line, not a string, so the guard is proved against a real
+network client path. Mutation 3 first used a non-target label (`Ciri empress`), which the old guard
+missed; the guard was broadened to every outcome label and the mutation was rerun, failing as shown.
+
+**Final state.** `cargo test --locked` reports 67 passed, 0 failed; `cargo build --release` is
+warning-free; `node --check ui/app.js` is not needed for this pass (no UI file changed); the real
+`ui/` was served at 480x820 from `ui/mock` on 127.0.0.1 with a temporary profile and produced no
+console errors and no horizontal overflow.
+
+**Still owed.** Phase 0's `TARGET-SCHEMA.md` still says `view.steps[*].goal` is false with guidance
+off, while the payload keeps goal chips; the Phase 4 six-scenario script has not been rerun as one
+script; and Phase 5 (version bump, release note, `package.ps1`, artifact verification, local commit)
+is not started. The truth tables and mutation record above are complete for this checkpoint.
+
+### 11.5 Release verification and 1.3.4 (2026-10-31)
+
+This pass re-read the log and re-ran every phase's named acceptance check against the current tree
+and the release build before packaging. No save, real profile or game file was written, and the game
+was not launched. The full evidence tables are in `docs/DESIGN.md` 10.8 and
+`docs/RELEASE-1.3.4.md`; this entry records the commands and the outcomes that mattered.
+
+**Tree and environment.** HEAD was `241a7ec` with the post-1.3.3 work uncommitted. `cargo 1.99.0`,
+`rustc 1.99.0`, Python 3.15.0 and Node are present. The real saves folder holds 518 `.sav` files;
+the sampled roles were earliest `ManualSave_53db8_7e221800_4f13d1b.sav`, median
+`ManualSave_5258a_7e224000_39e1473.sav` and newest `CheckPoint_10083c_7ea4f400_4f324d3.sav`.
+
+**Phase 0.** `README.md` describes NOW, UP NEXT and the four MORE tabs as they ship;
+`BACKEND_CONTRACT.md` documents `view.status`, order/card tags and tracked `choice`/`note`/`guidance`;
+`TARGET-SCHEMA.md` keeps `goal` chips when guidance is off; `DESIGN.md` 10.1 no longer puts a passed
+cutoff in NOW. The scenario now matches section 2, the README and the code: a passed cutoff is a
+`MORE > STATUS` row, and the corpus has no save in that state, so it was exercised as a fixture.
+
+**Phase 1.** `py .next-phase/release/run.py` regenerated seven profiles with the release exe, and
+`py .next-phase/truth/assert.py` exited 0. Clean/earliest/median/newest: 412 steps each, sections
+96+183+35+87+11, `--dump` = `--view` on top/todo and `dump.status_rows` equals `view.status`, top
+counts 0/0/2/1 and todo 0/2/51/60.
+The goal profile has 61 todo ids including the next plan step `q110postbattle`; guidance off keeps
+7 plan steps, 0 instructions and 4 goal chips. Clean `at_risk` is 0 and its statuette steps carry
+no watch; `--detail` stays `info`. The UI displays `view.todo` and does not re-filter it.
+
+**Phase 2.** The truth tables reproduced on the same profiles: statuettes `warn` find both
+(earliest), `warn` soldier missing (median), `info` Triss has left (newest); Dijkstra `unknown`
+(clean), `not_owned`/`not_yet` (earliest), `owned` (median, newest). The assertion printed
+statuette combos `{'both': 174, 'noble': 263, 'soldier': 0, 'neither': 81}` and Dijkstra rows
+`{'Active': 7, 'Done': 411}`. No real row has both statuettes with the window open, a soldier-only
+statuette, or an unowned Dijkstra past the Baron line; those branches remain shipped-data unit
+tests, not save runs.
+
+**Phase 3.** `cargo test --locked` reports 67 passed, 0 failed. The invariant 1/3/4/5/6/7 break-and-
+restore record is section 11.4; each named test failed when the guarantee was removed and the files
+were restored. The choice warning still has no real-save run because none of the 518 saves has an
+Active `ending_relevant` step; it is proved by its unit test and a fixture row in the real UI.
+
+**Phase 4.** Six first-run scenarios were driven at 480x820 in the real `ui/` with payloads from the
+release binary. No save: band hidden, UP NEXT reads "Load a save to see what is next", FOLDERS
+open with the saves path and Browse. Earliest save: band hidden, only tracked and in-log quests, 31
+ahead cards under MORE > CARDS > LATER. Passed cutoff fixture: band hidden, tag and action on MORE >
+STATUS, the same `warn` verdict on the quest and search pages. Note-only tick on `q110postbattle`:
+card remains `Not started`, PROGRESS shows the pencil, detail shows NOTE, band warning stays.
+Guidance off: PLAN AHEAD and the GOAL chip remain, no exact line. Corrupt save: file named, retry
+stated, FOLDERS reopened, no stale band. There were no console errors and no horizontal overflow.
+
+**Phase 5.** `package.ps1` produced `dist/Witcher3MissablesTracker-1.3.4/` and its zip; FileVersion
+and ProductVersion are 1.3.4. The exe SHA-256 is
+`9b7d8454a50e185754b785f338ef810ac2ecd118c8574c59c2209b1cac4cf02d`, identical to
+`target/release/witcher3-missables-tracker.exe`; the packaged binary matched the target build on
+every median `--view` field except the save's elapsed age, and on `--cards`; the zip has 21 entries
+and `testzip()` is clean. The script's final copy to
+the repo root failed because the 1.3.3 tracker was still running; PID 37304 was stopped, the same
+dist binary was copied to the root, and all three copies match the hash. The 1.3.4 release note,
+`Cargo.toml`, `Cargo.lock`, `tauri.conf.json` and the README link all name 1.3.4. The release was
+committed locally only; no remote push, tag or store upload was attempted.
+
+**Logs.** `w3loadfix.log` ends with 0 verify errors; `WitcherNativeBridge.log` has all registrations
+OK; `BeardmosImmersiveWorld.log` ends with its rain timer alive; `OptiScaler.log` ends with a normal
+detach. `ReShade.log` and `RenoDX-DLSS5-crash.log` still record the 2026-10-30 20:09 native-layer
+crash (`code=0x80000003`, `witcher3.exe+0x1f103a3`, `addon-module=no`), which is not a tracker fault.
+
+**Remaining limitations.** The five unreachable save states above are recorded in `DESIGN.md` 10.8
+and the release note. Native WebView automation was unavailable; the real `ui/` was driven in
+Chromium at 480x820 from release-binary payloads, which is recorded as the limitation rather than
+claimed as a packaged-window run.
+
 ---
 
 ## 12. Decision log
@@ -466,6 +801,11 @@ Record new decisions here. Do not silently change a locked decision.
 | 2026-10-30 | Dijkstra is one-time, not missable. | The office is a fallback, so a closed step cannot be called lost; one-time rows stay out of NOW. |
 | 2026-10-30 | Turn-in wording is data-driven from `cutoffs.json` facts. | The watch names both/one/neither statuettes without hardcoding a step id in Rust. |
 | 2026-10-30 | A missing or unreadable save returns `info` and no detail watch, never a live warning or a `safe` verdict. | An empty journal is not "every quest Not started"; the detail and search panes must not invent state. |
+| 2026-10-30 | The choice warning is a NOW row for an Active ending-relevant quest; the tracked card and the `MORE > PLAN` tab are removed. | The locked decisions put the choice in `NOW` and `UP NEXT` on the main surface; the uncommitted realignment had removed both. |
+| 2026-10-30 | One `live_watch` gate owns the no-save rule for the step card and the detail pane. | Heading the two surfaces separately let `view` report `at_risk` while `--detail` reported `info`. |
+| 2026-10-30 | The UI displays `view.todo` as the queue and never re-filters plan steps. | The second filter dropped the backend's next plan step `q110postbattle` from UP NEXT. |
+| 2026-10-30 | The detail page renders `detail.verdict`; search and detail resolve a step through `step_short`. | Every search hit opened a page that hid the answer, and a multi-file step could otherwise answer for a different journal than the hit. |
+| A passed cutoff is a `MORE > STATUS` row, never a NOW row; `DESIGN.md` 10.1 now says so. | The band is only for actions that can still change the outcome, and the scenario contradicted section 2, the README and the shipped code. |
 
 ---
 
