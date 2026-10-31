@@ -143,6 +143,8 @@ journal description is present in the matrix; the state and the reviewed labels 
       "instructions": [ { "target": "ciri_witcher", "instruction": "All right, Velen it is.",
                            "kind": "scene_choice", "file": "...", "locid": 550164, "facts": [] } ],
       "facts": ["q110_to_emperor"], "confirmation": false,
+      "packs": ["base"],                        // game part(s) of the selected goal(s) needing this step
+      "choice": true,                           // a reviewed ending choice, even when guidance is off
       "note": null|"No dialogue line: the game phase sets the terminal fact...",
       "prerequisites": [] }
   ],
@@ -154,8 +156,10 @@ journal description is present in the matrix; the state and the reviewed labels 
 
 A `confirmation` step is a terminal phase fact, not a dialogue choice: `instructions` is empty and
 `note` says so. `instructions` is empty on every non-`ahead` step, so a settled choice line never
-returns to the window. `unguided` lists selected targets with no reviewed guidance; such a plan is
-`state: "blocked"`, has no steps, and counts only guided targets in `coverage.guided`.
+returns to the window. `packs` and `choice` are not guidance-gated: they let the ending-quests panel
+group the steps by Main game / Hearts of Stone / Blood and Wine and mark a choice step while the
+exact line stays behind the switch. `unguided` lists selected targets with no reviewed guidance;
+such a plan is `state: "blocked"`, has no steps, and counts only guided targets in `coverage.guided`.
 
 No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf` or `src` keys. The 0.1.9
 `feed.json` and the 25 events are frozen in `data/legacy_*.json` and are not part of this contract.

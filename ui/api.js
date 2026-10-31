@@ -43,7 +43,11 @@ const Api = (() => {
     async pick_folder() { return ensure(); },
     async get_targets() { return { targets: [], presets: [] }; },
     async get_outcomes() { return { version: 1, groups: [], selected: [], conflicts: [], counts: {} }; },
-    async get_plan() { return { version: 1, state: 'empty', selected: [], steps: [], conflicts: [], blocked_by: [], coverage: {} }; },
+    async get_plan() {
+      // mock/plan.json is a real --plan dump when one was generated; otherwise stay empty.
+      try { return await load('plan'); } catch { /* no dump present */ }
+      return { version: 1, state: 'empty', selected: [], steps: [], conflicts: [], blocked_by: [], coverage: {} };
+    },
     async set_target(ids) {
       await ensure();
       view.target = ids && ids.length ? { ids, labels: ids, guidance: 'on', states: {} } : null;

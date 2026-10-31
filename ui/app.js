@@ -54,6 +54,8 @@ let detailId = null;
 let listScroll = 0;
 let lastTargetSig = '';
 let planData = null;
+const endingRecs = new Map(); // pack -> stable group/card nodes while the panel is open
+let endingTargetKey = null;
 let cardFilter = 'all';
 const MORE_TABS = ['cards', 'progress', 'coverage', 'status'];
 
@@ -71,6 +73,7 @@ const ui = {
   cards: $('#cards'), cardsCount: $('#cardsCount'), cardsNote: $('#cardsNote'),
   coverage: $('#coverage'), picker: $('#targetPicker'), targetOptions: $('#targetOptions'),
   applyTargets: $('#applyTargets'), morePanel: $('#morePanel'),
+  endingBtn: $('#endingBtn'), ending: $('#endingPanel'), endingGroups: $('#endingGroups'),
 };
 
 // ---------- MORE drawer (reference material, not the play loop) ----------
@@ -107,7 +110,7 @@ function focusInto(panel) {
   const active = document.activeElement;
   // Remember the control that opened the overlay, so Escape returns to it and not to nowhere.
   if (active instanceof HTMLElement && !panel.contains(active)) focusReturn = active;
-  const box = panel.querySelector('.more-box, .picker-box') || panel;
+  const box = panel.querySelector('.more-box, .picker-box, .ending-box') || panel;
   box.setAttribute('tabindex', '-1');
   box.focus({ preventScroll: true });
 }
@@ -287,6 +290,8 @@ function renderRun(v) {
 function renderGoalRow(v) {
   ui.goalRow.replaceChildren();
   const t = v.target;
+  // The ending-quests list names endings, so its button exists only after a goal is chosen.
+  ui.endingBtn.classList.toggle('hidden', !t || !(t.ids || []).length);
   if (!t) {
     add(ui.goalRow, h('span', 'fl', 'Ending goal: none'),
       h('button', 'btn sm', 'Choose', { 'data-act': 'open-picker' }));
@@ -340,6 +345,9 @@ function targetLabel(id) {
   const i = t.ids.indexOf(id);
   return i >= 0 ? (t.labels || [])[i] || id : id;
 }
+function endingIdsKey(t) {
+  return JSON.stringify(t && t.ids ? t.ids.slice().sort() : []);
+}
 function planMatchesView(p) {
   const t = view && view.target;
   // The plan is what is still coming; only exact instructions are guidance-gated upstream.
@@ -364,6 +372,7 @@ async function loadPlan() {
   if (seq !== planSeq || !view || !view.target) return;
   planData = p;
   renderPlanIssues(p);
+  renderEnding();
 }
 function renderPlanIssues(p) {
   ui.planIssues.replaceChildren();
@@ -392,6 +401,176 @@ function renderPlanIssues(p) {
   });
   issues.forEach((card) => ui.planIssues.append(card));
   ui.planIssues.classList.toggle('hidden', !issues.length);
+}
+
+// ---------- ending quests: the reviewed plan, grouped by the part of the game it belongs to ----------
+/** One short sentence from the game's own journal; the card stays name + summary + choice. */
+function endingSummary(step) {
+  const s = stepsById.get(step.step);
+  return s && s.desc ? short(String(s.desc).trim(), 120) : '';
+}
+
+async function openEnding() {
+  ui.ending.classList.remove('hidden');
+  focusInto(ui.ending);
+  renderEnding();
+  // A target change reloads the plan; if it is stale or not loaded yet, wait for the same call the
+  // page already uses rather than fetching a second, parallel source.
+  if (!planData || !planMatchesView(planData)) {
+    await loadPlan();
+    if (!ui.ending.classList.contains('hidden')) renderEnding();
+  }
+}
+function resetEndingList() {
+  ui.endingGroups.replaceChildren();
+  endingRecs.clear();
+}
+
+/** A whole-panel message replaces the groups; normal updates use setEndingNotice. */
+function endingMessage(text, cls) {
+  resetEndingList();
+  add(ui.endingGroups, h('p', 'ending-msg ' + (cls || 'dim small'), text));
+}
+
+/** Keep the blocked notice in place across refreshes instead of rebuilding the list around it. */
+function setEndingNotice(text, cls) {
+  const old = ui.endingGroups.querySelector('.ending-msg');
+  if (!text) { if (old) old.remove(); return; }
+  if (old) {
+    const nextClass = 'ending-msg ' + cls;
+    if (old.className !== nextClass) old.className = nextClass;
+    if (old.textContent !== text) old.textContent = text;
+    return;
+  }
+  ui.endingGroups.prepend(h('p', 'ending-msg ' + cls, text));
+}
+
+/** The <details> element owns its own open state; this map only holds the stable nodes. */
+function endingGroup(pack) {
+  let rec = endingRecs.get(pack);
+  if (rec) return rec;
+  const group = h('details', 'ending-group');
+  group.open = true;
+  const head = h('summary', 'ending-head');
+  const packEl = h('span', 'ending-pack');
+  const goalsEl = h('span', 'ending-goals');
+  const countEl = h('span', 'ending-count');
+  add(head, packEl, goalsEl, countEl);
+  const list = h('div', 'ending-list');
+  group.append(head, list);
+  rec = { group, packEl, goalsEl, countEl, list, cards: new Map() };
+  endingRecs.set(pack, rec);
+  return rec;
+}
+
+function endingCard(step) {
+  const root = h('article', 'ending-quest');
+  const top = h('div', 'eq-top');
+  const mark = h('span', 'eq-mark', '✦', { title: 'This quest has a reviewed step for your ending' });
+  const name = h('button', 'ending-name', step.title || step.step, { 'data-act': 'ending-detail', 'data-id': step.step });
+  const choice = h('span', 'tagchip goalchip', 'CHOICE');
+  const desc = h('div', 'ending-desc dim small');
+  top.append(mark, name);
+  root.append(top, desc);
+  return { root, top, name, choice, desc };
+}
+
+function patchEndingCard(rec, step) {
+  const title = step.title || step.step;
+  if (rec.name.textContent !== title) rec.name.textContent = title;
+  if (rec.name.dataset.id !== step.step) rec.name.dataset.id = step.step;
+  const hasChoice = !!step.choice;
+  if (hasChoice && rec.choice.parentNode !== rec.top) rec.top.append(rec.choice);
+  else if (!hasChoice && rec.choice.parentNode === rec.top) rec.choice.remove();
+  const desc = endingSummary(step);
+  if (rec.desc.textContent !== desc) rec.desc.textContent = desc;
+  rec.desc.classList.toggle('hidden', !desc);
+}
+
+function syncEndingGroup(pack, rows, labels) {
+  const rec = endingGroup(pack);
+  const label = PACK_LABEL[pack] || pack;
+  if (rec.packEl.textContent !== label) rec.packEl.textContent = label;
+  const goalText = labels.join(' · ');
+  if (rec.goalsEl.textContent !== goalText) rec.goalsEl.textContent = goalText;
+  rec.goalsEl.classList.toggle('hidden', !goalText);
+  const count = String(rows.length);
+  if (rec.countEl.textContent !== count) rec.countEl.textContent = count;
+  const seen = new Set();
+  rows.forEach((s, i) => {
+    seen.add(s.step);
+    let card = rec.cards.get(s.step);
+    if (!card) { card = endingCard(s); rec.cards.set(s.step, card); }
+    patchEndingCard(card, s);
+    if (rec.list.children[i] !== card.root) rec.list.insertBefore(card.root, rec.list.children[i] || null);
+  });
+  for (const [id, card] of rec.cards) {
+    if (!seen.has(id)) { card.root.remove(); rec.cards.delete(id); }
+  }
+  return rec;
+}
+
+function closeEnding(restore = true) {
+  if (ui.ending.classList.contains('hidden')) return;
+  ui.ending.classList.add('hidden');
+  resetEndingList();
+  if (restore) restoreFocus();
+}
+
+function renderEnding() {
+  if (ui.ending.classList.contains('hidden')) return;
+  const t = view && view.target;
+  if (!t || !(t.ids || []).length) {
+    endingMessage('Choose an ending goal to list its quests.', 'dim small');
+    return;
+  }
+  if (!planData || !planMatchesView(planData)) {
+    endingMessage('Reading your ending goals…', 'dim small');
+    return;
+  }
+  const steps = planData.steps || [];
+  if (!steps.length) {
+    const why = planData.state === 'conflict'
+      ? 'Your chosen endings conflict, so there is no single quest list. Narrow the goals to see one.'
+      : planData.state === 'blocked'
+        ? 'No reviewed quest list is available for these goals yet.'
+        : 'No quests are listed for the chosen endings.';
+    endingMessage(why, 'dim small');
+    return;
+  }
+  const blocked = (planData.blocked_by || []).length > 0;
+  setEndingNotice(blocked
+    ? 'At least one chosen ending is already out of reach in this save; its quests are still listed.'
+    : '', 'small amber');
+  // Same part labels and order as the goal picker; a part with nothing to list is not a section.
+  const visible = [];
+  Object.keys(PACK_LABEL).forEach((pack) => {
+    const rows = steps.filter((s) => (s.packs || []).includes(pack));
+    if (!rows.length) return;
+    const labels = [];
+    rows.forEach((s) => (s.targets || []).forEach((id) => {
+      // The group already names the part, so "Hearts of Stone: Olgierd is saved" would repeat it.
+      const full = targetLabel(id), prefix = (PACK_LABEL[pack] || '') + ': ';
+      const short = full.startsWith(prefix) ? full.slice(prefix.length) : full;
+      const label = short.charAt(0).toUpperCase() + short.slice(1);
+      if (!labels.includes(label)) labels.push(label);
+    }));
+    visible.push([pack, rows, labels]);
+  });
+  visible.forEach(([pack, rows, labels]) => syncEndingGroup(pack, rows, labels));
+  const keep = new Set(visible.map(([pack]) => pack));
+  for (const [pack, rec] of endingRecs) {
+    if (!keep.has(pack)) { rec.group.remove(); endingRecs.delete(pack); }
+  }
+  // The notice stays first; groups follow in pack order. Existing nodes are only moved, not rebuilt.
+  let pos = ui.endingGroups.firstElementChild && ui.endingGroups.firstElementChild.classList.contains('ending-msg') ? 1 : 0;
+  for (const [pack] of visible) {
+    const rec = endingRecs.get(pack);
+    if (ui.endingGroups.children[pos] !== rec.group) ui.endingGroups.insertBefore(rec.group, ui.endingGroups.children[pos] || null);
+    pos++;
+  }
+  // A refresh patches these same nodes; it never replaces the <details>, so the native open
+  // state, focus and scroll survive a view update.
 }
 
 // ---------- outcome matrix (inside the spoiler-gated picker) ----------
@@ -998,6 +1177,14 @@ function renderProgress(v, force) {
 function render(v) {
   if (!v) return;
   view = v; viewAt = performance.now();
+  // The list names the goals it was opened for. A different selection makes its cards stale, so
+  // close it and cancel any plan request still in flight before the new one is asked for.
+  const endsKey = endingIdsKey(v.target);
+  if (endsKey !== endingTargetKey) {
+    endingTargetKey = endsKey;
+    clearPlan();
+    if (!ui.ending.classList.contains('hidden')) closeEnding(false);
+  }
   v.objectives = v.objectives || {};
   stepsById.clear();
   v.steps.forEach((s) => stepsById.set(s.id, s));
@@ -1011,6 +1198,7 @@ function render(v) {
   }
   renderHeader(v); renderFlags(v); renderFolders(v); renderSetup(v); renderRun(v); renderGoalRow(v);
   loadPlan();
+  renderEnding();
   renderTop(v); renderStatus(v); renderTodo(v); renderImpossible(v); renderTradeoffs(v); renderCoverage(v); renderProgress(v);
   if (!cardsData) loadCards();
   if (detailId && !detailCache.has(detailId)) openDetail(detailId, true);
@@ -1317,6 +1505,7 @@ async function tick(id) {
 
 document.addEventListener('click', (e) => {
   if (e.target.id === 'morePanel') { closeMore(); return; }
+  if (e.target.id === 'endingPanel') { closeEnding(); return; }
   if (e.target.id === 'targetPicker') { closePicker(); return; }
   const t = e.target.closest('[data-act]');
   if (!t) return;
@@ -1361,6 +1550,9 @@ document.addEventListener('click', (e) => {
   else if (act === 'closeverdict') clearVerdict();
   else if (act === 'more') openMore('cards');
   else if (act === 'close-more') closeMore();
+  else if (act === 'ending-quests') openEnding();
+  else if (act === 'close-ending') closeEnding();
+  else if (act === 'ending-detail') { closeEnding(false); openDetail(id); }
   else if (act === 'more-tab') openMore(t.dataset.tab);
   else if (act === 'open-cards') openCards(t.dataset.filter);
   else if (act === 'card-filter') {
@@ -1377,7 +1569,8 @@ document.addEventListener('click', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-  const overlayOpen = !ui.picker.classList.contains('hidden') || !ui.morePanel.classList.contains('hidden');
+  const overlayOpen = !ui.picker.classList.contains('hidden') || !ui.morePanel.classList.contains('hidden')
+    || !ui.ending.classList.contains('hidden');
   // "/" jumps to the search box, the way it does in most reference tools.
   if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
     const a = document.activeElement;
@@ -1387,6 +1580,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Tab' && overlayOpen) { trapTab(e); return; }
   if (e.key !== 'Escape') return;
   if (!ui.picker.classList.contains('hidden')) { closePicker(); return; }
+  if (!ui.ending.classList.contains('hidden')) { closeEnding(); return; }
   if (!ui.morePanel.classList.contains('hidden')) { closeMore(); return; }
   if (detailId) { closeDetail(); return; }
   // An open hit list is the innermost thing Escape can dismiss.
@@ -1397,7 +1591,8 @@ document.addEventListener('keydown', (e) => {
 
 /** Tab stays inside the open overlay instead of walking into the page behind it. */
 function trapTab(e) {
-  const dialog = !ui.picker.classList.contains('hidden') ? ui.picker : ui.morePanel;
+  const dialog = !ui.picker.classList.contains('hidden') ? ui.picker
+    : !ui.ending.classList.contains('hidden') ? ui.ending : ui.morePanel;
   const focusable = [...dialog.querySelectorAll('button:not(:disabled), input:not(:disabled), [href], summary, [tabindex]:not([tabindex="-1"])')]
     .filter((n) => n.offsetParent !== null);
   if (!focusable.length) return;

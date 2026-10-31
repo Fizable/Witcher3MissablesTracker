@@ -76,6 +76,7 @@ Every screen answers one question. If it stops answering that, it is broken even
 | `MORE > COVERAGE` | is an empty section actually clean? | `view.coverage` | report a bare zero without the measured count |
 | `MORE > PROGRESS` | where am I in the whole game, by section? | `view.completion.matrix` | count a section header that disagrees with the total |
 | goal picker | which endings am I aiming for? | `get_targets`, `set_target` | appear in the payload before the opt-in |
+| ending quests | which quests do my chosen endings need? | `get_plan` (`packs`, `choice`) | appear without a chosen goal, or list a quest with no reviewed ending step |
 | outcome matrix and tradeoffs | which outcomes can still happen, which exclude each other? | `get_outcomes`, `view.tradeoffs` | present a goal with no path as if it had one |
 | guidance toggle | tell me the exact line | `set_guidance` | apply without a chosen goal |
 | `my game` | what can a save not tell you? | `set_flag`, `set_level`, `set_folder`, `pick_folder` | let a flag overrule the journal |

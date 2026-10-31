@@ -62,6 +62,7 @@
     <section id="todoSec">
       <div class="run-head">
         <h2 class="gold">UP NEXT</h2>
+        <button id="endingBtn" class="btn sm ending-btn hidden" data-act="ending-quests" title="Every quest with a reviewed ending step for the goals you chose">✦ ending quests</button>
       </div>
       <div id="planIssues" class="stack hidden"></div>
       <div id="todoCards" class="stack"></div>
@@ -146,6 +147,18 @@
       </section>
 
     </div>
+  </div>
+</div>
+
+<!-- Ending quests: opened only after a goal is chosen, so no ending name leaks before the opt-in -->
+<div id="endingPanel" class="ending hidden" role="dialog" aria-modal="true" aria-labelledby="endingTitle">
+  <div class="ending-box">
+    <div class="more-head">
+      <h2 id="endingTitle" class="gold">ENDING QUESTS</h2>
+      <button class="x" data-act="close-ending" aria-label="close">✕</button>
+    </div>
+    <p class="legend dim ending-note">The reviewed steps for your chosen endings, by part of the game. Open a quest for its full page.</p>
+    <div id="endingGroups" class="ending-groups"></div>
   </div>
 </div>
 

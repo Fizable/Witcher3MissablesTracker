@@ -26,6 +26,12 @@ struct StepAcc {
     instructions: Vec<Value>,
     facts: BTreeSet<String>,
     confirmation: bool,
+    /// Game parts whose selected goal needs this step. Normally one; kept as a set because a step
+    /// shared by two goals must not silently disappear from one part's list.
+    packs: BTreeSet<String>,
+    /// This step carries a reviewed ending choice (a guidance row), not just a terminal fact.
+    /// Independent of `instructions`, which are gated by the guidance switch.
+    choice: bool,
 }
 
 impl StepAcc {
@@ -40,6 +46,8 @@ impl StepAcc {
             instructions: Vec::new(),
             facts: BTreeSet::new(),
             confirmation: false,
+            packs: BTreeSet::new(),
+            choice: false,
         }
     }
 
@@ -216,6 +224,8 @@ pub fn build(
                 .entry(row.row.step.clone())
                 .or_insert_with(|| StepAcc::new(&row.row.step, order, level, title));
             acc.targets.insert(tid.clone());
+            acc.packs.insert(targets::pack(endings, tid));
+            acc.choice = true;
             let row_state = if row.state == "ahead" && e.state != "reachable" {
                 "unknown"
             } else {
@@ -263,6 +273,7 @@ pub fn build(
                 .entry(step.to_string())
                 .or_insert_with(|| StepAcc::new(step, order, level, title));
             acc.targets.insert(tid.clone());
+            acc.packs.insert(targets::pack(endings, tid));
             acc.confirmation = true;
             if let Some(fact) = req.get("fact").and_then(|x| x.as_str()) {
                 acc.facts.insert(fact.to_string());
@@ -320,6 +331,8 @@ pub fn build(
                 "instructions": instructions,
                 "facts": acc.facts.iter().cloned().collect::<Vec<_>>(),
                 "confirmation": acc.confirmation,
+                "packs": acc.packs.iter().cloned().collect::<Vec<_>>(),
+                "choice": acc.choice,
                 "note": note,
                 "prerequisites": prerequisites,
             })
@@ -437,8 +450,13 @@ mod tests {
         assert_eq!(plan["steps"][0]["step"], "q110postbattle");
         assert_eq!(plan["steps"][0]["state"], "ahead");
         assert_eq!(plan["steps"][0]["instructions"][0]["instruction"], "Velen.");
+        // The ending-quests panel groups by the goal's part and marks a reviewed choice; neither
+        // depends on the guidance switch, which only gates the exact line above.
+        assert_eq!(plan["steps"][0]["packs"], json!(["base"]));
+        assert_eq!(plan["steps"][0]["choice"], true);
         assert_eq!(plan["steps"][1]["step"], "q502avallach");
         assert_eq!(plan["steps"][1]["confirmation"], true);
+        assert_eq!(plan["steps"][1]["choice"], false, "a phase confirmation is not a dialogue choice");
         assert_eq!(plan["steps"][1]["instructions"].as_array().unwrap().len(), 0);
     }
 

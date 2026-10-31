@@ -158,6 +158,17 @@ pub fn label(endings: &Value, id: &str) -> String {
         .to_string()
 }
 
+/// The game part a reviewed target belongs to (`base`, `ep1`, `bob`, ...). The plan carries this on
+/// each step so a caller can group the ending quests without guessing from a quest id or a title.
+pub fn pack(endings: &Value, id: &str) -> String {
+    endings
+        .get("targets")
+        .and_then(|x| x.get(id))
+        .map(target_pack)
+        .unwrap_or("")
+        .to_string()
+}
+
 fn step_title(ev: &Eval, id: &str) -> String {
     ev.byid
         .get(id)

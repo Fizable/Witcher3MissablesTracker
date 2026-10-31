@@ -30,8 +30,11 @@ question: **what do I do next in this save, and what can I still lose?**
   - **PROGRESS**: every quest in the game, including Hearts of Stone and Blood & Wine, in the game's
     own five sections: Main, Secondary, Contracts, Treasure Hunts, Gwent.
 - **Ending goals (optional)**: opt into a reviewed goal (for example, both Blood and Wine sisters
-  living) and the matching mission shows the exact line to say. Skip the picker and the screen stays
-  spoiler-free; no ending name or line is shown.
+  living) and the matching mission shows the exact line to say. **✦ ending quests** beside UP NEXT
+  then lists the reviewed quests for those goals, grouped by Main game, Hearts of Stone and Blood and
+  Wine, each part collapsible and the list scrollable. A quest with a reviewed choice is marked
+  CHOICE; its card stays a name, one short summary and that mark. Skip the picker and the screen
+  stays spoiler-free; no ending name, ending-quests button or line is shown.
 - **Can I do this now?**: search any quest and get a safe / careful / not-yet answer.
 - Click a quest for its description, current objective and any warning. The source-file trail is
   there too, but folded away under **Technical details** so it does not get in the way.

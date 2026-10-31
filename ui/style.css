@@ -369,6 +369,34 @@ a.src:hover { text-decoration: underline; }
 .windowtag.green { color: var(--green); border-color: rgba(87,171,90,.45); }
 .cardwindow-text { min-width: 0; overflow-wrap: anywhere; }
 
+/* ---------- ending quests: one small button, a short collapsible list ---------- */
+.ending-btn { color: var(--muted-gold); border-color: rgba(212,168,75,.35); flex: none; }
+.ending-btn:hover { color: var(--gold); border-color: var(--gold); }
+.ending { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(8,10,14,.72); }
+/* The box stays small and the list is the only scroll box: each part expands in place. */
+.ending-box { width: min(520px, 100%); max-height: min(78vh, 620px); display: flex; flex-direction: column; overflow: hidden; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 55px rgba(0,0,0,.65); }
+.ending-note { margin: 0; padding: 8px 14px 0; }
+.ending-msg { margin: 6px 0 2px; }
+.ending-groups { min-height: 0; overflow-y: auto; padding: 2px 14px 14px; }
+.ending-group { border-top: 1px solid var(--line); }
+.ending-group:first-child { border-top: 0; }
+.ending-head { display: flex; align-items: baseline; gap: 8px; padding: 10px 0 8px; cursor: pointer; list-style: none; }
+.ending-head::-webkit-details-marker { display: none; }
+.ending-head::before { content: "▾"; width: 12px; flex: none; color: var(--dim); }
+.ending-group:not([open]) > .ending-head::before { content: "▸"; }
+.ending-head:hover .ending-pack { color: var(--gold); }
+.ending-pack { font-weight: 650; }
+.ending-goals { flex: 1; min-width: 0; color: var(--dim); font-size: 11.5px; overflow-wrap: anywhere; }
+.ending-count { margin-left: auto; color: var(--dim); font-size: 11px; font-variant-numeric: tabular-nums; }
+.ending-list { padding: 0 0 8px 12px; }
+.ending-quest { padding: 7px 0; border-top: 1px solid rgba(44,49,60,.55); }
+.ending-quest:first-child { border-top: 0; }
+.eq-top { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.eq-mark { flex: none; color: var(--gold); font-size: 11px; }
+.ending-name { font-weight: 600; transition: color var(--t); }
+.ending-name:hover { color: var(--gold); }
+.ending-desc { margin: 2px 0 0 18px; overflow-wrap: anywhere; }
+
 /* ---------- narrow windows ---------- */
 @media (max-width: 520px) {
   .goalrow { flex-direction: column; }
@@ -376,6 +404,7 @@ a.src:hover { text-decoration: underline; }
   .cardwindow { flex-direction: column; gap: 2px; }
   .more { padding: 8px; }
   .more-box { max-height: 94vh; }
+  .ending { padding: 8px; }
 }
 @media (max-width: 430px) {
   .coverage-table { font-size: 10.5px; }
