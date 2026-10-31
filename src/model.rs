@@ -507,14 +507,11 @@ pub fn check_quest(rd: &RouteData, ev: &Eval, short_name: &str, state: &HashMap<
 
 // ------------------------------------------------------------------ JSON views for the UI
 
-/// DO NEXT order. The route order is not story order; this is the only place that decides what to
-/// look at first.
-///
-/// 1. the quest tracked in the game, 2. quests already in the log, 3. available quests, 4. available
-/// quests that carry a live cutoff (the caution chip). Gated, done, lost and unsafe steps never
-/// appear. Inside a group: nearest deadline (a live cutoff), then lowest suggested level, then the
-/// journal's own `order` as a tie-break. Gwent and treasure steps are section-only unless they are
-/// tracked or carry a cutoff.
+/// UP NEXT order. The queue is deliberately small: the quest tracked in the game, then the one
+/// next unblocked plan step. Other in-log quests stay in `MORE > PROGRESS`; a quest whose live
+/// window is in `NOW` is removed by the caller. Gated, done, lost and unsafe steps never appear.
+/// Inside the queue: nearest deadline (a live cutoff), then lowest suggested level, then the
+/// journal's own `order` as a tie-break.
 pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>, caution: &HashSet<usize>, next_plan: Option<&str>) -> Vec<usize> {
     let mut out: Vec<usize> = ev
         .todo
@@ -524,21 +521,15 @@ pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>,
         .filter(|&i| {
             let s = &ev.steps[i];
             let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
-            // UP NEXT is the play queue: what the save says is live, plus the one plan step that
-            // is next. A merely unlocked quest lives in MORE > PROGRESS.
-            is_tracked || s.frontier == "in_log" || next_plan == Some(s.n.id.as_str())
+            // UP NEXT answers "what do I do next?", not "what is in my log?". The log is the
+            // ledger in MORE > PROGRESS; only the tracked quest and the next plan step belong here.
+            is_tracked || next_plan == Some(s.n.id.as_str())
         })
         .collect();
     out.sort_by_key(|&i| {
         let s = &ev.steps[i];
         let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
-        let group = if is_tracked {
-            0
-        } else if s.frontier == "in_log" {
-            1
-        } else {
-            2
-        };
+        let group = if is_tracked { 0 } else { 1 };
         let deadline = if caution.contains(&i) { 0 } else { 1 };
         let level = s.n.lv.trim().parse::<i64>().ok();
         (group, deadline, level.is_none(), level.unwrap_or(0), s.n.order, i)
@@ -1422,7 +1413,7 @@ mod tests {
     }
 
     #[test]
-    fn do_next_is_tracked_then_in_log_then_available_then_caution() {
+    fn do_next_is_the_tracked_quest_or_the_next_plan_step() {
         let tracked = node("tracked", "20", &["tracked"], "side", 9, true);
         let active_low = node("active_low", "30", &["active_low"], "side", 9, true);
         let avail_l5 = node("avail_l5", "5", &["avail_l5"], "side", 2, true);
@@ -1443,6 +1434,7 @@ mod tests {
         let pos = |id: &str| ord.iter().position(|&i| ev.steps[i].n.id == id)
             .unwrap_or_else(|| panic!("{id} is not in DO NEXT: {:?}", ord.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>()));
         assert_eq!(pos("tracked"), 0, "the tracked quest comes first");
+        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "active_low"), "an in-log quest is not repeated in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "avail_l3"), "a merely unlocked quest is not in UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "caution"), "caution alone does not enter UP NEXT");
         assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gwent"), "an unopened Gwent quest is not in UP NEXT");

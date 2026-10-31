@@ -8,10 +8,10 @@ question: **what do I do next in this save, and what can I still lose?**
   quest or card window that is open now. Card windows that are still ahead are not warnings; they
   show as a small later-warning count and in **MORE > CARDS > LATER**. When nothing is at stake the
   band disappears.
-- **UP NEXT**: only what you can act on now - the quest you are tracking, quests already in your
-  log, and the plan step you are actually on. Future goal steps sit under one collapsed **PLAN
-  AHEAD** line; unlocked route steps that are not in your log stay in PROGRESS. A plan step and a
-  quest are one card, never two. The exact line appears only on the tracked goal step.
+- **UP NEXT**: the quest you are tracking and the one plan step that is next. Other quests in your
+  log stay in **MORE > PROGRESS**; a window already in NOW is not repeated. Future goal steps sit
+  under one collapsed **PLAN AHEAD** line. A plan step and a quest are one card, never two. The exact
+  line appears only on the tracked goal step.
 - **MORE**: one reference drawer, with tabs.
   - **STATUS**: your completion state, without pretending every branch fits in one save. Quests and
     cards are counted separately as done/owned, still possible, at risk, lost or unknown.

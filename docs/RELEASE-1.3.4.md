@@ -3,6 +3,10 @@
 Released: 2026-10-31
 Previous package: `dist/Witcher3MissablesTracker-1.3.3/` (left untouched)
 
+Superseded by 1.3.5: 1.3.4 still queued every in-log quest, so the statuettes remained in `UP NEXT`
+even when their only live action was a later turn-in. `docs/RELEASE-1.3.5.md` records the corrected
+queue. The rest of this page is the historical 1.3.4 record.
+
 1.3.3's package predated the band and surface work in this tree. 1.3.4 is the first package built
 from that work: the NOW band and UP NEXT are back on the main surface, the choice warning is a band
 row again, the no-save watch leak and the UI's second queue filter are gone, and search returns the

@@ -926,13 +926,13 @@ function renderPlanAhead(items) {
 }
 
 /**
- * UP NEXT is the play queue, not the route. It carries only what the save says is live: the tracked
- * quest, quests already in the log, and the one plan step that is current. Future goal steps go into
- * one collapsed PLAN AHEAD line; route steps that are merely unlocked stay in PROGRESS.
+ * UP NEXT is the play queue, not the route. It carries the tracked quest and the one plan step that
+ * is current. Other in-log quests stay in PROGRESS; a window already in NOW is not repeated. Future
+ * goal steps go into one collapsed PLAN AHEAD line.
  */
 function renderTodo(v) {
-  // The backend already decided the queue and its order: tracked + in-log + the one next plan
-  // step. PLAN AHEAD is the same plan minus the ids the queue carries, so the two cannot disagree.
+  // The backend decides the queue and its order: tracked + the one next plan step. PLAN AHEAD is
+  // the same plan minus the ids the queue carries, so the two cannot disagree.
   const ids = (v.todo || []).filter((id) => stepsById.has(id));
   const inQueue = new Set(ids);
   const tr = v.tracked, trackedSteps = new Set(tr ? tr.steps : []);

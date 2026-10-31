@@ -9,13 +9,13 @@ question: **what do I do next in this save, and what can I still lose?**
   cutoff that already passed is not a band row: it lives in **MORE > STATUS** and on the quest page.
   A card window that is still ahead is not a warning and never enters the band; it is a row in
   **MORE > CARDS > LATER**. When nothing is at stake the band disappears.
-- **UP NEXT**: only what you can act on now - the quest you are tracking, quests already in your
-  log, and the one plan step that is next. A quest whose turn-in window is open right now is not
-  repeated here: the NOW band already carries it with the NPC and the deadline (the statuettes in
-  Final Preparations are the case this was written for). Future goal steps sit under one collapsed **PLAN
-  AHEAD** line; unlocked route steps that are not in your log stay in PROGRESS. A plan step and a
-  quest are one card, never two. The exact line appears only on the tracked goal step, and turning
-  guidance off removes the line without removing the plan.
+- **UP NEXT**: the quest you are tracking and the one plan step that is next. Other quests in your
+  log stay in **MORE > PROGRESS**; the queue is not a second quest log. A quest whose turn-in window
+  is open right now is not repeated here: the NOW band already carries it with the NPC and the
+  deadline (the statuettes in Final Preparations are the case this was written for). Future goal
+  steps sit under one collapsed **PLAN AHEAD** line. A plan step and a quest are one card, never two.
+  The exact line appears only on the tracked goal step, and turning guidance off removes the line
+  without removing the plan.
 - **MORE**: the reference drawer, with tabs.
   - **STATUS**: quest and card completion, split into done/owned, still possible, at risk, lost and
     unknown - never one misleading percentage.
@@ -168,7 +168,7 @@ To see what the app itself computed, run the exe with `--dump out.json` (state, 
 section), `--view out.json` (exactly what the window is handed), `--detail <quest id> out.json`
 (one mission, including any goal line), `--cards out.json`, `--targets out.json`, `--outcomes
 out.json` or `--plan out.json [id,id]`; all exit without opening a window. `--outcomes` and `--plan`
-are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.4.md` records what was
+are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.5.md` records what was
 verified for this release and what is still open; `docs/RELEASE-1.0.0.md` is the historical 1.0
 record.
 

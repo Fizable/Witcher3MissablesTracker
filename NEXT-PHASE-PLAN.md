@@ -1,7 +1,8 @@
 # Next Phase Plan — Witcher 3 Missables Tracker
 
-Status: 1.3.4 released locally 2026-10-31. Phases 0-5 are complete against the tree; section 11.5
-records the re-run acceptance checks, the artifact and the remaining unreachable product states.
+Status: 1.3.5 released locally 2026-10-31. Sections 11.5-11.6 record the re-run acceptance checks,
+the UP NEXT simplification, the artifact and the remaining unreachable product states. Where earlier
+sections say in-log quests belong in UP NEXT, section 11.6 supersedes them.
 Owner: the next coding agent.
 Workspace: `C:\Steam\steamapps\common\The Witcher 3\w3tracker` (Rust + Tauri 2, version in `Cargo.toml`).
 Scope: the `w3tracker/` project only. The game install and the saves are read-only. This plan is the source of truth; the mission prompt in chat is the entry point.
@@ -59,7 +60,7 @@ These are decisions the user already made. Do not re-litigate them.
 | Area | Decision |
 |---|---|
 | Invariant layer | Payload first. `get_view` must not emit violating data; the UI may simplify but must never be what makes an invariant true. |
-| `UP NEXT` scope | `view.todo` = tracked quest + in-log quests + the **next** unblocked plan step. Available quests live in `MORE > PROGRESS`. |
+| `UP NEXT` scope | `view.todo` = the tracked quest + the **next** unblocked plan step. Other in-log quests live in `MORE > PROGRESS`; a window already in `NOW` is not repeated. Superseded the earlier in-log scope on 2026-10-31 after the user rejected the 61-row queue. |
 | Tick semantics | A tick is a note. The journal wins: card, matrix and warning stay journal-true; show `tick disagrees`. Do not silently reinterpret existing ticks as done; preserve them as notes and show what the save says. |
 | Guidance off | The plan survives; only exact `instructions` are gated. PLAN AHEAD, step titles and goal chips remain. |
 | Card band rule | Only a card the player can act on now belongs in `top`; a window whose closing quest has not started is ledger-only. Never-missable cards never warn. |
@@ -232,7 +233,7 @@ The save exposes facts (`main.rs:62`, `save.rs:223`), so the runtime can evaluat
 Update `docs/DESIGN.md`, `README.md`, `docs/BACKEND_CONTRACT.md`, `docs/CARD-WINDOWS.md`, and `docs/TARGET-SCHEMA.md` with:
 
 - §2.3 card wording: "a card window you can act on now, or one that has closed"; §2.4 choice warning as a NOW item; "Order" only when finishing A actually fails B.
-- §5 `UP NEXT` payload = tracked + in-log + next plan step; available quests in PROGRESS.
+- §5 `UP NEXT` payload = tracked + next plan step; other in-log quests and available quests in PROGRESS (superseded 2026-10-31).
 - §5 `NOW` must never show a card before the player can act on it, or pad the band.
 - §6.2 tick truth table; §6.5 card state model (`not_yet/open/check/lost/owned/unknown/none`); §6.3 payload spoiler test; §6 layer/test/last-verified columns.
 - §4 ruling on the PROGRESS bar; §9 six scripted first-run scenarios at 480×820.
@@ -244,14 +245,14 @@ Acceptance: every §5 row has a payload/DOM/test/last-verified entry; no code be
 
 ### Phase 1 — Make the payload true (backend + minimal UI)
 
-1. **`view.todo`**: tracked + in-log + the next unblocked plan step. Files: `src/model.rs` todo/evaluate, `src/main.rs` view. Tests for exact membership on the three saves; remove the UI filter at `ui/app.js:919-921`.
+1. **`view.todo`**: tracked + the next unblocked plan step; other in-log quests stay in PROGRESS. Files: `src/model.rs` todo/evaluate, `src/main.rs` view. Tests for exact membership on the three saves; remove the UI filter at `ui/app.js:919-921`.
 2. **Card top**: `cards::top_items` excludes `ahead`; only `open`/`check`/`lost`; add `kind: "card"` to the contract; remove the UI strip at `ui/app.js:731-732`; move the later count to CARDS.
 3. **Tick note-only**: `node_status`/`classify`/`attach_derived`; keep the journal state, matrix state and watch; show `tick disagrees`; tests for `Not started`/`Active`/`Done`/`Failed`/`Assumed`; update README. Handle existing tick data as notes.
 4. **Guidance off**: plan survives; `target.guidance` gates `instructions` only; update `loadPlan`/`planMatchesView`; tests.
 5. **Search/detail**: one save-aware verdict; `check_quest` uses `live_cutoff`; `detail_json` uses the same path; test `mq3012noblestatuette` (safe vs watch) and a Done/Failed case.
 6. **`--dump` parity**: use the same top builder; test dump top = view top.
 
-Acceptance: clean top has no ahead cards; earliest top is empty (correct silence); newest top keeps the active Iorveth only; `todo` is tracked + in-log + next; tick truth table passes; guidance off yields 7 plan steps and 0 instructions; detail/search agree; dump=view; 47+ tests pass; no new HTTP or save writes.
+Acceptance: clean top has no ahead cards; earliest top is empty (correct silence); newest top keeps the active Iorveth only; `todo` is tracked + next plan step; tick truth table passes; guidance off yields 7 plan steps and 0 instructions; detail/search agree; dump=view; 47+ tests pass; no new HTTP or save writes.
 
 ### Phase 2 — Source availability (the data expansion)
 
@@ -334,7 +335,7 @@ Check at least:
 - 412 = 403 + 9; Gwent 11; sections 96+183+35+87+11 = 412.
 - Matrix states sum to 412 on every save.
 - `top` has no `MISSABLE CARD`; no `not_yet` card; only `open`/`check`/`lost` plus the three quest warning classes.
-- `todo` is exactly tracked + in-log + the next plan step; no available ids, no all-five plan-ahead ids.
+- `todo` is exactly tracked + the next plan step; other in-log ids and all available ids stay out; no all-five plan-ahead ids.
 - Clean payload: `target: null`, 0 goal steps, 0 tradeoffs, detail `guidance: null`.
 - Detail/search agree on `mq3012noblestatuette` and on a Done/Failed case.
 - `--dump` top equals `--view` top.
@@ -788,6 +789,45 @@ and the release note. Native WebView automation was unavailable; the real `ui/` 
 Chromium at 480x820 from release-binary payloads, which is recorded as the limitation rather than
 claimed as a packaged-window run.
 
+### 11.6 UP NEXT simplification (2026-10-31)
+
+The 1.3.4 release still used the old `tracked + in-log + next plan` queue. On the newest save that
+meant one tracked card plus 60 in-log quests, including both statuettes whose Triss turn-in was only
+`later`; on the median save the statuettes were both in the band and in UP NEXT. The user rejected
+that: UP NEXT was meant to shrink, and the statuettes were the visible proof it had not.
+
+**Change.** `model::todo_order` now admits only the tracked quest and the one next unblocked plan
+step. Every other in-log quest stays in PROGRESS; the existing open-window guard still prevents a
+tracked quest whose warning is already in NOW from being repeated. The UI already displays
+`view.todo` as-is, so no second filter was added. README, `docs/DESIGN.md` section 10.9 and
+`docs/BACKEND_CONTRACT.md` now state the smaller queue. The test was renamed to
+`do_next_is_the_tracked_quest_or_the_next_plan_step` and asserts an in-log, non-tracked quest is not
+in the queue.
+
+**Payload runs on copied saves in temporary `APPDATA`.** `view.todo` is 0 clean, 1 earliest
+(`q001beggining`), 1 median (`q302mafia`), 1 newest (`q401_phylactery`), and 2 on the goal profile
+(`q401_phylactery`, `q110postbattle`). No profile carries a statuette id in `todo`; the median `top`
+still carries `DO THIS NOW` "You still need the soldier statuette". `py .next-phase/release/run.py`
+printed `PASS payload matrix: 7 profiles, 412 steps each, dump=view` with top/todo/cards
+`0/0/224, 0/1/27/196/1, 2/1/114/109/1, 1/1/129/94/1`, and the goal plan still has 7 steps, 4
+instruction rows, and 7 steps / 0 instructions / 4 chips with guidance off.
+
+**DOM at 480x820.** The real `ui/` was served on loopback from a mock built by `tools/mockui.py`
+from the new release binary. The newest payload showed one UP NEXT card (`The Final Trial`), no
+statuette text in the queue, no toggle, and no horizontal overflow. The median payload showed the
+statuette warning in NOW and one UP NEXT card (`Get Junior`), again with no statuette in the queue.
+The goal payload showed two cards: `The Final Trial` and `Blood on the Battlefield`
+(`q110postbattle`). `window.__errors` was empty and `scrollWidth == clientWidth == 480` in all three.
+
+**Build and artifact.** `cargo test --locked`: 67 passed, 0 failed. `cargo build --release`:
+warning-free. `node --check ui/app.js`: clean. `package.ps1` built 1.3.5 without touching 1.3.4.
+The packaged exe is SHA-256 `a189fa75df22b5005e72392794300952c510aa33e608bd9e511323e8069d78dd`, identical
+to the root copy and `target/release`; the zip is
+`804a18a8513620b3e45c6b980328d0fe79fe9d37d31ee8bac55f26ffc21a20db`. The packaged WebView, read
+through WebView2's debugging port on the newest copied profile, showed one UP NEXT card, no statuette
+text in the queue, 480-wide layout and the new legend. No save, real profile or game file was written.
+`docs/RELEASE-1.3.5.md` records the artifact and the remaining limitations.
+
 ---
 
 ## 12. Decision log
@@ -797,7 +837,8 @@ Record new decisions here. Do not silently change a locked decision.
 | Date | Decision | Why |
 |---|---|---|
 | 2026-10-30 | Payload first; journal truth; completionist-first; next plan step only; card source model; Dijkstra is the Baron card; deck definition is not ownership. | The user's answers and the scripts. |
-| 2026-10-30 | `view.todo` is computed in the backend as tracked + in-log + the first ahead, unlocked plan step; the UI no longer re-filters it. | Two filters were disagreeing; the payload must be the one definition. |
+| 2026-10-30 | `view.todo` is computed in the backend as tracked + in-log + the first ahead, unlocked plan step; the UI no longer re-filters it. Superseded 2026-10-31: the in-log part is gone; see the next row. | Two filters were disagreeing; the payload must be the one definition. |
+| 2026-10-31 | `view.todo` is the tracked quest + the next plan step only. Other in-log quests stay in PROGRESS; a window already in NOW is not repeated. | The 1.3.4 screen listed 61 in-log quests and repeated the statuettes after their turn-in was no longer actionable; the user rejected that queue. |
 | 2026-10-30 | A tick on a file-derived step is a note for every journal state, including Not started; only manual rows use a tick as status. | The old code turned a Not started tick into the card Done while the matrix said unknown and the watch vanished. |
 | 2026-10-30 | The NOW band carries no later-card count. Ahead windows live only in MORE > CARDS > LATER. | The band is the product; a count of things you cannot act on padded it. |
 | 2026-10-30 | `goal_steps` has no guidance switch; only `instructions` are gated. | Turning guidance off deleted the plan, which is a reference surface, not a line. |

@@ -40,9 +40,9 @@ UI calls `window.__TAURI__.core.invoke(cmd, args)` and listens with
   },
   "sections": ["Main", "Secondary", "Contracts", "Treasure Hunts", "Gwent"],
   "steps": [ Step, ... ],                       // all 412 route nodes, section then level then order
-  "todo": ["q205lofoten", ...],                 // ordered ids for UP NEXT: the tracked quest, quests already in the
-                                                // log, and the one next unblocked plan step. A merely unlocked
-                                                // quest is not here; it lives in MORE > PROGRESS.
+  "todo": ["q205lofoten", ...],                 // ordered ids for UP NEXT: the tracked quest and the one next
+                                                // unblocked plan step. Other in-log quests and a window already
+                                                // in NOW are not repeated; they live in MORE > PROGRESS / NOW.
   "tracked": null | {
     "short": "q301dreamer", "display": "Pyres of Novigrad", "status": "Active",
     "steps": ["q301dreamer"],

@@ -1,6 +1,6 @@
 [package]
 name = "witcher3-missables-tracker"
-version = "1.3.4"
+version = "1.3.5"
 description = "Witcher 3 Missables Tracker: reads your save (read-only), warns before you lose a quest, and tells you what to do next"
 edition = "2021"
 

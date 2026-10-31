@@ -62,7 +62,7 @@ Every screen answers one question. If it stops answering that, it is broken even
 | surface | the question it answers | backend | must never |
 |---|---|---|---|
 | `NOW` band | what can I act on, right now? | `get_view.top` | show a row that cannot be acted on now, a settled loss, or an ahead card window; pad itself to look busy |
-| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | list future goal steps alongside actionable ones; re-filter the payload's queue in the UI |
+| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | repeat an in-log quest that is neither the tracked quest nor the next plan step; list future goal steps alongside actionable ones; re-filter the payload's queue in the UI |
 | `PLAN AHEAD` | what is still coming in my chosen run? | `view.target`, `get_plan` | compete with `UP NEXT` as a second to-do list |
 | quest detail | what is this quest, and am I safe to do it? | `get_detail` | put choice text in the default view |
 | `can I do this now?` search | is this quest safe yet? | `search`, `check_quest` | answer without naming the blocking quest |
@@ -186,7 +186,7 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 | surface | payload | positive test | negative test | last verified |
 |---|---|---|---|---|
 | NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `ahead` card or quest window; no instruction key | 2026-10-30 |
-| UP NEXT | `view.todo` | tracked + in-log + next plan step only | clean: 0 ids; no available quest; no done/failed id | 2026-10-30 |
+| UP NEXT | `view.todo` | tracked + next plan step only | clean: 0 ids; no other in-log quest; no available quest; no open NOW row; no done/failed id | 2026-10-31 |
 | PLAN AHEAD | `view.target`, `get_plan` | plan survives guidance off; instructions gone | no plan with an empty target | 2026-10-30 |
 | quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`, `info` verdict, no live watch; a lost window keeps its journal verdict | 2026-10-30 |
 | search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label; no save returns `info`, not `safe` | 2026-10-30 |
@@ -214,8 +214,8 @@ rule and 13 mutation tests prove the checker fails when the rule is removed.
 
 1. **No save.** The band is hidden; UP NEXT says "Load a save to see what is next."; the folder
    panel opens once with the saves path and a Browse action.
-2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest and in-log
-   quests only. MORE > CARDS > LATER lists the ahead windows.
+2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest and the next
+   plan step only; other in-log quests stay in PROGRESS. MORE > CARDS > LATER lists the ahead windows.
 3. **Cutoff passed.** The band stays hidden, because the action is gone; MORE > STATUS shows
    `CUTOFF PASSED - CHECK NOW` with its headline and next step, and the same warning is on the quest
    page and in search. The corpus has no save in this state, so the row is exercised as a fixture in
@@ -488,6 +488,32 @@ unowned Dijkstra past the Baron line, an Active ending-relevant quest, or a pass
 Those rows are proved by shipped-data unit tests or fixture payloads, not by a real save. The native
 Tauri WebView was not automated; the real `ui/` was driven in Chromium at 480x820 with a mock built
 from the release binary's payloads.
+
+### 10.9 UP NEXT simplification (2026-10-31)
+
+The 1.3.4 window still listed every in-log quest in UP NEXT, so The Nobleman Statuette and The
+Soldier Statuette appeared there even when their only live action was a later Triss turn-in. That
+made the queue a second quest log and contradicted the README's "only what you can act on now".
+
+The rule is now: `view.todo` is the tracked quest plus the single next unblocked plan step. Other
+in-log quests stay in `MORE > PROGRESS`; a quest whose open window is already a NOW row is removed by
+the remaining guard. A tracked quest still enters even when its journal has not opened, and the one
+next plan step enters by name; nothing else does.
+
+| copied profile | `view.todo` | queue content | statuettes in queue |
+|---|---|---|---|
+| clean | 0 | none | no |
+| earliest | 1 | tracked `q001beggining` | no |
+| median | 1 | tracked `q302mafia`; band still says "You still need the soldier statuette" | no |
+| newest | 1 | tracked `q401_phylactery` | no |
+| goal (newest) | 2 | tracked + next plan step `q110postbattle` | no |
+
+At 480x820 the real `ui/` rendered one tracked card on the newest profile, one tracked card plus the
+statuette warning in NOW on the median profile, and two cards on the goal profile. The page stayed
+480 wide with no horizontal overflow and no console errors. The packaged 1.3.5 WebView showed the
+same one-card queue on the newest copied save, read through WebView2's debugging port. `--dump`
+matched `--view` on `todo` for all seven profiles. `cargo test --locked` reports 67 passed; `cargo
+build --release` is warning-free; `node --check ui/app.js` passes.
 
 ## 11. How an audit uses this page
 
