@@ -197,6 +197,24 @@ def window_error(idx, w):
     at = w.get("closes_at", "")
     if not affects or closer not in idx["quests"]:
         return "the window names no affected quest or no closer"
+    if w.get("mechanism") == "dialogue_off":
+        # The step needs an NPC's everyday chat, and the closer switches that chat off for good. The
+        # journal stays Active, so the evidence is the dialogue loop and its stop fact, not a Failure input.
+        if "#" not in at:
+            return "a dialogue_off window must name the journal phase where it closes"
+        stem, phase = at.split("#", 1)
+        if stem != closer:
+            return f"closes_at {at} is not a phase of {closer}"
+        names = {p.get("name") for p in (idx["journals"].get(closer) or {}).get("phases", [])}
+        if phase not in names:
+            return f"{phase} is not a phase in {closer}.journal"
+        if not w.get("files"):
+            return "the dialogue_off window names no file evidence"
+        if not w.get("closed_headline"):
+            return "the dialogue_off window does not say what is true once the NPC stops talking"
+        import default_dialogues
+        err, _ = default_dialogues.window_evidence(idx, w)
+        return err
     if w.get("mechanism") == "availability":
         # An availability window is not a journal failure: the NPC leaves and the chance to act
         # closes, while the quest stays Active. It still has to name a real phase of a real quest.
@@ -274,7 +292,7 @@ def resolve_window(idx, name, w):
     if w.get("turn_in") is not None:
         out["turn_in"] = w["turn_in"]
     for k in ("gap_headline", "gap_action", "opens_at", "not_yet_headline", "not_yet_action",
-              "dialogue", "close_gate"):
+              "dialogue", "close_gate", "step", "closed_headline", "closed_action"):
         if w.get(k):
             out[k] = w[k]
     return out
@@ -436,6 +454,9 @@ def build():
                 keep_why = (f"an availability window: {resolved['closes_at']} is a phase of "
                             f"{resolved['closed_by'][0]}.journal where the NPC leaves; the affected quest "
                             "is not failed, so this window never reports a loss")
+            elif resolved.get("mechanism") == "dialogue_off":
+                keep_why = (f"a default-dialogue window: {resolved['closed_by'][0]} sets {resolved['close_gate']}, "
+                            f"which stops the chat {resolved['step']} needs, and no later story point starts it again")
             else:
                 keep_why = ("the affected journal entry has a connected Failure input gated "
                             f"by {resolved['closed_by'][0]}.journal, and {resolved['closes_at']} "

@@ -578,6 +578,15 @@ pub fn quest_status(state: &HashMap<String, String>, q: &str) -> Option<String> 
     Some(if done { "Done" } else if failed { "Failed" } else if active { "Active" } else { "Not started" }.to_string())
 }
 
+/// One journal entry's status, "<stem>#<entry name>" as the save reader writes it. The entry name keeps the
+/// game's own case, so an exact match is tried first and a case-insensitive one after.
+fn entry_status(state: &HashMap<String, String>, key: &str) -> Option<String> {
+    if let Some(s) = state.get(key) {
+        return Some(s.clone());
+    }
+    state.iter().find(|(k, _)| k.eq_ignore_ascii_case(key)).map(|(_, v)| v.clone())
+}
+
 /// a list of quest stems under `key`, whether the data wrote it as a list or as the single stem it usually is
 fn qlist(v: &Value, key: &str) -> Vec<String> {
     match v.get(key) {
@@ -683,6 +692,26 @@ pub fn live_cutoff(item: &mut Value, state: &HashMap<String, String>, done_q: &H
     live_cutoff_facts(item, state, done_q, ticked_q, &HashSet::new())
 }
 
+/// Drop rows that a closed default-dialogue window has made untrue. Once Vesemir has stopped talking
+/// about the sword, the council row's "you are inside the battle, finish it first" is advice the game
+/// no longer allows, so only the closed window and any real loss stay for that quest.
+pub fn drop_superseded(list: &mut Vec<Value>) {
+    let gone: HashSet<String> = list
+        .iter()
+        .filter(|w| w.get("mechanism").and_then(|x| x.as_str()) == Some("dialogue_off")
+            && w.get("live").and_then(|x| x.as_str()) == Some("passed"))
+        .flat_map(|w| qlist(w, "affected"))
+        .collect();
+    if gone.is_empty() {
+        return;
+    }
+    list.retain(|w| {
+        let advice = matches!(w.get("live").and_then(|x| x.as_str()), Some("inside" | "open" | "ahead" | "check"));
+        let own = w.get("mechanism").and_then(|x| x.as_str()) == Some("dialogue_off");
+        own || !advice || !qlist(w, "affected").iter().any(|a| gone.contains(a))
+    });
+}
+
 /// A window can open later than its journal phase: the turn-in dialogue is the game's own graph,
 /// and Triss tests `q310_philippa_rescued` before she will discuss the statuettes, however long
 /// Final Preparations has been running. An unmet opening gate is a note, never a "do this now".
@@ -772,6 +801,37 @@ pub fn live_cutoff_facts(item: &mut Value, state: &HashMap<String, String>, done
     if let Some(n) = tick_note(state, ticked_q, &named, &name_list) {
         saved.push(' ');
         saved.push_str(&n);
+    }
+    // A default-dialogue window: one step runs through an NPC's everyday chat, and the closer switches
+    // that chat off for good. Berengar's Blade is this shape: Vesemir stops talking when the battle
+    // starts, while the journal only fails the quest at the council. The window protects that one step,
+    // so it has nothing left to say once the step is done or the journal has already failed the quest.
+    if item.get("mechanism").and_then(|x| x.as_str()) == Some("dialogue_off") {
+        if !lost.is_empty() {
+            return false;
+        }
+        let step = item.get("step").and_then(|x| x.as_str()).unwrap_or("");
+        if !step.is_empty() && entry_status(state, step).as_deref() == Some("Done") {
+            return false;
+        }
+        if done.iter().chain(running.iter()).next().is_some() {
+            // no next chance and no journal failure yet: "passed", never "lost", until the journal says so
+            put(item, "live", json!("passed"));
+            put(item, "level", json!("stop"));
+            put(item, "tag", json!("CUTOFF PASSED - CHECK NOW"));
+            if let Some(h) = item.get("closed_headline").and_then(|x| x.as_str()).map(String::from) {
+                put(item, "headline", json!(h));
+            }
+            if let Some(a) = item.get("closed_action").and_then(|x| x.as_str()).map(String::from) {
+                put(item, "action", json!(a));
+            }
+            put(item, "live_note", json!(saved));
+            return true;
+        }
+        put(item, "live", json!("ahead"));
+        put(item, "tag", json!("CUTOFF AHEAD - GAME FILES"));
+        put(item, "live_note", json!(saved));
+        return true;
     }
     // An availability window is not a journal failure: when it closes the chance to act is gone
     // until the next window, and the quest stays Active. Triss leaving Novigrad is that shape.
@@ -1279,6 +1339,91 @@ mod tests {
             assert_eq!(neither["action"], neither_action, "{id}");
             assert_eq!(neither["live_note"], "The save has neither item.");
         }
+    }
+
+    /// Berengar's Blade, as the shipped data has it: Vesemir's chat is the only way on, and the battle
+    /// switches it off long before the journal fails the quest at the council.
+    fn berengar_watch(id: &str) -> Value {
+        let data: Value = serde_json::from_str(include_str!("../data/derived.json")).unwrap();
+        let watch = data["steps"]["mq4005sword"]["watch"].as_array().unwrap();
+        watch.iter().find(|w| w["id"] == id).cloned().unwrap_or_else(|| panic!("no {id} on mq4005sword"))
+    }
+
+    #[test]
+    fn berengar_closes_when_vesemir_stops_talking_not_at_the_council() {
+        let read = |pairs: &[(&str, &str)]| {
+            let mut item = berengar_watch("berengar_vesemir_before_battle");
+            let shown = live_cutoff(&mut item, &state(pairs), &HashSet::new(), &HashSet::new());
+            (shown, item)
+        };
+        let (shown, ahead) = read(&[("mq4005sword", "Active"), ("mq4005sword#Talk to Vesemir", "Active")]);
+        assert!(shown);
+        assert_eq!(ahead["live"], "ahead");
+        assert!(ahead["headline"].as_str().unwrap().contains("before The Isle of Mists"), "{}", ahead["headline"]);
+
+        // the battle has started and Vesemir was never asked: the quest cannot be finished, but only the
+        // journal may call it lost
+        for pairs in [
+            &[("q403battle#Council", "Active"), ("mq4005sword", "Active"), ("mq4005sword#Talk to Vesemir", "Active")][..],
+            &[("q403battle", "Active")][..],
+            &[("q403battle", "Done"), ("mq4005sword", "Active")][..],
+        ] {
+            let (shown, gone) = read(pairs);
+            assert!(shown, "{pairs:?}");
+            assert_eq!(gone["live"], "passed", "{pairs:?}");
+            assert_eq!(gone["level"], "stop");
+            let h = gone["headline"].as_str().unwrap();
+            assert!(h.contains("can no longer be finished"), "{h}");
+            assert!(!h.to_lowercase().contains("lost"), "{h}");
+        }
+
+        // asked in time: the chat is no longer needed, and the council cutoff is the one that stands
+        let (shown, _) = read(&[("q403battle", "Active"), ("mq4005sword", "Active"), ("mq4005sword#Talk to Vesemir", "Done")]);
+        assert!(!shown, "the Vesemir step is done");
+        let mut council = berengar_watch("db_q403battle");
+        let st = state(&[("q403battle", "Active"), ("mq4005sword", "Active"), ("mq4005sword#Talk to Vesemir", "Done")]);
+        assert!(live_cutoff(&mut council, &st, &HashSet::new(), &HashSet::new()));
+        assert_eq!(council["live"], "inside");
+
+        // the journal has failed it: the generated council row says so, this one stays quiet
+        let (shown, _) = read(&[("q403battle", "Done"), ("mq4005sword", "Failed")]);
+        assert!(!shown);
+    }
+
+    #[test]
+    fn no_surface_says_finish_berengar_once_vesemir_has_stopped_talking() {
+        let read = |pairs: &[(&str, &str)]| {
+            let st = state(pairs);
+            let mut list = vec![berengar_watch("berengar_vesemir_before_battle"), berengar_watch("db_q403battle")];
+            list.retain_mut(|w| live_warning_facts(w, &st, &HashMap::new(), &HashSet::new(), &HashSet::new(), &HashSet::new()));
+            drop_superseded(&mut list);
+            list
+        };
+        // the user's case: picked up during the battle, before the council
+        let list = read(&[("q403battle", "Active"), ("mq4005sword", "Active"), ("mq4005sword#Talk to Vesemir", "Active")]);
+        let ids: Vec<&str> = list.iter().filter_map(|w| w["id"].as_str()).collect();
+        assert_eq!(ids, ["berengar_vesemir_before_battle"]);
+        assert!(!list[0]["headline"].as_str().unwrap().contains("finish it first"));
+        let action = list[0]["action"].as_str().unwrap();
+        assert!(!action.starts_with("The game"), "the action is read as 'Do this first: ...': {action}");
+
+        // asked in time: the council row is the right advice again
+        let list = read(&[("q403battle", "Active"), ("mq4005sword", "Active"), ("mq4005sword#Talk to Vesemir", "Done")]);
+        let ids: Vec<&str> = list.iter().filter_map(|w| w["id"].as_str()).collect();
+        assert_eq!(ids, ["db_q403battle"]);
+        assert_eq!(list[0]["live"], "inside");
+    }
+
+    #[test]
+    fn the_vesemir_window_comes_before_the_council_row_on_the_quest_page() {
+        // the page shows the first of the strongest rows; with the battle running both rank the same, and the
+        // Vesemir row is the true one ("finish it first" is no longer possible once he has stopped talking)
+        let data: Value = serde_json::from_str(include_str!("../data/derived.json")).unwrap();
+        let ids: Vec<&str> = data["steps"]["mq4005sword"]["watch"].as_array().unwrap()
+            .iter().filter_map(|w| w["id"].as_str()).collect();
+        let v = ids.iter().position(|i| *i == "berengar_vesemir_before_battle").expect("Vesemir window shipped");
+        let c = ids.iter().position(|i| *i == "db_q403battle").expect("council cutoff kept");
+        assert!(v < c, "{ids:?}");
     }
 
     #[test]

@@ -981,6 +981,7 @@ impl Inner {
                 list.clear();
             } else {
                 list.retain_mut(|w| self.read_warning(w, done_q));
+                model::drop_superseded(list);
                 // An ahead window is reference data, not a warning on the quest card: it stays out
                 // of the payload until the closing quest is in the log and the turn-in is possible.
                 list.retain(|w| w.get("live").and_then(|x| x.as_str()) != Some("ahead"));
@@ -1011,6 +1012,7 @@ impl Inner {
         let mut list = d.get("watch")?.as_array()?.clone();
         let done_q = self.done_quests(ev);
         list.retain_mut(|w| self.read_warning(w, &done_q));
+        model::drop_superseded(&mut list);
         // the page shows the strongest live row: a loss beats an open window, which beats the
         // note that the window has closed
         let rank = |w: &Value| match w.get("live").and_then(|x| x.as_str()) {

@@ -14,7 +14,9 @@ journal entries in category 'quest'):
                              does not write the deciding fact itself (fact_ops set/add owned by B:
                              that is B's own bookkeeping, not a cutoff)
   reviewed                   a pair that a reviewed item in data/cutoffs.json already covers
-                             (B in affects, A in closed_by) is dropped; the reviewed item wins
+                             (B in affects, A in closed_by) is dropped; the reviewed item wins.
+                             A dialogue_off window covers only one step's NPC chat, not the journal
+                             failure, so it never drops the generated pair
 
 Run:  py tools/gamedb/export_cutoffs.py            write both files and print a summary
       py tools/gamedb/export_cutoffs.py --explain q402ciri
@@ -95,6 +97,8 @@ def gather(con):
     review = json.loads(CUTOFFS.read_text(encoding="utf-8"))
     covered = set()
     for it in review.get("items", []) + review.get("windows", []):
+        if it.get("mechanism") == "dialogue_off":
+            continue  # Berengar's Blade: Vesemir stops talking at the battle, the journal fails at the council
         for b in it["affects"]:
             for a in it["closed_by"]:
                 covered.add((b.lower(), a.lower()))

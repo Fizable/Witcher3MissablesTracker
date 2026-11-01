@@ -638,6 +638,11 @@
       "family": "window:triss_statuettes_before_now_or_never",
       "decision": "keep",
       "why": "an availability window: q309mages#To Triss is a phase of q309mages.journal where the NPC leaves; the affected quest is not failed, so this window never reports a loss"
+    },
+    {
+      "family": "window:berengar_vesemir_before_battle",
+      "decision": "keep",
+      "why": "a default-dialogue window: q403battle sets vesemir_dd_stop, which stops the chat mq4005sword#Talk to Vesemir needs, and no later story point starts it again"
     }
   ],
   "items": [
@@ -902,6 +907,59 @@
           "block": 714
         }
       ]
+    },
+    {
+      "id": "berengar_vesemir_before_battle",
+      "level": "stop",
+      "mechanism": "dialogue_off",
+      "resource": "",
+      "community": "",
+      "community_phases": [],
+      "affects": [
+        "mq4005sword"
+      ],
+      "affected_titles": [
+        "Berengar's Blade"
+      ],
+      "closed_by": [
+        "q403battle"
+      ],
+      "closed_by_titles": [
+        "The Battle of Kaer Morhen"
+      ],
+      "closes_at": "q403battle#Council",
+      "closes_at_title": "the start of The Battle of Kaer Morhen",
+      "binding": "q403battle",
+      "binding_title": "The Battle of Kaer Morhen",
+      "action": "Read Berengar's notes in Kaer Morhen and talk to Vesemir about the sword before you sail to the Isle of Mists",
+      "headline": "Talk to Vesemir about Berengar's sword before The Isle of Mists",
+      "why": "Berengar's Blade goes on only through Vesemir: mq4005_sword.w2phase #72 'Vesemir about sword' is a context dialogue hung on vesemir_default.w2scene, and it is the only way to the boat, the cave and the chort (#77 onward). That scene plays only in the loop quest_npcs_default_dialogues.w2phase #3960, which runs after vesemir_dd_start and stops on vesemir_dd_stop. The Battle of Kaer Morhen starts its Council and Supporters phases together, and the first block of Supporters is 'Switch Off Default Dialogs', which sets vesemir_dd_stop. Every vesemir_dd_start setter is in the prologue or the first Kaer Morhen visit, so the chat never comes back. The battle starts as soon as the Isle of Mists ends, so the last chance to ask Vesemir is before you sail there. The journal itself only fails the quest later, when q403_council is set.",
+      "files": [
+        "quests\\minor_quests\\kaer_morhen\\mq4005_sword.w2phase #72 CQuestContextDialogBlock 'Vesemir about sword' has targetScene quests\\main_npcs\\default_dialogues\u000besemir_default.w2scene; its output feeds #77 'Show boat', the only way on to the river, the cave and the chort",
+        "quests\\quest_npcs_default_dialogues.w2phase #3960 CQuestInteractionDialogBlock plays vesemir_default.w2scene; #3999 pauses on vesemir_dd_start before the loop, #3978 pauses on vesemir_dd_stop and ends it",
+        "quests\\part_2\\q403_battle.w2phase: the phase input #22 starts #18 Council and #26 Supporters together; Supporters' input #2428 goes straight to #31 'Switch Off Default Dialogs', whose #2440 sets vesemir_dd_stop (with the Lambert, Eskel, Triss, Yennefer, Ciri, Keira, Zoltan, Roche, Ves, Hjalmar and Mousesack stops)",
+        "quests\\part_2\\quest_files\\q403_battle\\phases\\q403_supporters.w2phase #2784 sets vesemir_dd_stop again",
+        "vesemir_dd_start is set only in q001_beginning.w2phase, q002_emhyr.w2phase, q401_konsylium.w2phase and q401_persistent.w2phase (at its entry); py tools/default_dialogues.py check verifies this against every phase file",
+        "gameplay\\journal\\quests\\q403battle.journal is The Battle of Kaer Morhen; its first phase is Council ('Enter Kaer Morhen keep and begin the council.')"
+      ],
+      "caveats": [
+        "No save in the corpus has Berengar's Blade started, so the save history cannot confirm the window; the default-dialogue switch in the battle's own graph is the evidence.",
+        "Once Vesemir has been asked, this window is done; the rest of the quest stays possible until the council, which the generated q403_council cutoff covers.",
+        "After the window the journal still says Active until the council; the app says the quest can no longer be finished, not that it is lost, until the journal fails it."
+      ],
+      "event_name": "The Isle of Mists",
+      "evidence": "files",
+      "saves": {},
+      "resources": [],
+      "dialogue": {
+        "file": "quests\\minor_quests\\kaer_morhen\\mq4005_sword.w2phase",
+        "block": 72,
+        "class": "CQuestContextDialogBlock"
+      },
+      "close_gate": "vesemir_dd_stop",
+      "step": "mq4005sword#Talk to Vesemir",
+      "closed_headline": "Vesemir no longer talks about Berengar's sword, so Berengar's Blade can no longer be finished",
+      "closed_action": "Load a save from before you sailed to the Isle of Mists and ask Vesemir about the sword there"
     }
   ]
 }

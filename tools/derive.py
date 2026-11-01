@@ -154,8 +154,9 @@ def build(verbose=True):
             out["turn_in"] = item["turn_in"]
         # an availability window carries what to say once the NPC has left, and a window whose
         # dialogue option opens later carries the fact that opens it (and what to do until then)
+        # a dialogue_off window also names the objective that needs the NPC and what to say once it is gone
         for k in ("gap_headline", "gap_action", "opens_at", "not_yet_headline", "not_yet_action",
-                  "dialogue", "close_gate"):
+                  "dialogue", "close_gate", "step", "closed_headline", "closed_action"):
             if item.get(k):
                 out[k] = item[k]
         return out

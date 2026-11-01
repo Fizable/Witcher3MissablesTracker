@@ -361,7 +361,8 @@ def check_windows(windows_path, quest_index_path=None):
         checked.append({"id": w.get("id"), "community": community,
                         "phases": {p: found[p] for p in wanted if p in found}})
     for w in data.get("windows", []):
-        if not w.get("dialogue"):
+        # a dialogue_off hook has no branch gates of its own; tools/default_dialogues.py checks it
+        if not w.get("dialogue") or w.get("mechanism") == "dialogue_off":
             continue
         err, ev = dialogue_evidence(quest_index, w)
         if err:
