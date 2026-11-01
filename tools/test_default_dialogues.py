@@ -42,6 +42,13 @@ class DefaultDialogues(unittest.TestCase):
             self.assertEqual(r["final_stops"], [])
             self.assertTrue(r["reopen_unknown"])
 
+    def test_a_quest_local_player_keeps_global_stops_from_reaching_the_hook(self):
+        for q in ("sq303brothel", "q210precanaris"):
+            hooked = [r for r in self.rows if q in r["quests"] and r["local_player"]]
+            self.assertTrue(hooked, q)
+            for r in hooked:
+                self.assertEqual(r["final_stops"], [])
+
     def test_wrong_stop_fact_or_closer_is_rejected(self):
         w = copy.deepcopy(berengar())
         w["close_gate"] = "lambert_dd_stop"

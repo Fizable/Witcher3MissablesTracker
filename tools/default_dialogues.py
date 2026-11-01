@@ -194,6 +194,11 @@ def scan(quest_index, index=None):
         after = [s for s in stops if s["story_pos"] is not None and s["story_pos"] > last_start]
         # a start setter the main story cannot place may run after any stop, so nothing is final then
         final = [] if reopen_unknown else after
+        # a player of the same scene in the hook's own file with no start/stop gate is not switched off
+        # by the global facts (sq303 #3226, q210 #6374), so the global stops cannot reach this hook
+        local = [p for p in players if p["file"] == h["file"] and not _gate_split(p)[0] and not _gate_split(p)[1]]
+        if local:
+            final, after = [], []
         quests = owners(h["file"], own)
         rows.append({
             **h, "quests": quests, "npc": Path(h["target_scene"]).stem.removesuffix("_default"),
@@ -202,6 +207,7 @@ def scan(quest_index, index=None):
             "stop_setters": stops, "start_setters": starts,
             "final_stops": final, "unplaced_stops": after if reopen_unknown else [],
             "reopen_unknown": reopen_unknown,
+            "local_player": [{"file": p["file"], "block": p["block"]} for p in local],
             "reviewed": sorted({w for q in quests for w in reviewed.get(q, [])}),
         })
     return rows
