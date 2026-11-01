@@ -28,3 +28,6 @@ __pycache__/
 
 # temporary verification profiles and the DOM harness
 .next-phase/
+
+# the game database and its LLM views, rebuilt by tools/gamedb/build.py
+/db/

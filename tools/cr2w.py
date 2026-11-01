@@ -165,6 +165,12 @@ def _decode(tname, p, names, imports, exports):
         return struct.unpack_from("<f", p, 0)[0]
     if t == "localizedstring" and len(p) >= 4:
         return {"locId": struct.unpack_from("<I", p, 0)[0]}
+    if t == "cvariant" and len(p) >= 6:
+        # script block parameters: u16 type name, u32 size (counting itself), then the value
+        vt = _name(names, struct.unpack_from("<H", p, 0)[0])
+        sz = struct.unpack_from("<I", p, 2)[0]
+        if vt and 4 <= sz <= len(p) - 2:
+            return {"variant_type": vt, "value": _decode(vt, p[6:2 + sz], names, imports, exports)}
     if t.startswith("soft:") and len(p) >= 2:
         i = struct.unpack_from("<H", p, 0)[0]
         if 0 < i <= len(imports):
