@@ -23,7 +23,8 @@ the wiki and are **not** licensed under CC BY-SA.
 These files are the older per-quest research. In the source checkout they are kept on disk for
 comparison and are never loaded by the app; they are not part of the release package:
 
-- `audit_*.json`, `guide_*.json`, `guide_alias.json`
+- `audit_*.json`, `guide_*.json`, `guide_alias.json` (removed from the checkout on 2026-11-01; still
+  in git history under this licence)
 - `legacy_route.json`, `legacy_events.json`, `legacy_feed.json` (frozen 0.1.9 inputs, used only as an
   acceptance corpus and never loaded by the app)
 

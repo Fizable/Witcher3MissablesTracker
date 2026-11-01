@@ -6,7 +6,7 @@
 
 use crate::model::{self, Eval};
 use serde_json::{json, Map, Value};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 /// Everything the payload reads. `steps` are the same save-aware step payloads the window gets,
 /// so a watch row cannot disagree with the quest page.
@@ -19,6 +19,23 @@ pub struct Input<'a> {
     pub steps: &'a [Value],
     pub card_report: &'a Value,
     pub guidance_on: bool,
+    pub highlighted: Option<&'a str>,
+    pub scene_objectives: &'a HashMap<String, Vec<String>>,
+}
+
+/// data/scene_objectives.json: scene path (lower case, forward slashes) -> dashed objective guids.
+pub fn scene_objectives_from(doc: &Value) -> HashMap<String, Vec<String>> {
+    doc.get("scenes")
+        .and_then(|x| x.as_object())
+        .map(|m| {
+            m.iter()
+                .map(|(k, v)| {
+                    let guids = v.as_array().into_iter().flatten().filter_map(|g| g.as_str().map(String::from)).collect();
+                    (k.clone(), guids)
+                })
+                .collect()
+        })
+        .unwrap_or_default()
 }
 
 /// The tracked quest the tracker cannot place on the route yet: name it, do not invent a step.
@@ -39,7 +56,7 @@ pub fn payload(input: Input<'_>) -> Value {
     let cutoffs = cutoff_rows(input.ev, input.steps, input.short);
     let watch = watch_rows(input.steps, &every_step);
     let cards = missable_cards(input.card_report, &every_step);
-    let choice = choice(input.ev, input.short, input.plan, input.guidance_on);
+    let choice = choice(input.ev, input.short, input.plan, input.guidance_on, input.highlighted, input.scene_objectives);
     json!({
         "short": input.short,
         "display": input.display,
@@ -275,14 +292,35 @@ fn missable_cards(card_report: &Value, ids: &HashSet<String>) -> Vec<Value> {
     out
 }
 
+/// Whether a line is "say it now": its scene plays under the objective the player highlighted with V.
+/// True and false when the scene has known objectives; null when the database names none for it (no
+/// conversation row, or a journal objective rather than a scene), so the card makes no claim.
+fn line_now(scene_objectives: &HashMap<String, Vec<String>>, highlighted: Option<&str>, file: &str) -> Value {
+    let key = file.replace('\\', "/").to_lowercase();
+    match scene_objectives.get(&key) {
+        Some(objs) if !objs.is_empty() => {
+            json!(highlighted.is_some_and(|h| objs.iter().any(|g| g.eq_ignore_ascii_case(h))))
+        }
+        _ => Value::Null,
+    }
+}
+
 /// The ending-choice warning on the tracked quest card.
 ///
 /// A consequential choice belongs to the quest the player is on, not to a separate queue entry
-/// underneath it and not to a plan card. With guidance off the card carries only the constant
-/// sentence, so no exact line, branch fact or ending id leaves the backend. With guidance on and a
-/// selected goal it carries the reviewed line for that scene. A settled or unreachable plan step
-/// says nothing: there is no action left to take.
-fn choice(ev: &Eval, short: &str, plan: Option<&Value>, guidance_on: bool) -> Value {
+/// underneath it and not to a plan card. With guidance off the card carries only a constant sentence
+/// (one of two, chosen by `now`), so no exact line, branch fact or ending id leaves the backend. With
+/// guidance on and a selected goal it carries the reviewed line for that scene, and `now` marks the
+/// lines whose scene the highlighted objective belongs to: that is the moment to say the line. A
+/// settled or unreachable plan step says nothing: there is no action left to take.
+fn choice(
+    ev: &Eval,
+    short: &str,
+    plan: Option<&Value>,
+    guidance_on: bool,
+    highlighted: Option<&str>,
+    scene_objectives: &HashMap<String, Vec<String>>,
+) -> Value {
     let Some(i) = (0..ev.steps.len()).find(|&i| {
         let s = &ev.steps[i];
         model::tracks(&s.n, short)
@@ -301,25 +339,36 @@ fn choice(ev: &Eval, short: &str, plan: Option<&Value>, guidance_on: bool) -> Va
             return Value::Null;
         }
     }
-    if guidance_on {
-        let lines: Vec<Value> = step_plan
-            .and_then(|s| s.get("instructions"))
-            .and_then(|x| x.as_array())
-            .into_iter()
-            .flatten()
-            .filter_map(|row| {
-                let line = row.get("instruction").and_then(|x| x.as_str())?;
-                if line.is_empty() {
-                    return None;
-                }
-                Some(json!({"line": line, "target": row.get("target").cloned().unwrap_or(Value::Null)}))
-            })
-            .collect();
-        if !lines.is_empty() {
-            return json!({"guided": true, "text": Value::Null, "lines": lines});
-        }
+    // The plan arrives before the guidance gate, so `now` is known with guidance off too. Lines are
+    // only returned below when guidance is on.
+    let all: Vec<Value> = step_plan
+        .and_then(|s| s.get("instructions"))
+        .and_then(|x| x.as_array())
+        .into_iter()
+        .flatten()
+        .filter_map(|row| {
+            let line = row.get("instruction").and_then(|x| x.as_str())?;
+            if line.is_empty() {
+                return None;
+            }
+            let file = row.get("file").and_then(|x| x.as_str()).unwrap_or("");
+            Some(json!({
+                "line": line,
+                "target": row.get("target").cloned().unwrap_or(Value::Null),
+                "now": line_now(scene_objectives, highlighted, file),
+            }))
+        })
+        .collect();
+    let now = all.iter().any(|l| l["now"] == json!(true));
+    if guidance_on && !all.is_empty() {
+        return json!({"guided": true, "text": Value::Null, "lines": all, "now": now});
     }
-    json!({"guided": false, "text": "This choice affects an ending.", "lines": []})
+    let text = if now {
+        "Your choice in this part of the quest affects an ending."
+    } else {
+        "This choice affects an ending."
+    };
+    json!({"guided": false, "text": text, "lines": [], "now": now})
 }
 
 #[cfg(test)]
@@ -398,7 +447,7 @@ mod tests {
         ]);
         let ev = model::evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
         // Guidance off: only the constant sentence, no line, no branch fact, no ending id.
-        let off = choice(&ev, "q110postbattle", None, false);
+        let off = choice(&ev, "q110postbattle", None, false, None, &HashMap::new());
         assert_eq!(off["guided"], false);
         assert_eq!(off["text"], "This choice affects an ending.");
         assert!(off["lines"].as_array().unwrap().is_empty());
@@ -409,14 +458,58 @@ mod tests {
         // Guidance on plus a goal: only the exact reviewed line, on this quest.
         let plan = json!({"steps": [{"step": "q110postbattle", "state": "ahead",
             "instructions": [{"instruction": "Velen.", "target": "bw_both_sisters"}]}]});
-        let on = choice(&ev, "q110postbattle", Some(&plan), true);
+        let on = choice(&ev, "q110postbattle", Some(&plan), true, None, &HashMap::new());
         assert_eq!(on["guided"], true);
         assert_eq!(on["lines"][0]["line"], "Velen.");
         assert!(on["text"].is_null());
         // A settled plan step and a quest that does not carry the choice stay silent.
         let settled = json!({"steps": [{"step": "q110postbattle", "state": "settled"}]});
-        assert!(choice(&ev, "q110postbattle", Some(&settled), true).is_null());
-        assert!(choice(&ev, "q999plain", Some(&plan), true).is_null());
+        assert!(choice(&ev, "q110postbattle", Some(&settled), true, None, &HashMap::new()).is_null());
+        assert!(choice(&ev, "q999plain", Some(&plan), true, None, &HashMap::new()).is_null());
+    }
+
+    /// "Say it now" is true only on the objective the scene plays under. An unknown scene is null, not
+    /// false: the tracker makes no claim it cannot back. Guidance off keeps the lines hidden and only
+    /// changes the constant sentence.
+    #[test]
+    fn the_choice_says_now_only_on_the_objective_its_scene_plays_under() {
+        let mut nd = node("q110postbattle", &["q110postbattle"]);
+        nd.ending_relevant = true;
+        let rd = route(vec![nd]);
+        let st = HashMap::from([("q110postbattle".to_string(), "Active".to_string())]);
+        let ev = model::evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
+        let scene = "quests\\part_3\\q110_03_01_ciri_wakes_geralt.w2scene";
+        let plan = json!({"steps": [{"step": "q110postbattle", "state": "ahead", "instructions": [
+            {"instruction": "Velen.", "target": "ciri_witcher", "file": scene},
+            {"instruction": "Emhyr.", "target": "ciri_empress", "file": "quests\\part_3\\other.w2scene"},
+            {"instruction": "Journal.", "target": "baron_wife_cured", "file": "gameplay\\journal\\q105.journal"}
+        ]}]});
+        let scenes = HashMap::from([
+            ("quests/part_3/q110_03_01_ciri_wakes_geralt.w2scene".to_string(), vec!["7B83F607-4F49A525-27D76E88-5FD432D6".to_string()]),
+            ("quests/part_3/other.w2scene".to_string(), vec!["AAAAAAAA-BBBBBBBB-CCCCCCCC-DDDDDDDD".to_string()]),
+        ]);
+        let hit = Some("7B83F607-4F49A525-27D76E88-5FD432D6");
+        let c = choice(&ev, "q110postbattle", Some(&plan), true, hit, &scenes);
+        assert_eq!(c["now"], true);
+        assert_eq!(c["lines"][0]["now"], true, "the highlighted objective is in this scene");
+        assert_eq!(c["lines"][1]["now"], false, "the scene is known, the highlighted objective is not in it");
+        assert!(c["lines"][2]["now"].is_null(), "a journal file is not a scene: no claim");
+        // No highlighted objective: known scenes say false, never true.
+        let none = choice(&ev, "q110postbattle", Some(&plan), true, None, &scenes);
+        assert_eq!(none["now"], false);
+        assert_eq!(none["lines"][0]["now"], false);
+        // Guidance off: the same `now`, no lines, and the changed constant sentence.
+        let off = choice(&ev, "q110postbattle", Some(&plan), false, hit, &scenes);
+        assert_eq!(off["now"], true);
+        assert_eq!(off["text"], "Your choice in this part of the quest affects an ending.");
+        assert!(off["lines"].as_array().unwrap().is_empty());
+        let off_none = choice(&ev, "q110postbattle", Some(&plan), false, None, &scenes);
+        assert_eq!(off_none["now"], false);
+        assert_eq!(off_none["text"], "This choice affects an ending.");
+        // A scene the database names no objective for stays null, even with a highlighted objective.
+        let unknown = choice(&ev, "q110postbattle", Some(&plan), true, hit, &HashMap::new());
+        assert!(unknown["lines"][0]["now"].is_null());
+        assert_eq!(unknown["now"], false);
     }
 
     #[test]
@@ -466,6 +559,7 @@ mod tests {
             qtitles: HashMap::new(),
             endings: read_json(&data.join("endings.json")).unwrap(),
             outcomes: read_json(&data.join("outcomes.json")).unwrap(),
+            scene_objectives: scene_objectives_from(&read_json(&data.join("scene_objectives.json")).unwrap()),
             branches: BranchGraph::from_json(&read_json(&data.join("branches.json")).unwrap()),
             ending_branch_ids: HashSet::new(),
             cards: crate::cards::CardIndex::from_json(&read_json(&data.join("gwent_cards.json")).unwrap()),

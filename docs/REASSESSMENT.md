@@ -129,6 +129,38 @@ This is the leading hypothesis; the fix below includes a soak test that would sh
    *Check:* for each reviewed ending line, a save taken on that objective shows the "say it now"
    state and a save on an earlier objective shows "coming up"; with guidance off no line text
    appears anywhere.
+9. **Quest detail page, simplified** (requested 2026-11-01, later). Plain language, no technical
+   talk at first glance. Top to bottom:
+   - The verdict as now: safe to do now, or not safe to do now.
+   - Choices, only when the quest has one. Guidance on: the choice, what it affects, and what to do
+     to get that option. Guidance off: a spoiler box the player clicks to reveal; it hides again
+     whenever the page is reopened.
+   - Current objective, as now. Its expander lists all objectives in the game's order with the
+     current one (the save's highlighted objective) marked. Needs the objective-guid format bug
+     fixed first: `current_objectives` compares derived.json's raw hex with the save's dashed form
+     and always returns nothing.
+   - "Matrix status" is replaced by "Finishing this quest fails: ..." listing the quests, and the
+     section is absent when it fails none.
+   - Technical details stay folded away under their expander.
+   - The "Mark as done" button is renamed "Override", so it does not read as the way quests
+     normally get completed.
+   *Check:* the Isle of Mists page and a quest with no choice and no cutoff, each with guidance on
+   and off, screenshot-reviewed by the user; the spoiler re-hides after leaving and reopening the
+   page.
+10. **Story path under the tracked quest** (requested 2026-11-01, later). The "ending quests" button
+    becomes a thin, full-width bar directly below the TRACKED card, in the same style. Opened, it
+    keeps today's ending-quest content and adds the minimum quests needed to finish the main game,
+    Hearts of Stone and Blood and Wine, each part in order. Done quests read as past, the quest the
+    player is on now is highlighted, quests holding a choice are highlighted in a second colour,
+    and every row opens the quest detail page. Purpose: one glance shows what is behind, what is
+    current and what is ahead on the path to each ending.
+    The "minimum required" set is derived, not hand-typed: from each pack's final quest, walk back
+    through the quests whose completion its start depends on (`quest_relations` kinds
+    `starts_or_advances`, `journal_test` and the facts it tests), skipping quests the game lets the
+    player bypass. The result is reviewed once against the user's own playthrough before it ships.
+    *Check:* the bar is thin and full width under the card; with a mid-game save, done, current,
+    ahead and choice quests are visibly distinct; every row opens its detail page; the required
+    list for each pack is signed off by the user.
 
 Execution follows the agreed split: the planner writes the brief and the acceptance check for each
 item, a Haiku worker implements it, and the planner reruns the check and reads the diff before it is

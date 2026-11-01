@@ -75,7 +75,7 @@ Copy-Item (Join-Path $targetDir 'release\witcher3-missables-tracker.exe') (Join-
 # exclusivity rows as well; a build without them would start with the 1.0 screen but none of its data.
 # cutoff_windows.json is the reviewed source behind cutoffs.json; it lives in tools/ as provenance
 # and is deliberately not packaged, so the resolved windows have one shipped owner.
-foreach ($f in 'route.json', 'derived.json', 'quest_graph.json', 'cutoffs.json', 'route_disputes.json', 'prereqs_review.json', 'prereq_relations.json', 'endings.json', 'outcomes.json', 'branches.json', 'gwent_cards.json', 'card_windows.json', 'card_window_review.json', 'coverage.json', 'exclusive.json') {
+foreach ($f in 'route.json', 'derived.json', 'quest_graph.json', 'cutoffs.json', 'cutoffs_generated.json', 'route_disputes.json', 'prereqs_review.json', 'prereq_relations.json', 'endings.json', 'outcomes.json', 'branches.json', 'gwent_cards.json', 'card_windows.json', 'card_window_review.json', 'coverage.json', 'exclusive.json', 'scene_objectives.json', 'story_path.json') {
     if (Test-Path "data\$f") { Copy-Item "data\$f" (Join-Path $dist 'data') } else { Write-Warning "missing data\$f" }
 }
 foreach ($f in 'LICENSE', 'LICENSE-DATA.md', 'NOTICE.txt', 'THIRD-PARTY-LICENSES.txt') { Copy-Item $f $dist }

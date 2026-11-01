@@ -211,7 +211,7 @@ newest) and a clean profile with an empty saves folder, all under a temporary `A
 | header / setup / pin | `view.save`, `view.setup`, `set_pin` | read error named with file and next step | setup card below NOW | 2026-10-30 |
 
 Invariants 1, 3, 4, 5, 6 and 7 each have a named test that fails when the guarantee is broken; the
-mutation runs are recorded in `NEXT-PHASE-PLAN.md` section 11. Invariant 2 is the tick truth table
+mutation runs are recorded in `docs/archive/NEXT-PHASE-PLAN.md` section 11. Invariant 2 is the tick truth table
 above, tested for every journal state. Invariant 8 is stated in the README and `NOTICE.txt`.
 
 Phase 2 adds the card-source audit: 224 rows = 14 reviewed missable windows (14 Tier B) +

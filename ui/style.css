@@ -123,7 +123,8 @@ button.title.link:hover { color: var(--gold); }
 
 ul.bul { margin: 3px 0 0; padding-left: 18px; }
 ul.bul li { margin: 1px 0; overflow-wrap: anywhere; }
-ul.bul li.current { color: var(--gold); }
+ul.bul li.current { color: var(--gold); font-weight: 700; }
+.choice-label { color: var(--text); font-weight: 600; margin-top: 4px; overflow-wrap: anywhere; }
 ol.num { margin: 3px 0 0; padding-left: 20px; }
 ol.num li { margin: 3px 0; }
 /* spoiler-free card tags: choice / Gwent / missable / tick disagrees */
@@ -271,6 +272,10 @@ a.src:hover { text-decoration: underline; }
 .desc { color: #b3b1a9; }
 .tagchip.goalchip { color: var(--gold); border-color: rgba(212,168,75,.45); background: rgba(212,168,75,.12); }
 .goal-line { color: var(--text); font-size: 14px; font-weight: 600; line-height: 1.4; margin: 3px 0; }
+/* the line to say now: the highlighted objective is in its scene */
+.goal-line.now { color: var(--green); font-weight: 700; }
+.lbl.now { color: var(--green); }
+.choice-note.now { color: var(--green); font-weight: 600; padding: 4px 8px; border-left: 3px solid var(--green); border-radius: 4px; background: rgba(87,171,90,.1); }
 
 .cards-list { margin-top: 4px; }
 .cards-collapse { background: var(--card); border: 1px solid var(--line); border-radius: 9px; overflow: hidden; padding: 7px 11px; }
@@ -383,9 +388,19 @@ a.src:hover { text-decoration: underline; }
 .windowtag.green { color: var(--green); border-color: rgba(87,171,90,.45); }
 .cardwindow-text { min-width: 0; overflow-wrap: anywhere; }
 
-/* ---------- ending quests: one small button, a short collapsible list ---------- */
-.ending-btn { color: var(--muted-gold); border-color: rgba(212,168,75,.35); flex: none; }
-.ending-btn:hover { color: var(--gold); border-color: var(--gold); }
+/* ---------- STORY PATH: a thin bar under TRACKED, and the path in the dialog ---------- */
+/* The bar is one card edge: same surface and border as .card, 28px tall, the full width. */
+.story-bar {
+  display: flex; align-items: center; gap: 9px; width: 100%; height: 28px; margin-top: 9px; padding: 0 11px;
+  background: var(--card); border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 1px 3px rgba(0,0,0,.35);
+  color: var(--muted-gold); transition: background var(--t), border-color var(--t), color var(--t);
+}
+.story-bar:hover { background: var(--card2); border-color: rgba(212,168,75,.45); color: var(--gold); }
+.story-bar-label { flex: none; font-size: 10.5px; font-weight: 700; letter-spacing: .14em; }
+.story-bar-counts { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; color: var(--dim); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.story-bar-chev { flex: none; color: var(--dim); }
+.story-bar:hover .story-bar-chev { color: var(--gold); }
+.story-sub { margin: 6px 0 2px; font-size: 10.5px; letter-spacing: .14em; color: var(--muted-gold); }
 .ending { position: fixed; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(8,10,14,.72); }
 /* The box stays small and the list is the only scroll box: each part expands in place. */
 .ending-box { width: min(520px, 100%); max-height: min(78vh, 620px); display: flex; flex-direction: column; overflow: hidden; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 55px rgba(0,0,0,.65); }
@@ -410,6 +425,31 @@ a.src:hover { text-decoration: underline; }
 .ending-name { font-weight: 600; transition: color var(--t); }
 .ending-name:hover { color: var(--gold); }
 .ending-desc { margin: 2px 0 0 18px; overflow-wrap: anywhere; }
+.story-group { border-top: 1px solid var(--line); }
+.story-group:first-child { border-top: 0; }
+.story-list { padding: 0 0 8px 4px; }
+.sp-row { display: flex; align-items: baseline; gap: 8px; width: 100%; padding: 4px 7px; border-left: 3px solid transparent; border-radius: 5px; transition: background var(--t); }
+.sp-row:hover { background: var(--card2); }
+.sp-mark { flex: none; width: 13px; text-align: center; color: var(--dim); }
+.sp-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.sp-tags { flex: none; display: flex; gap: 5px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.sp-tag { font-size: 10px; letter-spacing: .06em; padding: 0 6px; border-radius: 9px; border: 1px solid var(--line); color: var(--dim); white-space: nowrap; }
+/* done: dim, with a check */
+.sp-done .sp-mark { color: var(--green); }
+.sp-done .sp-title { color: var(--dim); }
+/* failed: red */
+.sp-failed .sp-mark, .sp-failed .sp-title { color: var(--red); }
+.sp-tag.failed { color: var(--red); border-color: rgba(229,83,75,.55); }
+/* choice: a second colour, a gold edge and a neutral CHOICE tag */
+.sp-row.choice { border-left-color: var(--gold); }
+.sp-row.choice .sp-mark { color: var(--gold); }
+.sp-tag.choice { color: var(--gold); border-color: rgba(212,168,75,.55); }
+/* current or tracked: the accent, bold, with a NOW tag */
+.sp-row.now { background: rgba(108,182,255,.1); }
+.sp-row.now .sp-mark, .sp-row.now .sp-title { color: var(--blue); font-weight: 700; }
+.sp-tag.now { color: var(--blue); border-color: rgba(108,182,255,.55); }
+/* optional: italic */
+.sp-row.optional .sp-title { font-style: italic; }
 
 /* ---------- narrow windows ---------- */
 @media (max-width: 520px) {
@@ -430,3 +470,7 @@ a.src:hover { text-decoration: underline; }
   .save-name { max-width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* FINISHING THIS QUEST FAILS: green when the save has finished the quest, red when it is already lost */
+.fails-list li.fail-done { color: var(--green, #6cc070); }
+.fails-list li.fail-failed { color: var(--red, #e06060); }

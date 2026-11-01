@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "note": "generated from db/w3db.sqlite by tools/gamedb/export_scene_objectives.py",
+  "scenes": {
+    "dlc/bob/data/quests/main_quests/quest_files/q704b_fairy_tale/scenes/q704_ft_08_match_girl.w2scene": [],
+    "dlc/bob/data/quests/main_quests/quest_files/q705_epilog/scenes/q705_15_ceremony_begins.w2scene": [
+      "7B83F607-4F49A525-27D76E88-5FD432D6"
+    ],
+    "dlc/ep1/data/quests/quest_files/q605_finale/scenes/q605_04_temple_meeting.w2scene": [],
+    "quests/part_3/quest_files/q110_postbattle/scenes/q110_03_01_ciri_wakes_geralt.w2scene": []
+  }
+}

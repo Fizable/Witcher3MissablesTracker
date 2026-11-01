@@ -76,16 +76,19 @@ misses), choosing the most advanced one. Transitions are parent to child, so "qu
 | `journal_tests` | every condition that tests a journal entry's status |
 | `fact_ops` | every fact set, added, removed, tested or forbidden, by a phase block, a script block or a dialogue choice (`source`) |
 | `spawnset_ops` | every community (NPC group) a phase switches on or off |
-| `fail_triggers` | for each wired `Failure` input, the fact and journal conditions upstream of it within 12 graph steps |
+| `fail_triggers` | for each wired `Failure` input, the fact and journal conditions upstream of it within 12 graph steps (flat list, no logic) |
+| `fail_paths` | each backward path to a `Failure` input as one condition: every block test on it, the output it is left by (`require` true or false), the block's AND/OR logic, and `after_json`, the named sub-phases control passes through first. Paths cross into the enclosing sub-phase; `truncated` marks a loop or the depth limit |
+| `scene_objectives` | the objective(s) active while each conversation can play: walked back from the `CQuestSceneBlock` to the nearest objective activation, into the embedding phase and the including files. Empty for a conversation that plays before any objective or outside a quest graph |
 | `choice_effects` | what a dialogue choice leads to in the quest graph: the facts and journal changes reachable from the scene output it ends in (within 8 steps, stopping at the next conversation) |
 | `quest_relations` | quest A to quest B, with `kind`, count `n` and JSON `evidence` |
 
 ## Evidence strength (`quest_relations.kind`)
 
 - `fails`: a journal block in A's own files has its `Failure` input wired for B's entry. Direct.
-- `fail_when_journal`, `fail_when_fact`: B's `Failure` input is fired by a condition testing A's
-  journal status or a fact A writes. `hops` in the evidence is the number of graph steps between the
-  condition and the failure; small is strong. Example: `q402_escort_completed`, set in The Isle of
+- `fail_when_journal`, `fail_when_fact`: a path to B's `Failure` input needs A's journal status or a
+  fact A writes to hold. `fail_unless_*`: it needs it NOT to hold (skipping A loses B).
+  `fail_involves_*`: the test sits in an AND/OR block where it is not decisive on its own. The
+  evidence carries `path_tests`, the whole condition of that path. Example: `q402_escort_completed`, set in The Isle of
   Mists, fails Now or Never, Redania's Most Wanted, Cabaret, A Matter of Life and Death and others.
 - `completes`, `starts_or_advances`: A completes or activates B's entries.
 - `fact_test`, `fact_forbid`, `journal_test`: a dependency, not a loss.
@@ -96,6 +99,15 @@ misses), choosing the most advanced one. Transitions are parent to child, so "qu
 A forward walk (`choice_effects`) or backward walk (`fail_triggers`) can pass through blocks that
 other paths also reach, so it shows what is reachable, not what is exclusive to one path.
 
+## Checking against the saves
+
+`py tools/gamedb/oracle_check.py [--list]` evaluates every cross-quest path (one that tests another
+quest's fact or journal) on the saves: contradicted when B finished at a save step whose parent save
+already satisfied the whole path while B was active (and, for a path in another quest A's files, A was
+finished); confirmed when B failed at a step whose save satisfies it. Paths that only test B's own
+state are internal timers and are not scored. On 2026-11-01: 897 cross-quest paths, 204 reached in a
+save step, 0 contradicted, 6 confirmed.
+
 ## Known gaps
 
 - Phase files with no journal block of their own and no including phase (mostly Blood and Wine
@@ -103,4 +115,5 @@ other paths also reach, so it shows what is reachable, not what is exclusive to 
 - Merchant inventories defined in entity templates (`.w2ent`) are not read; shop loot tables are.
 - The saves cover one player's choices: a quest the player always finished before its cutoff has no
   observed failure, so the oracle can contradict a claim but rarely confirm one.
+- A save does not say where inside a quest the game is, so the oracle scores timing only coarsely.
 - `cr2w.py` refuses older container layouts (4 phase files, 3 scenes, 73 journal files).

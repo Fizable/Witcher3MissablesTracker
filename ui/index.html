@@ -45,10 +45,15 @@
     <section id="trackedSec">
       <div class="run-head">
         <h2 class="gold">TRACKED</h2>
-        <button id="endingBtn" class="btn sm ending-btn hidden" data-act="ending-quests" title="Every quest with a reviewed ending step for the goals you chose">✦ ending quests</button>
       </div>
       <div id="planIssues" class="stack hidden"></div>
       <div id="trackedCards" class="stack"></div>
+      <!-- The STORY PATH bar: a thin strip under the tracked card; opens the path in #endingPanel. -->
+      <button id="storyBar" class="story-bar hidden" data-act="story-path" aria-haspopup="dialog" title="The quests that complete the main game and each DLC, in order">
+        <span class="story-bar-label">STORY PATH</span>
+        <span id="storyBarCounts" class="story-bar-counts"></span>
+        <span class="story-bar-chev" aria-hidden="true">▸</span>
+      </button>
       <p id="trackedEmpty" class="dim hidden">No quest is tracked in your game. Pick one in your quest log and it will appear here.</p>
     </section>
 
@@ -141,15 +146,22 @@
   </div>
 </div>
 
-<!-- Ending quests: opened only after a goal is chosen, so no ending name leaks before the opt-in -->
+<!-- STORY PATH: the main-story quests per part of the game. The ending list inside it names endings,
+     so that section is shown only after a goal is chosen (no ending name leaks before the opt-in). -->
 <div id="endingPanel" class="ending hidden" role="dialog" aria-modal="true" aria-labelledby="endingTitle">
   <div class="ending-box">
     <div class="more-head">
-      <h2 id="endingTitle" class="gold">ENDING QUESTS</h2>
+      <h2 id="endingTitle" class="gold">STORY PATH</h2>
       <button class="x" data-act="close-ending" aria-label="close">✕</button>
     </div>
-    <p class="legend dim ending-note">The reviewed steps for your chosen endings, by part of the game. Open a quest for its full page.</p>
-    <div id="endingGroups" class="ending-groups"></div>
+    <p class="legend dim ending-note">The quests that complete each part of the game, in the order your saves reached them. Open a quest for its full page.</p>
+    <div id="storyScroll" class="ending-groups">
+      <section id="endingGoals" class="hidden">
+        <h3 class="story-sub">YOUR ENDING GOALS</h3>
+        <div id="endingGroups"></div>
+      </section>
+      <div id="storyPacks"></div>
+    </div>
   </div>
 </div>
 

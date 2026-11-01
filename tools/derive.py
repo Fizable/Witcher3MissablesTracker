@@ -33,6 +33,7 @@ import stringsdb
 from paths import HERE, ROUTE, TRACKER
 
 CUTOFFS = TRACKER / "data" / "cutoffs.json"
+GENERATED = TRACKER / "data" / "cutoffs_generated.json"
 DERIVED = TRACKER / "data" / "derived.json"
 LEVELS = {"stop", "warn", "info"}
 
@@ -94,7 +95,11 @@ def build(verbose=True):
         """The game's own wording for a quest: journal text of its file."""
         out = {"title": None, "objectives": []}
         locids = []
-        for o in quest.get("objectives", []):
+        # export order is not the game's order: sort by the objective's order key. A missing key
+        # goes last; Python's sort is stable, so ties keep their export order.
+        objs = sorted(quest.get("objectives", []),
+                      key=lambda o: (o.get("order") is None, o.get("order") if o.get("order") is not None else 0))
+        for o in objs:
             if o.get("locid"):
                 locids.append((o["guid"], o["locid"]))
         m = stringsdb.locs([l for _g, l in locids], con)
@@ -155,7 +160,10 @@ def build(verbose=True):
                 out[k] = item[k]
         return out
 
-    resolved = [resolve(i) for i in (review.get("items", []) + review.get("windows", []))]
+    # cutoffs from the game database (tools/gamedb/export_cutoffs.py): the same item schema, appended
+    # after the reviewed ones; a reviewed item that covers the same pair has already dropped it there
+    generated = json.loads(GENERATED.read_text(encoding="utf-8")) if GENERATED.exists() else {"items": []}
+    resolved = [resolve(i) for i in (review.get("items", []) + review.get("windows", []) + generated.get("items", []))]
     for r in resolved:
         if r["level"] not in LEVELS:
             raise SystemExit(f"cutoffs.json: level {r['level']!r} in {r['id']}")

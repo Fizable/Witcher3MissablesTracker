@@ -163,8 +163,12 @@ def journal_struct(jf):
         if e["className"] == "CJournalQuestPhase":
             phase = {"guid": guid(e["index"]), "name": props.get(e["index"], {}).get("baseName", ""), "objectives": []}
             for o in children(e["index"], "CJournalQuestObjective"):
+                # the game sorts objectives by this key, not by export order; keep it so the
+                # consumers can show the list in the order the game shows it
+                ord_ = props.get(o["index"], {}).get("order")
                 obj = {"guid": guid(o["index"]), "name": props.get(o["index"], {}).get("baseName", ""),
-                       "locid": locid(o["index"]), "pins": len(children(o["index"], "CJournalQuestMapPin"))}
+                       "locid": locid(o["index"]), "pins": len(children(o["index"], "CJournalQuestMapPin")),
+                       "order": ord_ if isinstance(ord_, int) else None}
                 phase["objectives"].append(obj)
                 out["objectives"].append(obj)
             out["phases"].append(phase)

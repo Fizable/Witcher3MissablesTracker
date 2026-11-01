@@ -6,7 +6,7 @@ flow, the target part of the payload, and the vocabulary for target states and c
 and its fixtures are `tools/endings.py` and `tools/test_endings.py`; this document itself adds no
 game data.
 
-It is written against the retired 1.0 completion plan (its record is [RELEASE-1.0.0.md](RELEASE-1.0.0.md)), sections 2.1-2.3, 3.2, 3.6
+It is written against the retired 1.0 completion plan (its record is [RELEASE-1.0.0.md](archive/RELEASE-1.0.0.md)), sections 2.1-2.3, 3.2, 3.6
 and 3.7. Where the plan sketches a shape rather than fixing it, this document makes the decision and
 records it in section 1.
 

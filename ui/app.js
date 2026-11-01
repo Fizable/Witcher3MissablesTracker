@@ -69,7 +69,8 @@ const ui = {
   cards: $('#cards'), cardsCount: $('#cardsCount'), cardsNote: $('#cardsNote'),
   coverage: $('#coverage'), picker: $('#targetPicker'), targetOptions: $('#targetOptions'),
   applyTargets: $('#applyTargets'), morePanel: $('#morePanel'),
-  endingBtn: $('#endingBtn'), ending: $('#endingPanel'), endingGroups: $('#endingGroups'),
+  storyBar: $('#storyBar'), storyBarCounts: $('#storyBarCounts'), ending: $('#endingPanel'),
+  storyScroll: $('#storyScroll'), endingGoals: $('#endingGoals'), endingGroups: $('#endingGroups'), storyPacks: $('#storyPacks'),
 };
 
 // ---------- MORE drawer (reference material, not the play loop) ----------
@@ -286,8 +287,6 @@ function renderRun(v) {
 function renderGoalRow(v) {
   ui.goalRow.replaceChildren();
   const t = v.target;
-  // The ending-quests list names endings, so its button exists only after a goal is chosen.
-  ui.endingBtn.classList.toggle('hidden', !t || !(t.ids || []).length);
   if (!t) {
     add(ui.goalRow, h('span', 'fl', 'Ending goal: none'),
       h('button', 'btn sm', 'Choose', { 'data-act': 'open-picker' }));
@@ -410,6 +409,7 @@ async function openEnding() {
   ui.ending.classList.remove('hidden');
   focusInto(ui.ending);
   renderEnding();
+  renderStoryPanel(true);
   // A target change reloads the plan; if it is stale or not loaded yet, wait for the same call the
   // page already uses rather than fetching a second, parallel source.
   if (!planData || !planMatchesView(planData)) {
@@ -510,16 +510,17 @@ function closeEnding(restore = true) {
   if (ui.ending.classList.contains('hidden')) return;
   ui.ending.classList.add('hidden');
   resetEndingList();
+  resetStoryList();
   if (restore) restoreFocus();
 }
 
 function renderEnding() {
   if (ui.ending.classList.contains('hidden')) return;
   const t = view && view.target;
-  if (!t || !(t.ids || []).length) {
-    endingMessage('Choose an ending goal to list its quests.', 'dim small');
-    return;
-  }
+  // The goal list names endings, so it is shown only for a chosen goal; without one the panel is the story path alone.
+  const goals = !!(t && (t.ids || []).length);
+  ui.endingGoals.classList.toggle('hidden', !goals);
+  if (!goals) { resetEndingList(); return; }
   if (!planData || !planMatchesView(planData)) {
     endingMessage('Reading your ending goals…', 'dim small');
     return;
@@ -567,6 +568,93 @@ function renderEnding() {
   }
   // A refresh patches these same nodes; it never replaces the <details>, so the native open
   // state, focus and scroll survive a view update.
+}
+
+// ---------- STORY PATH: the main-story quests of each part of the game, in the order the saves reached them ----------
+const storyRecs = new Map(); // pack -> stable group node, its row list and the keyed row sync
+// Shown on each alternative ending; the path names the group, never the ending itself.
+const PACK_ALT_LABEL = 'one of these, depending on your choices';
+
+/** The thin bar under TRACKED: the label, the done/total count per part of the game, and a chevron. */
+function renderStoryBar(v) {
+  const packs = (v && v.story_path) || [];
+  ui.storyBar.classList.toggle('hidden', !packs.length);
+  const text = packs.map((p) => p.label + ' ' + p.done + '/' + p.total).join(' · ');
+  if (ui.storyBarCounts.textContent !== text) ui.storyBarCounts.textContent = text;
+}
+
+/**
+ * One quest of the path. Done rows are dim with a check; the tracked or current row takes the accent
+ * and a NOW tag; a choice row gets a gold edge and a neutral CHOICE tag; a failed row is red. An
+ * optional row is italic and says so, or names the alternative it belongs to. The row opens the quest.
+ */
+function storyRow(q) {
+  // NOW is the quest the game tracks. Other open quests stay marked as active but not as "now": the
+  // journal keeps some main quests open long before they are played (A Mysterious Passenger).
+  const now = !!q.tracked;
+  const active = !now && q.state === 'current';
+  const cls = ['sp-row', 'sp-' + q.state];
+  if (now) cls.push('now');
+  if (active) cls.push('active');
+  if (q.choice) cls.push('choice');
+  if (q.optional) cls.push('optional');
+  const mark = q.state === 'done' ? '✔' : q.state === 'failed' ? '✖' : (now || active) ? '◐' : '○';
+  const row = h('button', cls.join(' '), null, { 'data-act': 'ending-detail', 'data-id': q.id });
+  const tags = h('span', 'sp-tags');
+  if (now) add(tags, h('span', 'sp-tag now', 'NOW'));
+  if (active) add(tags, h('span', 'sp-tag', 'in your log'));
+  if (q.choice) add(tags, h('span', 'sp-tag choice', 'CHOICE'));
+  if (q.state === 'failed') add(tags, h('span', 'sp-tag failed', 'FAILED'));
+  if (q.optional) add(tags, h('span', 'sp-tag', q.alt_group ? PACK_ALT_LABEL : 'optional'));
+  add(row, h('span', 'sp-mark', mark), h('span', 'sp-title', q.title || q.id), tags);
+  return row;
+}
+
+/** A part of the game: a <details> that stays put across refreshes so its open state survives. */
+function storyGroup(p) {
+  let rec = storyRecs.get(p.pack);
+  if (rec) return rec;
+  const group = h('details', 'story-group');
+  // The part holding the quest the player is on opens by default; the others start closed.
+  const quests = p.quests || [];
+  group.open = quests.some((q) => q.tracked) || (!quests.some((q) => q.tracked) && quests.some((q) => q.state === 'current') &&
+    !((view && view.story_path) || []).some((o) => (o.quests || []).some((q) => q.tracked)));
+  const head = h('summary', 'ending-head');
+  const name = h('span', 'ending-pack');
+  const count = h('span', 'ending-count');
+  add(head, name, count);
+  const list = h('div', 'story-list');
+  group.append(head, list);
+  rec = { group, name, count, list, sync: keyedList(list) };
+  storyRecs.set(p.pack, rec);
+  return rec;
+}
+
+function resetStoryList() {
+  for (const rec of storyRecs.values()) rec.group.remove();
+  storyRecs.clear();
+}
+
+/** Paints the path from the view. `scrollToNow` is set only when the panel opens. */
+function renderStoryPanel(scrollToNow) {
+  if (ui.ending.classList.contains('hidden')) return;
+  const packs = (view && view.story_path) || [];
+  const keep = new Set();
+  packs.forEach((p, i) => {
+    keep.add(p.pack);
+    const rec = storyGroup(p);
+    const label = p.label || PACK_LABEL[p.pack] || p.pack;
+    if (rec.name.textContent !== label) rec.name.textContent = label;
+    const ct = p.done + '/' + p.total;
+    if (rec.count.textContent !== ct) rec.count.textContent = ct;
+    rec.sync(p.quests || [], (q) => q.id, (q) => q, (q) => storyRow(q));
+    if (ui.storyPacks.children[i] !== rec.group) ui.storyPacks.insertBefore(rec.group, ui.storyPacks.children[i] || null);
+  });
+  for (const [pack, rec] of storyRecs) if (!keep.has(pack)) { rec.group.remove(); storyRecs.delete(pack); }
+  if (scrollToNow) {
+    const now = ui.storyPacks.querySelector('.sp-row.now');
+    if (now) now.scrollIntoView({ block: 'center' });
+  }
 }
 
 // ---------- outcome matrix (inside the spoiler-gated picker) ----------
@@ -957,14 +1045,15 @@ function choiceBlock(tracked) {
   const ch = tracked && tracked.choice;
   if (!ch) return null;
   const box = h('div', 'trk-choice');
+  // "now" means the highlighted objective is in this line's scene: the moment to say it
   if (ch.guided && (ch.lines || []).length) {
-    add(box, h('div', 'lbl gold', 'SAY THIS'));
+    add(box, h('div', ch.now === true ? 'lbl now' : 'lbl gold', ch.now === true ? 'SAY THIS NOW' : 'SAY THIS'));
     ch.lines.forEach((x) => {
-      add(box, h('div', 'goal-line', '“' + x.line + '”'));
+      add(box, h('div', x.now === true ? 'goal-line now' : 'goal-line', '“' + x.line + '”'));
       if (x.target) add(box, h('div', 'dim small', targetLabel(x.target)));
     });
   } else if (ch.text) {
-    add(box, h('div', 'txt choice-note', ch.text));
+    add(box, h('div', ch.now === true ? 'txt choice-note now' : 'txt choice-note', ch.text));
   } else {
     return null;
   }
@@ -1093,7 +1182,7 @@ function buildTrackedCard(s, tr, extras) {
   const need = lvNum(s);
   if (view.level > 0 && need && view.level < need - 2) add(foot, h('span', 'amber small', 'level ' + need + ' suggested'));
   add(foot, h('span', 'grow'), h('button', 'btn sm', 'details', { 'data-act': 'detail', 'data-id': s.id }));
-  if (s.manual) add(foot, h('button', 'btn sm', 'mark done', { 'data-act': 'tick', 'data-id': s.id }));
+  if (s.manual) add(foot, h('button', 'btn sm', 'Override', { 'data-act': 'tick', 'data-id': s.id }));
   add(c, foot);
   return c;
 }
@@ -1244,6 +1333,7 @@ function render(v) {
   renderHeader(v); renderFlags(v); renderFolders(v); renderSetup(v); renderRun(v); renderGoalRow(v);
   loadPlan();
   renderEnding();
+  renderStoryBar(v); renderStoryPanel();
   renderStatus(v); renderTracked(v); renderImpossible(v); renderTradeoffs(v); renderCoverage(v); renderProgress(v);
   if (!cardsData) loadCards();
   if (detailId && !detailCache.has(detailId)) openDetail(detailId, true);
@@ -1358,6 +1448,13 @@ function evidenceBlock(d, s, dv, gr) {
 
   if (dv && dv.stems && dv.stems.length) line('Game files: ' + dv.stems.join(', ') + '.');
   if (d.tracking) line(d.tracking);
+  // These moved off the first glance: the reviewed-manual tag, the review trail and the matrix state.
+  if (s.provenance === 'manual_reviewed') line('MANUAL REVIEWED - NOT GAMEFILE-PROVEN.');
+  if (s.manual && s.review_reason) line('Why it cannot be read from the save: ' + s.review_reason);
+  if (s.manual && s.review_source) line('Review source: ' + s.review_source + (s.reviewed ? ' · ' + s.reviewed : '') + '.');
+  if (s.classification) {
+    line('Matrix status: ' + stateText(s.classification.state) + ' - ' + (s.classification.reason || 'no evidence recorded') + '.');
+  }
 
   const reqs = gr && gr.requires ? gr.requires : [];
   reqs.forEach((r) => {
@@ -1397,6 +1494,27 @@ function evidenceBlock(d, s, dv, gr) {
   return det;
 }
 
+/** The choice entries (guidance-shaped) and, when there is no entry, the plain fallback line. */
+function renderChoiceBody(parent, entries, branches) {
+  entries.forEach((g) => {
+    add(parent, h('div', 'choice-label', g.label));
+    if (g.step_state === 'ahead') {
+      add(parent, h('div', 'lbl gold', 'SAY THIS'));
+      add(parent, h('div', 'goal-line', '“' + (g.instruction || '') + '”'));
+    } else if (g.step_state === 'settled') {
+      add(parent, h('div', 'txt', 'Already settled in this save.'));
+    } else if (g.step_state === 'unreachable') {
+      add(parent, h('div', 'txt red', 'This goal is no longer reachable.'));
+    } else {
+      add(parent, h('div', 'txt', 'Not enough information yet.'));
+    }
+  });
+  if (!entries.length && branches.length) {
+    add(parent, h('div', 'txt', 'This quest has a choice that changes later content.'));
+    if (branches.some((x) => x.ending_relevant)) add(parent, h('div', 'dim small', 'It affects an ending.'));
+  }
+}
+
 function renderDetail(d) {
   const s = d.step;
   const live = stepsById.get(s.id) || {};
@@ -1406,7 +1524,6 @@ function renderDetail(d) {
   const root = el.detail;
   root.replaceChildren();
   add(root, h('div', 'chip', lvlChip(s) + ' · ' + s.status), h('h2', 'dtitle', s.title));
-  if (s.provenance === 'manual_reviewed') add(root, h('div', 'tag green', 'MANUAL REVIEWED - NOT GAMEFILE-PROVEN'));
   if (s.desc) add(root, h('div', 'ddesc', String(s.desc).trim()));
   // Prefer the same top items the list shows, so the tag, headline and action cannot drift from
   // AT RISK NOW. Fall back to the generated watch row when the step has no current top item.
@@ -1434,51 +1551,62 @@ function renderDetail(d) {
 
   warns.forEach((x) => { if (x !== same) add(root, watchBox(x)); });
 
-  // The exact line is the only thing the player needs at the table. Fact names and the scene
-  // source are evidence, so they live in Technical details instead of beside the instruction.
-  const guidance = Array.isArray(d.guidance) ? d.guidance : [];
-  guidance.forEach((g) => {
-    const b = block(root, 'YOUR GOAL - ' + g.label, 'gold');
-    if (g.step_state === 'ahead') {
-      add(b, h('div', 'lbl gold', 'SAY THIS'));
-      add(b, h('div', 'goal-line', '“' + g.instruction + '”'));
-    } else if (g.step_state === 'settled') {
-      add(b, h('div', 'txt', 'Already settled in this save.'));
-    } else if (g.step_state === 'unreachable') {
-      add(b, h('div', 'txt red', 'This goal is no longer reachable.'));
-    } else {
-      add(b, h('div', 'txt', 'Not enough information yet.'));
-    }
-  });
-
+  // CHOICES appears only where the quest has one. With guidance on, the entries are shown as they
+  // are. With guidance off, the same content sits in a closed section, so the spoiler is hidden on
+  // every visit: renderDetail rebuilds the page and nothing remembers an open section.
   const branches = Array.isArray(d.branches) ? d.branches : [];
-  if (branches.length) {
+  const guidance = Array.isArray(d.guidance) ? d.guidance : [];
+  const spoiler = Array.isArray(d.choice_spoiler) ? d.choice_spoiler : [];
+  const choiceEntries = guided ? guidance : spoiler;
+  if (branches.length || choiceEntries.length) {
     const b = block(root, 'CHOICES');
-    add(b, h('div', 'txt', 'This step contains decisions that change later content.'));
-    if (branches.some((x) => x.ending_relevant)) {
-      add(b, h('div', 'dim small', 'One of them affects an ending.'));
+    if (guided) {
+      renderChoiceBody(b, guidance, branches);
+    } else {
+      const sp = h('details', 'evidence');
+      add(sp, h('summary', '', 'Show the choice (spoiler)'));
+      const body = h('div', 'evbody');
+      renderChoiceBody(body, spoiler, branches);
+      add(sp, body);
+      add(b, sp);
     }
   }
 
+  // The current objective is the game's highlighted objective when this is the quest the save
+  // tracks; otherwise it is the active objectives derived for the step. The expander lists the
+  // step's objectives in the game's order and marks the current ones.
   const all = (dv && dv.objectives ? dv.objectives : []).map((o) => o.text).filter(Boolean);
-  const cur = (d.current_objectives || []).filter(Boolean);
-  if (all.length || cur.length) {
-    const active = s.status === 'Active';
-    const shown = active && cur.length ? cur : all.slice(0, active ? 1 : Math.min(3, all.length));
-    const b = block(root, active ? (shown.length > 1 ? 'CURRENT OBJECTIVES' : 'CURRENT OBJECTIVE') : 'OBJECTIVES');
+  const active = s.status === 'Active';
+  const trackedHere = view && view.tracked && (view.tracked.steps || []).includes(s.id) && view.tracked.objective;
+  const cur = active ? (trackedHere ? [view.tracked.objective] : (d.current_objectives || []).filter(Boolean)) : [];
+  const first = cur.length ? cur[0] : all[0];
+  if (first) {
+    const b = block(root, cur.length ? 'CURRENT OBJECTIVE' : 'OBJECTIVES');
     const ul = h('ul', 'bul');
-    shown.forEach((o, i) => add(ul, h('li', i === 0 && active ? 'current' : '', (i === 0 && active ? '▸ ' : '') + o)));
+    add(ul, h('li', cur.length ? 'current' : '', first));
     add(b, ul);
-    if (all.length > shown.length) {
+    if (all.length > 1) {
       const more = h('details', 'evidence');
       add(more, h('summary', '', 'Show all ' + all.length + ' objectives'));
       const full = h('ul', 'bul');
-      all.forEach((o) => add(full, h('li', '', o)));
+      all.forEach((o) => add(full, h('li', cur.includes(o) ? 'current' : '', o)));
       const body = h('div', 'evbody');
       add(body, full);
       add(more, body);
       add(b, more);
     }
+  }
+
+  // Quests the save would fail if this one is finished (from the reviewed cutoffs). Absent when none.
+  // Each quest is coloured by where this save stands on it: green finished, red already failed.
+  const fails = Array.isArray(d.fails_status) && d.fails_status.length ? d.fails_status
+    : (Array.isArray(d.fails) ? d.fails.map((t) => ({ title: t, status: 'open' })) : []);
+  if (fails.length) {
+    const b = block(root, 'FINISHING THIS QUEST FAILS');
+    const ul = h('ul', 'bul fails-list');
+    fails.forEach((x) => add(ul, h('li', 'fail-' + x.status, x.title + (x.status === 'done' ? ' (finished)' : x.status === 'failed' ? ' (failed)' : ''))));
+    add(b, ul);
+    add(b, h('div', 'dim small', 'Finish them first if you want them.'));
   }
 
   const reqs = gr && gr.requires ? gr.requires : [];
@@ -1495,32 +1623,15 @@ function renderDetail(d) {
     add(b, h('div', 'txt', s.provenance === 'manual_reviewed'
       ? 'Reviewed manual step. You tick this one yourself; it is not a gamefile claim.'
       : 'You tick this one yourself when it is done.'));
-    if (s.review_reason) add(b, h('div', 'dim small', 'Why it cannot be read from the save: ' + s.review_reason));
-    if (s.review_source) add(b, h('div', 'dim small', 'Review source: ' + s.review_source + (s.reviewed ? ' · ' + s.reviewed : '')));
-    add(b, h('button', 'btn', s.status === 'Done' ? 'mark as not done' : 'mark done', { 'data-act': 'tick', 'data-id': s.id }));
   }
 
-  if (s.classification) {
-    const b = block(root, 'MATRIX STATUS');
-    add(b, h('div', 'txt', stateText(s.classification.state) + ' - ' + (s.classification.reason || 'no evidence recorded')));
-  }
-
-  if (!s.manual) {
-    // Ticking a file-derived step is a note, not a status. Put it on the page as a plain button
-    // and say what it does; the save still decides the card, the matrix and the warning.
-    const b = block(root, 'NOTE');
-    add(b, h('div', 'why', s.tick_disagrees
-      ? 'You noted this as done, but the save still says ' + s.status + '. The journal wins; remove the note if it was a mistake.'
-      : 'The tracker reads this step from your save. A note records what the save cannot show; it never overrides the journal.'));
-    add(b, h('button', 'btn sm', s.tick_disagrees ? 'remove my note' : 'note this as done', { 'data-act': 'tick', 'data-id': s.id }));
-    const fix = h('details', 'evidence');
-    add(fix, h('summary', '', 'Something wrong with this reading?'));
-    const fb = h('div', 'evbody');
-    add(fb, h('div', 'evline', 'A note is kept beside the save state: the card keeps saying ' + s.status + ' until the journal itself changes.'));
-    add(fb, h('button', 'linkbtn small', s.tick_disagrees ? 'remove my note' : 'add a note', { 'data-act': 'tick', 'data-id': s.id }));
-    add(fix, fb);
-    add(root, fix);
-  }
+  // One override control for every step, with the same handler the old tick and note buttons used.
+  // A manual step is ticked when Done; a file-derived step is overridden when the page says so.
+  const ticked = s.manual ? s.status === 'Done' : !!d.overridden;
+  const ov = h('section', 'dblock override');
+  add(ov, h('button', 'btn sm', ticked ? 'Remove override' : 'Override', { 'data-act': 'tick', 'data-id': s.id }));
+  add(ov, h('div', 'dim small', 'Use this only if the tracker reads this quest wrong.'));
+  add(root, ov);
 
   add(root, evidenceBlock(d, s, dv, gr));
 }
@@ -1595,7 +1706,7 @@ document.addEventListener('click', (e) => {
   else if (act === 'closeverdict') clearVerdict();
   else if (act === 'more') openMore('cards');
   else if (act === 'close-more') closeMore();
-  else if (act === 'ending-quests') openEnding();
+  else if (act === 'story-path') openEnding();
   else if (act === 'close-ending') closeEnding();
   else if (act === 'ending-detail') { closeEnding(false); openDetail(id); }
   else if (act === 'more-tab') openMore(t.dataset.tab);
