@@ -480,6 +480,7 @@ mod tests {
             objectives: HashMap::new(),
             tracked: Some("guid".into()),
             tracked_file: None,
+            highlighted: None,
             facts: HashSet::new(),
             save_path: None,
             save_mtime: None,

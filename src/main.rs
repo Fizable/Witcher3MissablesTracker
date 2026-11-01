@@ -60,6 +60,7 @@ struct Inner {
     objectives: HashMap<String, Vec<String>>,      // the save's own labels, debug only
     tracked: Option<String>,         // guid of the quest tracked in the game (read from the save)
     tracked_file: Option<String>,    // journal file of that quest, as the save names it
+    highlighted: Option<String>,     // guid of the objective selected with V in the game (dashed, as `tracked`)
     facts: HashSet<String>,          // the game's facts this save has set (facts with a value of 1 or more)
     save_path: Option<PathBuf>,
     save_mtime: Option<SystemTime>,
@@ -79,6 +80,84 @@ struct Inner {
 }
 
 struct Shared(Mutex<Inner>);
+
+/// Locks the shared state, ignoring poison. A panic in one command while it holds the lock must not
+/// stop every later command and the save watcher from reading the state; the state is still valid
+/// to read, and the panic itself is in tracker.log.
+fn lock(st: &Shared) -> std::sync::MutexGuard<'_, Inner> {
+    st.0.lock().unwrap_or_else(|e| e.into_inner())
+}
+
+/// Log file in the app folder, set once at startup. Logging is best effort and never panics.
+static LOG: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+
+fn now_secs() -> u64 {
+    SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0)
+}
+
+fn log_line(msg: &str) {
+    let Some(path) = LOG.get() else { return };
+    let line = format!("{} {}\n", utc_stamp(now_secs()), msg.replace(['\n', '\r'], " "));
+    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(path) {
+        use std::io::Write;
+        let _ = f.write_all(line.as_bytes());
+    }
+}
+
+/// Starts tracker.log in the app folder. A log over 1 MB is rotated to tracker.log.1 first. Every panic
+/// goes to the log through a hook that keeps the previous hook, so the default output still happens.
+fn init_log(app_dir: &Path) {
+    let path = app_dir.join("tracker.log");
+    if std::fs::metadata(&path).map(|m| m.len() > 1_000_000).unwrap_or(false) {
+        let _ = std::fs::remove_file(app_dir.join("tracker.log.1"));
+        let _ = std::fs::rename(&path, app_dir.join("tracker.log.1"));
+    }
+    let _ = LOG.set(path);
+    let prev = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |info| {
+        let msg = panic_text(info.payload());
+        let loc = info.location().map(|l| format!("{}:{}", l.file(), l.line())).unwrap_or_default();
+        log_line(&format!("PANIC {msg} at {loc}"));
+        prev(info);
+    }));
+}
+
+/// The text of a panic payload (panics carry a &str or a String).
+fn panic_text(payload: &(dyn std::any::Any + Send)) -> String {
+    payload
+        .downcast_ref::<&str>()
+        .map(|s| s.to_string())
+        .or_else(|| payload.downcast_ref::<String>().cloned())
+        .unwrap_or_else(|| "non-string panic".into())
+}
+
+/// `YYYY-MM-DD HH:MM:SS` in UTC from seconds since the epoch (civil-from-days, no crate needed).
+fn utc_stamp(secs: u64) -> String {
+    let days = (secs / 86_400) as i64;
+    let rem = secs % 86_400;
+    let z = days + 719_468;
+    let era = z.div_euclid(146_097);
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    let y = yoe + era * 400 + i64::from(m <= 2);
+    format!("{y:04}-{m:02}-{d:02} {:02}:{:02}:{:02}", rem / 3600, rem % 3600 / 60, rem % 60)
+}
+
+#[cfg(test)]
+mod log_tests {
+    use super::utc_stamp;
+
+    #[test]
+    fn utc_stamp_known_dates() {
+        assert_eq!(utc_stamp(0), "1970-01-01 00:00:00");
+        assert_eq!(utc_stamp(951_782_400), "2000-02-29 00:00:00");
+        assert_eq!(utc_stamp(1_767_225_599), "2025-12-31 23:59:59");
+    }
+}
 
 /// What the route counts as finished, split by how it knows.
 ///
@@ -311,6 +390,7 @@ impl Inner {
             objectives: HashMap::new(),
             tracked: None,
             tracked_file: None,
+            highlighted: None,
             facts: HashSet::new(),
             save_path: None,
             save_mtime: None,
@@ -375,6 +455,13 @@ impl Inner {
     }
 
     fn saves_dir(&self) -> Option<PathBuf> {
+        // W3TRACKER_SAVES points the tracker at a test folder (used by the soak test); ignored unless it exists
+        if let Ok(p) = std::env::var("W3TRACKER_SAVES") {
+            let p = PathBuf::from(p);
+            if p.is_dir() {
+                return Some(p);
+            }
+        }
         if let Some(o) = &self.saves_override {
             let p = PathBuf::from(o);
             if p.is_dir() {
@@ -569,9 +656,13 @@ impl Inner {
                 self.objectives = s.objectives;
                 self.tracked = s.tracked;
                 self.tracked_file = s.tracked_file;
+                self.highlighted = s.highlighted;
                 self.facts = s.facts;
                 self.ok_mtime = Some(m);
                 self.error.clear();
+                // once per change: this line is reached only when the path or the mtime moved
+                let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("?").to_string();
+                log_line(&format!("READ {name}"));
             }
             Err(e) => {
                 // The game may still be writing the file: keep the old state and retry on the next
@@ -703,10 +794,15 @@ impl Inner {
         if self.tracked.is_none() {
             return Value::Null;
         }
-        let Some(short) = self.tracked_short() else { return tracked::unknown(); };
+        let Some(short) = self.tracked_short() else {
+            let mut out = tracked::unknown();
+            out["objective"] = Value::Null;
+            out["objective_source"] = Value::Null;
+            return out;
+        };
         let display = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
         let status = self.state.get(&short).map(String::as_str).unwrap_or("");
-        tracked::payload(tracked::Input {
+        let mut out = tracked::payload(tracked::Input {
             ev,
             short: &short,
             display: &display,
@@ -715,7 +811,44 @@ impl Inner {
             steps,
             card_report,
             guidance_on: self.guidance_on,
-        })
+        });
+        // the one objective line the TRACKED card shows: the game's highlighted objective, else the first active one
+        let (objective, source) = self.tracked_objective(&short);
+        out["objective"] = objective;
+        out["objective_source"] = source;
+        out
+    }
+
+    /// The text of the objective the card shows for the tracked quest, and where it came from. "save" is the
+    /// objective the player highlighted with V; "fallback" is the first active objective of the quest, used when
+    /// the save has no highlighted objective or its text cannot be found. Both are null when neither exists.
+    fn tracked_objective(&self, short: &str) -> (Value, Value) {
+        if let Some(t) = self.highlighted.as_deref().and_then(|g| self.objective_text(g, short)) {
+            return (json!(t), json!("save"));
+        }
+        let first = self.objective_guids.get(short).into_iter().flatten().find_map(|g| self.objective_text(g, short));
+        match first {
+            Some(t) => (json!(t), json!("fallback")),
+            None => (Value::Null, Value::Null),
+        }
+    }
+
+    /// The game's text for an objective guid (dashed, as the save and the quest index write it). derived.json
+    /// stores the same guid as raw hex, so each entry is converted before the comparison. The tracked quest's
+    /// own steps are searched first, then every step. An entry with empty text does not count.
+    fn objective_text(&self, guid: &str, short: &str) -> Option<String> {
+        let steps = self.derived.get("steps")?.as_object()?;
+        let own = self.route.nodes.iter().filter(|n| model::tracks(n, short)).map(|n| n.id.as_str());
+        for id in own.chain(steps.keys().map(String::as_str)) {
+            let Some(list) = steps.get(id).and_then(|d| d.get("objectives")).and_then(|x| x.as_array()) else { continue };
+            for o in list {
+                let same = o.get("guid").and_then(|x| x.as_str()).and_then(save::guid_from_hex).as_deref() == Some(guid);
+                if let Some(t) = o.get("text").and_then(|x| x.as_str()).filter(|t| same && !t.is_empty()) {
+                    return Some(t.to_string());
+                }
+            }
+        }
+        None
     }
 
     /// Attach what the game's own files say about a step: the game's name for it, its quest-log
@@ -1363,12 +1496,15 @@ fn edge_label(endings: &Value, outcomes_doc: &Value, value: &str) -> String {
 
 #[tauri::command]
 fn get_view(st: State<Shared>) -> Value {
-    st.0.lock().unwrap().view()
+    // a pull from the window also rescans the saves folder, so a dead watcher thread cannot leave it stale
+    let mut g = lock(&st);
+    g.refresh_save();
+    g.view()
 }
 
 #[tauri::command]
 fn get_detail(id: String, st: State<Shared>) -> Value {
-    let g = st.0.lock().unwrap();
+    let g = lock(&st);
     detail_json(&g, &id)
 }
 
@@ -1443,7 +1579,7 @@ fn detail_json(g: &Inner, id: &str) -> Value {
 
 #[tauri::command]
 fn get_targets(st: State<Shared>) -> Value {
-    let g = st.0.lock().unwrap();
+    let g = lock(&st);
     let ev = g.eval();
     let evals = g.target_evals(&ev);
     json!({
@@ -1454,18 +1590,18 @@ fn get_targets(st: State<Shared>) -> Value {
 
 #[tauri::command]
 fn get_outcomes(st: State<Shared>) -> Value {
-    st.0.lock().unwrap().outcome_report()
+    lock(&st).outcome_report()
 }
 
 #[tauri::command]
 fn get_plan(targets: Option<Vec<String>>, st: State<Shared>) -> Value {
-    st.0.lock().unwrap().plan_report(targets)
+    lock(&st).plan_report(targets)
 }
 
 #[tauri::command]
 fn set_target(ids: Vec<String>, app: tauri::AppHandle, st: State<Shared>) -> Result<Value, String> {
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         g.set_target(ids)?;
         g.view()
     };
@@ -1476,7 +1612,7 @@ fn set_target(ids: Vec<String>, app: tauri::AppHandle, st: State<Shared>) -> Res
 #[tauri::command]
 fn set_guidance(on: bool, app: tauri::AppHandle, st: State<Shared>) -> Value {
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         g.set_guidance(on);
         g.view()
     };
@@ -1486,7 +1622,7 @@ fn set_guidance(on: bool, app: tauri::AppHandle, st: State<Shared>) -> Value {
 
 #[tauri::command]
 fn get_cards(st: State<Shared>) -> Value {
-    let mut g = st.0.lock().unwrap();
+    let mut g = lock(&st);
     let ev = g.eval();
     g.cards_report(&ev)
 }
@@ -1494,7 +1630,7 @@ fn get_cards(st: State<Shared>) -> Value {
 #[tauri::command]
 fn set_card(id: String, owned: bool, app: tauri::AppHandle, st: State<Shared>) -> Result<Value, String> {
     let (report, view) = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         g.set_card(id, owned)?;
         let ev = g.eval();
         (g.cards_report(&ev), g.view())
@@ -1505,7 +1641,7 @@ fn set_card(id: String, owned: bool, app: tauri::AppHandle, st: State<Shared>) -
 
 #[tauri::command]
 fn search(q: String, st: State<Shared>) -> Value {
-    let g = st.0.lock().unwrap();
+    let g = lock(&st);
     let q = q.trim().to_lowercase();
     if q.chars().count() < 2 {
         return json!([]);
@@ -1530,7 +1666,7 @@ fn search(q: String, st: State<Shared>) -> Value {
 
 #[tauri::command]
 fn check_quest(short: String, st: State<Shared>) -> Value {
-    let g = st.0.lock().unwrap();
+    let g = lock(&st);
     let rt = g.effective_route();
     let ev = model::evaluate(&rt, &g.state, &g.ticks, &g.flags, &g.facts);
     g.verdict_for(&rt, &ev, &short)
@@ -1539,7 +1675,7 @@ fn check_quest(short: String, st: State<Shared>) -> Value {
 #[tauri::command]
 fn toggle_tick(id: String, app: tauri::AppHandle, st: State<Shared>) -> Value {
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         if !g.ticks.remove(&id) {
             g.ticks.insert(id);
         }
@@ -1553,7 +1689,7 @@ fn toggle_tick(id: String, app: tauri::AppHandle, st: State<Shared>) -> Value {
 #[tauri::command]
 fn set_level(level: i64, app: tauri::AppHandle, st: State<Shared>) -> Value {
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         g.level = level.clamp(0, 100);
         g.save_progress();
         g.view()
@@ -1565,7 +1701,7 @@ fn set_level(level: i64, app: tauri::AppHandle, st: State<Shared>) -> Value {
 #[tauri::command]
 fn set_flag(flag: String, value: String, app: tauri::AppHandle, st: State<Shared>) -> Value {
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         if g.route.flags.iter().any(|f| f.id == flag) && (value == "yes" || value == "no" || value.is_empty()) {
             if value.is_empty() {
                 g.flags.remove(&flag);
@@ -1583,7 +1719,7 @@ fn set_flag(flag: String, value: String, app: tauri::AppHandle, st: State<Shared
 #[tauri::command]
 fn set_folder(kind: String, path: String, app: tauri::AppHandle, st: State<Shared>) -> Value {
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         g.apply_folder(&kind, &path);
         g.view()
     };
@@ -1619,7 +1755,7 @@ fn run_picker(description: &str, initial: &str) -> Option<String> {
 async fn pick_folder(kind: String, app: tauri::AppHandle) -> Result<Value, String> {
     let (desc, initial) = {
         let st = app.state::<Shared>();
-        let g = st.0.lock().unwrap();
+        let g = lock(&st);
         if kind == "game" {
             ("Choose your Witcher 3 game folder (it contains the folders content and bin)", g.game_dir.as_ref().map(|p| p.display().to_string()).unwrap_or_default())
         } else {
@@ -1629,7 +1765,7 @@ async fn pick_folder(kind: String, app: tauri::AppHandle) -> Result<Value, Strin
     let picked = tauri::async_runtime::spawn_blocking(move || run_picker(desc, &initial)).await.map_err(|e| e.to_string())?;
     let st = app.state::<Shared>();
     let v = {
-        let mut g = st.0.lock().unwrap();
+        let mut g = lock(&st);
         if let Some(p) = picked {
             g.apply_folder(&kind, &p);
         }
@@ -1661,6 +1797,10 @@ fn main() {
         return;
     }
     let data_dir = find_data_dir();
+    // The log comes first so a panic while loading the data is recorded too
+    let app_dir = find_app_dir(&data_dir);
+    init_log(&app_dir);
+    let data_dir_text = data_dir.display().to_string();
     let mut inner = match Inner::load(data_dir) {
         Ok(i) => i,
         Err(e) => {
@@ -1784,28 +1924,48 @@ fn main() {
         let _ = std::fs::write(out, serde_json::to_string_pretty(&dump).unwrap_or_default());
         return;
     }
+    let saves_text = inner.saves_dir().map(|p| p.display().to_string()).unwrap_or_else(|| "none".into());
+    log_line(&format!("START version={} app_dir={} data_dir={} saves_dir={}", env!("CARGO_PKG_VERSION"), app_dir.display(), data_dir_text, saves_text));
+    // Test-only: W3TRACKER_TEST_PANIC_AT=N makes the watcher panic on its Nth iteration, while holding the lock, once.
+    let panic_at: Option<u64> = std::env::var("W3TRACKER_TEST_PANIC_AT").ok().and_then(|v| v.trim().parse().ok());
     tauri::Builder::default()
         .manage(Shared(Mutex::new(inner)))
-        .setup(|app| {
+        .setup(move |app| {
             let handle = app.handle().clone();
             std::thread::spawn(move || {
-                let mut last_emit = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+                let mut last_emit = now_secs();
+                let mut last_hb: u64 = 0;
+                let mut iter: u64 = 0;
                 loop {
                     std::thread::sleep(Duration::from_millis(2000));
-                    let shared = handle.state::<Shared>();
-                    let view = {
-                        let mut g = shared.0.lock().unwrap();
-                        if g.refresh_save() { Some(g.view()) } else { None }
-                    };
-                    let now = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
-                    if let Some(v) = view {
-                        let _ = handle.emit("view", v);
-                        last_emit = now;
-                    } else if now.saturating_sub(last_emit) >= 20 {
-                        // keep the "saved Xm ago" text fresh
-                        let v = shared.0.lock().unwrap().view();
-                        let _ = handle.emit("view", v);
-                        last_emit = now;
+                    iter += 1;
+                    // A panic in the body must not end the thread: the sleep above stays outside the catch,
+                    // so a panic that repeats every pass cannot spin the CPU.
+                    let res = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        let shared = handle.state::<Shared>();
+                        let (view, save) = {
+                            let mut g = lock(&shared);
+                            if panic_at == Some(iter) {
+                                panic!("test panic");
+                            }
+                            let view = if g.refresh_save() { Some(g.view()) } else { None };
+                            let save = g.save_path.as_ref().and_then(|p| p.file_name()).map(|n| n.to_string_lossy().into_owned());
+                            (view, save)
+                        };
+                        // Emit only when the save changed. The window ticks "saved Xm ago" itself, and it pulls
+                        // a view on its own watchdog, so a quiet save costs no 1 MB push here.
+                        let now = now_secs();
+                        if let Some(v) = view {
+                            let _ = handle.emit("view", v);
+                            last_emit = now;
+                        }
+                        if now.saturating_sub(last_hb) >= 60 {
+                            log_line(&format!("heartbeat save={} last_emit_age={}s", save.as_deref().unwrap_or("none"), now.saturating_sub(last_emit)));
+                            last_hb = now;
+                        }
+                    }));
+                    if let Err(payload) = res {
+                        log_line(&format!("WATCHER caught panic, continuing: {}", panic_text(&*payload)));
                     }
                 }
             });

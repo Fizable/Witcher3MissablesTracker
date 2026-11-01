@@ -1046,7 +1046,7 @@ function trackedAccent(s, tr) {
  * quests this quest would close, and its missable Gwent cards. There is no second queue and no
  * card above this one.
  */
-function buildTrackedCard(s, objs, tr, extras) {
+function buildTrackedCard(s, tr, extras) {
   const active = s.status === 'Active';
   const accent = trackedAccent(s, tr);
   const c = h('article', 'card tracked-card accent-' + accent);
@@ -1058,9 +1058,11 @@ function buildTrackedCard(s, objs, tr, extras) {
     h('span', 'sidetag ' + (active ? 'green' : 'dim'), place));
   add(c, top, h('button', 'title link', s.title, { 'data-act': 'detail', 'data-id': s.id }));
 
-  if (objs.length) {
+  // Exactly one objective line: the one the game has highlighted for this quest (tr.objective). The
+  // step's full list and any "show all" control belong to the quest detail page, not this card.
+  if (tr.objective) {
     const ul = h('ul', 'bul');
-    objs.slice(0, 2).forEach((o) => add(ul, h('li', '', o)));
+    add(ul, h('li', '', tr.objective));
     add(c, h('div', 'lbl', active ? 'CURRENT OBJECTIVE' : 'STARTS WITH'), ul);
   }
   if (s.desc) add(c, h('div', 'txt desc', s.desc));
@@ -1129,8 +1131,8 @@ function renderTracked(v) {
   const ids = (tr.steps || []).filter((id) => stepsById.has(id));
   setTrackedFallback(ids.length ? null : trackedUnknownCard(tr));
   trackedList(ids, (id) => id,
-    (id) => [stepsById.get(id), v.objectives[id] || [], v.level, tr],
-    (id, i) => buildTrackedCard(stepsById.get(id), v.objectives[id] || [], tr, i === 0));
+    (id) => [stepsById.get(id), v.level, tr],
+    (id, i) => buildTrackedCard(stepsById.get(id), tr, i === 0));
 }
 
 // ---------- PROGRESS ----------
@@ -1654,6 +1656,18 @@ el.level.addEventListener('input', () => {
 });
 el.pin.checked = store.get('pin', true);
 el.pin.addEventListener('change', () => { store.set('pin', el.pin.checked); Api.set_pin(el.pin.checked); });
+
+// ---------- watchdog ----------
+// The app pushes a view only when a save changes. If no view has arrived for a minute, pull one: a pull
+// rescans the saves folder, so the window recovers even if the watcher thread has stopped. One pull at a time.
+let pullInFlight = false;
+setInterval(async () => {
+  if (pullInFlight || performance.now() - viewAt <= 60000) return;
+  pullInFlight = true;
+  try { render(await Api.get_view()); }
+  catch (e) { console.error(e); }
+  finally { pullInFlight = false; }
+}, 15000);
 
 // ---------- boot ----------
 (async function boot() {

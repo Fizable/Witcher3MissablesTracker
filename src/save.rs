@@ -251,10 +251,11 @@ pub fn guid_str(g: &[u8; 16]) -> String {
         .join("-")
 }
 
-/// CWitcherJournalManager.JTrackedQuest.guid -> the quest the player is tracking in the game (None if the save has none)
-pub fn tracked_guid(r: &[u8], names: &[String]) -> Option<String> {
+/// The raw guid of the first `key` object in CWitcherJournalManager, read from its first field (`guid`).
+/// JTrackedQuest and JHighlightedObjective share this layout.
+fn journal_object_guid(r: &[u8], names: &[String], key: &str) -> Option<[u8; 16]> {
     let idx = |n: &str| names.iter().rposition(|x| x == n).map(|i| (i + 1) as u16);
-    let (jt, guid, cguid) = (idx("JTrackedQuest")?, idx("guid")?, idx("CGUID")?);
+    let (jt, guid, cguid) = (idx(key)?, idx("guid")?, idx("CGUID")?);
     let mut pat = b"BS".to_vec();
     pat.extend_from_slice(&jt.to_le_bytes());
     let mut from = 0;
@@ -262,12 +263,36 @@ pub fn tracked_guid(r: &[u8], names: &[String]) -> Option<String> {
         // object header (4 bytes), then its first field: VL guid: CGUID
         let q = p + 4;
         if r.get(q..q + 2) == Some(&b"VL"[..]) && r.get(q + 2..q + 4) == Some(&guid.to_le_bytes()[..]) && r.get(q + 4..q + 6) == Some(&cguid.to_le_bytes()[..]) {
-            let g: [u8; 16] = r.get(q + 6..q + 22)?.try_into().ok()?;
-            return Some(guid_str(&g));
+            return r.get(q + 6..q + 22)?.try_into().ok();
         }
         from = p + 1;
     }
     None
+}
+
+/// CWitcherJournalManager.JTrackedQuest.guid -> the quest the player is tracking in the game (None if the save has none)
+pub fn tracked_guid(r: &[u8], names: &[String]) -> Option<String> {
+    journal_object_guid(r, names, "JTrackedQuest").map(|g| guid_str(&g))
+}
+
+/// CWitcherJournalManager.JHighlightedObjective.guid -> the objective the player selected with V in the game.
+/// An all-zero guid means nothing is highlighted, so it reads as None.
+pub fn highlighted_guid(r: &[u8], names: &[String]) -> Option<String> {
+    journal_object_guid(r, names, "JHighlightedObjective").filter(|g| *g != [0u8; 16]).map(|g| guid_str(&g))
+}
+
+/// A raw guid as 32 hex digits (the form derived.json and the game's own files use, in file byte order)
+/// -> the dashed form `guid_str` gives and the quest index stores. None if the text is not 32 hex digits.
+pub fn guid_from_hex(s: &str) -> Option<String> {
+    let s = s.trim();
+    if s.len() != 32 || !s.is_ascii() {
+        return None;
+    }
+    let mut g = [0u8; 16];
+    for (i, b) in g.iter_mut().enumerate() {
+        *b = u8::from_str_radix(&s[2 * i..2 * i + 2], 16).ok()?;
+    }
+    Some(guid_str(&g))
 }
 
 /// the quest file (short name) a journal guid belongs to: its top-level guid first, then any of its entries
@@ -350,6 +375,7 @@ pub struct SaveState {
     pub objectives: HashMap<String, Vec<String>>,
     pub tracked: Option<String>,      // guid of the quest the player is tracking in the game
     pub tracked_file: Option<String>, // journal file (short) of that guid, from the save's own journal entry
+    pub highlighted: Option<String>,  // guid of the objective the player selected with V (dashed, as `tracked`)
     /// Names of the game's facts this save has set (a value of 1 or more). Some route prerequisites
     /// are not "the other quest is finished" but "its story has reached the point that opens this",
     /// and the game's own condition for that is a fact (see data/prereqs_review.json).
@@ -449,6 +475,7 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
     let raw = load_raw(path)?;
     let names = name_table(&raw)?;
     let tracked = tracked_guid(&raw, &names);
+    let highlighted = highlighted_guid(&raw, &names);
     let entries = journal(&raw, &names)?;
     // the save's journal entry with the tracked guid names the file; the quest index does not list every entry guid
     let tracked_file = tracked.as_deref().and_then(|g| {
@@ -520,5 +547,27 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
         .filter(|(_name, vals)| vals.iter().any(|v| *v > 0))
         .map(|(name, _vals)| name)
         .collect();
-    Ok(SaveState { state, objective_guids, objectives, tracked, tracked_file, facts })
+    Ok(SaveState { state, objective_guids, objectives, tracked, tracked_file, highlighted, facts })
+}
+
+#[cfg(test)]
+mod guid_tests {
+    use super::*;
+
+    #[test]
+    fn hex_from_derived_matches_the_dashed_form_the_save_and_index_use() {
+        // derived.json (raw hex, file byte order) and the quest index / save (dashed, u32 little-endian
+        // printed as hex) name the same objective; this pair was checked against the cached quest index
+        assert_eq!(guid_from_hex("daba22a8fc21204eaedce0d2c5161c9f").as_deref(), Some("A822BADA-4E2021FC-D2E0DCAE-9F1C16C5"));
+        // the index's own dashed guid, read back to raw bytes, gives the same hex again
+        let raw: String = "CB9A683E-401D6D11-8D174DA7-9A673C01".split('-')
+            .flat_map(|p| u32::from_str_radix(p, 16).unwrap().to_le_bytes())
+            .map(|b| format!("{b:02x}"))
+            .collect();
+        assert_eq!(guid_from_hex(&raw).as_deref(), Some("CB9A683E-401D6D11-8D174DA7-9A673C01"));
+        // upper case input is the same guid; anything that is not 32 hex digits is not a guid
+        assert_eq!(guid_from_hex("DABA22A8FC21204EAEDCE0D2C5161C9F").as_deref(), Some("A822BADA-4E2021FC-D2E0DCAE-9F1C16C5"));
+        assert_eq!(guid_from_hex("daba22a8"), None);
+        assert_eq!(guid_from_hex("zaba22a8fc21204eaedce0d2c5161c9f"), None);
+    }
 }

@@ -118,6 +118,17 @@ This is the leading hypothesis; the fix below includes a soak test that would sh
 7. **UI faults.** Collect the faults from the user with a screenshot each, reproduce with a `--view`
    dump, fix one per commit.
    *Check:* each fault's screenshot redone after the fix.
+8. **Ending choices on the tracked card** (requested 2026-11-01, after items 1 and 2). When the tracked
+   quest holds a reviewed ending choice, the card always shows a warning: with guidance on, the exact
+   line to say; with guidance off, only that the quest matters for an ending. When the save's
+   highlighted objective is the one during which that line is offered, the warning changes state
+   (with guidance on, the line itself is highlighted in a different colour): "say it now" rather
+   than "coming up". Needs a new database table linking each scene block to the objective that is
+   active when it plays (walk back from the `CQuestSceneBlock` to the nearest objective activation),
+   joined to the reviewed lines in `data/endings.json` / `outcomes.json`.
+   *Check:* for each reviewed ending line, a save taken on that objective shows the "say it now"
+   state and a save on an earlier objective shows "coming up"; with guidance off no line text
+   appears anywhere.
 
 Execution follows the agreed split: the planner writes the brief and the acceptance check for each
 item, a Haiku worker implements it, and the planner reruns the check and reads the diff before it is
