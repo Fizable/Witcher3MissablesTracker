@@ -401,7 +401,7 @@ mod tests {
     }
 
     fn eval(steps: &[(&str, &str)]) -> Eval {
-        let mut e = Eval { steps: Vec::new(), byid: HashMap::new(), events: Vec::new(), todo: Vec::new() };
+        let mut e = Eval { steps: Vec::new(), byid: HashMap::new(), events: Vec::new() };
         for (i, (id, status)) in steps.iter().enumerate() {
             e.steps.push(Step {
                 n: node(id), status: status.to_string(), journal: status.to_string(), manual: false,

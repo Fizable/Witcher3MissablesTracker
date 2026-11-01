@@ -146,14 +146,6 @@ ol.num li { margin: 3px 0; }
 .collapsible.closed { grid-template-rows: 0fr; }
 .collapsible.closed > .inner { visibility: hidden; transition: visibility 0s 180ms; }
 
-/* ---------- compact todo rows ---------- */
-.rows { display: flex; flex-direction: column; gap: 2px; padding-top: 9px; }
-.row { display: flex; align-items: baseline; gap: 9px; width: 100%; padding: 6px 9px; background: var(--card); border-radius: 7px; transition: background var(--t); }
-.row:hover { background: var(--card2); }
-.rank { width: 22px; text-align: right; flex: none; font-variant-numeric: tabular-nums; }
-.rtitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rreg, .row .small { white-space: nowrap; flex: none; }
-
 /* ---------- progress ---------- */
 .psec { background: var(--card); border-radius: 9px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .phead { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 12px; transition: background var(--t); flex-wrap: wrap; }
@@ -230,9 +222,6 @@ a.src:hover { text-decoration: underline; }
 .finput:focus { outline: none; border-color: #d4a84b; }
 .foldermsg { margin-top: 8px; padding: 7px 9px; border-radius: 6px; background: #2a1d1d; color: #e5534b; font-size: 12px; }
 
-/* a step that carries a cutoff worked out from the game's own files */
-.warnmark { color: #d9a441; font-size: 12px; margin-right: 4px; }
-
 /* ---------- setup gate, run header and ending goals ---------- */
 .setup-card {
   margin-top: 10px; padding: 11px 13px; border: 1px solid var(--gold); border-radius: 9px;
@@ -307,19 +296,44 @@ a.src:hover { text-decoration: underline; }
 .coverage-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .coverage-table tr:last-child td { border-bottom: 0; }
 
-/* ---------- cockpit: NOW, UP NEXT and one MORE drawer ---------- */
-#topSec {
-  position: sticky; top: 0; z-index: 6; max-height: 52vh; overflow-y: auto;
-  margin: 0 -14px 0; padding: 9px 14px 10px;
-  background: var(--bg); border-bottom: 1px solid var(--line);
-  box-shadow: 0 8px 14px rgba(0,0,0,.22);
+/* ---------- TRACKED: one section, one quest ---------- */
+#trackedSec { margin-top: 14px; }
+#trackedSec h2 { letter-spacing: .16em; }
+#trackedEmpty { margin: 4px 0 0; }
+.tracked-card .title { margin-top: 5px; }
+/* A chip is one compact line; opening it shows the little warning window with the names. */
+.trk-chip {
+  margin-top: 8px; border: 1px solid var(--line); border-left: 2px solid var(--amber);
+  border-radius: 7px; background: var(--card2); overflow: hidden;
 }
-#topSec h2 { margin-bottom: 4px; }
-#topSec .stack { gap: 7px; }
-#topSec .card { padding-top: 8px; padding-bottom: 8px; }
+.trk-chip.red { border-left-color: var(--red); }
+.trk-chip.amber, .trk-chip.gold { border-left-color: var(--gold); }
+.trk-chip.blue { border-left-color: var(--blue); }
+.trk-chip.lost { border-left-color: var(--dim); }
+.trk-chip > summary {
+  display: flex; align-items: baseline; gap: 6px; padding: 5px 9px; cursor: pointer;
+  list-style: none; font-size: 10.5px; letter-spacing: .07em; font-weight: 650; color: var(--amber);
+}
+.trk-chip > summary::-webkit-details-marker { display: none; }
+.trk-chip > summary::after { content: "▸"; margin-left: auto; color: var(--dim); font-size: 10px; }
+.trk-chip[open] > summary::after { content: "▾"; }
+.trk-chip > summary:hover { color: var(--text); }
+.trk-chip.red > summary { color: var(--red); }
+.trk-chip.gold > summary { color: var(--gold); }
+.trk-chip.blue > summary { color: var(--blue); }
+.trk-chip.lost > summary { color: var(--dim); }
+.trk-chip-mark { font-size: 12px; line-height: 1; }
+.trk-chip-body { padding: 7px 10px 9px; border-top: 1px solid var(--line); }
+.trk-chip-body .lbl { margin-top: 5px; }
+.trk-chip-body .bul { margin: 2px 0 5px; }
+.trk-chip-body .why { margin-bottom: 4px; }
+.trk-card { padding: 6px 0; border-top: 1px solid rgba(44,49,60,.55); }
+.trk-card:first-child { border-top: 0; padding-top: 0; }
+.trk-card-top { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.trk-card-top .fl { flex: 1; min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.trk-card-top .windowtag { flex: none; }
+/* The old sticky warning band and the queue rows are gone; STATUS and PROGRESS keep their own. */
 #statusWarnSec { margin-bottom: 14px; }
-.top-later { margin-left: auto; }
-.top-later .linkbtn { padding: 0; font-size: 11px; }
 
 /* Future plan steps are reference order, not the play queue. One collapsed line keeps them
    reachable without making them look like the next thing to do. */
@@ -410,11 +424,9 @@ a.src:hover { text-decoration: underline; }
   .coverage-table { font-size: 10.5px; }
   .coverage-table th, .coverage-table td { padding: 4px 3px; }
 }
-@media (max-width: 420px) { .rreg { display: none; } }
 @media (max-width: 400px) {
   .pane { padding: 0 9px 24px; }
   #hdr { padding: 8px 9px; }
   .save-name { max-width: 100%; }
-  #topSec { margin-left: -9px; margin-right: -9px; padding-left: 9px; padding-right: 9px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

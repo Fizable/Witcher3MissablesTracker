@@ -5,7 +5,6 @@
 const $ = (s, r = document) => r.querySelector(s);
 const GLYPH = { Main: '✦', Secondary: '◆', Contracts: '⚔', 'Treasure Hunts': '◈', Gwent: '🃏' };
 const ICON = { Done: '✔', Active: '◐', 'Not started': '○', Failed: '✖', Assumed: '✔?', 'N/A': '–' };
-const FIRST_N = 5;
 
 // ---------- helpers ----------
 function h(tag, cls, text, attrs) {
@@ -21,10 +20,8 @@ const store = {
   set(k, v) { try { localStorage.setItem('w3.' + k, JSON.stringify(v)); } catch { /* ignore */ } },
 };
 const short = (s, n) => (s.length > n ? s.slice(0, n).trimEnd() + '…' : s);
-const noParen = (t) => t.replace(/\s*\([^)]*\)\s*/g, ' ').replace(/\s+/g, ' ').trim();
 const lvNum = (s) => { const n = parseInt(s.lv, 10); return Number.isFinite(n) ? n : 0; };
 const lvlChip = (s) => s.section.toUpperCase() + (/\d/.test(s.lv || '') ? ' · L' + s.lv : '');
-const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 /** Keyed list: keeps one element per key, rebuilds it only when sig changes, keeps order. */
 function keyedList(parent) {
@@ -35,8 +32,8 @@ function keyedList(parent) {
       const k = keyOf(it); seen.add(k);
       const sig = JSON.stringify(sigOf(it));
       let rec = map.get(k);
-      if (!rec) { rec = { el: build(it), sig }; map.set(k, rec); }
-      else if (rec.sig !== sig) { const el = build(it); rec.el.replaceWith(el); rec.el = el; rec.sig = sig; }
+      if (!rec) { rec = { el: build(it, i), sig }; map.set(k, rec); }
+      else if (rec.sig !== sig) { const el = build(it, i); rec.el.replaceWith(el); rec.el = el; rec.sig = sig; }
       if (parent.children[i] !== rec.el) parent.insertBefore(rec.el, parent.children[i] || null);
     });
     for (const [k, rec] of map) if (!seen.has(k)) { rec.el.remove(); map.delete(k); }
@@ -46,7 +43,6 @@ function keyedList(parent) {
 // ---------- state ----------
 let view = null;
 let viewAt = performance.now();
-let showAll = store.get('showAll', false);
 let collapsed = store.get('collapsed', {});
 const stepsById = new Map();
 const detailCache = new Map(); // id -> detail
@@ -68,7 +64,7 @@ const el = {
 const ui = {
   setup: $('#setupCard'), runTargets: $('#runTargets'), runCounts: $('#runCounts'),
   goalRow: $('#goalRow'), impossibleSec: $('#impossibleSec'), impossible: $('#impossible'),
-  planIssues: $('#planIssues'), topLater: $('#topLater'),
+  planIssues: $('#planIssues'),
   tradeoffsSec: $('#tradeoffsSec'), tradeoffs: $('#tradeoffs'), outcomeMatrix: $('#outcomeMatrix'),
   cards: $('#cards'), cardsCount: $('#cardsCount'), cardsNote: $('#cardsNote'),
   coverage: $('#coverage'), picker: $('#targetPicker'), targetOptions: $('#targetOptions'),
@@ -896,39 +892,7 @@ async function applyPicker() {
   } catch (e) { console.error(e); }
 }
 
-// ---------- top section: only what still has a cost ----------
-const topList = keyedList($('#top'));
-
-/**
- * The only list-level warning surface. The backend sends an entry only when the loaded save
- * permits an action now: an open quest window, an ordering conflict, an open card window, or an
- * active quest that holds a consequential choice. Settled losses and passed cutoffs are on
- * STATUS; an empty list hides the section.
- *
- * A card says what is at stake and why, in the game's own names. The file mechanism and the
- * save-status transcript stay on the quest's detail page, behind "Technical details".
- */
-function renderTop(v) {
-  // The payload is the whole truth: an action available now, an ordering conflict, an open card
-  // window, or a choice in the quest the player is on. Settled losses and passed cutoffs are
-  // MORE > STATUS; an ahead window is a count in MORE > CARDS > LATER, never a band entry.
-  const items = v.top || [];
-  ui.topLater.replaceChildren();
-  // Silence is the correct answer: an empty band is hidden, not filled.
-  $('#topSec').classList.toggle('hidden', !items.length);
-  topList(items, (x) => x.kind + x.headline, (x) => x, (x) => {
-    const col = x.level === 'stop' ? 'red' : x.level === 'lost' ? 'lost' : x.level === 'warn' ? 'amber' : 'blue';
-    const first = (x.ids || [])[0];
-    const c = h('div', 'card accent-' + col, null, first ? { 'data-act': 'detail', 'data-id': first } : null);
-    add(c, h('div', 'tag ' + col, x.tag || 'WATCH OUT'));
-    if (first) add(c, h('button', 'title link', x.headline, { 'data-act': 'detail', 'data-id': first }));
-    else add(c, h('div', 'title', x.headline));
-    if (x.action) add(c, h('div', 'action', x.action));
-    return c;
-  });
-}
-
-/** MORE > STATUS carries the warnings the band must not show: settled losses and checks. */
+/** MORE > STATUS carries the warnings the play loop does not show: settled losses and checks. */
 function renderStatus(v) {
   const rows = v.status || [];
   const sec = $('#statusWarnSec');
@@ -980,9 +944,9 @@ function watchBox(x) {
 }
 
 
-// ---------- DO NEXT ----------
-const cardList = keyedList($('#todoCards'));
-const rowList = keyedList($('#todoRows'));
+// ---------- TRACKED: one section, one quest ----------
+const trackedList = keyedList($('#trackedCards'));
+let trackedFallback = null;
 
 /**
  * A mission card: the current objective first (the line you read most), then one short description,
@@ -1007,22 +971,90 @@ function choiceBlock(tracked) {
   return box;
 }
 
+/** A compact chip whose body is the little warning window the summary opens. */
+function chipBlock(reason, tone, buildBody) {
+  const details = h('details', 'trk-chip ' + tone);
+  const summary = h('summary', 'trk-chip-sum');
+  add(summary, h('span', 'trk-chip-mark', reason.mark || '⚠'), h('span', '', reason.label));
+  details.append(summary);
+  const body = h('div', 'trk-chip-body');
+  buildBody(body);
+  details.append(body);
+  return details;
+}
+
+/** What finishing the tracked quest would close, named in the chip's warning window. */
+function cutoffChip(cut) {
+  const n = (cut.quests || []).length;
+  const tone = cut.level === 'stop' ? 'red' : 'amber';
+  const closed = ['check', 'passed', 'lost', 'later'].includes(cut.live);
+  const label = (closed ? 'CLOSED FOR' : 'CUTS OFF') + ' ' + n + (n === 1 ? ' QUEST' : ' QUESTS');
+  return chipBlock({ label }, tone, (body) => {
+    if (cut.headline) add(body, h('div', 'why', cut.headline));
+    if (n) {
+      const ul = h('ul', 'bul');
+      cut.quests.forEach((q) => add(ul, h('li', '', q)));
+      add(body, h('div', 'lbl', closed ? 'WINDOW CLOSED FOR' : 'FINISH THESE FIRST'), ul);
+    }
+    if (cut.action) add(body, h('div', 'action', cut.action));
+    (cut.details || []).forEach((d) => add(body, h('div', 'dim small', d)));
+  });
+}
+
+/** A live warning that belongs to the tracked quest itself (open window, passed cutoff, ...). */
+function trackedWatchChip(w) {
+  const col = warnCol(w);
+  return chipBlock({ label: w.tag || warnTag(w) }, col === 'lost' ? 'lost' : col, (body) => {
+    if (w.headline) add(body, h('div', 'why', w.headline));
+    if (w.action) add(body, h('div', 'action', w.action));
+    if (w.live_note) add(body, h('div', 'dim small', w.live_note));
+  });
+}
+
+/** Missable Gwent cards whose source, opening or closing window is one of this quest's steps. */
+function trackedGwent(tr) {
+  const cards = tr.cards || [];
+  if (!cards.length) return null;
+  return chipBlock({ mark: '🃏', label: 'GWENT · ' + cards.length + (cards.length === 1 ? ' MISSABLE CARD' : ' MISSABLE CARDS') }, 'gold', (body) => {
+    cards.forEach((card) => {
+      const live = card.window_live || {};
+      const row = h('div', 'trk-card');
+      add(row, h('div', 'trk-card-top'), h('span', 'fl', card.name || card.id),
+        h('span', 'windowtag ' + (live.tone || 'dim'), live.label || 'NO WINDOW'));
+      if (card.source_text) add(row, h('div', 'dim small', card.source_text));
+      const w = card.window || {};
+      if (w.mechanism) add(row, h('div', 'dim small', w.mechanism));
+      if (w.source && w.source.name) {
+        add(row, h('div', 'dim small', 'Source: ' + w.source.name + (w.source.reviewed ? ' (' + w.source.reviewed + ')' : '') + '.'));
+      }
+      body.append(row);
+    });
+  });
+}
+
+function trackedAccent(s, tr) {
+  if ((tr.cutoffs || []).some((c) => c.level === 'stop')) return 'red';
+  if ((tr.watch || []).some((w) => ['inside', 'open', 'check', 'passed', 'lost'].includes(w.live))) return 'red';
+  if ((tr.cutoffs || []).some((c) => c.level === 'warn') || (tr.watch || []).length) return 'amber';
+  if ((tr.cards || []).some((c) => (c.window_live || {}).state === 'active')) return 'amber';
+  return s.status === 'Active' ? 'green' : s.conditional ? 'blue' : 'gold';
+}
+
 /**
- * A tracked mission card: the current objective first, then one short description, then the choice
- * warning the player came here for. The plan is not a card of its own; when guidance is on and a
- * goal is selected it contributes exactly one reviewed line, and with guidance off it contributes
- * only the constant sentence.
+ * The tracked card: the quest the save is following, with only the reviewed facts that belong to
+ * that quest. The plan contributes one ending choice; the route data contributes live windows,
+ * quests this quest would close, and its missable Gwent cards. There is no second queue and no
+ * card above this one.
  */
-function buildCard(s, objs, tracked) {
+function buildTrackedCard(s, objs, tr, extras) {
   const active = s.status === 'Active';
-  const w = tracked ? tracked.warning : null;
-  const accent = w ? (w.level === 'stop' ? 'red' : 'amber') : active ? 'green' : s.conditional ? 'blue' : 'gold';
-  const c = h('article', 'card todo accent-' + accent);
+  const accent = trackedAccent(s, tr);
+  const c = h('article', 'card tracked-card accent-' + accent);
   const top = h('div', 'card-top');
   // A tracked step is in the save even when its journal state is "not started" (the tracker may
   // know the next goal before the log flips it active). Never label that card "not in your log".
   const place = active ? 'in your quest log' : 'tracked in your game';
-  add(top, h('span', 'chip', lvlChip(s)), tracked ? h('span', 'tag blue', 'TRACKED IN YOUR GAME') : null,
+  add(top, h('span', 'chip', lvlChip(s)), h('span', 'tag blue', 'TRACKED'),
     h('span', 'sidetag ' + (active ? 'green' : 'dim'), place));
   add(c, top, h('button', 'title link', s.title, { 'data-act': 'detail', 'data-id': s.id }));
 
@@ -1032,8 +1064,17 @@ function buildCard(s, objs, tracked) {
     add(c, h('div', 'lbl', active ? 'CURRENT OBJECTIVE' : 'STARTS WITH'), ul);
   }
   if (s.desc) add(c, h('div', 'txt desc', s.desc));
-  const choice = choiceBlock(tracked);
-  if (choice) add(c, choice);
+
+  if (extras) {
+    (tr.watch || []).forEach((w) => add(c, trackedWatchChip(w)));
+    (tr.cutoffs || []).forEach((cut) => add(c, cutoffChip(cut)));
+  }
+  const choice = choiceBlock(tr);
+  if (choice && extras) add(c, choice);
+  if (extras) {
+    const gwent = trackedGwent(tr);
+    if (gwent) add(c, gwent);
+  }
 
   // Choice and goal chips were plan decoration: the tracked card states the warning in words, so
   // turning guidance off removes the line and leaves no chip behind. Informational tags stay.
@@ -1044,7 +1085,6 @@ function buildCard(s, objs, tracked) {
     if (s.provenance === 'manual_reviewed') add(chips, h('span', 'tagchip', 'MANUAL REVIEWED', { title: s.review_reason || 'Reviewed checklist step, not gamefile-proven.' }));
     add(c, chips);
   }
-  if (w) add(c, h('div', 'tag ' + (w.level === 'stop' ? 'red' : 'amber'), w.headline));
   if (s.manual) add(c, h('div', 'dim small', s.provenance === 'manual_reviewed' ? 'Reviewed checklist step, not gamefile-proven. You tick it yourself.' : 'You tick this one yourself when it is done.'));
 
   const foot = h('div', 'card-foot');
@@ -1056,38 +1096,41 @@ function buildCard(s, objs, tracked) {
   return c;
 }
 
-function buildRow(s, rank) {
-  const b = h('button', 'row', null, { 'data-act': 'detail', 'data-id': s.id });
-  const st = s.status === 'Active' ? 'in your log' : s.conditional ? 'if it exists' : 'not in log';
-  if ((s.watch || []).length) add(b, h('span', 'warnmark', '⚠', { title: s.watch[0].headline }));
-  add(b, h('span', 'rank dim', String(rank)), h('span', 'rtitle', noParen(s.title)),
-    h('span', 'dim small rreg', s.section), h('span', 'small ' + (s.status === 'Active' ? 'green' : 'dim'), st));
-  return b;
+/** The tracked quest the tracker cannot place on the route yet: name it, do not invent a step. */
+function trackedUnknownCard(tr) {
+  const c = h('article', 'card tracked-card accent-gold');
+  add(c, h('div', 'card-top'), h('span', 'tag blue', 'TRACKED'), h('span', 'sidetag dim', 'not on the route yet'));
+  add(c, h('div', 'title', tr.display || tr.short || 'a quest the tracker does not know yet'));
+  add(c, h('div', 'txt desc', 'The save tracks this quest, but its route step is not in this build. Open your quest log to see its objectives.'));
+  return c;
+}
+
+function setTrackedFallback(el) {
+  if (trackedFallback) { trackedFallback.remove(); trackedFallback = null; }
+  if (el) { trackedFallback = el; $('#trackedCards').append(el); }
 }
 
 /**
- * UP NEXT is the tracked quest and nothing else. Other in-log quests stay in PROGRESS; a window
- * already in NOW is not repeated. The plan adds no row of its own: its one visible product is
- * `tracked.choice`, rendered inside the tracked card.
+ * TRACKED is the one source of truth for the play loop: `v.tracked` names the quest, its steps and
+ * every reviewed fact that belongs to it. There is no `todo` list and no warning band to merge.
  */
-function renderTodo(v) {
-  const ids = (v.todo || []).filter((id) => stepsById.has(id));
-  const tr = v.tracked, trackedSteps = new Set(tr ? tr.steps : []);
-  const first = ids.slice(0, FIRST_N), rest = ids.slice(FIRST_N);
-  const trackedOf = (id) => (trackedSteps.has(id) ? tr : null);
-  $('#todoEmpty').classList.toggle('hidden', ids.length > 0);
-  const emptyText = (v.save && v.save.error) ? 'Load a save to see what is next.' : 'Nothing queued right now.';
-  if ($('#todoEmpty').textContent !== emptyText) $('#todoEmpty').textContent = emptyText;
-  cardList(first, (id) => id, (id) => [stepsById.get(id), v.objectives[id] || [], v.level, trackedOf(id)],
-    (id) => buildCard(stepsById.get(id), v.objectives[id] || [], trackedOf(id)));
-  const rank = new Map(ids.map((id, i) => [id, i + 1]));
-  rowList(rest, (id) => id, (id) => [stepsById.get(id), rank.get(id)],
-    (id) => buildRow(stepsById.get(id), rank.get(id)));
-  $('#todoToggle').classList.toggle('hidden', !rest.length);
-  $('#todoMore').classList.toggle('closed', !showAll || !rest.length);
-  $('#todoToggle').textContent = showAll
-    ? '▴ show only the first ' + FIRST_N
-    : '▾ show all ' + ids.length + ' (+' + rest.length + ' more)';
+function renderTracked(v) {
+  const tr = v.tracked;
+  const missingSave = !!(v.save && v.save.error);
+  const empty = $('#trackedEmpty');
+  empty.classList.toggle('hidden', !!tr);
+  if (!tr) {
+    setTrackedFallback(null);
+    trackedList([], (id) => id, (id) => id, () => null);
+    const text = missingSave ? 'Load a save to see the quest you are tracking.' : 'No quest is tracked in your game. Pick one in your quest log and it will appear here.';
+    if (empty.textContent !== text) empty.textContent = text;
+    return;
+  }
+  const ids = (tr.steps || []).filter((id) => stepsById.has(id));
+  setTrackedFallback(ids.length ? null : trackedUnknownCard(tr));
+  trackedList(ids, (id) => id,
+    (id) => [stepsById.get(id), v.objectives[id] || [], v.level, tr],
+    (id, i) => buildTrackedCard(stepsById.get(id), v.objectives[id] || [], tr, i === 0));
 }
 
 // ---------- PROGRESS ----------
@@ -1199,7 +1242,7 @@ function render(v) {
   renderHeader(v); renderFlags(v); renderFolders(v); renderSetup(v); renderRun(v); renderGoalRow(v);
   loadPlan();
   renderEnding();
-  renderTop(v); renderStatus(v); renderTodo(v); renderImpossible(v); renderTradeoffs(v); renderCoverage(v); renderProgress(v);
+  renderStatus(v); renderTracked(v); renderImpossible(v); renderTradeoffs(v); renderCoverage(v); renderProgress(v);
   if (!cardsData) loadCards();
   if (detailId && !detailCache.has(detailId)) openDetail(detailId, true);
 }
@@ -1560,7 +1603,6 @@ document.addEventListener('click', (e) => {
     syncCardFilters();
     if (cardsData) renderCards(cardsData);
   }
-  else if (act === 'toggle-all') { showAll = !showAll; store.set('showAll', showAll); if (view) renderTodo(view); }
   else if (act === 'collapse') {
     collapsed[name] = !collapsed[name];
     store.set('collapsed', collapsed);

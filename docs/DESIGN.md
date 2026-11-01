@@ -6,43 +6,44 @@ it serves it, and an audit is judged by whether every row below is actually deli
 
 ## 1. The goal
 
-**Warn the player, at the top of the window, what is at risk right now, so the run keeps the endings
-they chose.**
+**Show the player, at the top of the window, what the quest they are tracking can still cost, so
+the run keeps the endings they chose.**
 
-The warning is the product. Every other screen exists so that warning can be trusted and so the
-player can find what is left.
+The tracked quest is the product. Every other screen exists so that its facts can be trusted and so
+the player can find what is left.
 
-## 2. The warnings
+## 2. The TRACKED card
 
-The top band (`NOW`) must warn about exactly these, and nothing else:
+There is one play-loop surface, `TRACKED`. It always shows the quest the save says the game is
+tracking, and it carries only facts that belong to that quest:
 
-1. **A cutoff.** An action that is about to cost something still saveable, or a moment that has
-   arrived and has not been taken.
-2. **Order.** Do this quest before that one. A player who has chosen a quest must be told when
-   finishing it fails other quests still open in their log.
-3. **Gwent cards.** A card window open now. A window that closed already is `MORE > STATUS`.
+1. **Its own live warnings.** An open window, a passed cutoff, a source not ready yet, or a card
+   window opening on one of its steps.
+2. **Cutoffs it would cause.** A chip names how many quests finishing this one would close down;
+   opening the little warning window names them and the reviewed action. The route's loss events
+   and every live reviewed window whose closer is this quest feed the same list, and a quest already
+   settled in the save is not named.
+3. **Missable Gwent cards.** An unowned missable card whose source, opening step or closing window
+   is one of this quest's steps. The chip lists the card, its live window, the mechanism and the
+   reviewed source.
+4. **A consequential choice.** The card carries the constant sentence "This choice affects an
+   ending."; it never prints the choice text, the ending name or the recommended option, so it is
+   safe with guidance off and no goal selected. With guidance on and a goal selected it carries the
+   exact reviewed line for that scene instead.
 
-The fourth warning, a **consequential choice**, belongs to the tracked quest card instead of the
-band. The card for the quest the player is on carries the constant sentence "This choice affects an
-ending."; the sentence never prints the choice text, the ending name or the recommended option, so
-it is safe with guidance off and no goal selected. It is never a NOW row and never a separate row
-under the card.
-
-Every quest-window band row names the action, what is lost, and the quest or phase that closes the
-window. If the data cannot supply all three, the row does not ship. "Actionable now" means the save
+Every row is answered by the loaded save: a warning about something the journal has already settled
+is not shown, and a choice whose plan step is settled is not shown. "Actionable now" means the save
 permits the action and the journal has not settled it; it does not mean the player is standing at
 the NPC, and the app must never imply that.
 
-The three band warnings apply whether or not an ending has been chosen. A chosen ending changes
-which choice line is shown on the tracked card; it is never a precondition for being warned.
+A tracked quest with no extra facts is still shown as itself: its title, its current objective and
+its description. `LOST IN THIS SAVE`, `CUTOFF PASSED - CHECK NOW` and other settled rows live on
+`MORE > STATUS` and the quest page; an ahead card window lives in `MORE > CARDS > LATER`. Nothing
+belonging to another quest is repeated here just to fill the section.
 
-Each item is answered by the loaded save: a warning about something the journal has already settled
-is not shown, and a choice still ahead is not a NOW item. `LOST IN THIS SAVE` and `CUTOFF PASSED -
-CHECK NOW` live on `MORE > STATUS` and the quest page. `UP NEXT` is on the main surface below the
-band and carries the tracked quest only.
-
-**Silence is correct.** When nothing can still change, the band is hidden. An empty band is not a
-failure state and must not be filled with reference data to look useful.
+**Silence is correct.** When nothing can still change, the card keeps the quest and drops the
+warnings. An empty chip list is not a failure state and must not be filled with reference data to
+look useful.
 
 ## 3. Guidance is opt-in, and it is a second layer
 
@@ -50,9 +51,9 @@ By default the app says only that a choice changes the outcome. It never says wh
 follows. The tracked quest card carries the constant sentence "This choice affects an ending." with
 no ending name, outcome or recommended option. With guidance toggled on, a goal chosen and that
 quest still ahead, the card tells the player what to say in that scene, using the exact line from
-the game's own scene data. Turning guidance off removes both the exact line and the choice chip,
-leaving the constant sentence. That gate is why choice text can ship at all: the line is reviewed
-game text, and the default payload carries none of it.
+the game's own scene data. Turning guidance off removes the exact line, leaving the constant
+sentence. That gate is why choice text can ship at all: the line is reviewed game text, and the
+default payload carries none of it.
 
 ## 4. One hundred percent is supported, not the headline
 
@@ -67,8 +68,7 @@ Every screen answers one question. If it stops answering that, it is broken even
 
 | surface | the question it answers | backend | must never |
 |---|---|---|---|
-| `NOW` band | what can I act on, right now? | `get_view.top` | show a row that cannot be acted on now, a settled loss, or an ahead card window; pad itself to look busy |
-| `UP NEXT` | what do I do next? | `view.todo`, `view.tracked` | repeat an in-log quest other than the tracked one; add a plan step as a second card; show a plan chip, a plan summary or a `PLAN AHEAD` list; re-filter the payload's queue in the UI |
+| `TRACKED` | what is the quest I am on, and what can it still cost? | `get_view.tracked` | repeat another in-log quest; add a second queue or plan card; show a settled loss, an ahead card window, or a settled choice; pad itself with warnings that belong to another quest |
 | quest detail | what is this quest, and am I safe to do it? | `get_detail` | put choice text in the default view |
 | `can I do this now?` search | is this quest safe yet? | `search`, `check_quest` | answer without naming the blocking quest |
 | `MORE > STATUS` | what is settled, and how much is done? | `view.completion`, `view.status` | print one percentage, or hide a settled loss or a passed cutoff |
@@ -109,13 +109,13 @@ These are not features; they are conditions. A bug is an invariant broken.
   fact about where the player is.
 - No second-hand knowledge, no guessed dialogue, no walkthrough text.
 - No claim that one save can realize every branch, ending and card.
-- No feature whose only job is to display data the band already trusts.
+- No feature whose only job is to display data the tracked card already trusts.
 
 ## 8. The check before any change
 
-Ask one question: **does this make the top band more accurate about what is at risk now?** Reference
-data may grow, but it must not move into the band. Scope that adds no warning accuracy is what this
-page exists to refuse.
+Ask one question: **does this make the tracked card more accurate about what is at risk for the
+quest the save is following?** Reference data may grow, but it must not move onto the card unless it
+belongs to that quest. Scope that adds no warning accuracy is what this page exists to refuse.
 
 ## 9. State model (1.3)
 
@@ -150,19 +150,23 @@ that row at all.
 ### 9.3 Card-window lifecycle
 
 `not_yet` (no source usable yet; ledger only) -> `ahead` (the closing step has not started;
-MORE > CARDS > LATER only) -> `active` (the closing step is open; the only card state in NOW) ->
+MORE > CARDS > LATER only) -> `active` (the closing step is open; the only card state that becomes a
+live warning on TRACKED) ->
 `check` (the step is done or failed; a check, never a proved loss) -> `lost` only when the save
 owns the failure. `owned` and `unknown` are ownership states, not window states. A window that is
 `ahead` is never a TopItem. A deck definition is not ownership and not a source.
 
-### 9.4 Warning lifecycle, the band and search
+### 9.4 Warning lifecycle, the tracked card and search
 
 A reviewed warning is rebuilt against the loaded save on every refresh. `settled` and `unknown`
-are not warnings. The band accepts `live: open` and `live: inside` window rows, and only when the
-row also names its action, the titles it costs and the quest or phase that closes the window. A
-row missing any of those does not ship. `lost`, `passed` and `check` are `MORE > STATUS` rows, and
-`ahead` is ledger-only. A consequential choice enters the band only when its quest is Active; no
-choice text, ending name or recommended option is ever in that row.
+are not warnings. The tracked card shows this quest's own live warning rows in every state (`open`,
+`inside`, `check`, `passed`, `lost`, `later`, `not_yet`) and a cutoff row for every other open quest
+this quest would close. A cutoff row names the affected quests and, for a live window, the action;
+an event edge may have `live: null`. Rows about another closer stay on that quest's page, and
+`lost`, `passed` and `check` rows for other quests are `MORE > STATUS`. `ahead` is ledger-only. A
+consequential choice is inside the tracked card only when its quest has an open ending-relevant step
+and that plan step is ahead; no choice text, ending name or recommended option is ever in the
+default payload.
 
 A search answer and the quest's own detail page call the same save-aware verdict function, so the
 same quest cannot be `safe` on its page and `at risk` in search. Both resolve a step through
@@ -184,15 +188,17 @@ the section totals are the honest report.
 The save has no player-position signal. The app may not claim "you are at the Baron"; it may only
 say what the journal, the game files and the reviewed windows prove. Literal location is refused.
 
-## 10. Acceptance record (1.3)
+## 10. Acceptance record
+
+The dated records in 10.2-10.11 describe the surface as it stood in those versions. Their references
+to `NOW`, `UP NEXT` and `view.todo` are historical; sections 5 and 10.12 describe the current app.
 
 Verified 2026-10-30 against `route.json` (412 nodes), three copied real saves (earliest, median,
 newest) and a clean profile with an empty saves folder, all under a temporary `APPDATA`.
 
 | surface | payload | positive test | negative test | last verified |
 |---|---|---|---|---|
-| NOW band | `get_view.top` | newest: active card window + missable quest | clean and earliest: `top == []`; no `choice` row; a choice lives on `tracked.choice` and never enters `top`; no `ahead` card or quest window; no instruction key | 2026-10-31 |
-| UP NEXT | `view.todo` | the tracked quest only, also with a goal selected | clean: 0 ids; the plan adds no card, chip or summary; no other in-log quest; no available quest; no open NOW row; no done/failed id | 2026-10-31 |
+| TRACKED | `get_view.tracked` | each real profile: the tracked quest, its open steps and objectives | clean: null and the load-a-save message; no `todo` key; no second queue; no other in-log quest; no plan card or `PLAN AHEAD` list; a settled loss or ahead card window is not on the card | 2026-10-31 |
 | quest detail | `get_detail` | statuette detail reads both/one/neither statuettes from the save's facts; newest says talk to Triss now | clean: `guidance == null`, `info` verdict, no live watch; a lost window keeps its journal verdict | 2026-10-30 |
 | search | `search`, `check_quest` | shares `verdict_for` with detail | clean payload has no ending label; no save returns `info`, not `safe` | 2026-10-30 |
 | STATUS / PROGRESS | `view.completion` | 412 = 403 + 9; sections 96/183/35/87/11 | no sixth section; no single percentage | 2026-10-30 |
@@ -218,20 +224,21 @@ mutation tests prove the checker fails when the rule is removed.
 
 ### 10.1 Six first-run scenarios at 480x820
 
-1. **No save.** The band is hidden; UP NEXT says "Load a save to see what is next."; the folder
-   panel opens once with the saves path and a Browse action.
-2. **Clean save, no goal.** The band is hidden. UP NEXT carries the tracked quest only; other
-   in-log quests stay in PROGRESS. MORE > CARDS > LATER lists the ahead windows.
-3. **Cutoff passed.** The band stays hidden, because the action is gone; MORE > STATUS shows
-   `CUTOFF PASSED - CHECK NOW` with its headline and next step, and the same warning is on the quest
-   page and in search. The corpus has no save in this state, so the row is exercised as a fixture in
-   the real `ui/` (section 10.8).
+1. **No save.** TRACKED says "Load a save to see the quest you are tracking."; the folder panel
+   opens once with the saves path and a Browse action.
+2. **Clean save, no goal.** TRACKED carries the tracked quest only; other in-log quests stay in
+   PROGRESS. MORE > CARDS > LATER lists the ahead windows.
+3. **Cutoff passed.** A settled loss leaves TRACKED alone and shows in MORE > STATUS as
+   `CUTOFF PASSED - CHECK NOW` with its headline and next step; the same warning is on the quest
+   page and in search. A cutoff the tracked quest would cause stays on the card as a chip. The
+   corpus has no save in this state, so the row is exercised as a fixture in the real `ui/`
+   (section 10.8).
 4. **Tick a not-started step.** The card keeps Not started, PROGRESS shows a pencil note rather
    than a green check, and the warning stays.
 5. **Goal selected, guidance off.** The tracked card keeps the constant sentence and no exact line;
    no choice chip, plan card or PLAN AHEAD list appears.
 6. **Corrupt save.** The header names the file and says the tracker retries; the folder panel can
-   be reopened; no stale band from the previous save is presented as current.
+   be reopened; no stale tracked card from the previous save is presented as current.
 
 ### 10.2 1.3.1 verification record
 
@@ -324,7 +331,7 @@ Novigrad - the next chance is Final Preparations" with only the Iorveth card in 
 `cargo test --locked` reports 59 passed; the two new tests cover the open window and the closed one.
 `py tools/regen.py --check` reports all 11 outputs matching.
 
-### 10.5 Band and main-surface restoration (2026-10-30)
+### 10.5 Band and main-surface restoration (2026-10-30, historical)
 
 An uncommitted post-1.3.3 realignment removed `ENDING CHOICE AHEAD` from `top`, moved `UP NEXT` and
 `PLAN AHEAD` under `MORE > PLAN`, and replaced the queue with a tracked card. That contradicted the
@@ -496,7 +503,7 @@ Those rows are proved by shipped-data unit tests or fixture payloads, not by a r
 Tauri WebView was not automated; the real `ui/` was driven in Chromium at 480x820 with a mock built
 from the release binary's payloads.
 
-### 10.9 UP NEXT simplification (2026-10-31)
+### 10.9 UP NEXT simplification (2026-10-31, historical)
 
 The 1.3.4 window still listed every in-log quest in UP NEXT, so The Nobleman Statuette and The
 Soldier Statuette appeared there even when their only live action was a later Triss turn-in. That
@@ -525,7 +532,7 @@ same one-card queue on the newest copied save, read through WebView2's debugging
 matched `--view` on `todo` for all seven profiles. `cargo test --locked` reports 67 passed; `cargo
 build --release` is warning-free; `node --check ui/app.js` passes.
 
-### 10.10 Choice on the tracked card and tracked-only UP NEXT (2026-10-31)
+### 10.10 Choice on the tracked card and tracked-only UP NEXT (2026-10-31, historical)
 
 Supersedes 10.9. The plan step no longer enters `view.todo`; the queue is the tracked quest only.
 The consequential-choice warning is no longer a NOW row: it is stated inside the tracked quest card.
@@ -657,6 +664,42 @@ left for the user.
 Artifact: `dist/Witcher3MissablesTracker-1.3.8/Witcher3MissablesTracker.exe`, copied to
 `w3tracker/Witcher3MissablesTracker.exe`, FileVersion and ProductVersion 1.3.8, SHA-256
 `DEC36362BC24FBC34B5BFB705543DAE8532C11C592F1DD634BDE2568E4CA027D`.
+
+### 10.12 TRACKED replacement (1.4.0, 2026-10-31)
+
+1.3.9's NOW and UP NEXT are one section, `TRACKED`, and the old queue no longer exists in the
+payload or the UI: `view.todo` and `Eval.todo` are gone, as are `renderTop`, `renderTodo`, the
+sticky `#topSec`, the queue rows and the `showAll` toggle. The legacy `get_view.top` ledger remains
+only because the quest detail page reads its card and quest-window rows; it is not a section.
+
+The `tracked` payload is one quest-scoped object: the tracked quest's own `watch` rows, `cutoffs`
+for other open quests it would close, unowned missable `cards` tied to its steps, and `choice`.
+Its derivation lives in `src/tracked.rs`: `Input` carries the save's answer plus the already-built
+step and card payloads, and `payload` is the only entry point. The card renders its title, current
+objective and description, then watch rows, cutoffs, the choice and finally its Gwent cards; it
+renders no other quest's warning.
+
+Verification used the packaged 1.4.0 exe. `--view` and `--dump` were run on the clean profile and
+the five save fixtures: all 412 steps, no `todo`, equal `tracked` in both payloads. In the packaged
+WebView2, three copies of the median save retargeted only `JTrackedQuest.guid` produced three
+distinct cards:
+
+| copied tracked quest | card | facts shown | facts absent |
+|---|---|---|---|
+| `q402ciri` The Isle of Mists | one red chip, `CUTS OFF 4 QUESTS` | opening to all four Brothers In Arms quests and the Isle of Mists sentence | no cards, no choice |
+| `sq301triss` A Matter of Life and Death | one gold chip, `GWENT · 3 MISSABLE CARDS` | Dandelion, Milva and Vampire: Bruxa, each `OPEN LATER · COMMUNITY WINDOW`, mechanism and community source | no cutoff, no choice |
+| `q110postbattle` Blood on the Battlefield | `SAY THIS` block | “All right, Velen it is.” and `Ciri lives: witcher ending` with the `ciri_witcher` goal and guidance on | no chip; guidance off gives the constant sentence only |
+
+Get Junior on the unmodified median save rendered one card with no chip, and the clean profile
+rendered the load-a-save message. Every packaged DOM had one tracked article, the heading
+`TRACKED`, no `UP NEXT` text and no standalone `NOW` heading.
+
+`cargo test` reports 70 passed, `node --check ui/app.js` passes, and the dist, repo-root and target
+release exes are byte-identical with SHA-256
+`99CD012628147A56F67C3D7574D9A6E9E20A46CED93CD68F68C466DDFE577205`, 13,646,336 bytes. The
+tracked tests live in `tracked::tests`. Limitation: the three special
+quests came from GUID-retargeted copies of one save, not from saves that naturally track them;
+`cargo fmt --check` could not run because rustfmt is absent from this toolchain.
 
 ## 11. How an audit uses this page
 

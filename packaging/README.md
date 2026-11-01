@@ -3,15 +3,13 @@
 A small always-on-top window that reads your newest Witcher 3 save (read-only) and answers one
 question: **what do I do next in this save, and what can I still lose?**
 
-- **NOW**: a sticky band that appears only while an action can still change the outcome - a loss
-  that already happened, a story event that would fail a quest you still have open, or a missable
-  quest or card window that is open now. Card windows that are still ahead are not warnings; they
-  show as a small later-warning count and in **MORE > CARDS > LATER**. When nothing is at stake the
-  band disappears.
-- **UP NEXT**: the quest you are tracking and the one plan step that is next. Other quests in your
-  log stay in **MORE > PROGRESS**; a window already in NOW is not repeated. Future goal steps sit
-  under one collapsed **PLAN AHEAD** line. A plan step and a quest are one card, never two. The exact
-  line appears only on the tracked goal step.
+- **TRACKED**: one section at the top, always the quest your game is tracking and nothing else.
+  Other quests in your log stay in **MORE > PROGRESS**; this is not a second quest log. The card
+  shows the current objective, a live warning about that quest, a chip naming every quest finishing
+  it would cut off, the ending choice while a reviewed goal still has a step ahead, and any missable
+  Gwent card whose source, opening or closing window is one of its steps. The exact ending line
+  appears only while guidance is on and that goal is selected; otherwise the card keeps the constant
+  sentence "This choice affects an ending."
 - **MORE**: one reference drawer, with tabs.
   - **STATUS**: your completion state, without pretending every branch fits in one save. Quests and
     cards are counted separately as done/owned, still possible, at risk, lost or unknown.

@@ -582,7 +582,7 @@ mod tests {
         Eval {
             steps: vec![step],
             byid: HashMap::from([(STEP.to_string(), 0)]),
-            events: vec![], todo: vec![],
+            events: vec![],
         }
     }
 

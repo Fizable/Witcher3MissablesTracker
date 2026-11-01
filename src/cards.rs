@@ -20,6 +20,9 @@ pub struct Card {
     pub collection: String,
     pub source_text: String,
     pub source_kind: String,
+    /// The route step the reviewed source names, when it names one. A tracked quest can show a
+    /// missable card granted by its own step even when the window closes somewhere else.
+    pub source_step: String,
     pub window: Value,
     pub deck_default: bool,
 }
@@ -59,6 +62,11 @@ impl CardIndex {
                         .get("kind")
                         .and_then(|x| x.as_str())
                         .unwrap_or("unknown")
+                        .to_string(),
+                    source_step: source
+                        .get("step")
+                        .and_then(|x| x.as_str())
+                        .unwrap_or("")
                         .to_string(),
                     window: c.get("window").cloned().unwrap_or(Value::Null),
                     deck_default: c.get("ownership").and_then(|x| x.as_str()) == Some("deck_default"),
@@ -122,6 +130,7 @@ impl CardIndex {
                     "owned": owned,
                     "source_text": c.source_text,
                     "source_kind": c.source_kind,
+                    "source_step": c.source_step,
                     "window": c.window,
                     "window_live": live,
                     "note": note,
@@ -363,7 +372,7 @@ fn grouped(report: &Value, wanted: &[&str]) -> Vec<Value> {
         let live = card.get("window_live").cloned().unwrap_or(Value::Null);
         let state = text(&live, "state");
         // A window whose closing quest has not started is ledger-only. An active window is the
-        // only card state the band may carry; check and lost are STATUS rows.
+        // only card state the warning ledger may carry; check and lost are STATUS rows.
         if !wanted.contains(&state) {
             continue;
         }

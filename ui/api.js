@@ -89,7 +89,6 @@ const Api = (() => {
         if (s.manual) s.status = s.status === 'Done' ? 'Not started' : 'Done';
         else if (overrides.has(id)) { s.status = overrides.get(id); overrides.delete(id); }
         else { overrides.set(id, s.status); s.status = 'Done'; }
-        view.todo = view.todo.filter((x) => stepOf(x).status !== 'Done');
       }
       return clone(view);
     },

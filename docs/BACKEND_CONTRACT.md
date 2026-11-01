@@ -40,19 +40,34 @@ UI calls `window.__TAURI__.core.invoke(cmd, args)` and listens with
   },
   "sections": ["Main", "Secondary", "Contracts", "Treasure Hunts", "Gwent"],
   "steps": [ Step, ... ],                       // all 412 route nodes, section then level then order
-  "todo": ["q205lofoten", ...],                 // ordered ids for UP NEXT: the tracked quest only. Other
-                                                // in-log quests and a window already in NOW are not repeated;
-                                                // they live in MORE > PROGRESS / NOW. The plan adds no id.
-  "tracked": null | {
+  "tracked": null | {                          // the one play-loop source of truth; there is no `todo`
     "short": "q301dreamer", "display": "Pyres of Novigrad", "status": "Active",
-    "steps": ["q301dreamer"],
-    "warning": null | { "level": "stop"|"warn", "headline": "...", "details": ["..."] },
+    "steps": ["q301dreamer"],                   // open steps in route order; finished steps only when
+                                                // the save still tracks a completed quest
+    "cutoffs": [ { "level": "stop"|"warn",
+                   "live": null|"inside"|"open"|"check"|"passed"|"lost"|"later"|"not_yet",
+                   "headline": "Finishing this triggers \"The Isle of Mists\"",
+                   "quests": ["Brothers In Arms: Velen", ...],
+                   "details": ["..."], "action": null|"..." } ],
+                                                // every reviewed loss edge this quest closes, plus live
+                                                // watch rows whose closed_by names it; only quests the
+                                                // save still has open are named
+    "watch": [ Watch, ... ],                    // this quest's own live warnings; each row also carries
+                                                // "step" and "step_title"
+    "cards": [ { "id": "card_dandelion", "name": "Dandelion", "deck": "Neutral", "pack": "base",
+                 "owned": "not_owned"|"unknown", "source_text": "...",
+                 "window_live": { ... }, "window": { ... } } ],
+                                                // unowned missable Gwent cards tied to one of this
+                                                // quest's steps by source_step, window.step or
+                                                // window.opens.step
     "choice": null | {
       "guided": true, "text": null,
       "lines": [ { "line": "Velen.", "target": "bw_both_sisters" } ]
     } | { "guided": false, "text": "This choice affects an ending.", "lines": [] }
   },
-  "top": [ TopItem, ... ],                      // empty is a valid, tested answer; the UI hides the section
+  "top": [ TopItem, ... ],                      // save-aware warning ledger; the UI does not paint a
+                                                // band from it, it reuses the same rows on the detail
+                                                // page. Settled rows are in `status`.
   "status": [ StatusItem, ... ],                // MORE > STATUS only: settled losses, passed cutoffs and
                                                 // failed quests; same row shape as TopItem, with "live" added
   "objectives": { "<step id>": ["Follow Yennefer to Lofoten.", ...] },  // up to 4, current objective first
@@ -232,18 +247,18 @@ No `alerts`, `holdoff`, `feed`, `kb`, `guide`, `choices`, `start`, `note`, `conf
 `StatusItem` has the same fields as `TopItem`, plus `live` for the row's win state (`lost`, `check`,
 `passed`), and is read only by MORE > STATUS. `settled` and `unknown` never become a TopItem. `top`
 carries only `open` and `inside` quest windows and an `active` card window; `lost`, `passed`/`check`
-and `ahead` rows are STATUS or ledger rows. `Step.watch` and `Detail.derived.watch` are the same
-save-aware read through `main.rs::read_warning`; a reviewed turn-in applies its both/one/neither
-wording before either surface or `top` sees the row, so the card, the band and `verdict.headline`
-cannot disagree about what is still missing. `kind` ordering is risk, order, then card. A choice is
-not a TopItem at all: `tracked.choice` states it on the tracked quest card. With guidance off it is
-only the constant sentence and empty `lines`; with guidance on and a goal selected it carries the
-exact reviewed line and its target. A quest with no open `ending_relevant` step, or whose plan step
-is not `ahead`, has `choice: null`.
+and `ahead` rows are STATUS or ledger rows. `Step.watch`, `Detail.derived.watch` and
+`tracked.watch` are the same save-aware read through `main.rs::read_warning`; a reviewed turn-in
+applies its both/one/neither wording before any surface sees the row, so the tracked card, the quest
+page and `verdict.headline` cannot disagree about what is still missing. `kind` ordering is risk,
+order, then card. A choice is not a TopItem at all: `tracked.choice` states it on the tracked quest
+card. With guidance off it is only the constant sentence and empty `lines`; with guidance on and a
+goal selected it carries the exact reviewed line and its target. A quest with no open
+`ending_relevant` step, or whose plan step is not `ahead`, has `choice: null`.
 A cutoff that has fired while the journal still has the quest open is `risk` with the tag
 `CUTOFF PASSED - CHECK NOW`, not `lost`: only a `Failed` journal entry produces `lost`.
-The UI shows only `tag` and `headline` on the top card; `detail`, `mechanism`, `file`, `action` and
-`live_note` are kept for the detail pane's collapsed **Technical details**, not for the list.
+The detail page reuses `top` for the same row; `detail`, `mechanism`, `file`, `action` and `live_note`
+stay behind its collapsed **Technical details**.
 
 ## Detail
 
@@ -290,7 +305,7 @@ TargetOption = { "id", "label", "pack", "spoiler", "guidance_status", "state", "
 Preset       = { "id", "label", "targets": ["..."], "reviewed", "note" }
 CardReport   = { "cards": [ { "id", "name", "deck", "pack", "collection",
                               "owned": "owned"|"not_owned"|"unknown",
-                              "source_text", "source_kind", "note",
+                              "source_text", "source_kind", "source_step", "note",
                               "window": { "kind": "missable"|"one_time"|"none",
                                           "tier": "gamefile"|"community"|"unknown",
                                           "tier_rank": "A"|"B"|"C",

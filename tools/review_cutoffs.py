@@ -52,6 +52,12 @@ KEEP_THIN = {
     "q402skelligeallies": "Brothers in Arms: Skellige is played through the Kaer Morhen allies, whose communities the Isle of Mists switches off",
     "q402nilfgaardianally": "Brothers in Arms: Nilfgaard is played through the Kaer Morhen allies, whose communities the Isle of Mists switches off",
 }
+# (closer, resource) families reviewed by hand. The Isle of Mists deactivates the Kaer Morhen
+# allies' communities, and Brothers in Arms has no connected Failure input in its own graph, so
+# the file proof that generic gating gives is missing. Its only support is the two saves that
+# marked it Failed after the Isle; the same saves satisfy every earlier closer, so the pair is
+# reviewed by hand rather than attributed by the save rule.
+REVIEWED_CLOSERS = {("q402ciri", "quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm")}
 # Never shipped, with the reason. These are quests whose journal entry is a container or a phase
 # placeholder, so "lost" would not mean a piece of play the player can still do.
 EXCLUDE = {
@@ -286,6 +292,39 @@ def item_saves(pool, item):
                key=lambda s: (s.get("later_failed", 0), s.get("open_before", 0)))
 
 
+def survivors(pool, idx):
+    """Every (closer, resource) family with the affected quests that pass the review rule.
+
+    The rule is the same for every closer: a row survives when `invalid_cutoff` accepts it, at
+    least one save had the affected quest open when the closer finished, and no save finished it
+    afterwards. Returns {(closer, resource): [row, ...]}, one row per affected quest.
+    """
+    groups = defaultdict(list)
+    gate_cache = {}
+    for r in pool:
+        if r.get("to") in EXCLUDE or r.get("from") in EXCLUDE:
+            continue
+        s = r.get("saves") or {}
+        if s.get("later_finished", 0) > 0:
+            continue
+        # The file proof: the affected journal's Failure input is gated by the closer's journal.
+        # Saves cannot attribute a failure to one closer when several closers fall before it (the
+        # same two saves satisfy every one of them), so a save-only pair is accepted only when it
+        # is one of the reviewed families in REVIEWED_CLOSERS.
+        if r["to"] not in gate_cache:
+            gate_cache[r["to"]] = {journal_stem(e["resource"]) for e in failure_conditions(idx, r["to"])}
+        gated = r["from"].lower() in gate_cache[r["to"]]
+        reviewed = (r["from"], r["resource"]) in REVIEWED_CLOSERS
+        if not gated and not reviewed:
+            continue
+        item = {"id": r["to"], "resource": r["resource"], "affects": [r["to"]],
+                "closed_by": [r["from"]], "saves": s}
+        if invalid_cutoff(idx, item):
+            continue
+        groups[(r["from"], r["resource"])].append(r)
+    return groups
+
+
 def build():
     pool = json.loads(INDEX.read_text(encoding="utf-8"))["candidates"]
     idx = json.loads(QUEST_INDEX.read_text(encoding="utf-8"))
@@ -318,31 +357,43 @@ def build():
     if not window_error(idx, old_window):
         raise SystemExit("cutoff audit self-check failed: the old Q310 statuette window is accepted")
 
-    # Brothers in Arms: the Isle of Mists closes the allies' communities.
-    allies = ["q402velenallies", "q402novigradallies", "q402skelligeallies", "q402nilfgaardianally"]
-    rows = [r for r in pool if r["to"] in allies and r["from"] == "q402ciri" and r["resource"].endswith("q402_dopey.w2comm")]
-    hit = sorted({r["to"] for r in rows})
-    if len(hit) >= 3:
-        r = rows[0]
-        refs = {a: ref_file(idx, a, r["resource"]) for a in hit}
-        refs_phrase = "; ".join(a + " references " + r["resource"] for a in hit)
-        kept["brothers_in_arms"] = {
-            "id": "brothers_in_arms", "event_name": "The Isle of Mists", "level": "stop", "mechanism": "spawnset",
-            "resource": r["resource"], "affects": hit, "closed_by": ["q402ciri"],
-            "action": "Finish the Brothers in Arms quests",
-            "headline": "Finish Brothers in Arms before The Isle of Mists",
-            "why": (f"The Isle of Mists switches off the Kaer Morhen allies' communities in {r['deactivated_in']} "
-                    f"(CDeactivateSpawnset), and every Brothers in Arms quest is played through them: "
-                    f"{refs_phrase}. Sailing to the Isle closes them."),
-            "files": [f"{r['deactivated_in']} switches off {r['resource']} (CQuestStoryPhaseSetterBlock -> CDeactivateSpawnset)"]
-                     + [f"{refs[a]} references {r['resource']}" for a in hit if refs[a]],
-            "evidence": "files+saves",
-            "caveats": ["Only two saves in the corpus had a Brothers in Arms quest still open when The Isle of Mists was done; none finished one later. The mechanism is what makes this a cutoff, not the save count."],
-        }
-        decisions.append({"family": "brothers_in_arms", "decision": "keep", "why": KEEP_THIN[hit[0]],
-                          "saves": r["saves"], "resource": r["resource"]})
-    else:
-        decisions.append({"family": "brothers_in_arms", "decision": "drop", "why": f"only {len(hit)} of the four allies quests survived"})
+    # Every closer, not one hand-picked family: each (closer, resource) group that has surviving
+    # affected quests becomes a reviewed item. A reviewed item keeps its hand-written text, so a
+    # family that was reviewed by hand (Brothers in Arms) reads the same as before.
+    fam = survivors(pool, idx)
+    prior = {(i["closed_by"][0], i["resource"]): i for i in existing.get("items", []) if i.get("closed_by") and i.get("resource")}
+    generated = []
+    for (closer, resource), rows in sorted(fam.items()):
+        rows = sorted(rows, key=lambda r: r["to"])
+        affects = [r["to"] for r in rows]
+        closer_title = name.get(closer, closer)
+        titles_joined = ", ".join(name.get(a, a) for a in affects)
+        base = rows[0]
+        best = max((r.get("saves") or {} for r in rows), key=lambda s: (s.get("later_failed", 0), s.get("open_before", 0)))
+        prev = prior.get((closer, resource))
+        if prev:
+            item = dict(prev)
+            item["affects"] = affects
+        else:
+            slug = re.sub(r"\W+", "_", resource).strip("_").lower()
+            item = {
+                "id": f"{closer}__{slug}", "event_name": closer_title, "level": "stop", "mechanism": "spawnset",
+                "resource": resource, "affects": affects, "closed_by": [closer],
+                "action": f"Finish {titles_joined} before {closer_title}",
+                "headline": f"Finish {titles_joined} before {closer_title}",
+                "why": (f"{closer_title} switches off {resource} in {base['deactivated_in']} (CDeactivateSpawnset). "
+                        f"{titles_joined} run through it, and the journal is recorded Failed or gated by "
+                        f"{closer}.journal."),
+                "files": [f"{base['deactivated_in']} switches off {resource} (CQuestStoryPhaseSetterBlock -> CDeactivateSpawnset)"],
+                "evidence": "files+saves",
+                "caveats": [f"{best.get('open_before', 0)} saves had the affected quest open when {closer_title} was done, "
+                            f"and {best.get('later_failed', 0)} later recorded it Failed. The mechanism is what makes this a cutoff, not the save count."],
+            }
+        decisions.append({"family": item["id"], "decision": "keep",
+                          "why": KEEP_THIN.get(affects[0], "the rule holds: the file switches the community off, the affected quest runs through it, and the journal fails"),
+                          "saves": best, "resource": resource})
+        generated.append(item)
+    kept = {i["id"]: i for i in generated}
 
     # every excluded family, with the reason
     for (frm, to), rows in sorted(by_family.items()):
@@ -353,7 +404,7 @@ def build():
         if to not in {d["family"].split(" -> ")[-1] for d in decisions}:
             decisions.append({"family": f"(all) -> {to}", "decision": "exclude", "why": EXCLUDE[to]})
 
-    items = [kept[k] for k in ("brothers_in_arms",) if k in kept]
+    items = list(kept.values())
     # A reviewed cutoff still has to survive the graph: a deactivation is not a loss when the
     # affected quest starts after it, when its own phase switches the actor back on, or when no
     # save or Failure branch ever marks it failed.

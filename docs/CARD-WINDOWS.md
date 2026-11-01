@@ -126,7 +126,8 @@ Northern Kingdoms deck list. The row is now reviewed as **one_time**, with the b
 | owned | `owned` - the row is silent |
 
 The row names `The Baron's office` as the fallback and never becomes a Tier B missable claim. It
-is a one-time source, so it stays out of the NOW band; MORE > CARDS shows the exact source. The
+is a one-time source, so it never becomes a live warning on TRACKED; MORE > CARDS shows the exact
+source. The
 newest and median saves own the card; the earliest save is `not_yet` because the Baron has not
 been discovered. The active/check rows are Rust fixtures because no corpus save is after the
 Baron line with the card still unowned.

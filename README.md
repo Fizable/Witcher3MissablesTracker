@@ -3,21 +3,17 @@
 A small always-on-top Windows tool that reads your newest Witcher 3 save (read-only) and answers one
 question: **what do I do next in this save, and what can I still lose?**
 
-- **NOW**: a sticky band that appears only while an action can still change the outcome - a story
-  event that would fail a quest you still have open, an ordering conflict, or a card window you can
-  act on now. A loss that already happened or a cutoff that already passed is not a band row: it
-  lives in **MORE > STATUS** and on the quest page. A card window that is still ahead is not a
-  warning and never enters the band; it is a row in **MORE > CARDS > LATER**. When nothing is at
-  stake the band disappears. A choice that matters to the endings is not a band row either: it is
-  stated on the tracked quest card (see below).
-- **UP NEXT**: the quest you are tracking, and nothing else. Other quests in your log stay in
-  **MORE > PROGRESS**; the queue is not a second quest log. A quest whose turn-in window is open
-  right now is not repeated here: the NOW band already carries it with the NPC and the deadline (the
-  statuettes in Final Preparations are the case this was written for). There is no separate plan
-  card, `PLAN` chip or **PLAN AHEAD** list. The plan's one visible product is the ending-choice note
-  and, with guidance on and a goal selected, the exact reviewed line inside the tracked quest card.
-  Turning guidance off removes both the exact line and the choice chip, leaving only the constant
-  sentence "This choice affects an ending."
+- **TRACKED**: one section at the top, always the quest your game is tracking and nothing else.
+  Other quests in your log stay in **MORE > PROGRESS**; this is not a second quest log. The card
+  carries the current objective, one short description, and only the reviewed facts that belong to
+  that quest: a live warning about it, a chip naming every quest finishing it would cut off (open
+  the chip for the names and the action), the ending choice while a reviewed goal still has a step
+  ahead, and any missable Gwent card whose source, opening or closing window is one of its steps.
+  A tracked quest with no extra facts is still shown as itself. The plan is not a second queue: with
+  guidance on and a goal selected it contributes exactly one reviewed line, and with guidance off
+  it contributes only the constant sentence "This choice affects an ending." Losses and cutoffs
+  that are already settled stay in **MORE > STATUS** and on the quest page, and an ahead card
+  window stays in **MORE > CARDS > LATER**.
 - **MORE**: the reference drawer, with tabs.
   - **STATUS**: quest and card completion, split into done/owned, still possible, at risk, lost and
     unknown - never one misleading percentage.
@@ -30,7 +26,7 @@ question: **what do I do next in this save, and what can I still lose?**
   - **PROGRESS**: every quest in the game, including Hearts of Stone and Blood & Wine, in the game's
     own five sections: Main, Secondary, Contracts, Treasure Hunts, Gwent.
 - **Ending goals (optional)**: opt into a reviewed goal (for example, both Blood and Wine sisters
-  living) and the matching mission shows the exact line to say. **✦ ending quests** beside UP NEXT
+  living) and the matching mission shows the exact line to say. **✦ ending quests** beside TRACKED
   then lists the reviewed quests for those goals, grouped by Main game, Hearts of Stone and Blood and
   Wine, each part collapsible and the list scrollable. A quest with a reviewed choice is marked
   CHOICE; its card stays a name, one short summary and that mark. Skip the picker and the screen
@@ -171,11 +167,11 @@ py tools/exclusivity.py --check     # accepted edges and the rejected candidate 
 cargo test
 ```
 
-To see what the app itself computed, run the exe with `--dump out.json` (state, statuses, top
-section), `--view out.json` (exactly what the window is handed), `--detail <quest id> out.json`
+To see what the app itself computed, run the exe with `--dump out.json` (state, statuses, the
+tracked payload), `--view out.json` (exactly what the window is handed), `--detail <quest id> out.json`
 (one mission, including any goal line), `--cards out.json`, `--targets out.json`, `--outcomes
 out.json` or `--plan out.json [id,id]`; all exit without opening a window. `--outcomes` and `--plan`
-are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.3.9.md` records what was
+are the headless forms of the two spoiler-gated commands. `docs/RELEASE-1.4.0.md` records what was
 verified for this release and what is still open; `docs/RELEASE-1.0.0.md` is the historical 1.0
 record.
 
@@ -207,8 +203,8 @@ read.
 |---|---|
 | `src/save.rs` | Save reader (LZ4 chunks, name table, quest journal). Read-only. |
 | `src/bundles.rs` | Finds the game and builds the quest index from the player's own game files. |
-| `src/model.rs` | Route engine: frontier, prerequisites, cutoffs, UP NEXT order, tags, safety check. |
-| `src/main.rs` | App, settings, NOW warnings, commands. |
+| `src/model.rs` | Route engine: frontier, prerequisites, cutoffs, tracked-quest aggregation, tags, safety check. |
+| `src/main.rs` | App, settings, the tracked payload, commands. |
 | `ui/` | Interface (HTML/CSS/JS, no build step). |
 | `data/route.json` | The generated route: 403 quest + 9 manual steps = 412, sections, prerequisites, events, and the manual audit. Regenerate, do not hand-edit. |
 | `data/derived.json` | What the game's own files say per step (names, objectives, activators, cutoffs). Generated. |

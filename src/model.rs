@@ -1,4 +1,4 @@
-//! Route model + engine. Port of route.py: needs (hard), PREFS (recommended order), EVENTS (cutoffs), DO NEXT / HOLD OFF / safety check.
+//! Route model + engine. Port of route.py: needs (hard), PREFS (recommended order), EVENTS (cutoffs), TRACKED / HOLD OFF / safety check.
 
 use serde::Deserialize;
 use serde_json::{json, Map, Value};
@@ -238,7 +238,6 @@ pub struct Eval {
     pub steps: Vec<Step>,
     pub byid: HashMap<String, usize>,
     pub events: Vec<Ev>,
-    pub todo: Vec<usize>,
 }
 
 pub fn short(t: &str) -> &str {
@@ -435,13 +434,7 @@ pub fn evaluate(rd: &RouteData, state: &HashMap<String, String>, ticks: &HashSet
         s.evs = s.n.by.iter().filter_map(|b| eidx.get(b.as_str()).copied()).collect();
         s.lost = s.status == "Not started" && s.evs.iter().any(|&k| events[k].fired && !events[k].def.soft);
     }
-    let todo: Vec<usize> = (0..steps.len())
-        .filter(|&i| {
-            let s = &steps[i];
-            !s.n.opt && matches!(s.status.as_str(), "Active" | "Not started") && !s.lost && s.locked.is_empty() && s.held.is_none()
-        })
-        .collect();
-    Eval { steps, byid, events, todo }
+    Eval { steps, byid, events }
 }
 
 pub struct Verdict {
@@ -500,43 +493,12 @@ pub fn check_quest(rd: &RouteData, ev: &Eval, short_name: &str, state: &HashMap<
     let _ = rd;
     let b = short_name.as_bytes();
     if b.len() >= 4 && b[0] == b'q' && b[1..4].iter().all(|c| c.is_ascii_digit()) {
-        return v("warn", "Main story quest: I have no data on what it closes", vec!["Finish your DO NEXT items first if you are unsure.".into()]);
+        return v("warn", "Main story quest: I have no data on what it closes", vec!["Finish the other open quests first if you are unsure.".into()]);
     }
     v("safe", "Safe: not tied to any story cutoff I know of", vec!["Only cutoffs in the route data are checked.".into()])
 }
 
 // ------------------------------------------------------------------ JSON views for the UI
-
-/// UP NEXT order. The queue is deliberately small: the quest tracked in the game, and nothing else.
-/// The plan is not a second surface and adds no step; its one visible product is the reviewed line
-/// on the tracked quest card. Other in-log quests stay in `MORE > PROGRESS`; a quest whose live
-/// window is in `NOW` is removed by the caller. Gated, done, lost and unsafe steps never appear.
-/// Inside the queue: nearest deadline (a live cutoff), then lowest suggested level, then the
-/// journal's own `order` as a tie-break.
-pub fn todo_order(ev: &Eval, tracked: Option<&str>, unsafe_ids: &HashSet<usize>, caution: &HashSet<usize>) -> Vec<usize> {
-    let mut out: Vec<usize> = ev
-        .todo
-        .iter()
-        .copied()
-        .filter(|&i| !unsafe_ids.contains(&i))
-        .filter(|&i| {
-            let s = &ev.steps[i];
-            let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
-            // UP NEXT answers "what do I do next?", not "what is in my log?". The log is the
-            // ledger in MORE > PROGRESS; only the tracked quest belongs here.
-            is_tracked
-        })
-        .collect();
-    out.sort_by_key(|&i| {
-        let s = &ev.steps[i];
-        let is_tracked = tracked.map(|t| tracks(&s.n, t)).unwrap_or(false);
-        let group = if is_tracked { 0 } else { 1 };
-        let deadline = if caution.contains(&i) { 0 } else { 1 };
-        let level = s.n.lv.trim().parse::<i64>().ok();
-        (group, deadline, level.is_none(), level.unwrap_or(0), s.n.order, i)
-    });
-    out
-}
 
 fn r(ev: &Eval, i: usize) -> Value {
     json!({"id": ev.steps[i].n.id, "title": short(&ev.steps[i].n.title), "manual": ev.steps[i].manual})
@@ -1082,40 +1044,6 @@ pub fn step_for_short(ev: &Eval, short_name: &str) -> Option<usize> {
     (0..ev.steps.len()).find(|&i| tracks(&ev.steps[i].n, short_name))
 }
 
-/// warning for the quest you are tracking: "stop" when finishing it closes open quests, "warn" when the route says to wait
-pub fn tracked_warning(ev: &Eval, short_name: &str) -> Option<(&'static str, String, Vec<String>)> {
-    for e in &ev.events {
-        if e.fired {
-            continue;
-        }
-        let Some((r, sts)) = e.def.fires.iter().find(|(r, _)| r.split('#').next() == Some(short_name)) else { continue };
-        // open steps of the same quest do not count: finishing it does not fail it
-        let others: Vec<usize> = e.open.iter().copied().filter(|&d| !tracks(&ev.steps[d].n, short_name)).collect();
-        if others.is_empty() {
-            continue;
-        }
-        let names: Vec<&str> = others.iter().take(8).map(|&d| short(&ev.steps[d].n.title)).collect();
-        // say what the event waits for: an objective of this quest, its end, or (rarely) its start
-        let headline = if r.contains('#') {
-            format!("Its next step triggers \"{}\"", e.def.name)
-        } else if sts.iter().all(|s| s == "Done") {
-            format!("Finishing this triggers \"{}\"", e.def.name)
-        } else {
-            format!("This triggers \"{}\"", e.def.name)
-        };
-        // soft events are the same amber "warn" the alerts use
-        let level = if e.def.soft { "warn" } else { "stop" };
-        return Some((level, headline, vec![format!("It would fail or lock: {}", names.join("; ")), "Finish those first.".into()]));
-    }
-    for s in &ev.steps {
-        if let (true, Some(h)) = (tracks(&s.n, short_name), &s.held) {
-            let names: Vec<&str> = h.blockers.iter().take(3).map(|&x| short(&ev.steps[x].n.title)).collect();
-            return Some(("warn", "Recommended to wait".into(), vec![h.why.clone(), format!("Do first: {}", names.join("; "))]));
-        }
-    }
-    None
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1398,11 +1326,6 @@ mod tests {
         assert_eq!(ev.steps[at(&ev, "available")].frontier, "available");
         assert_eq!(ev.steps[at(&ev, "unknown")].frontier, "unknown");
         assert_eq!(ev.steps[at(&ev, "gated")].frontier, "gated");
-        assert!(!ev.todo.contains(&at(&ev, "done")));
-        assert!(!ev.todo.contains(&at(&ev, "gated")));
-        for id in ["active", "available", "unknown", "dep"] {
-            assert!(ev.todo.contains(&at(&ev, id)), "{id} should stay in DO NEXT");
-        }
         // the card JSON carries no wiki field; it carries the short description and the chip list
         let v = step_json(&rd, &ev, at(&ev, "unknown"));
         for bad in ["note", "start", "conf", "kb", "guide", "choices"] {
@@ -1411,47 +1334,6 @@ mod tests {
         assert_eq!(v["desc"], "A line about the quest.");
         assert!(v["tags"].is_array());
         assert_eq!(v["frontier"], "unknown");
-    }
-
-    #[test]
-    fn do_next_is_the_tracked_quest_and_nothing_else() {
-        let tracked = node("tracked", "20", &["tracked"], "side", 9, true);
-        let active_low = node("active_low", "30", &["active_low"], "side", 9, true);
-        let avail_l5 = node("avail_l5", "5", &["avail_l5"], "side", 2, true);
-        let avail_l3 = node("avail_l3", "3", &["avail_l3"], "side", 9, true);
-        let avail_nolevel = node("avail_nolevel", "", &["avail_nolevel"], "side", 1, true);
-        let caution = node("caution", "2", &["caution"], "side", 1, true);
-        let gwent = node("gwent", "", &["gwent"], "gwent", 0, true);
-        let treasure = node("treasure", "", &["treasure"], "treasure", 0, true);
-        let dep = node("dep", "", &["dep"], "side", 0, true);
-        let mut gated = node("gated", "", &["gated"], "side", 0, true);
-        gated.hard = vec!["dep".into()];
-        let rd = route(vec![tracked.clone(), active_low.clone(), avail_l5.clone(), avail_l3.clone(),
-                            avail_nolevel.clone(), caution.clone(), gwent.clone(), treasure.clone(), dep, gated]);
-        let st = state(&[("tracked", "Active"), ("active_low", "Active")]);
-        let ev = evaluate(&rd, &st, &HashSet::new(), &HashMap::new(), &HashSet::new());
-        let caution_ids: HashSet<usize> = HashSet::from([at(&ev, "caution")]);
-        let ord = todo_order(&ev, Some("tracked"), &HashSet::new(), &caution_ids);
-        let pos = |id: &str| ord.iter().position(|&i| ev.steps[i].n.id == id)
-            .unwrap_or_else(|| panic!("{id} is not in DO NEXT: {:?}", ord.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>()));
-        assert_eq!(pos("tracked"), 0, "the tracked quest comes first");
-        assert_eq!(ord.len(), 1, "the tracked quest is the whole queue: {:?}", ord.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>());
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "active_low"), "an in-log quest is not repeated in UP NEXT");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "avail_l3"), "a merely unlocked quest is not in UP NEXT");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "caution"), "caution alone does not enter UP NEXT");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gwent"), "an unopened Gwent quest is not in UP NEXT");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "treasure"), "an unopened treasure hunt is not in UP NEXT");
-        assert!(!ord.iter().any(|&i| ev.steps[i].n.id == "gated"), "gated is never in DO NEXT");
-        // The plan adds no step of its own any more: a named plan step is not queued either. Only
-        // the tracked quest enters, even when its journal has not opened.
-        let tracked_gwent = todo_order(&ev, Some("gwent"), &HashSet::new(), &HashSet::new());
-        assert_eq!(tracked_gwent.len(), 1, "the plan adds no row: {:?}", tracked_gwent.iter().map(|&i| &ev.steps[i].n.id).collect::<Vec<_>>());
-        assert_eq!(ev.steps[tracked_gwent[0]].n.id, "gwent");
-        assert!(!tracked_gwent.iter().any(|&i| ev.steps[i].n.id == "treasure"), "a plan step is not an UP NEXT row");
-        // a fired cutoff takes its step out of DO NEXT; the top section names it instead
-        let unsafe_ids = HashSet::from([at(&ev, "avail_l3")]);
-        let without = todo_order(&ev, Some("tracked"), &unsafe_ids, &caution_ids);
-        assert!(!without.iter().any(|&i| ev.steps[i].n.id == "avail_l3"));
     }
 
     #[test]
@@ -1614,7 +1496,6 @@ mod tests {
             let i = at(&ev, &n.id);
             assert_eq!(ev.steps[i].status, "Done", "{} is not Done once its quest is", n.id);
             assert_eq!(ev.steps[i].frontier, "done");
-            assert!(!ev.todo.contains(&i), "{} is Done but still in DO NEXT", n.id);
         }
     }
 
