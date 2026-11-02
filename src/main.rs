@@ -324,6 +324,9 @@ fn no_save_verdict(display: &str) -> Value {
 /// A row is listed under every step it guards, so rows are deduped by id before they count.
 /// Done and Failed both count as finished: a failed quest is already lost, so finishing this one
 /// costs nothing more.
+/// The shipped paths all pass the route's finished set, so this two-argument form exists only for
+/// the tests that check the save alone decides.
+#[cfg(test)]
 fn closer_exposure<'a>(rows: impl IntoIterator<Item = &'a Value>, state: &HashMap<String, String>, stem: &str) -> (Vec<String>, Vec<String>) {
     closer_exposure_with(rows, state, &HashSet::new(), stem)
 }
