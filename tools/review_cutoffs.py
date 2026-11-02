@@ -194,9 +194,14 @@ def window_error(idx, w):
     """
     affects = w.get("affects") or []
     closer = w.get("closer", "")
+    also = [q for q in w.get("also_closed_by", []) if q]
     at = w.get("closes_at", "")
     if not affects or closer not in idx["quests"]:
         return "the window names no affected quest or no closer"
+    if closer in also:
+        return "also_closed_by repeats the closer"
+    if any(q not in idx["quests"] for q in also):
+        return "also_closed_by names a quest that is not in the quest index"
     if w.get("mechanism") == "dialogue_off":
         # The step needs an NPC's everyday chat, and the closer switches that chat off for good. The
         # journal stays Active, so the evidence is the dialogue loop and its stop fact, not a Failure input.
@@ -274,6 +279,10 @@ def window_error(idx, w):
 
 def resolve_window(idx, name, w):
     closer = w["closer"]
+    # `closer` is the journal whose Failure branch ends the window. A quest can also be named as
+    # the last chance the player stands in, even though its journal is not the one that fails the
+    # quest: the statuettes close at that moment, and Final Preparations is the quest they are in.
+    closed = [closer] + [q for q in w.get("also_closed_by", []) if q and q != closer]
     out = {
         "id": w["id"], "level": w.get("level", "stop"), "mechanism": w.get("mechanism", "journal_failure"),
         "resource": w.get("resource", ""),
@@ -281,7 +290,7 @@ def resolve_window(idx, name, w):
         "community_phases": w.get("community_phases", []),
         "affects": [a.lower() for a in w["affects"]],
         "affected_titles": [name.get(a.lower(), a) for a in w["affects"]],
-        "closed_by": [closer], "closed_by_titles": [name.get(closer, closer)],
+        "closed_by": closed, "closed_by_titles": [name.get(q, q) for q in closed],
         "closes_at": w["closes_at"], "closes_at_title": w.get("closes_at_title", ""),
         "binding": closer, "binding_title": name.get(closer, closer),
         "action": w.get("action", ""), "headline": w.get("headline", ""),
@@ -399,9 +408,9 @@ def build():
                 "resource": resource, "affects": affects, "closed_by": [closer],
                 "action": f"Finish {titles_joined} before {closer_title}",
                 "headline": f"Finish {titles_joined} before {closer_title}",
-                "why": (f"{closer_title} switches off {resource} in {base['deactivated_in']} (CDeactivateSpawnset). "
-                        f"{titles_joined} run through it, and the journal is recorded Failed or gated by "
-                        f"{closer}.journal."),
+                "why": (f"{closer_title} switches off the communities these quests are played through "
+                        f"(CDeactivateSpawnset). {titles_joined} run through them, and the journal is "
+                        f"recorded Failed or gated when that quest moves on."),
                 "files": [f"{base['deactivated_in']} switches off {resource} (CQuestStoryPhaseSetterBlock -> CDeactivateSpawnset)"],
                 "evidence": "files+saves",
                 "caveats": [f"{best.get('open_before', 0)} saves had the affected quest open when {closer_title} was done, "

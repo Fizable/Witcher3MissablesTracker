@@ -225,10 +225,9 @@ fn cutoff_rows(ev: &Eval, steps: &[Value], short: &str) -> Vec<Value> {
             if quests.is_empty() {
                 continue;
             }
+            // `why` is the file mechanism (switch names, gate facts). It stays in the data for the audit
+            // tools; the card shows only the save's own note, so the player reads plain game terms.
             let mut details: Vec<Value> = Vec::new();
-            if let Some(x) = w.get("why").filter(|v| !v.is_null()) {
-                details.push(x.clone());
-            }
             if let Some(x) = w.get("live_note").filter(|v| !v.is_null()) {
                 details.push(x.clone());
             }
@@ -571,6 +570,7 @@ mod tests {
             card_manual: HashMap::from([("card_dandelion".to_string(), false)]),
             state: HashMap::new(),
             objective_guids: HashMap::new(),
+            active_guids: HashMap::new(),
             objectives: HashMap::new(),
             tracked: Some("guid".into()),
             tracked_file: None,
@@ -643,6 +643,109 @@ mod tests {
                 "every listed card must belong to the tracked quest: {tr}");
     }
 
+    fn final_preparations_fixture(fp_state: &str) -> Inner {
+        let mut inner = tracker_with_shipped_data();
+        // `save_ready` only needs a path and no error; the data is set directly, as in the test above.
+        inner.save_path = Some(PathBuf::from("test.sav"));
+        inner.tracked_file = Some("q310preparationsnovigrad".into());
+        inner.state = HashMap::from([
+            ("q310preparationsnovigrad".to_string(), fp_state.to_string()),
+            ("q309mages".to_string(), "Done".to_string()),
+            ("mq3012noblestatuette".to_string(), "Active".to_string()),
+            ("mq3012warriorstatuette".to_string(), "Active".to_string()),
+        ]);
+        inner.facts = HashSet::from([
+            "mq3012_noble_statuette".to_string(),
+            "mq3012_soldier_statuette".to_string(),
+            "q310_philippa_rescued".to_string(),
+        ]);
+        inner
+    }
+
+    #[test]
+    fn final_preparations_warns_that_the_statuettes_are_due_now() {
+        let inner = final_preparations_fixture("Active");
+        let rt = inner.effective_route();
+        let ev = model::evaluate(&rt, &inner.state, &HashSet::new(), &HashMap::new(), &inner.facts);
+        let done_q = inner.done_quests(&ev);
+        let mut steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i)).collect();
+        for (i, s) in steps.iter_mut().enumerate() {
+            inner.attach_derived(s, &ev.steps[i], &done_q);
+        }
+        let statuses: HashMap<String, String> = ev.steps.iter().map(|s| (s.n.id.clone(), s.status.clone())).collect();
+        let card_report = inner.cards.report(None, true, "", &inner.facts, &inner.card_manual, &statuses);
+        let tr = inner.tracked_json(&ev, None, &steps, &card_report);
+        assert_eq!(tr["short"], "q310preparationsnovigrad");
+        let cuts = tr["cutoffs"].as_array().unwrap();
+        let statuettes = cuts.iter()
+            .find(|c| c["headline"].as_str().unwrap_or("").contains("Both statuettes in hand"))
+            .unwrap_or_else(|| panic!("Final Preparations must name the statuette turn-in: {tr}"));
+        assert_eq!(statuettes["action"], "Talk to Triss during Final Preparations");
+        assert_eq!(statuettes["live"], "inside");
+
+        // The band carries the same row, and the old Soldier -> Nobleman order warning stays.
+        let top = crate::top_items(&ev, &steps);
+        let row = top.as_array().unwrap().iter()
+            .find(|r| r["action"].as_str() == Some("Talk to Triss during Final Preparations"))
+            .unwrap_or_else(|| panic!("the turn-in must be a band row: {top}"));
+        assert_eq!(row["tag"], "ORDER");
+        assert!(row["headline"].as_str().unwrap().contains("Both statuettes in hand"));
+        assert!(top.as_array().unwrap().iter()
+                .any(|r| r["headline"].as_str().unwrap_or("").contains("You are inside The Soldier Statuette")),
+                "the order warning must survive: {top}");
+
+        let verdict = inner.verdict_for(&rt, &ev, "q310preparationsnovigrad");
+        assert_eq!(verdict["verdict"], "stop");
+        assert!(verdict["headline"].as_str().unwrap().contains("Both statuettes in hand"), "verdict: {verdict}");
+    }
+
+    #[test]
+    fn before_now_or_never_the_first_triss_window_warns() {
+        let mut inner = final_preparations_fixture("Not started");
+        // Before Now or Never, Triss is still in Novigrad: the first window must warn first.
+        inner.state.remove("q309mages");
+        let rt = inner.effective_route();
+        let ev = model::evaluate(&rt, &inner.state, &HashSet::new(), &HashMap::new(), &inner.facts);
+        let done_q = inner.done_quests(&ev);
+        let mut steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i)).collect();
+        for (i, s) in steps.iter_mut().enumerate() {
+            inner.attach_derived(s, &ev.steps[i], &done_q);
+        }
+        let top = crate::top_items(&ev, &steps);
+        let row = top.as_array().unwrap().iter()
+            .find(|r| r["action"].as_str() == Some("Talk to Triss in Novigrad before Now or Never"))
+            .unwrap_or_else(|| panic!("the first Triss window must be a band row: {top}"));
+        assert_eq!(row["tag"], "DO THIS NOW");
+    }
+
+    #[test]
+    fn final_preparations_is_ahead_before_it_starts() {
+        // Now or Never is over, so the first Triss window has closed and only the Final
+        // Preparations one is left. It must stay ahead until that quest starts.
+        let inner = final_preparations_fixture("Not started");
+        let rt = inner.effective_route();
+        let ev = model::evaluate(&rt, &inner.state, &HashSet::new(), &HashMap::new(), &inner.facts);
+        let done_q = inner.done_quests(&ev);
+        let mut steps: Vec<Value> = (0..ev.steps.len()).map(|i| model::step_json(&rt, &ev, i)).collect();
+        for (i, s) in steps.iter_mut().enumerate() {
+            inner.attach_derived(s, &ev.steps[i], &done_q);
+        }
+        let statuses: HashMap<String, String> = ev.steps.iter().map(|s| (s.n.id.clone(), s.status.clone())).collect();
+        let card_report = inner.cards.report(None, true, "", &inner.facts, &inner.card_manual, &statuses);
+        let tr = inner.tracked_json(&ev, None, &steps, &card_report);
+        assert!(tr["cutoffs"].as_array().unwrap().iter()
+                .all(|c| !c["headline"].as_str().unwrap_or("").contains("Both statuettes in hand")),
+                "an ahead window is not a card cutoff: {tr}");
+        let top = crate::top_items(&ev, &steps);
+        assert!(top.as_array().unwrap().iter()
+                .all(|r| !r["headline"].as_str().unwrap_or("").contains("Both statuettes in hand")),
+                "an ahead window is not a band row: {top}");
+        let verdict = inner.verdict_for(&rt, &ev, "q310preparationsnovigrad");
+        assert!(!verdict["headline"].as_str().unwrap_or("").contains("Both statuettes in hand"),
+                "an ahead window is not a verdict: {verdict}");
+        assert_ne!(verdict["verdict"], "stop", "a future window must not make the page warn: {verdict}");
+    }
+
     #[test]
     fn a_tracked_quest_names_the_quests_the_save_still_has_open() {
         let ev = model::evaluate(
@@ -670,7 +773,8 @@ mod tests {
         assert_eq!(rows[0]["level"], "stop", "a window already closing is urgent");
         assert_eq!(rows[0]["quests"], json!(["Brothers in Arms: Velen"]));
         assert_eq!(rows[0]["action"], "Finish it before The Isle of Mists");
-        assert!(rows[0]["details"][1].as_str().unwrap().contains("The Isle of Mists is active"));
+        assert_eq!(rows[0]["details"].as_array().unwrap().len(), 1, "the mechanism note stays off the card");
+        assert!(rows[0]["details"][0].as_str().unwrap().contains("The Isle of Mists is active"));
         // The tracked quest's own step never becomes a warning about itself.
         let own = cutoff_rows(&ev, &[step("q402ciri", json!([{
             "id": "self", "live": "inside", "headline": "self",

@@ -371,6 +371,8 @@ pub struct SaveState {
     pub state: HashMap<String, String>,
     // active objective GUIDs, keyed by journal short name: the app maps them to the game's text
     pub objective_guids: HashMap<String, Vec<String>>,
+    // every Active entry guid of each journal file, unfiltered: the ownership test for the V-highlight
+    pub active_guids: HashMap<String, Vec<String>>,
     // the save's own objective labels, kept for the debug dump only
     pub objectives: HashMap<String, Vec<String>>,
     pub tracked: Option<String>,      // guid of the quest the player is tracking in the game
@@ -490,7 +492,15 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
     let mut state: HashMap<String, String> = HashMap::new();
     let mut objective_guids: HashMap<String, Vec<String>> = HashMap::new();
     let mut objectives: HashMap<String, Vec<String>> = HashMap::new();
+    let mut active_guids: HashMap<String, Vec<String>> = HashMap::new();
     for (short, ids) in &db.quests {
+        // every entry of this journal file the save marks Active, whatever its name: the label filter below
+        // only decides what the quest page lists by name, and must not hide the game's own active objective
+        for (_, g) in ids {
+            if by_guid.get(g) == Some(&"Active") {
+                active_guids.entry(short.clone()).or_default().push(g.clone());
+            }
+        }
         let own = ids.first().and_then(|(_, g)| by_guid.get(g)).copied().unwrap_or("Not started");
         // The quest's own entry decides whenever the game moves it. For a handful of quests the game
         // leaves that entry absent or Inactive and moves a description entry instead (Novigrad, Under
@@ -547,7 +557,7 @@ pub fn quest_states(path: &Path, db: &QuestDb) -> Result<SaveState, String> {
         .filter(|(_name, vals)| vals.iter().any(|v| *v > 0))
         .map(|(name, _vals)| name)
         .collect();
-    Ok(SaveState { state, objective_guids, objectives, tracked, tracked_file, highlighted, facts })
+    Ok(SaveState { state, objective_guids, active_guids, objectives, tracked, tracked_file, highlighted, facts })
 }
 
 #[cfg(test)]

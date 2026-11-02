@@ -768,6 +768,29 @@ function cardWindowLine(card) {
   return w.reason || 'No window classification.';
 }
 
+/**
+ * Technical details are still text a player can read, so no game file path goes into them.
+ * The evidence itself stays in the payload and in docs/CUTOFF-REVIEW.md; on screen it is prose.
+ * Only tokens that are both a path and a game asset are touched, so ordinary URLs survive.
+ */
+const GAME_ASSET = /[^\s()'"]*[\\/][^\s()'"]*\.(?:w2[a-z0-9]+|ws|w2l|w2rig|w2mesh|w2mi|w2ent)\b/gi;
+function noPaths(text) {
+  if (!text) return '';
+  const raw = String(text);
+  const hadPath = /[\\/]/.test(raw);
+  const out = raw
+    .replace(/\([^()]*[\\/][^()]*\)/g, '')
+    .replace(GAME_ASSET, '')
+    .replace(/\s+([.,;:])/g, '$1')
+    .replace(/\(\s*\)/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  // If the path was the whole content, what is left is a dangling label ("Card evidence:."),
+  // which is worse than nothing: drop the line instead of printing a stub.
+  if (hadPath && /[:\-\u2013\u2014]\s*\.?$/.test(out)) return '';
+  return out;
+}
+
 function cardEvidence(card) {
   const w = card.window || {};
   const live = card.window_live || {};
@@ -775,7 +798,7 @@ function cardEvidence(card) {
   const det = h('details', 'evidence');
   add(det, h('summary', '', 'Technical details'));
   const body = h('div', 'evbody');
-  const line = (text) => { if (text) add(body, h('div', 'evline', text)); };
+  const line = (text) => { if (text) add(body, h('div', 'evline', noPaths(text))); };
   const tier = w.tier_rank ? 'Tier ' + w.tier_rank + ' - ' + stateText(w.tier) : 'no tier';
   line('Classification: ' + (w.kind === 'missable' ? 'missable' : 'one-time source') + ' · ' + tier + '.');
   if (w.step_title || w.step) line('Closing step: ' + (w.step_title || w.step) + ' (' + (w.step || 'no step') + ').');
@@ -1079,7 +1102,7 @@ function cutoffChip(cut) {
   const closed = ['check', 'passed', 'lost', 'later'].includes(cut.live);
   const label = (closed ? 'CLOSED FOR' : 'CUTS OFF') + ' ' + n + (n === 1 ? ' QUEST' : ' QUESTS');
   return chipBlock({ label }, tone, (body) => {
-    if (cut.headline) add(body, h('div', 'why', cut.headline));
+    if (cut.headline) add(body, h('div', 'why', noPaths(cut.headline)));
     if (n) {
       const ul = h('ul', 'bul');
       cut.quests.forEach((q) => add(ul, h('li', '', q)));
@@ -1094,9 +1117,9 @@ function cutoffChip(cut) {
 function trackedWatchChip(w) {
   const col = warnCol(w);
   return chipBlock({ label: w.tag || warnTag(w) }, col === 'lost' ? 'lost' : col, (body) => {
-    if (w.headline) add(body, h('div', 'why', w.headline));
-    if (w.action) add(body, h('div', 'action', w.action));
-    if (w.live_note) add(body, h('div', 'dim small', w.live_note));
+    if (w.headline) add(body, h('div', 'why', noPaths(w.headline)));
+    if (w.action) add(body, h('div', 'action', noPaths(w.action)));
+    if (w.live_note) add(body, h('div', 'dim small', noPaths(w.live_note)));
   });
 }
 
@@ -1396,7 +1419,7 @@ function verdictCard(v, opts) {
   if (v.from_game_files) add(c, h('div', 'tag green', (v.evidence === 'files+saves' ? 'GAME FILES + YOUR SAVES' : 'GAME FILES')));
   add(c, h('div', 'title verdict-text', v.headline));
   if (opts.action) add(c, h('div', 'action', opts.action));
-  (v.details || []).forEach((d) => add(c, h('div', 'why', d)));
+  (v.details || []).forEach((d) => add(c, h('div', 'why', noPaths(d))));
   return c;
 }
 
@@ -1444,7 +1467,7 @@ function evidenceBlock(d, s, dv, gr) {
   const det = h('details', 'evidence');
   add(det, h('summary', '', 'Technical details'));
   const body = h('div', 'evbody');
-  const line = (text) => { if (text) add(body, h('div', 'evline', text)); };
+  const line = (text) => { if (text) add(body, h('div', 'evline', noPaths(text))); };
 
   if (dv && dv.stems && dv.stems.length) line('Game files: ' + dv.stems.join(', ') + '.');
   if (d.tracking) line(d.tracking);
@@ -1470,7 +1493,9 @@ function evidenceBlock(d, s, dv, gr) {
     }
     if (w.evidence) line('Evidence tier: ' + w.evidence + '.');
     if (w.why) line('Why this warning exists: ' + w.why);
-    (w.files || []).forEach((f) => line('Game file: ' + f + '.'));
+    // The list of source files (`w.files`) is deliberately not printed: it is nothing but game
+    // paths and block numbers, which say nothing to a player and are the one thing that used to
+    // leak into the panel. The reviewed trail stays in docs/CUTOFF-REVIEW.md.
     (w.caveats || []).forEach((c) => line('Caveat: ' + c));
     if (w.live_note) line('Your save: ' + w.live_note);
   });
@@ -1478,7 +1503,10 @@ function evidenceBlock(d, s, dv, gr) {
   // quest, the card window must still be inspectable here rather than only in the card row.
   ((view && view.top) || []).filter((x) => x.kind === 'card' && (x.ids || []).includes(s.id)).forEach((x) => {
     line('Card warning: ' + (x.tag || 'card window') + '. ' + (x.action || x.detail || ''));
-    if (x.file) line('Card evidence: ' + x.file + '.');
+    // A card's evidence is nearly always a phase file, which says nothing here; only keep the
+    // line when what is left after the path is stripped is still readable.
+    const file = noPaths(x.file);
+    if (file && file !== '.') line('Card evidence: ' + file + '.');
   });
 
   (Array.isArray(d.guidance) ? d.guidance : []).forEach((g) => {

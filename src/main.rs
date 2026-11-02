@@ -57,7 +57,8 @@ struct Inner {
     card_manual: HashMap<String, bool>,
     // save state
     state: HashMap<String, String>,
-    objective_guids: HashMap<String, Vec<String>>, // journal short -> active objective GUIDs
+    objective_guids: HashMap<String, Vec<String>>, // journal short -> active objective GUIDs (named ones, for the quest page)
+    active_guids: HashMap<String, Vec<String>>,    // journal short -> every Active entry GUID, unfiltered
     objectives: HashMap<String, Vec<String>>,      // the save's own labels, debug only
     tracked: Option<String>,         // guid of the quest tracked in the game (read from the save)
     tracked_file: Option<String>,    // journal file of that quest, as the save names it
@@ -324,6 +325,19 @@ fn no_save_verdict(display: &str) -> Value {
 /// Done and Failed both count as finished: a failed quest is already lost, so finishing this one
 /// costs nothing more.
 fn closer_exposure<'a>(rows: impl IntoIterator<Item = &'a Value>, state: &HashMap<String, String>, stem: &str) -> (Vec<String>, Vec<String>) {
+    closer_exposure_with(rows, state, &HashSet::new(), stem)
+}
+
+/// The same exposure, plus the quests the route already treats as out of play. A quest the player
+/// marked "does not apply in my game" has no journal entry in the save at all, so reading the save
+/// alone would call it open and name it as something still to finish. It costs nothing to finish
+/// this quest, so it is finished here too.
+fn closer_exposure_with<'a>(
+    rows: impl IntoIterator<Item = &'a Value>,
+    state: &HashMap<String, String>,
+    finished: &HashSet<String>,
+    stem: &str,
+) -> (Vec<String>, Vec<String>) {
     let stem = stem.to_ascii_lowercase();
     let mut seen_rows: HashSet<String> = HashSet::new();
     let mut seen_q: HashSet<String> = HashSet::new();
@@ -352,7 +366,8 @@ fn closer_exposure<'a>(rows: impl IntoIterator<Item = &'a Value>, state: &HashMa
                 continue;
             }
             let title = titles.and_then(|t| t.get(i)).and_then(|x| x.as_str()).unwrap_or(a.as_str()).to_string();
-            let finished = matches!(model::quest_status(state, &a).as_deref(), Some("Done") | Some("Failed"));
+            let finished = finished.contains(&a)
+                || matches!(model::quest_status(state, &a).as_deref(), Some("Done") | Some("Failed"));
             if !finished {
                 open.push(title.clone());
             }
@@ -360,6 +375,48 @@ fn closer_exposure<'a>(rows: impl IntoIterator<Item = &'a Value>, state: &HashMa
         }
     }
     (open, all)
+}
+
+/// The sentence for a quest that is still able to fail something: only the affected quests the
+/// save still shows open are named, so a red card disappears the moment the last one is finished.
+fn closer_headline(open: &[String]) -> String {
+    match open.len() {
+        1 => format!("This quest will fail {}. Complete it first.", open[0]),
+        _ => format!("This quest will fail the following quests: {}. Complete them first.", open.join(", ")),
+    }
+}
+
+/// The other half of the same rule: nothing left to lose, so the green answer is explicit rather
+/// than the same "no cutoff is known" the page uses for quests it has no row for.
+fn closer_safe_headline() -> &'static str {
+    "Safe to complete: every quest it would fail is already finished or lost."
+}
+
+/// A whole-quest journal failure is already true before the closing quest is in the log, which is
+/// why On Thin Ice must read red while Reason of State is open. A cutoff that names a phase is a
+/// window: it only costs something once the save is inside that phase, so it stays suppressed
+/// while ahead. This is the line between the two, kept in one place for the closer verdict.
+fn counts_while_ahead(w: &Value) -> bool {
+    w.get("mechanism").and_then(|x| x.as_str()) == Some("journal_failure")
+        && w.get("closes_at").and_then(|x| x.as_str()).filter(|s| !s.is_empty()).is_none()
+}
+
+/// The affected quest's answer while the closing quest is still ahead. The row knows which quest
+/// ends it, so the page says "do this before On Thin Ice" instead of quietly reporting nothing.
+fn ahead_headline(w: &Value) -> String {
+    let closer = w
+        .get("closed_by_titles")
+        .and_then(|x| x.as_array())
+        .and_then(|a| a.first())
+        .and_then(|x| x.as_str())
+        .filter(|s| !s.is_empty())
+        .unwrap_or("the next story quest");
+    let fails = w.get("mechanism").and_then(|x| x.as_str()) == Some("journal_failure");
+    if fails {
+        format!("Do this before {closer}: finishing {closer} fails this quest.")
+    } else {
+        format!("Do this before {closer}: this quest is no longer available after that.")
+    }
 }
 
 impl Inner {
@@ -443,6 +500,7 @@ impl Inner {
             display: vec![],
             state: HashMap::new(),
             objective_guids: HashMap::new(),
+            active_guids: HashMap::new(),
             objectives: HashMap::new(),
             tracked: None,
             tracked_file: None,
@@ -715,6 +773,7 @@ impl Inner {
             Ok(s) => {
                 self.state = s.state;
                 self.objective_guids = s.objective_guids;
+                self.active_guids = s.active_guids;
                 self.objectives = s.objectives;
                 self.tracked = s.tracked;
                 self.tracked_file = s.tracked_file;
@@ -747,7 +806,7 @@ impl Inner {
         let mut out: Vec<String> = Vec::new();
         for f in files {
             let stem = f.split('#').next().unwrap_or(f);
-            let (Some(guids), Some(list)) = (self.objective_guids.get(stem), listed) else { continue };
+            let (Some(guids), Some(list)) = (self.active_guids.get(stem), listed) else { continue };
             for guid in guids {
                 if let Some(t) = listed_objective_text(list, guid) {
                     if !t.is_empty() && !out.iter().any(|x| x == t) {
@@ -879,6 +938,9 @@ impl Inner {
         };
         let display = self.display.iter().find(|(k, _)| *k == short).map(|(_, d)| d.clone()).unwrap_or_else(|| short.clone());
         let status = self.state.get(&short).map(String::as_str).unwrap_or("");
+        // The game keeps the V-highlight after the player tracks another quest, so a highlight that is not one
+        // of this quest's own active objectives belongs to a different quest and must not reach the card.
+        let highlighted = self.highlighted.as_deref().filter(|g| self.is_own_objective(g, &short));
         let mut out = tracked::payload(tracked::Input {
             ev,
             short: &short,
@@ -888,24 +950,43 @@ impl Inner {
             steps,
             card_report,
             guidance_on: self.guidance_on,
-            highlighted: self.highlighted.as_deref(),
+            highlighted,
             scene_objectives: &self.scene_objectives,
         });
         // the one objective line the TRACKED card shows: the game's highlighted objective, else the first active one
-        let (objective, source) = self.tracked_objective(&short);
+        let (objective, source) = self.tracked_objective(&short, highlighted);
         out["objective"] = objective;
         out["objective_source"] = source;
         out
     }
 
+    /// True when this objective guid belongs to the tracked quest: the save marks it active on one of the quest's
+    /// own journal entries, or the game's files list it under one of the quest's own route steps. The highlight
+    /// can point at a quest the player is no longer tracking, and that guid is in neither place.
+    fn is_own_objective(&self, guid: &str, short: &str) -> bool {
+        self.active_guids.get(short).is_some_and(|q| q.iter().any(|g| g == guid))
+            || self.own_step_objective(guid, short).is_some()
+    }
+
+    /// The game's text for an objective guid, looked up only in the quest's own route steps.
+    fn own_step_objective(&self, guid: &str, short: &str) -> Option<String> {
+        let steps = self.derived.get("steps")?.as_object()?;
+        self.route.nodes.iter().filter(|n| model::tracks(n, short)).find_map(|n| {
+            steps.get(&n.id)?.get("objectives")?.as_array()?.iter().find_map(|o| {
+                let same = o.get("guid").and_then(|x| x.as_str()).and_then(save::guid_from_hex).as_deref() == Some(guid);
+                o.get("text").and_then(|x| x.as_str()).filter(|t| same && !t.is_empty()).map(String::from)
+            })
+        })
+    }
+
     /// The text of the objective the card shows for the tracked quest, and where it came from. "save" is the
-    /// objective the player highlighted with V; "fallback" is the first active objective of the quest, used when
-    /// the save has no highlighted objective or its text cannot be found. Both are null when neither exists.
-    fn tracked_objective(&self, short: &str) -> (Value, Value) {
-        if let Some(t) = self.highlighted.as_deref().and_then(|g| self.objective_text(g, short)) {
+    /// objective the player highlighted with V (already filtered to this quest); "fallback" is the first active
+    /// objective of the quest, used when there is no highlight or its text cannot be found. Both are null when neither exists.
+    fn tracked_objective(&self, short: &str, highlighted: Option<&str>) -> (Value, Value) {
+        if let Some(t) = highlighted.and_then(|g| self.objective_text(g, short)) {
             return (json!(t), json!("save"));
         }
-        let first = self.objective_guids.get(short).into_iter().flatten().find_map(|g| self.objective_text(g, short));
+        let first = self.active_guids.get(short).into_iter().flatten().find_map(|g| self.objective_text(g, short));
         match first {
             Some(t) => (json!(t), json!("fallback")),
             None => (Value::Null, Value::Null),
@@ -1038,12 +1119,18 @@ impl Inner {
             return no_save_verdict(&display);
         }
         let out = self.watch_verdict(rt, ev, short_name, &display);
-        self.closer_verdict(short_name, out)
+        self.closer_verdict(ev, short_name, out)
     }
 
     /// The route model's verdict, outranked by a reviewed warning that is live in this save.
     fn watch_verdict(&self, rt: &RouteData, ev: &Eval, short_name: &str, display: &str) -> Value {
         let mut out = model::verdict_json(&model::check_quest(rt, ev, short_name, &self.state), display);
+        // A quest the journal already carries as done has nothing to do now. A cutoff row is
+        // listed under every quest it protects, so without this the finished statuette page would
+        // take Reason of State's "do this before On Thin Ice" advice.
+        if model::quest_status(&self.state, short_name).as_deref() == Some("Done") {
+            return out;
+        }
         let Some(w) = self.live_watch_for(ev, short_name) else { return out };
         let Some(live) = w.get("live").and_then(|x| x.as_str()) else { return out };
         let (verdict, headline) = match live {
@@ -1055,8 +1142,9 @@ impl Inner {
             "not_yet" => ("info", w.get("headline").cloned().unwrap_or(Value::Null)),
             // the window closed and the journal is still open: say where the next chance is
             "later" => ("info", w.get("headline").cloned().unwrap_or(Value::Null)),
-            // an ahead window is not a verdict: the route model's answer stands until the closing
-            // quest is in the log and the turn-in is possible
+            // The cutoff is real but the closing quest is not in this save yet. It is not urgent,
+            // and it is not "no cutoff is known" either: name the quest that will end it.
+            "ahead" => ("info", json!(ahead_headline(&w))),
             // settled, missed, unknown: the journal has answered the question, so the route
             // model's own verdict stands and the warning is not repeated as advice
             _ => return out,
@@ -1067,11 +1155,15 @@ impl Inner {
                 details.push(x.clone());
             }
         } else {
-            if let Some(x) = w.get("why").filter(|v| !v.is_null()) {
-                details.push(x.clone());
-            }
-            if let Some(x) = w.get("action").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
-                details.push(json!(format!("Do this first: {x}.")));
+            // The file-level reasoning (`why`, `files`) belongs to the collapsed Technical details
+            // section. The card itself speaks in the player's terms: the headline, the action, and
+            // what this save says. Raw phase paths and block numbers never reach the visible text.
+            // An ahead row's action covers every quest the closer fails; on this quest's own
+            // page the headline already names the closer, so the shared instruction is noise.
+            if live != "ahead" {
+                if let Some(x) = w.get("action").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
+                    details.push(json!(format!("Do this first: {x}.")));
+                }
             }
             if let Some(x) = w.get("live_note").filter(|v| !v.is_null()) {
                 details.push(x.clone());
@@ -1088,29 +1180,88 @@ impl Inner {
     /// The other direction: this quest may be the one that closes other quests. Their cutoff rows
     /// name it in `closed_by`, so finishing it fails whatever they affect that the save still shows
     /// open. A quest that is already done has had its cutoffs happen, so it gets no closer warning.
-    fn closer_verdict(&self, short_name: &str, mut out: Value) -> Value {
+    /// An `ahead` row counts here: `on Thin Ice` is the quest that fails Reason of State long before
+    /// it is in the log, and the page must not call it safe while that is still true. Only the
+    /// affected quests the save still shows open are named, so finishing the ones that are already
+    /// done never leaves a warning behind.
+    fn closer_verdict(&self, ev: &Eval, short_name: &str, mut out: Value) -> Value {
         if model::quest_status(&self.state, short_name).as_deref() == Some("Done") {
             return out;
         }
-        let rows = self
-            .derived
-            .get("steps")
-            .and_then(|s| s.as_object())
-            .into_iter()
-            .flat_map(|m| m.values())
-            .filter_map(|s| s.get("watch"))
-            .filter_map(|w| w.as_array())
-            .flatten();
-        let (open, all) = closer_exposure(rows, &self.state, short_name);
+        let done_q = self.done_quests(ev);
+        let mut rows: Vec<Value> = Vec::new();
+        let mut seen: HashSet<String> = HashSet::new();
+        for s in self.derived.get("steps").and_then(|s| s.as_object()).into_iter().flat_map(|m| m.values()) {
+            for w in s.get("watch").and_then(|w| w.as_array()).into_iter().flatten() {
+                let id = w.get("id").and_then(|x| x.as_str()).unwrap_or("").to_string();
+                if !id.is_empty() && !seen.insert(id) {
+                    continue;
+                }
+                let mut w = w.clone();
+                // Keep the row even when every quest it protects is finished: `all` is how the
+                // page knows to say "safe to complete" instead of saying nothing at all.
+                let _ = self.read_warning(&mut w, &done_q);
+                if !counts_while_ahead(&w)
+                    && !matches!(
+                        w.get("live").and_then(|x| x.as_str()),
+                        Some("inside" | "open" | "check" | "passed" | "lost")
+                    )
+                {
+                    continue;
+                }
+                rows.push(w);
+            }
+        }
+        let (open, all) = closer_exposure_with(rows.iter(), &self.state, &done_q.done, short_name);
+        // Only a row that fails the other quest outright may say "finishing this fails X".
+        let failing: Vec<Value> = rows
+            .iter()
+            .filter(|w| w.get("mechanism").and_then(|x| x.as_str()) == Some("journal_failure"))
+            .cloned()
+            .collect();
+        let (open_fail, _) = closer_exposure_with(failing.iter(), &self.state, &done_q.done, short_name);
         if all.is_empty() {
             return out;
         }
+        // A live turn-in on this quest's page says what to do now, not just how many quests it
+        // would fail: the statuettes are handed to Triss before Final Preparations ends.
+        let closes_here = |w: &Value| {
+            let closes = w.get("closed_by").and_then(|x| x.as_array()).into_iter().flatten()
+                .filter_map(|x| x.as_str())
+                .any(|x| x.split('#').next() == Some(short_name));
+            let at = w.get("closes_at").and_then(|x| x.as_str())
+                .map(|x| x.split('#').next() == Some(short_name)).unwrap_or(false);
+            closes || at
+        };
+        let turn_in = rows.iter()
+            .filter(|w| w.get("live").and_then(|x| x.as_str()) == Some("inside"))
+            .filter(|w| closes_here(w))
+            .find(|w| w.get("turn_in").is_some())
+            .cloned();
         let verdict = out.get("verdict").and_then(|v| v.as_str()).unwrap_or("").to_string();
         if !open.is_empty() {
             if verdict != "stop" {
                 out["verdict"] = json!("stop");
-                out["headline"] = json!(format!("Not safe yet: finishing this fails {} quest(s) you have not finished", open.len()));
-                let mut details: Vec<Value> = vec![json!(format!("Finish first: {}.", open.join(", ")))];
+                let mut details: Vec<Value> = Vec::new();
+                if let Some(w) = &turn_in {
+                    if let Some(h) = w.get("headline") {
+                        out["headline"] = h.clone();
+                    }
+                    if let Some(a) = w.get("action").and_then(|x| x.as_str()).filter(|s| !s.is_empty()) {
+                        details.push(json!(format!("Do this first: {a}.")));
+                    }
+                } else if !open_fail.is_empty() {
+                    // The question is "can I finish this now": name only what is still open, and
+                    // say what finishing would cost. A quest whose affected quests are all done
+                    // never reaches this branch, so the red card cannot outlive the risk.
+                    out["headline"] = json!(closer_headline(&open_fail));
+                } else {
+                    out["headline"] = json!(format!("Not safe yet: finishing this fails {} quest(s) you have not finished", open.len()));
+                }
+                let named = if open_fail.is_empty() { &open } else { &open_fail };
+                if !named.is_empty() {
+                    details.push(json!(format!("Complete first: {}.", named.join(", "))));
+                }
                 if let Some(old) = out.get("details").and_then(|x| x.as_array()) {
                     details.extend(old.iter().cloned());
                 }
@@ -1120,15 +1271,16 @@ impl Inner {
                 // The route model already says stop, but it only knows its own events (Brothers in
                 // Arms for the Isle of Mists); name the other open quests the game files say it fails.
                 let said = out.get("details").map(|d| d.to_string()).unwrap_or_default();
-                let extra: Vec<String> = open.iter().filter(|t| !said.contains(t.as_str())).cloned().collect();
+                let named = if open_fail.is_empty() { &open } else { &open_fail };
+                let extra: Vec<String> = named.iter().filter(|t| !said.contains(t.as_str())).cloned().collect();
                 if !extra.is_empty() {
                     let mut details = out.get("details").and_then(|x| x.as_array()).cloned().unwrap_or_default();
                     details.push(json!(format!("It also fails: {}.", extra.join(", "))));
                     out["details"] = json!(details);
                 }
             }
-        } else if verdict == "safe" {
-            out["headline"] = json!("Safe: every quest it would fail is already finished or lost");
+        } else if verdict == "safe" && !all.is_empty() {
+            out["headline"] = json!(closer_safe_headline());
         }
         out
     }
@@ -1797,6 +1949,27 @@ fn fails_for(derived: &Value, id: &str) -> Vec<String> {
 #[cfg(test)]
 mod detail_tests {
     use super::*;
+
+    #[test]
+    fn visible_warning_text_never_exposes_a_game_file() {
+        // Paths and internal file names belong to the collapsed Technical details section, which
+        // prints `files`. Everything the card says out loud is player prose.
+        let derived: Value = serde_json::from_str(
+            &std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/data/derived.json")).unwrap(),
+        ).unwrap();
+        for step in derived["steps"].as_object().into_iter().flat_map(|m| m.values()) {
+            for w in step["watch"].as_array().into_iter().flatten() {
+                for key in ["why", "headline", "action", "closes_at_title", "live_note", "live_detail"] {
+                    let Some(text) = w.get(key).and_then(|x| x.as_str()) else { continue };
+                    assert!(
+                        !text.contains(".w2") && !text.contains('/') && !text.contains('\\'),
+                        "{} {key} leaks a game file path: {text}",
+                        w["id"]
+                    );
+                }
+            }
+        }
+    }
 
     #[test]
     fn derived_raw_guid_matches_save_dashed_guid() {
@@ -2597,6 +2770,141 @@ mod top_tests {
         let rows = vec![closer_row("x", "q309mages", &[("q402novigradallies", "Brothers In Arms: Novigrad")])];
         let (open, all) = closer_exposure(rows.iter(), &HashMap::new(), "q402ciri");
         assert!(open.is_empty() && all.is_empty());
+    }
+
+    #[test]
+    fn on_thin_ice_is_red_while_reason_of_state_is_open_and_green_once_it_is_done() {
+        // The wiki and the generated matrix agree: On Thin Ice fails Reason of State. The page
+        // must say so before On Thin Ice is in the log, and must stop saying it once the save
+        // shows Reason of State finished.
+        let mut row = closer_row("db_q501eredin", "q501eredin", &[
+            ("mq3012noblestatuette", "The Nobleman Statuette"),
+            ("mq3012warriorstatuette", "The Soldier Statuette"),
+            ("mq3035_emhyr", "Reason of State"),
+        ]);
+        row["mechanism"] = json!("journal_failure");
+
+        let open_save = HashMap::from([
+            ("mq3012noblestatuette".to_string(), "Done".to_string()),
+            ("mq3012warriorstatuette".to_string(), "Done".to_string()),
+            ("mq3035_emhyr".to_string(), "Active".to_string()),
+            ("q501eredin".to_string(), "Not started".to_string()),
+        ]);
+        let (open, all) = closer_exposure(std::iter::once(&row), &open_save, "q501eredin");
+        assert_eq!(open, vec!["Reason of State"], "only the quests still open are named");
+        assert_eq!(all.len(), 3);
+        assert_eq!(closer_headline(&open), "This quest will fail Reason of State. Complete it first.");
+
+        let done_save = HashMap::from([
+            ("mq3012noblestatuette".to_string(), "Done".to_string()),
+            ("mq3012warriorstatuette".to_string(), "Done".to_string()),
+            ("mq3035_emhyr".to_string(), "Done".to_string()),
+        ]);
+        let (open, all) = closer_exposure(std::iter::once(&row), &done_save, "q501eredin");
+        assert!(open.is_empty());
+        assert_eq!(all.len(), 3);
+        assert_eq!(closer_safe_headline(), "Safe to complete: every quest it would fail is already finished or lost.");
+    }
+
+    #[test]
+    fn a_quest_that_does_not_apply_in_this_game_is_not_named_as_remaining() {
+        // "Does not apply in my game" leaves no journal entry in the save, so the state map alone
+        // would call it open. The route's finished set is what keeps it off the red list.
+        let rows = vec![closer_row("db_q501eredin", "q501eredin", &[("mq3035_emhyr", "Reason of State")])];
+        let finished: HashSet<String> = ["mq3035_emhyr".to_string()].into_iter().collect();
+        let (open, all) = closer_exposure_with(rows.iter(), &HashMap::new(), &finished, "q501eredin");
+        assert!(open.is_empty());
+        assert_eq!(all, vec!["Reason of State"]);
+    }
+
+    #[test]
+    fn the_closer_text_follows_the_save_not_the_static_row() {
+        // The shipped row names all three quests; the sentence must only name the ones this save
+        // still has open, so finishing Reason of State first flips the warning to the statuettes.
+        let derived: Value = serde_json::from_str(
+            &std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/data/derived.json")).unwrap(),
+        ).unwrap();
+        let rows: Vec<Value> = derived["steps"]
+            .as_object()
+            .into_iter()
+            .flat_map(|m| m.values())
+            .filter_map(|s| s["watch"].as_array())
+            .flatten()
+            .filter(|w| w["id"] == "db_q501eredin")
+            .cloned()
+            .collect();
+        assert!(!rows.is_empty(), "the generated cutoffs must be shipped");
+        let state = |pairs: &[(&str, &str)]| -> HashMap<String, String> {
+            pairs.iter().map(|(k, v)| (k.to_string(), v.to_string())).collect()
+        };
+
+        // Reason of State open, both statuettes finished.
+        let ros = state(&[
+            ("mq3012noblestatuette", "Done"), ("mq3012warriorstatuette", "Done"),
+            ("mq3035_emhyr", "Active"), ("q501eredin", "Not started"),
+        ]);
+        let (open, _) = closer_exposure(rows.iter(), &ros, "q501eredin");
+        assert_eq!(open, vec!["Reason of State"]);
+        assert_eq!(closer_headline(&open), "This quest will fail Reason of State. Complete it first.");
+
+        // The opposite playthrough: Reason of State finished, the soldier statuette still open.
+        let soldier = state(&[
+            ("mq3012noblestatuette", "Done"), ("mq3012warriorstatuette", "Active"),
+            ("mq3035_emhyr", "Done"), ("q501eredin", "Not started"),
+        ]);
+        let (open, _) = closer_exposure(rows.iter(), &soldier, "q501eredin");
+        assert_eq!(open, vec!["The Soldier Statuette"]);
+        assert_eq!(closer_headline(&open), "This quest will fail The Soldier Statuette. Complete it first.");
+
+        // Everything finished: the same row now reads as safe, and the details list still has
+        // the three quests, each coloured by the save rather than by the row.
+        let none = state(&[
+            ("mq3012noblestatuette", "Done"), ("mq3012warriorstatuette", "Done"),
+            ("mq3035_emhyr", "Done"), ("q501eredin", "Not started"),
+        ]);
+        let (open, all) = closer_exposure(rows.iter(), &none, "q501eredin");
+        assert!(open.is_empty());
+        assert_eq!(all.len(), 3);
+        let listed = fails_with_status(&derived, "q501eredin", &none);
+        assert_eq!(listed.len(), 3);
+        assert!(listed.iter().all(|x| x["status"] == "done"));
+    }
+
+    #[test]
+    fn a_whole_quest_failure_counts_while_ahead_but_a_phase_window_does_not() {
+        // On Thin Ice has no `closes_at`: finishing it fails Reason of State whenever it happens.
+        let mut whole = closer_row("db_q501eredin", "q501eredin", &[("mq3035_emhyr", "Reason of State")]);
+        whole["mechanism"] = json!("journal_failure");
+        assert!(counts_while_ahead(&whole));
+
+        // The statuette window names its phase, so it only counts once the save is inside it.
+        let mut window = whole.clone();
+        window["closes_at"] = json!("q210preparations#Novigrad");
+        assert!(!counts_while_ahead(&window));
+
+        // A community switch is not a journal failure either way.
+        let mut community = whole.clone();
+        community["mechanism"] = json!("spawnset");
+        assert!(!counts_while_ahead(&community));
+    }
+
+    #[test]
+    fn the_affected_quest_names_the_closer_instead_of_claiming_it_knows_nothing() {
+        let row = json!({
+            "mechanism": "journal_failure",
+            "closed_by_titles": ["On Thin Ice"],
+        });
+        assert_eq!(
+            ahead_headline(&row),
+            "Do this before On Thin Ice: finishing On Thin Ice fails this quest."
+        );
+        // A community switch is not a journal failure: say "no longer available", not "fails".
+        let mut community = row.clone();
+        community["mechanism"] = json!("spawnset");
+        assert_eq!(
+            ahead_headline(&community),
+            "Do this before On Thin Ice: this quest is no longer available after that."
+        );
     }
 }
 

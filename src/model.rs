@@ -769,12 +769,18 @@ pub fn live_cutoff_facts(item: &mut Value, state: &HashMap<String, String>, done
         match live_status(state, done_q, ticked_q, at).as_deref() {
             Some("Done") | Some("Failed") => done.push(0),
             Some("Active") => running.push(0),
-            // an older save may not carry the phase entry yet; fall back to the quest's own status
-            _ => match live_status(state, done_q, ticked_q, &closed[0]).as_deref() {
-                Some("Done") | Some("Failed") => done.push(0),
-                Some("Active") => running.push(0),
-                _ => {}
-            },
+            // A window can name the phase that ends it and the quest whose end is the last chance.
+            // An older save may not carry the phase entry, and Final Preparations is Active while
+            // that phase is not, so read every closer rather than only the first.
+            _ => {
+                for (i, c) in closed.iter().enumerate() {
+                    match live_status(state, done_q, ticked_q, c).as_deref() {
+                        Some("Done") | Some("Failed") => done.push(i),
+                        Some("Active") => running.push(i),
+                        _ => {}
+                    }
+                }
+            }
         }
     } else {
         for (i, c) in closed.iter().enumerate() {
@@ -1690,6 +1696,40 @@ mod tests {
         assert!(live_cutoff(&mut item, &passed, &HashSet::new(), &HashSet::new()));
         assert_eq!(item["live"], "check");
         assert!(!item["headline"].as_str().unwrap().contains("can no longer be completed"));
+    }
+
+    #[test]
+    fn a_window_reads_every_closer_when_the_phase_entry_is_not_in_the_log() {
+        // The statuettes close when Battle Preparations starts, but the last chance is Final
+        // Preparations; its journal is Active while the closing phase is not in the save at all.
+        let make = || json!({
+            "id": "triss_statuettes_window", "level": "stop",
+            "affected": ["mq3012noblestatuette", "mq3012warriorstatuette"],
+            "affected_titles": ["The Nobleman Statuette", "The Soldier Statuette"],
+            "closed_by": ["q210preparations", "q310preparationsnovigrad"],
+            "closed_by_titles": ["Battle Preparations", "Final Preparations"],
+            "closes_at": "q210preparations#Novigrad",
+            "closes_at_title": "the end of Final Preparations"
+        });
+        let fp = state(&[("q310preparationsnovigrad", "Active"),
+                         ("mq3012noblestatuette", "Active"), ("mq3012warriorstatuette", "Active")]);
+        let mut item = make();
+        assert!(live_cutoff(&mut item, &fp, &HashSet::new(), &HashSet::new()));
+        assert_eq!(item["live"], "inside", "Final Preparations is the last chance");
+
+        // Before Final Preparations the same window stays ahead, so the suppression still holds.
+        let early = state(&[("q310preparationsnovigrad", "Not started"),
+                            ("mq3012noblestatuette", "Active"), ("mq3012warriorstatuette", "Active")]);
+        let mut item = make();
+        assert!(live_cutoff(&mut item, &early, &HashSet::new(), &HashSet::new()));
+        assert_eq!(item["live"], "ahead");
+
+        // Once Final Preparations is done the chance has passed: check, never a loss.
+        let passed = state(&[("q310preparationsnovigrad", "Done"),
+                             ("mq3012noblestatuette", "Active"), ("mq3012warriorstatuette", "Active")]);
+        let mut item = make();
+        assert!(live_cutoff(&mut item, &passed, &HashSet::new(), &HashSet::new()));
+        assert_eq!(item["live"], "check");
     }
 
     #[test]

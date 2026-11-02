@@ -1919,7 +1919,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact sq301_ball_started is set during A Matter of Life and Death (quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase)."
+     "why": "The game fails these quests once the fact sq301_ball_started is set during A Matter of Life and Death."
     },
     {
      "action": "Finish Collect 'Em All before High Stakes",
@@ -1968,7 +1968,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact sq306_completed is set during High Stakes (quests/sidequests/novigrad/sq306_maverick.w2phase)."
+     "why": "The game fails these quests once the fact sq306_completed is set during High Stakes."
     }
    ]
   },
@@ -3261,7 +3261,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q210_quest_start is set during Battle Preparations (quests/part_3/quest_files/q210_precanaris/phases/q210_depart_novigrad.w2phase)."
+     "why": "The game fails these quests once the fact q210_quest_start is set during Battle Preparations."
     }
    ]
   },
@@ -6557,7 +6557,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q002_left_village is set during The Beast of White Orchard (quests/prologue/q002_emhyr.w2phase)."
+     "why": "The game fails these quests once the fact q002_left_village is set during The Beast of White Orchard."
     }
    ]
   },
@@ -7042,7 +7042,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact mq1005_quest_refused is set during Bitter Harvest (quests/minor_quests/no_mans_land/mq1005_battlefield_scavengers.w2phase)."
+     "why": "The game fails these quests once the fact mq1005_quest_refused is set during Bitter Harvest."
     }
    ]
   },
@@ -7128,7 +7128,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact mq3036_fact_done is set during Fencing Lessons (quests/minor_quests/novigrad/mq3036_rosa_romance.w2phase). The game fails these quests while the journal of Fencing Lessons reads failed (quests/minor_quests/no_mans_land/mq1028_courier.w2phase)."
+     "why": "The game fails these quests once the fact mq3036_fact_done is set during Fencing Lessons. The game fails these quests while the journal of Fencing Lessons reads failed."
     }
    ]
   },
@@ -7943,7 +7943,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact sq106_hammond_knows is set during Following the Thread (quests/sidequests/no_mans_land/quest_files/sq106_killbill/phases/sq106_hammond.w2phase)."
+     "why": "The game fails these quests once the fact sq106_hammond_knows is set during Following the Thread."
     }
    ]
   },
@@ -8504,7 +8504,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact mq3012_endgame is set during The Soldier Statuette (quests/minor_quests/novigrad/mq3012_jade_statuettes.w2phase)."
+     "why": "The game fails these quests once the fact mq3012_endgame is set during The Soldier Statuette."
     },
     {
      "action": "Finish The Nobleman Statuette, The Soldier Statuette and Reason of State before On Thin Ice",
@@ -8558,7 +8558,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q501_naglfar_arrived is set during On Thin Ice (quests/part_3/q501_eredin.w2phase)."
+     "why": "The game fails these quests once the fact q501_naglfar_arrived is set during On Thin Ice."
     },
     {
      "action": "Talk to Triss in Novigrad before Now or Never",
@@ -8646,7 +8646,7 @@
        "mq3012_soldier_statuette"
       ]
      },
-     "why": "mq3012_jade_statuettes.w2phase activates exactly two Triss community phases: triss_default, her usual Novigrad spot, and q310_ap_triss_dandelions, her place at Dandelion's during Final Preparations (blocks 523/526, 627/630 and 710/714). The option itself is the quest's own context-dialogue block #161, hung on triss_default.w2scene, and its branches test q309_completed on the False output: the chat exists while Now or Never is not completed. q309_casablanca.w2phase moves her through a list of q309_triss_* phases for Now or Never, so triss_default is off and she has nothing to say about the statuettes while that quest runs; the app closes the window there, which is earlier than the fact gate and therefore safe. The statuette phase tests q310_philippa_rescued, which Final Preparations sets, and that is why q310_ap_triss_dandelions is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back."
+     "why": "Triss's statuette hand-in exists in exactly two places: her usual spot in Novigrad, and her place at Dandelion's during Final Preparations. The option is her own context dialogue, and its branch checks that Now or Never is not completed, so she has nothing to say about the statuettes while that quest runs. The window closes when Now or Never starts, which is earlier than the journal failure and therefore safe. The statuette phase also requires the Philippa rescue, which Final Preparations sets, and that is why her place at Dandelion's is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back."
     },
     {
      "action": "Give both statuettes to Triss during Final Preparations",
@@ -8658,18 +8658,20 @@
       "The Nobleman Statuette",
       "The Soldier Statuette"
      ],
-     "binding": "q210preparations",
-     "binding_title": "Battle Preparations",
+     "binding": "q310preparationsnovigrad",
+     "binding_title": "Final Preparations",
      "caveats": [
       "No save in the corpus has a statuette still open when Battle Preparations starts, so the save history cannot confirm the window; the game's own connected Failure branch is the evidence.",
       "Before the window the journal can say Active for a long time: the quest is still winnable, not lost.",
       "After the window, if the journal still says Active, the app says CHECK NOW rather than LOST; only a Failed journal entry may be called lost."
      ],
      "closed_by": [
-      "q210preparations"
+      "q210preparations",
+      "q310preparationsnovigrad"
      ],
      "closed_by_titles": [
-      "Battle Preparations"
+      "Battle Preparations",
+      "Final Preparations"
      ],
      "closes_at": "q210preparations#Novigrad",
      "closes_at_title": "the end of Final Preparations",
@@ -8807,7 +8809,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q501_naglfar_arrived is set during On Thin Ice (quests/part_3/q501_eredin.w2phase)."
+     "why": "The game fails these quests once the fact q501_naglfar_arrived is set during On Thin Ice."
     },
     {
      "action": "Talk to Triss in Novigrad before Now or Never",
@@ -8895,7 +8897,7 @@
        "mq3012_soldier_statuette"
       ]
      },
-     "why": "mq3012_jade_statuettes.w2phase activates exactly two Triss community phases: triss_default, her usual Novigrad spot, and q310_ap_triss_dandelions, her place at Dandelion's during Final Preparations (blocks 523/526, 627/630 and 710/714). The option itself is the quest's own context-dialogue block #161, hung on triss_default.w2scene, and its branches test q309_completed on the False output: the chat exists while Now or Never is not completed. q309_casablanca.w2phase moves her through a list of q309_triss_* phases for Now or Never, so triss_default is off and she has nothing to say about the statuettes while that quest runs; the app closes the window there, which is earlier than the fact gate and therefore safe. The statuette phase tests q310_philippa_rescued, which Final Preparations sets, and that is why q310_ap_triss_dandelions is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back."
+     "why": "Triss's statuette hand-in exists in exactly two places: her usual spot in Novigrad, and her place at Dandelion's during Final Preparations. The option is her own context dialogue, and its branch checks that Now or Never is not completed, so she has nothing to say about the statuettes while that quest runs. The window closes when Now or Never starts, which is earlier than the journal failure and therefore safe. The statuette phase also requires the Philippa rescue, which Final Preparations sets, and that is why her place at Dandelion's is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back."
     },
     {
      "action": "Give both statuettes to Triss during Final Preparations",
@@ -8907,18 +8909,20 @@
       "The Nobleman Statuette",
       "The Soldier Statuette"
      ],
-     "binding": "q210preparations",
-     "binding_title": "Battle Preparations",
+     "binding": "q310preparationsnovigrad",
+     "binding_title": "Final Preparations",
      "caveats": [
       "No save in the corpus has a statuette still open when Battle Preparations starts, so the save history cannot confirm the window; the game's own connected Failure branch is the evidence.",
       "Before the window the journal can say Active for a long time: the quest is still winnable, not lost.",
       "After the window, if the journal still says Active, the app says CHECK NOW rather than LOST; only a Failed journal entry may be called lost."
      ],
      "closed_by": [
-      "q210preparations"
+      "q210preparations",
+      "q310preparationsnovigrad"
      ],
      "closed_by_titles": [
-      "Battle Preparations"
+      "Battle Preparations",
+      "Final Preparations"
      ],
      "closes_at": "q210preparations#Novigrad",
      "closes_at_title": "the end of Final Preparations",
@@ -9283,7 +9287,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q501_naglfar_arrived is set during On Thin Ice (quests/part_3/q501_eredin.w2phase)."
+     "why": "The game fails these quests once the fact q501_naglfar_arrived is set during On Thin Ice."
     }
    ]
   },
@@ -9379,7 +9383,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q310_started is set during Payback (quests/part_3/q310_pregeels_new.w2phase)."
+     "why": "The game fails these quests once the fact q310_started is set during Payback."
     }
    ]
   },
@@ -9523,7 +9527,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact mh303_done is set during Contract: Deadly Delights (quests/generic_quests/novigrad/mh303_succubus.w2phase)."
+     "why": "The game fails these quests once the fact mh303_done is set during Contract: Deadly Delights."
     }
    ]
   },
@@ -9752,7 +9756,7 @@
       "open_before": 0
      },
      "step": "mq4005sword#Talk to Vesemir",
-     "why": "Berengar's Blade goes on only through Vesemir: mq4005_sword.w2phase #72 'Vesemir about sword' is a context dialogue hung on vesemir_default.w2scene, and it is the only way to the boat, the cave and the chort (#77 onward). That scene plays only in the loop quest_npcs_default_dialogues.w2phase #3960, which runs after vesemir_dd_start and stops on vesemir_dd_stop. The Battle of Kaer Morhen starts its Council and Supporters phases together, and the first block of Supporters is 'Switch Off Default Dialogs', which sets vesemir_dd_stop. Every vesemir_dd_start setter is in the prologue or the first Kaer Morhen visit, so the chat never comes back. The battle starts as soon as the Isle of Mists ends, so the last chance to ask Vesemir is before you sail there. The journal itself only fails the quest later, when q403_council is set."
+     "why": "Berengar's Blade goes on only through Vesemir. His conversation about the sword is a default-dialogue line, and it is the only way to the boat, the cave and the chort. That dialogue runs only while Vesemir's default loop is active: the Battle of Kaer Morhen's first Supporters phase switches it off, and nothing later turns it back on. The battle starts as soon as the Isle of Mists ends, so the last chance to ask him is before you sail there. The journal itself only fails the quest later, when the council begins."
     },
     {
      "action": "Finish Berengar's Blade before The Battle of Kaer Morhen",
@@ -9802,7 +9806,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q403_council is set during The Battle of Kaer Morhen (quests/part_2/q403_battle.w2phase)."
+     "why": "The game fails these quests once the fact q403_council is set during The Battle of Kaer Morhen."
     }
    ]
   },
@@ -9920,7 +9924,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact witcher3_game_finished is set during Something Ends, Something Begins (quests/videos_scenes/ending_boards.w2phase)."
+     "why": "The game fails these quests once the fact witcher3_game_finished is set during Something Ends, Something Begins."
     }
    ]
   },
@@ -10807,7 +10811,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q704_long_night_starts is set during The Night of Long Fangs (dlc/bob/data/quests/main_quests/quest_files/q704_truth/phases/q704_01_beginning.w2phase)."
+     "why": "The game fails these quests once the fact q704_long_night_starts is set during The Night of Long Fangs."
     }
    ]
   },
@@ -12261,7 +12265,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q002_left_village is set during The Beast of White Orchard (quests/prologue/q002_emhyr.w2phase)."
+     "why": "The game fails these quests once the fact q002_left_village is set during The Beast of White Orchard."
     }
    ]
   },
@@ -12426,7 +12430,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q103_enable_ciris_room is set during Family Matters (quests/part_1/q103_daughter.w2phase)."
+     "why": "The game fails these quests once the fact q103_enable_ciris_room is set during Family Matters."
     },
     {
      "action": "Finish Ciri's Room, An Invitation from Keira Metz, Return to Crookback Bog and 9 more before The Isle of Mists",
@@ -12501,7 +12505,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -12686,7 +12690,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q103_enable_ciris_room is set during Family Matters (quests/part_1/q103_daughter.w2phase)."
+     "why": "The game fails these quests once the fact q103_enable_ciris_room is set during Family Matters."
     }
    ]
   },
@@ -13127,7 +13131,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q106_curse_ended is set during A Towerful of Mice (quests/part_2/q106_tower.w2phase)."
+     "why": "The game fails these quests once the fact q106_curse_ended is set during A Towerful of Mice."
     },
     {
      "action": "Finish Ciri's Room, An Invitation from Keira Metz, Return to Crookback Bog and 9 more before The Isle of Mists",
@@ -13202,7 +13206,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -13465,7 +13469,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -13618,7 +13622,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -14089,7 +14093,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q210_on_quest is set during The Sunstone (quests/part_3/q210_precanaris.w2phase)."
+     "why": "The game fails these quests once the fact q210_on_quest is set during The Sunstone."
     }
    ]
   },
@@ -14499,7 +14503,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q210_on_quest is set during The Sunstone (quests/part_3/q210_precanaris.w2phase)."
+     "why": "The game fails these quests once the fact q210_on_quest is set during The Sunstone."
     }
    ]
   },
@@ -15374,7 +15378,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q302_whoreson_found is set during Get Junior (quests/part_1/q302_mafia.w2phase)."
+     "why": "The game fails these quests once the fact q302_whoreson_found is set during Get Junior."
     }
    ]
   },
@@ -16222,7 +16226,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -16345,7 +16349,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q302_whoreson_found is set during Get Junior (quests/part_1/q302_mafia.w2phase)."
+     "why": "The game fails these quests once the fact q302_whoreson_found is set during Get Junior."
     },
     {
      "action": "Finish Novigrad, Closed City II before Novigrad, Closed City",
@@ -16394,7 +16398,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q309_wounded_represions_started is set during Novigrad, Closed City (quests/part_2/quest_files/q309_casablanca/phases/q309_witch_hunters_control.w2phase)."
+     "why": "The game fails these quests once the fact q309_wounded_represions_started is set during Novigrad, Closed City."
     },
     {
      "action": "Finish Collect 'Em All and Novigrad, Closed City II before A Matter of Life and Death",
@@ -16447,7 +16451,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact sq301_ball_started is set during A Matter of Life and Death (quests/sidequests/novigrad/quest_files/sq301_triss/phases/sq301_dawn_estate.w2phase)."
+     "why": "The game fails these quests once the fact sq301_ball_started is set during A Matter of Life and Death."
     }
    ]
   },
@@ -17529,7 +17533,7 @@
       "finished_after": 0,
       "open_before": 2
      },
-     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities in quests\\part_2\\q402_ciri.w2phase (CDeactivateSpawnset), and every Brothers in Arms quest is played through them: q402nilfgaardianally references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402novigradallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402skelligeallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402velenallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm. Sailing to the Isle closes them."
+     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities, and every Brothers in Arms quest is played through them. Sailing to the Isle closes them."
     },
     {
      "action": "Finish Brothers In Arms: Nilfgaard and Brothers In Arms: Velen before For the Advancement of Learning",
@@ -17580,7 +17584,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q109_keira_defeated is set during For the Advancement of Learning (quests/part_2/q109_wrapup.w2phase)."
+     "why": "The game fails these quests once the fact q109_keira_defeated is set during For the Advancement of Learning."
     }
    ]
   },
@@ -17692,7 +17696,7 @@
       "finished_after": 0,
       "open_before": 2
      },
-     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities in quests\\part_2\\q402_ciri.w2phase (CDeactivateSpawnset), and every Brothers in Arms quest is played through them: q402nilfgaardianally references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402novigradallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402skelligeallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402velenallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm. Sailing to the Isle closes them."
+     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities, and every Brothers in Arms quest is played through them. Sailing to the Isle closes them."
     }
    ]
   },
@@ -17809,7 +17813,7 @@
       "finished_after": 0,
       "open_before": 2
      },
-     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities in quests\\part_2\\q402_ciri.w2phase (CDeactivateSpawnset), and every Brothers in Arms quest is played through them: q402nilfgaardianally references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402novigradallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402skelligeallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402velenallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm. Sailing to the Isle closes them."
+     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities, and every Brothers in Arms quest is played through them. Sailing to the Isle closes them."
     }
    ]
   },
@@ -17901,7 +17905,7 @@
       "finished_after": 0,
       "open_before": 2
      },
-     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities in quests\\part_2\\q402_ciri.w2phase (CDeactivateSpawnset), and every Brothers in Arms quest is played through them: q402nilfgaardianally references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402novigradallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402skelligeallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm; q402velenallies references quests\\part_2\\quest_files\\q402_ciri\\spawnsets\\q402_dopey.w2comm. Sailing to the Isle closes them."
+     "why": "The Isle of Mists switches off the Kaer Morhen allies' communities, and every Brothers in Arms quest is played through them. Sailing to the Isle closes them."
     },
     {
      "action": "Finish Brothers In Arms: Nilfgaard and Brothers In Arms: Velen before For the Advancement of Learning",
@@ -17952,7 +17956,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q109_keira_defeated is set during For the Advancement of Learning (quests/part_2/q109_wrapup.w2phase)."
+     "why": "The game fails these quests once the fact q109_keira_defeated is set during For the Advancement of Learning."
     },
     {
      "action": "Finish Brothers In Arms: Velen before A Favor for a Friend",
@@ -18002,7 +18006,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact sq101_date_with_keira_was_failed is set during A Favor for a Friend (quests/sidequests/no_mans_land/sq101_keira.w2phase). The game fails these quests while the journal of A Favor for a Friend reads failed (gameplay/community/shops_and_craftsmen/traveling_merchants/phases/patch_signal_phase_01.w2phase)."
+     "why": "The game fails these quests once the fact sq101_date_with_keira_was_failed is set during A Favor for a Friend. The game fails these quests while the journal of A Favor for a Friend reads failed."
     }
    ]
   },
@@ -18590,7 +18594,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q602_done is set during Without a Trace (dlc/ep1/data/quests/quest_npcs_default_dialogues_ep1.w2phase)."
+     "why": "The game fails these quests once the fact q602_done is set during Without a Trace."
     },
     {
      "action": "Finish A Midnight Clear before Dead Man's Party",
@@ -18639,7 +18643,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q602_done is set during Dead Man's Party (dlc/ep1/data/quests/q602_wedding.w2phase)."
+     "why": "The game fails these quests once the fact q602_done is set during Dead Man's Party."
     }
    ]
   },
@@ -19787,7 +19791,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "A journal block in dlc/bob/data/quests/main_quests/q702_hunt.w2phase fails these quests directly."
+     "why": "The journal of La Cage au Fou fails these quests directly."
     }
    ]
   },
@@ -20845,7 +20849,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q705_stash_disabled is set during Burlap is the New Stripe (dlc/bob/data/quests/main_quests/q705_epilog.w2phase)."
+     "why": "The game fails these quests once the fact q705_stash_disabled is set during Burlap is the New Stripe."
     }
    ]
   },
@@ -21046,7 +21050,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -21413,7 +21417,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q401_gotten_uma is set during To Bait a Forktail... (quests/part_1/q401_konsylium.w2phase)."
+     "why": "The game fails these quests once the fact q401_gotten_uma is set during To Bait a Forktail...."
     }
    ]
   },
@@ -21896,7 +21900,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q401_gotten_uma is set during To Bait a Forktail... (quests/part_1/q401_konsylium.w2phase)."
+     "why": "The game fails these quests once the fact q401_gotten_uma is set during To Bait a Forktail...."
     }
    ]
   },
@@ -22280,7 +22284,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q206_party_started is set during King's Gambit (quests/part_2/q206_berserkers.w2phase)."
+     "why": "The game fails these quests once the fact q206_party_started is set during King's Gambit."
     },
     {
      "action": "Finish Possession, King's Gambit and The Cave of Dreams before The Sunstone",
@@ -22335,7 +22339,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q210_on_quest is set during The Sunstone (quests/part_3/q210_precanaris.w2phase)."
+     "why": "The game fails these quests once the fact q210_on_quest is set during The Sunstone."
     }
    ]
   },
@@ -22608,7 +22612,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -22755,7 +22759,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -22917,7 +22921,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -23492,7 +23496,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -23579,7 +23583,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q302_whoreson_found is set during Get Junior (quests/part_1/q302_mafia.w2phase)."
+     "why": "The game fails these quests once the fact q302_whoreson_found is set during Get Junior."
     },
     {
      "action": "Finish Ciri's Room, An Invitation from Keira Metz, Return to Crookback Bog and 9 more before The Isle of Mists",
@@ -23654,7 +23658,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -23786,7 +23790,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists (quests/part_2/q402_ciri.w2phase)."
+     "why": "The game fails these quests once the fact q402_escort_completed is set during The Isle of Mists."
     }
    ]
   },
@@ -24141,7 +24145,7 @@
       "finished_after": 0,
       "open_before": 0
      },
-     "why": "The game fails these quests once the fact q704_long_night_starts is set during The Night of Long Fangs (dlc/bob/data/quests/main_quests/quest_files/q704_truth/phases/q704_01_beginning.w2phase)."
+     "why": "The game fails these quests once the fact q704_long_night_starts is set during The Night of Long Fangs."
     }
    ]
   },

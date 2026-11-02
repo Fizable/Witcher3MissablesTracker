@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "note": "Reviewed cutoff windows. A window is a precise journal phase, not a community: the affected quest's own phase graph has a connected Failure input, and that input is gated by the closer's journal. tools/review_cutoffs.py validates every window against tools/quest_index.json and the graph; the app reads the result from data/cutoffs.json. Nothing here is wiki-derived.",
+  "note": "Reviewed cutoff windows. A window is a precise journal phase, not a community: the affected quest's own phase graph has a connected Failure input, and that input is gated by the closer's journal. A window may also name `also_closed_by`: quests whose end is the last chance even though their journal is not the one that fires the Failure input (Final Preparations for the statuettes). tools/review_cutoffs.py validates every window against tools/quest_index.json and the graph; the app reads the result from data/cutoffs.json. Nothing here is wiki-derived.",
   "windows": [
     {
       "id": "triss_statuettes_window",
@@ -13,6 +13,9 @@
         "mq3012warriorstatuette"
       ],
       "closer": "q210preparations",
+      "also_closed_by": [
+        "q310preparationsnovigrad"
+      ],
       "closes_at": "q210preparations#Novigrad",
       "closes_at_title": "the end of Final Preparations",
       "turn_in": {
@@ -113,7 +116,7 @@
           }
         }
       },
-      "why": "mq3012_jade_statuettes.w2phase activates exactly two Triss community phases: triss_default, her usual Novigrad spot, and q310_ap_triss_dandelions, her place at Dandelion's during Final Preparations (blocks 523/526, 627/630 and 710/714). The option itself is the quest's own context-dialogue block #161, hung on triss_default.w2scene, and its branches test q309_completed on the False output: the chat exists while Now or Never is not completed. q309_casablanca.w2phase moves her through a list of q309_triss_* phases for Now or Never, so triss_default is off and she has nothing to say about the statuettes while that quest runs; the app closes the window there, which is earlier than the fact gate and therefore safe. The statuette phase tests q310_philippa_rescued, which Final Preparations sets, and that is why q310_ap_triss_dandelions is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back.",
+      "why": "Triss's statuette hand-in exists in exactly two places: her usual spot in Novigrad, and her place at Dandelion's during Final Preparations. The option is her own context dialogue, and its branch checks that Now or Never is not completed, so she has nothing to say about the statuettes while that quest runs. The window closes when Now or Never starts, which is earlier than the journal failure and therefore safe. The statuette phase also requires the Philippa rescue, which Final Preparations sets, and that is why her place at Dandelion's is the next window. The journal never fails the quests when she leaves: the chance to act closes, and the next one opens when she is back.",
       "files": [
         "quests\\minor_quests\\novigrad\\mq3012_jade_statuettes.w2phase blocks 523, 627 and 710 are CActivateStoryPhase on quests\\main_npcs\\community_files\\triss.w2comm with phase triss_default; blocks 526, 630 and 714 are the same class on the same community with phase q310_ap_triss_dandelions; blocks 532, 636 and 682 are CDeactivateSpawnset on the same file",
         "quests\\part_2\\q309_casablanca.w2phase moves Triss through q309_triss_* phases (q309_triss_waits_hideout, q309_triss_harbour_wait, q309_triss_to_hideout and the rest), so triss_default is not her active phase while Now or Never runs",
@@ -156,7 +159,7 @@
       "headline": "Talk to Vesemir about Berengar's sword before The Isle of Mists",
       "closed_headline": "Vesemir no longer talks about Berengar's sword, so Berengar's Blade can no longer be finished",
       "closed_action": "Load a save from before you sailed to the Isle of Mists and ask Vesemir about the sword there",
-      "why": "Berengar's Blade goes on only through Vesemir: mq4005_sword.w2phase #72 'Vesemir about sword' is a context dialogue hung on vesemir_default.w2scene, and it is the only way to the boat, the cave and the chort (#77 onward). That scene plays only in the loop quest_npcs_default_dialogues.w2phase #3960, which runs after vesemir_dd_start and stops on vesemir_dd_stop. The Battle of Kaer Morhen starts its Council and Supporters phases together, and the first block of Supporters is 'Switch Off Default Dialogs', which sets vesemir_dd_stop. Every vesemir_dd_start setter is in the prologue or the first Kaer Morhen visit, so the chat never comes back. The battle starts as soon as the Isle of Mists ends, so the last chance to ask Vesemir is before you sail there. The journal itself only fails the quest later, when q403_council is set.",
+      "why": "Berengar's Blade goes on only through Vesemir. His conversation about the sword is a default-dialogue line, and it is the only way to the boat, the cave and the chort. That dialogue runs only while Vesemir's default loop is active: the Battle of Kaer Morhen's first Supporters phase switches it off, and nothing later turns it back on. The battle starts as soon as the Isle of Mists ends, so the last chance to ask him is before you sail there. The journal itself only fails the quest later, when the council begins.",
       "files": [
         "quests\\minor_quests\\kaer_morhen\\mq4005_sword.w2phase #72 CQuestContextDialogBlock 'Vesemir about sword' has targetScene quests\\main_npcs\\default_dialogues\u000besemir_default.w2scene; its output feeds #77 'Show boat', the only way on to the river, the cave and the chort",
         "quests\\quest_npcs_default_dialogues.w2phase #3960 CQuestInteractionDialogBlock plays vesemir_default.w2scene; #3999 pauses on vesemir_dd_start before the loop, #3978 pauses on vesemir_dd_stop and ends it",

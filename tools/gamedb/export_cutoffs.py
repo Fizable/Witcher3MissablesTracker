@@ -270,32 +270,28 @@ def build_items(con, kept, title, text):
         else:
             closes_at_title = ""
 
-        # why: the deciding fact (most B's) or journal status, with the file that sets it
+        # why: the deciding fact (most B's) or journal status, in the player's terms. The file that
+        # proves it stays in `files`, which only the collapsed technical section prints.
         files_out = []
         why_parts = []
         fact_counts = Counter(f for (_b, f) in fact_pairs)
         if fact_counts:
             fact, _n = sorted(fact_counts.items(), key=lambda kv: (-kv[1], kv[0]))[0]
             set_files = [fid for fid, _blk, _src in setters(fact, a_guid)]
-            set_path = path_of(set_files[0]) if set_files else None
-            if set_path:
-                why_parts.append(f"The game fails these quests once the fact {fact} is set during {a_title} "
-                                 f"({set_path}).")
-            else:
-                why_parts.append(f"The game fails these quests once the fact {fact} is set during {a_title}.")
+            why_parts.append(f"The game fails these quests once the fact {fact} is set during {a_title}.")
             files_out += [path_of(f) for f in dict.fromkeys(set_files)]
         journal = [r for _b, r in rows if r["kind"] == "fail_when_journal"]
         if journal:
             st = Counter(r.get("status") for r in journal).most_common(1)[0][0]
             where = path_of(journal[0]["file"])
             why_parts.append(f"The game fails these quests while the journal of {a_title} reads "
-                             f"{JOURNAL_STATUS.get(st, st)} ({where}).")
+                             f"{JOURNAL_STATUS.get(st, st)}.")
             files_out += [where]
         direct = [r for _b, r in rows if r["kind"] == "fails"]
         if direct:
             where = path_of(direct[0]["file"])
             if not why_parts:
-                why_parts.append(f"A journal block in {where} fails these quests directly.")
+                why_parts.append(f"The journal of {a_title} fails these quests directly.")
             files_out += [where]
         for _b, r in rows:
             if r["kind"] != "fails":
